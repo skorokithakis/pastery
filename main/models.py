@@ -13,7 +13,7 @@ def paste_uuid():
 
 
 class Paste(models.Model):
-    LEXERS = sorted([[lexer[0], lexer[0]] for lexer in get_all_lexers()])
+    LEXERS = sorted([[lexer[1][0], lexer[0]] for lexer in get_all_lexers()], key=lambda x: x[0].lower())
 
     id = models.CharField(max_length=100, primary_key=True, db_index=True, default=paste_uuid, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
