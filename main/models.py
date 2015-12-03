@@ -13,7 +13,7 @@ def paste_uuid():
 
 
 class Paste(models.Model):
-    LEXERS = sorted([[lexer[0], lexer[0]] for lexer in pygments.lexers.get_all_lexers()])
+    LEXERS = sorted([[lexer[0], lexer[0]] for lexer in get_all_lexers()])
 
     id = models.CharField(max_length=100, primary_key=True, db_index=True, default=paste_uuid, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
@@ -30,8 +30,12 @@ class Paste(models.Model):
         return reverse("paste", args=[self.id])
 
     @property
+    def style(self):
+        return self.formatter.get_style_defs()
+
+    @property
     def formatter(self):
-        return HtmlFormatter(linenos="table")
+        return HtmlFormatter(style="monokai", linenos="table", cssclass="paste")
 
     @property
     def lexer(self):
