@@ -90,9 +90,10 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.redirects.RedirectsPanel',
 ]
 
+DEBUG_TOOLBAR_PATCH_SETTINGS = True
+
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": lambda request: ((not request.is_ajax()) and request.user.is_authenticated() and request.user.is_superuser),
-    "DEBUG_TOOLBAR_PATCH_SETTINGS": True,
 }
 
 WSGI_APPLICATION = 'pastebin.wsgi.application'
