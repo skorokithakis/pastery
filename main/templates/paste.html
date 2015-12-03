@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<style>
+{{ paste.formatter.get_style_defs }}
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>{{ paste.title }}</h1>
+{{ paste.rendered_body|safe }}
+{% endblock %}

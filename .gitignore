@@ -1,0 +1,11 @@
+*.pyc
+*.swp
+.venv
+.coverage
+.hypothesis/
+cover/
+env/
+*.sqlite3
+local_settings.py
+secret_keys.py
+_static/
