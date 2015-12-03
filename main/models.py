@@ -31,7 +31,7 @@ class Paste(models.Model):
 
     @property
     def style(self):
-        return self.formatter.get_style_defs()
+        return self.formatter.get_style_defs(".pastetable")
 
     @property
     def formatter(self):
