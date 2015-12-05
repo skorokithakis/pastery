@@ -16,3 +16,4 @@ Werkzeug~=0.11.2
 
 flake8
 pip
+captainwebhook
