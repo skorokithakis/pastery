@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [".pastery.net"]
 
+BROWSERID_AUDIENCES = ["https://www.pastery.net"]
 
 # Application definition
 
