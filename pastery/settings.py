@@ -38,11 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'main',
+    'raven.contrib.django.raven_compat',
     'django_extensions',
     'debug_toolbar',
     'bootstrap3',
     'django_browserid',
+    'main',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -154,6 +155,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+RAVEN_CONFIG = {"dsn": None}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
