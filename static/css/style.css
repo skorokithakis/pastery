@@ -1,0 +1,175 @@
+.container {
+	max-width: 800px;
+}
+
+/* Header */
+.top-header {
+    position: relative;
+    margin: 20px 0;
+	background: transparent url('images/logo.png') no-repeat scroll left center;
+	background-size: 150px;
+	padding: 20px 0 20px 170px;
+}
+.top-header a.home {
+	position: absolute;
+	width: 150px;
+	height: 100px;
+	left: 0;
+	top: 0;
+	text-indent: -99999px;
+}
+.top-header .persona {
+	position: absolute;
+	right: 0;
+	top: -20px;
+	padding: 5px 10px;
+}
+.top-header .persona a {
+	color: #D41616;
+}
+
+.top-header h1 {
+	font-weight: bold;
+	margin: 0 0 5px;
+}
+.top-header h2 {
+	margin: 0;
+	color: #666;
+}
+
+/* Pastery form */
+.pastery-form .errorlist {
+	list-style-type: none;
+	color: red;
+	font-weight: bold;
+	font-size: 15px;
+	background: rgba(255,0,0,.15);
+	padding: 5px;
+}
+.pastery-form input,
+.pastery-form textarea {
+	border-radius: 0;
+}
+.pastery-form input:focus,
+.pastery-form textarea:focus {
+	box-shadow: none;
+	border-color: #D41616;
+}
+.pastery-form .fieldWrapper {
+	margin-bottom: 20px;
+	position: relative;
+}
+.pastery-form .language {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	z-index: 1;
+	background-color: #ddd;
+	padding: 2px 5px;
+	opacity: .3;
+	cursor: pointer;
+	transition: opacity .2s ease-in;
+	border-radius: 3px;
+}
+.pastery-form .language:hover {
+	opacity: 1;
+}
+.pastery-form .language select {
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	cursor: pointer;
+	border: none;
+	height: 24px;
+}
+.pastery-form .language em {
+	font-style: normal;
+}
+.pastery-form label {
+	font-weight: normal;
+    color: #666;
+    font-size: 15px;
+    margin-right: 5px;
+}
+.pastery-form #id_expires {
+	border-color: rgba(0,0,0,.25);
+}
+.pastery-form .form-group {
+	text-align: center;
+}
+.pastery-form .btn-primary:focus, 
+.pastery-form .btn-primary:active,
+.pastery-form .btn-primary {
+	border-radius: 0;
+	outline: none;
+	font-size: 20px;
+	font-weight: bold;
+	border-color: #D41616;
+	background-color: #D41616;
+	text-transform: uppercase;
+}
+.pastery-form .btn-primary:focus {
+	box-shadow: 0 0 10px #D41616;
+}
+.pastery-form .btn-primary:hover {
+	background-color: #EB1717;
+}
+
+/* Alerts */
+.alert {
+	border: none;
+	background-color: #F4D86D;
+	color: rgba(0,0,0,.5);
+	font-weight: bold;
+	font-size: 15px;
+}
+.alert button {
+	color: rgba(0,0,0,.5);
+    opacity: 1;
+    text-shadow: none;
+}
+
+/* Paste */
+.paste header {
+	position: relative;
+	margin-bottom: 20px;
+}
+.paste header h1 {
+	margin: 0;
+}
+.paste header .btn-group-justified {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: 200px;
+}
+.paste header .btn-group-justified>.btn-group:first-child button {
+	border-right: none;
+}
+.paste header .btn-group-justified>.btn-group:last-child button {
+	border-left: none;
+}
+
+.btn-container {
+	text-align: center;
+}
+.new-pastery {
+	outline: none;
+	font-size: 20px;
+	font-weight: bold;
+	color: #D41616;
+	display: inline-block;
+	margin-top: 20px;
+}
+.new-pastery:hover {
+	color: #D41616;
+	text-decoration: underline;
+}
+
+.pastetable pre {
+    background-color: transparent;
+    border: 0;
+    margin-bottom: 0;
+    color: inherit;
+}
