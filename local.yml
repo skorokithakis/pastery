@@ -1,0 +1,34 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    project_root: /var/projects/pastery
+    env_root: /var/projects/pastery/env
+
+  tasks:
+  - name: Upgrade the env.
+    pip: requirements="{{ project_root }}/requirements.txt" virtualenv="{{ env_root }}" state=latest
+    sudo: yes
+    sudo_user: pastery
+
+  - name: Migrate Django database.
+    shell: "{{ env_root }}/bin/python {{ project_root }}/manage.py migrate --noinput"
+    sudo: yes
+    sudo_user: pastery
+
+  - name: Clean pyc files.
+    shell: "find {{ project_root }} -name '*.pyc' -delete"
+    sudo: yes
+    sudo_user: pastery
+
+  - name: Migrate Django database.
+    shell: "{{ env_root }}/bin/python {{ project_root }}/manage.py collectstatic --noinput"
+    sudo: yes
+    sudo_user: pastery
+
+  - name: Reload uWSGI.
+    service: name=pastery_uwsgi state=reloaded
+
+  - name: Chown everything.
+    shell: chown -R pastery:pastery {{ project_root }}
