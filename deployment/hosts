@@ -1,8 +1,8 @@
 [production-web]
-www.pastery.net:16022
+198.199.68.75:16022
 
 [production-app]
-www.pastery.net:16022
+198.199.68.75:16022
 
 
 [production:children]
