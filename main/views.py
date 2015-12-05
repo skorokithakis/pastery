@@ -10,24 +10,25 @@ from django.utils.translation import ugettext as _
 from .models import Paste
 
 
+class PasteForm(forms.ModelForm):
+    EXPIRATION = [
+        [10, _("ten minutes")],
+        [60, _("an hour")],
+        [24 * 60, _("a day")],
+        [7 * 24 * 60, _("a week")],
+        [14 * 24 * 60, _("two weeks")],
+        [30 * 24 * 60, _("a month")],
+        [100 * 365 * 24 * 60, _("never")],
+    ]
+    expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60, label=_("Expires in"))
+
+    class Meta:
+        model = Paste
+        fields = ["title", "body", "raw_language"]
+
+
 @render_to("home.html")
 def home(request):
-    class PasteForm(forms.ModelForm):
-        EXPIRATION = [
-            [10, _("ten minutes")],
-            [60, _("an hour")],
-            [24 * 60, _("a day")],
-            [7 * 24 * 60, _("a week")],
-            [14 * 24 * 60, _("two weeks")],
-            [30 * 24 * 60, _("a month")],
-            [100 * 365 * 24 * 60, _("never")],
-        ]
-        expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60, label=_("Expires in"))
-
-        class Meta:
-            model = Paste
-            fields = ["title", "body", "raw_language"]
-
     if request.method == 'POST':
         form = PasteForm(request.POST)
         if form.is_valid():
