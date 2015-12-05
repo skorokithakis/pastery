@@ -30,16 +30,17 @@
   copy: src=acme_tiny.py dest=/usr/local/bin/acme_tiny.py mode=755
   notify: reload nginx
 
+- name: Copy acme-tiny.
+  template: src=get_cert.sh.j2 dest=/usr/local/bin/get_{{ project_name }}_cert.sh mode=755
+  notify: reload nginx
+
 - name: Check if a cert exists.
   stat: path=/etc/ssl/certs/{{ domain }}.crt
   register: stat_result
 
-- name: Run acme-tiny.
-  shell: acme_tiny.py --account-key /etc/ssl/certs/pastery.net_user.key --csr /etc/ssl/certs/pastery.net.csr --acme-dir /tmp/challenges/ > /etc/ssl/certs/{{ domain }}.crt
+- name: Get the certificate.
+  shell: get_cert.sh
   when: stat_result.stat.exists == False
-
-- name: Get the full cert chain.
-  shell: "{ cat /etc/ssl/certs/{{ domain }}.crt; curl https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem; } > /etc/ssl/certs/{{ domain }}.unified.pem"
 
 - name: Start backend.
   service: name=nginx state=started

@@ -1,0 +1,4 @@
+#!/bin/bash
+acme_tiny.py --account-key /etc/ssl/certs/pastery.net_user.key --csr /etc/ssl/certs/pastery.net.csr --acme-dir /tmp/challenges/ > /etc/ssl/certs/{{ domain }}.crt
+cat /etc/ssl/certs/{{ domain }}.crt > /etc/ssl/certs/{{ domain }}.unified.pem
+curl https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem >> /etc/ssl/certs/{{ domain }}.unified.pem
