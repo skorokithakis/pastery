@@ -29,7 +29,6 @@ def get_languages():
     top_languages = [["autodetect", _("Autodetect")]]
     bottom_languages = [["autodetect", "--------"]]
     for language in sorted_lexers:
-        print(language[0])
         if language[0] in top:
             top_languages.append(language)
         else:
