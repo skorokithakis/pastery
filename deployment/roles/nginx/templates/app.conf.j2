@@ -1,0 +1,76 @@
+uwsgi_cache_path /tmp/{{ project_name }}_nginx_cache keys_zone={{ project_name }}_cache:100m;
+
+upstream {{ project_name }}_django {
+    server 127.0.0.1:{{ uwsgi_port }};
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name  {{ domain }} *.{{ domain }};
+
+    location /.well-known/acme-challenge/ {
+        alias /tmp/challenges/;
+        try_files $uri =404;
+    }
+
+    location / {
+        rewrite ^   https://$host$request_uri? permanent;
+    }
+}
+
+server {
+    listen   443 ssl spdy;
+    charset     utf-8;
+    client_max_body_size 200K;
+
+    ssl    on;
+    ssl_certificate    /etc/ssl/certs/{{ domain }}.unified.pem;
+    ssl_certificate_key     /etc/ssl/certs/{{ domain }}_domain.key;
+
+    ssl_ciphers EECDH+AES128:EECDH+AES256:!3DES:!RC4:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache  shared:SSL:10m;
+    ssl_protocols  TLSv1.2  TLSv1.1  TLSv1;
+    ssl_stapling on;
+
+    server_name  {{ domain }} *.{{ domain }};
+
+    gzip on;
+
+    access_log /var/log/nginx/access.{{ project_name }}.log;
+    error_log /var/log/nginx/error.{{ project_name }}.log;
+
+
+    if ($host != "{{ full_domain }}") {
+        rewrite  ^/(.*)$  $scheme://{{ full_domain }}/$1  permanent;
+    }
+
+
+    location /webhook {
+        proxy_pass       http://localhost:{{ cptwebhook_port }};
+    }
+
+    location /static/ {
+        expires max;
+        alias /var/projects/{{ project_name }}/_static/;
+    }
+
+    location /narnia/ {
+        if ($https != 'on') {
+            rewrite ^   https://$host$request_uri? permanent;
+        }
+        uwsgi_pass {{ project_name }}_django;
+        include uwsgi_params;
+        expires -1;
+        proxy_set_header  X-Real-IP  $remote_addr;
+    }
+
+    location / {
+        uwsgi_pass {{ project_name }}_django;
+        include uwsgi_params;
+        expires -1;
+        proxy_set_header  X-Real-IP  $remote_addr;
+    }
+}

@@ -1,0 +1,12 @@
+[uwsgi]
+module={{ project_name }}.wsgi:application
+master=True
+pidfile=/tmp/{{ project_name }}-master.pid
+vacuum=True
+max-requests=5000
+logto=/var/log/uwsgi/{{ project_name }}.log
+socket=127.0.0.1:{{ uwsgi_port }}
+processes=3
+harakiri=20
+single-interpreter=True
+enable-threads=True

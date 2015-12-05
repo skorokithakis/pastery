@@ -1,0 +1,45 @@
+---
+- name: Install necessary system packages.
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - nginx
+    - openssl
+    - libssl1.0.0
+
+- name: Copy the site config.
+  template: src=app.conf.j2 dest=/etc/nginx/sites-enabled/{{ project_name }} mode=644
+  notify: reload nginx
+
+- name: Copy the DH parameters.
+  copy: src=dh2k.pem dest=/etc/ssl/dh2k.pem mode=644
+  notify: reload nginx
+
+- name: Copy the Let's Encrypt user private key.
+  copy: src=certs/user.key dest=/etc/ssl/certs/{{ domain }}_user.key mode=600
+  notify: reload nginx
+
+- name: Copy the Let's Encrypt domain private key.
+  copy: src=certs/domain.key dest=/etc/ssl/certs/{{ domain }}_domain.key mode=600
+  notify: reload nginx
+
+- name: Copy the CSR.
+  copy: src=certs/domain.csr dest=/etc/ssl/certs/{{ domain }}.csr mode=644
+  notify: reload nginx
+
+- name: Copy acme-tiny.
+  copy: src=acme_tiny.py dest=/usr/local/bin/acme_tiny.py mode=755
+  notify: reload nginx
+
+- name: Check if a cert exists.
+  stat: path=/etc/ssl/certs/{{ domain }}.crt
+  register: stat_result
+
+- name: Run acme-tiny.
+  shell: acme_tiny.py --account-key /etc/ssl/certs/pastery.net_user.key --csr /etc/ssl/certs/pastery.net.csr --acme-dir /tmp/challenges/ > /etc/ssl/certs/{{ domain }}.crt
+  when: stat_result.stat.exists == False
+
+- name: Get the full cert chain.
+  shell: "{ cat /etc/ssl/certs/{{ domain }}.crt; curl https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem; } > /etc/ssl/certs/{{ domain }}.unified.pem"
+
+- name: Start backend.
+  service: name=nginx state=started

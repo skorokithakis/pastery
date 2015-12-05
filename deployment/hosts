@@ -1,0 +1,16 @@
+[production-web]
+www.pastery.net:16022
+
+[production-app]
+www.pastery.net:16022
+
+
+[production:children]
+production-web
+production-app
+
+[app:children]
+production-app
+
+[web:children]
+production-web

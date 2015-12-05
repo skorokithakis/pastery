@@ -1,0 +1,6 @@
+---
+- name: update rcd
+  shell: initctl reload-configuration
+
+- name: restart cptwebhook
+  service: name={{ project_name }}_cptwebhook state=restarted

@@ -1,0 +1,73 @@
+---
+- name: Install necessary system packages.
+  apt: pkg={{ item }} update_cache=yes state=present
+  with_items:
+    - python-dev
+    - python-setuptools
+    - git
+    - postgresql
+    - zlib1g-dev
+
+- name: Install Python packages.
+  easy_install: name={{ item }}
+  with_items:
+    - pip
+    - virtualenv
+
+- name: Make sure the group exists
+  group: name={{ project_name }} system=yes
+
+- name: Make sure the user exists
+  user: name={{ project_name }} system=yes group={{ project_name }}
+
+- name: Create project dir.
+  file: path={{ project_root }} owner={{ project_name }} group={{ project_name }} mode=755 state=directory
+
+- name: Pull sources from the repository.
+  git: repo={{ repo }} dest={{ project_root }} version={{ branch }} accept_hostkey=True
+  sudo: yes
+  sudo_user: "{{ project_name }}"
+  notify:
+    - collectstatic
+    - migrate
+    - reload uwsgi
+
+- name: Upgrade the virtualenv.
+  pip: requirements={{ project_root }}/requirements.txt virtualenv={{ env_root }} state=latest
+  sudo: yes
+  sudo_user: "{{ project_name }}"
+  notify: reload uwsgi
+
+- name: Copy the local settings file.
+  template: src=local_settings.py.j2.secret dest={{ project_root }}/{{ project_name }}/local_settings.py mode=644
+  notify: reload uwsgi
+
+- name: Initialize database.
+  shell: "{{ env_root }}/bin/python {{ project_root }}/manage.py sqlcreate --router=default | sudo -u postgres psql"
+
+- name: Copy the uWSGI ini file.
+  template: src=uwsgi.ini.j2 dest={{ project_root }}/uwsgi.ini mode=0755 owner={{ project_name }} group={{ project_name }}
+  notify:
+      - update rcd
+      - restart uwsgi
+
+- name: Copy the uWSGI init script.
+  template: src=uwsgi.conf.j2 dest=/etc/init/{{ project_name }}_uwsgi.conf mode=0755 owner={{ project_name }} group={{ project_name }}
+  notify:
+      - update rcd
+      - restart uwsgi
+
+- name: Copy the cron script.
+  template: src=cron.d.j2 dest=/etc/cron.d/{{ project_name }}
+
+- name: Change permissions.
+  shell: chown -R {{ project_name }}:{{ project_name }} {{ project_root }}
+
+- name: Create logfile dir.
+  file: path=/var/log/uwsgi/ owner={{ project_name }} group={{ project_name }} mode=755 state=directory
+
+- name: Make sure logfile exists (there are problems otherwise).
+  file: path=/var/log/uwsgi/{{ project_name }}.log owner={{ project_name }} group={{ project_name }} mode=0640 state=touch
+
+- name: Start backend.
+  service: name={{ project_name }}_uwsgi state=started
