@@ -1,0 +1,238 @@
+.container {
+	max-width: 800px;
+}
+
+/* Header */
+.top-header {
+    position: relative;
+    margin: 20px 0;
+	background: transparent url('images/logo.png') no-repeat scroll left center;
+	background-size: 150px;
+	padding: 20px 0 20px 170px;
+}
+.top-header a.home {
+	position: absolute;
+	width: 150px;
+	height: 100px;
+	left: 0;
+	top: 0;
+	text-indent: -99999px;
+	outline: none;
+}
+.top-header .persona {
+	position: absolute;
+	right: 0;
+	top: -20px;
+	background: #999;
+	padding: 5px 10px;
+}
+.top-header .persona a {
+	color: #fff;
+}
+.top-header .persona a:focus,
+.top-header .persona a:active,
+.top-header .persona a:hover {
+	text-decoration: none;
+}
+
+.top-header h1 {
+	font-weight: bold;
+	margin: 0 0 5px;
+}
+.top-header h2 {
+	margin: 0;
+	color: #888;
+	font-size: 22px;
+}
+
+/* Pastery form */
+.pastery-form .errorlist {
+	list-style-type: none;
+	color: red;
+	font-weight: bold;
+	font-size: 15px;
+	background: rgba(255,0,0,.15);
+	padding: 5px;
+}
+.pastery-form input,
+.pastery-form textarea {
+	border-radius: 0;
+}
+.pastery-form input:focus,
+.pastery-form textarea:focus {
+	box-shadow: none;
+	border-color: #333;
+}
+.pastery-form .fieldWrapper {
+	margin-bottom: 20px;
+	position: relative;
+}
+.pastery-form .language {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	z-index: 1;
+}
+.pastery-form .language select {
+	border-color: rgba(0,0,0,.25);
+	max-width: 200px;
+	opacity: .3;
+	transition: opacity .2s ease-in;
+}
+.pastery-form .language select:hover {
+	opacity: 1;
+}
+.pastery-form .language select:focus {
+	opacity: 1;
+	border-color: #333;
+	box-shadow: none;
+	outline: none;
+}
+.pastery-form .language em {
+	opacity: 0;
+	font-style: normal;
+}
+.pastery-form label {
+	font-weight: normal;
+    color: #666;
+    font-size: 15px;
+    margin-right: 5px;
+}
+.pastery-form #id_expires {
+	border-color: rgba(0,0,0,.25);
+}
+.pastery-form .form-group {
+	text-align: center;
+}
+.pastery-form .btn-primary:focus,
+.pastery-form .btn-primary:active,
+.pastery-form .btn-primary {
+	border-radius: 0;
+	outline: none;
+	font-size: 20px;
+	font-weight: bold;
+	border-color: #D41616;
+	background-color: #D41616;
+	text-transform: uppercase;
+}
+.pastery-form .btn-primary:focus {
+	box-shadow: 0 0 10px #D41616;
+}
+.pastery-form .btn-primary:hover {
+	background-color: #EB1717;
+}
+
+/* Alerts */
+.alert {
+	border: none;
+	background-color: #F4D86D;
+	color: rgba(0,0,0,.5);
+	font-weight: bold;
+	font-size: 15px;
+}
+.alert button {
+	color: rgba(0,0,0,.5);
+    opacity: 1;
+    text-shadow: none;
+}
+
+/* Paste */
+.paste header {
+	position: relative;
+	margin-bottom: 20px;
+}
+.paste header h1 {
+	margin: 0;
+}
+.paste .button-container {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	background-color: #D41616;
+}
+.paste .button-container .dropdown-toggle:focus,
+.paste .button-container .dropdown-toggle:hover,
+.paste .button-container .dropdown-toggle {
+	border-right: none;
+	background-color: transparent;
+	box-shadow: none;
+	color: #fff;
+    border: none;
+    padding: 10px 15px;
+}
+.paste .button-container .dropdown-toggle em {
+	font-style: normal;
+}
+.paste .button-container input {
+    line-height: 1.5;
+    font-size: 12px;
+    padding: 5px;
+    border-left: none;
+    border-right: none;
+    margin: 0px 1px;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    background-color: #fff;
+    color: #D41616;
+    border: 1px solid #D41616;
+    padding: 10px 15px;
+}
+.paste .button-container ul .glyphicon {
+	opacity: 0;
+}
+.paste .button-container ul .selected .glyphicon {
+	opacity: 1;
+}
+.paste .button-container .action-copy .btn {
+	background-color: transparent;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+}
+
+.btn-container {
+	text-align: center;
+	margin: 20px 0;
+}
+.new-paste {
+	border-radius: 0;
+	outline: none;
+	font-size: 20px;
+	font-weight: bold;
+	border-color: #D41616;
+	background-color: #D41616;
+	text-transform: uppercase;
+	color: #fff;
+}
+.new-pastery:hover {
+	background-color: #EB1717;
+	color: #fff;
+}
+
+.pastetable pre {
+    background-color: transparent;
+    border: 0;
+    margin-bottom: 0;
+    color: inherit;
+}
+.pretty-paste {
+	overflow: auto;
+}
+
+@media (max-width: 550px) {
+	.top-header {
+		padding: 100px 0 0;
+		background-position: center top;
+		text-align: center;
+	}
+	.top-header a.home {
+		width: 100%;
+	}
+	.paste header {
+		text-align: center;
+		margin-bottom: 0;
+	}
+	.paste .button-container {
+		position: static;
+		margin: 10px 0;
+	}
+}

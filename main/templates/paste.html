@@ -1,9 +1,59 @@
 {% extends "base.html" %}
+{% load bootstrap3 i18n %}
 
 {% block content %}
-<h1>{{ paste }}</h1>
 
-<div class="pretty-paste">
-{{ paste.rendered_body|safe }}
+{% bootstrap_messages %}
+
+<div class="paste">
+	<header>
+		<h1>{{ paste }}</h1>
+
+
+		<div class="btn-group button-container" id="share-dropdown">
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<em>Raw</em> <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					{% if 0 %}
+					<li>
+					<a href="javascript:void(0);" data-choice="embed" data-legend="Embed" class="selected">
+						<span class="glyphicon glyphicon-ok"></span> Embed
+					</a>
+					</li>
+					{% endif %}
+					<li>
+					<a href="javascript:void(0);" data-choice="raw" data-legend="Raw"class="selected">
+						<span class="glyphicon glyphicon-ok"></span> Raw
+					</a>
+					</li>
+					<li>
+					<a href="javascript:void(0);" data-choice="link" data-legend="Link">
+						<span class="glyphicon glyphicon-ok"></span> Link
+					</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="btn-group">
+				<input data-placement="top" title="Copied!" type="text" data-raw="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "raw-paste" paste.id %}" data-link="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "paste" paste.id %}" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "raw-paste" paste.id %}" readonly=""/>
+			</div>
+			<div class="btn-group action-copy">
+				<button aria-label="Copy to clipboard" id="copy-clipboard" title="Copy to clipboard" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
+			</div>
+		</div>
+
+	</header>
+
+	<div class="pretty-paste">
+	{{ paste.rendered_body|safe }}
+	</div>
+
 </div>
+
+<div class="btn-container">
+    <a href="{% url 'home' %}" class="btn new-paste">{% trans "New paste" %}</a>
+<div>
+
 {% endblock %}
