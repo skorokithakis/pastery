@@ -1,4 +1,4 @@
-{% load bootstrap3 staticfiles browserid %}
+{% load bootstrap3 staticfiles browserid i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +20,7 @@
         <header class="top-header clearfix">
             <a href="{% url 'home' %}" class="home" title="{{ current_site.name }}">{{ current_site.name }}</a>
             <h1>{{ current_site.name }}</h1>
-            <h2>So sweet. Much paste.</h2>
+            <h2>{% trans "So sweet. Much paste." %}</h2>
 
             {% if 0 %}
             <div class="persona">

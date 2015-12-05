@@ -11,27 +11,27 @@
         <div class="btn-group button-container" id="share-dropdown">
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Raw <span class="caret"></span>
+                    {% trans "Raw" %} <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
                     <div class="btn-group">
-                        <input data-placement="top" title="Copied!" type="text" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "raw-paste" paste.id %}" readonly=""/>
+                        <input data-placement="top" title="{% trans "Copied!" %}" type="text" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "raw-paste" paste.id %}" readonly=""/>
                     </div>
                     <div class="btn-group action-copy">
-                        <button data-trigger="hover" data-toggle="tooltip" title="Copy to clipboard" aria-label="Copy to clipboard" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
+                        <button data-trigger="hover" data-toggle="tooltip" title="{% trans "Copy to clipboard" %}" aria-label="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
                     </div>
                 </ul>
             </div>
             <div class="btn-group" role="group">
                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Link <span class="caret"></span>
+                    {% trans "Link" %} <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
                     <div class="btn-group">
                         <input data-placement="top" title="Copied!" type="text" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "paste" paste.id %}" readonly=""/>
                     </div>
                     <div class="btn-group action-copy">
-                        <button data-trigger="hover" data-toggle="tooltip" title="Copy to clipboard" aria-label="Copy to clipboard" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
+                        <button data-trigger="hover" data-toggle="tooltip" title="{% trans "Copy to clipboard" %}" aria-label="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
                     </div>
                 </ul>
             </div>
@@ -47,7 +47,11 @@
     {{ paste.rendered_body|safe }}
     </div>
 
-    <div class="expires">Expires in {{ paste.expiration|timeuntil }}</div>
+    <div class="expires">
+        {% blocktrans %}
+        Expires in {{ paste.expiration|timeuntil }}
+        {% endblocktrans %}
+    </div>
 
 </div>
 
