@@ -23,11 +23,11 @@ def home(request):
             [30 * 24 * 60, _("A month")],
             [100 * 365 * 24 * 60, _("Never")],
         ]
-        expires = forms.ChoiceField(choices=EXPIRATION)
+        expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60)
 
         class Meta:
             model = Paste
-            fields = ["title", "body", "language"]
+            fields = ["title", "body", "_language"]
 
     if request.method == 'POST':
         form = PasteForm(request.POST)

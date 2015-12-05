@@ -50,14 +50,16 @@ class Paste(models.Model):
         editable=False
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
-    title = models.CharField(max_length=500, blank=True)
+    title = models.CharField(max_length=500, blank=True, help_text=_("The title of the paste."))
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     expiration = models.DateTimeField()
-    language = models.CharField(
+    _language = models.CharField(
+        verbose_name=_("Language"),
         max_length=100,
         choices=get_languages(),
         default="autodetect",
+        db_column="language",
     )
 
     def __str__(self):
@@ -71,17 +73,28 @@ class Paste(models.Model):
     has_expired.boolean = True
 
     @property
-    def lexer_language(self):
-        if self.language == "autodetect":
+    def language(self):
+        """
+        The final language of the lexer. This is either the user-specified
+        language, or a guessed language, if the former was not specified.
+        """
+        if self._language == "autodetect":
             try:
                 language = guess_lexer(self.body).name
             except pygments.util.ClassNotFound:
                 language = "text"
         else:
-            language = self.language
+            language = self._language
         return language
 
     @property
     def rendered_body(self):
-        formatter = HtmlFormatter(linenos="table", cssclass="paste")
-        return highlight(self.body, pygments.lexers.get_lexer_by_name(self.lexer_language), formatter)
+        if self.language == "markdown":
+            return self.body
+        elif self.language == "textie":
+            return self.body
+        elif self.language == "restructuredtext":
+            return self.body
+        else:
+            formatter = HtmlFormatter(linenos="table", cssclass="paste")
+            return highlight(self.body, pygments.lexers.get_lexer_by_name(self.lexer_language), formatter)
