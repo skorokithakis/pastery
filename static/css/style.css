@@ -138,33 +138,58 @@
 .paste header h1 {
 	margin: 0;
 }
-.paste header .btn-group-justified {
+.paste .button-container {
 	position: absolute;
 	right: 0;
-	bottom: 0;
-	width: 200px;
+	top: 50%;
+	transform: translate(0, -50%);
 }
-.paste header .btn-group-justified>.btn-group:first-child button {
+.paste .button-container .dropdown-toggle:focus,
+.paste .button-container .dropdown-toggle:hover,
+.paste .button-container .dropdown-toggle {
 	border-right: none;
+	background-color: transparent;
+	box-shadow: none;
+	border-color: #ccc;
 }
-.paste header .btn-group-justified>.btn-group:last-child button {
+.paste .button-container .dropdown-toggle em {
+	font-style: normal;
+}
+.paste .button-container input {
+	border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    line-height: 1.5;
+    font-size: 12px;
+    padding: 5px;
+    border-left: none;
+    border-right: none;
+    margin: 0px 1px;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+.paste .button-container ul .glyphicon {
+	opacity: 0;
+}
+.paste .button-container ul .selected .glyphicon {
+	opacity: 1;
+}
+.paste .button-container .action-copy .btn {
 	border-left: none;
+	color: #555;
 }
 
 .btn-container {
 	text-align: center;
+	margin-top: 20px;
 }
 .new-pastery {
+	border-radius: 0;
 	outline: none;
 	font-size: 20px;
 	font-weight: bold;
-	color: #D41616;
-	display: inline-block;
-	margin-top: 20px;
-}
-.new-pastery:hover {
-	color: #D41616;
-	text-decoration: underline;
+	border-color: #D41616;
+	background-color: #D41616;
+	text-transform: uppercase;
+	color: #fff;
 }
 
 .pastetable pre {
