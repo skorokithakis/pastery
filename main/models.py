@@ -6,6 +6,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.urlresolvers import reverse
+from django.http import Http404
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -64,6 +65,16 @@ class Paste(models.Model):
 
     def __str__(self):
         return self.title if self.title else self.id
+
+    @classmethod
+    def get_by_id_or_404(cls, paste_id):
+        """Retrieve a paste by its ID, or None if it doesn't exist."""
+        paste = cls.objects.filter(pk=paste_id).first()
+
+        if not paste or paste.has_expired():
+            raise Http404
+        else:
+            return paste
 
     def get_absolute_url(self):
         return reverse("paste", args=[self.id])

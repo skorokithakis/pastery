@@ -3,7 +3,7 @@ import datetime
 from annoying.decorators import render_to
 from django import forms
 from django.contrib import messages
-from django.http import Http404, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.translation import ugettext as _
@@ -51,18 +51,12 @@ def home(request):
 
 @render_to("paste.html")
 def paste(request, paste_id):
-    paste = Paste.objects.filter(pk=paste_id).first()
-
-    if not paste or paste.has_expired():
-        raise Http404
+    paste = Paste.get_by_id_or_404(paste_id)
 
     return {"paste": paste}
 
 
 def raw_paste(request, paste_id):
-    paste = Paste.objects.filter(pk=paste_id).first()
-
-    if not paste or paste.has_expired():
-        raise Http404
+    paste = Paste.get_by_id_or_404(paste_id)
 
     return HttpResponse(paste.body, content_type="text/plain")
