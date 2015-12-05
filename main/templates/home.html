@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load bootstrap3 %}
+{% load bootstrap3 i18n %}
 
 {% block content %}
 
@@ -12,7 +12,7 @@
 
     <div class="fieldWrapper">
         {{ form.title.errors }}
-        <input class="form-control" id="id_title" maxlength="500" name="title" placeholder="The title of the paste." type="text" />
+        <input class="form-control" id="id_title" maxlength="500" name="title" placeholder="{{ form.title.help_text }}" type="text" />
     </div>
     <div class="fieldWrapper">
         {{ form.body.errors }}
@@ -23,12 +23,12 @@
     </div>
     <div class="fieldWrapper">
         {{ form.expires.errors }}
-        <label for="{{ form.sender.id_for_label }}">Expires in:</label>
+        <label for="{{ form.sender.id_for_label }}">{{ form.expires.label }}</label>
         {{ form.expires }}
     </div>
 
     {% buttons %}
-    <button type="submit" tabindex="2" class="btn btn-primary">Create</button>
+    <button type="submit" tabindex="2" class="btn btn-primary">{% trans "Create" %}</button>
     {% endbuttons %}
 </form>
 
