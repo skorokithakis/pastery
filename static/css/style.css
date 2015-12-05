@@ -104,7 +104,7 @@
 .pastery-form .form-group {
 	text-align: center;
 }
-.pastery-form .btn-primary:focus, 
+.pastery-form .btn-primary:focus,
 .pastery-form .btn-primary:active,
 .pastery-form .btn-primary {
 	border-radius: 0;
@@ -191,7 +191,7 @@
 	text-align: center;
 	margin-top: 20px;
 }
-.new-pastery {
+.new-paste {
 	border-radius: 0;
 	outline: none;
 	font-size: 20px;

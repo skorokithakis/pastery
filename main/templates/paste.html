@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load bootstrap3 %}
+{% load bootstrap3 i18n %}
 
 {% block content %}
 
@@ -53,7 +53,7 @@
 </div>
 
 <div class="btn-container">
-	<a href="{% url 'home' %}" class="btn new-pastery">New Pastery</a>
+    <a href="{% url 'home' %}" class="btn new-paste">{% trans "New paste" %}</a>
 <div>
 
 {% endblock %}
