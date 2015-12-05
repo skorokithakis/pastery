@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load bootstrap3 i18n %}
+{% load bootstrap3 i18n tabindex %}
 
 {% block content %}
 
@@ -12,19 +12,19 @@
 
     <div class="fieldWrapper">
         {{ form.title.errors }}
-        <input class="form-control" id="id_title" maxlength="500" name="title" placeholder="{{ form.title.help_text }}" type="text" />
+        <input class="form-control" id="id_title" maxlength="500" name="title" placeholder="{{ form.title.help_text }}" type="text" tabindex="6" />
     </div>
     <div class="fieldWrapper">
         {{ form.body.errors }}
         <textarea autofocus required tabindex="1" class="form-control" cols="40" id="id_body" name="body" rows="10"></textarea>
         <div class="language">
-            {{ form.raw_language }}
+            {{ form.raw_language|tabindex:5 }}
         </div>
     </div>
     <div class="fieldWrapper">
         {{ form.expires.errors }}
         <label for="{{ form.sender.id_for_label }}">{{ form.expires.label }}</label>
-        {{ form.expires }}
+        {{ form.expires|tabindex:4 }}
     </div>
 
     {% buttons %}
