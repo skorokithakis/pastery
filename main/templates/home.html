@@ -1,9 +1,21 @@
 {% extends "base.html" %}
 
-{% load bootstrap3 %}
+{% load bootstrap3 browserid %}
 
 {% block content %}
 Pastery!
+
+{% browserid_css %}
+{% browserid_info %}
+    {% if user.is_authenticated %}
+      <p>Current user: {{ user.email }}</p>
+      {% browserid_logout text='Logout' %}
+    {% else %}
+      {% browserid_login text='Login' color='dark' %}
+    {% endif %}
+
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    {% browserid_js %}
 
 <form action="{% url "home" %}" method="post" class="form">
     {% csrf_token %}

@@ -21,5 +21,6 @@ from main import urls as main_urls
 
 urlpatterns = [
     url(r'^narnia/', admin.site.urls),
+    url(r'', include('django_browserid.urls')),
     url(r'^', include(main_urls)),
 ]

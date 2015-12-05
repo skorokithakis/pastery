@@ -36,7 +36,7 @@ def home(request):
             data["title"] = clean["title"]
             data["body"] = clean["body"]
             data["language"] = clean["language"]
-            data["expiration"] = timezone.now() + datetime.timedelta(int(form.cleaned_data["expires"]))
+            data["expiration"] = timezone.now() + datetime.timedelta(minutes=int(form.cleaned_data["expires"]))
             if request.user.is_authenticated():
                 data["user"] = request.user
             paste = Paste.objects.create(**data)
@@ -51,7 +51,7 @@ def home(request):
 def paste(request, paste_id):
     paste = Paste.objects.filter(pk=paste_id).first()
 
-    if not paste or paste.has_expired:
+    if not paste or paste.has_expired():
         raise Http404
 
     return {"paste": paste}

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'debug_toolbar',
     'bootstrap3',
+    'django_browserid',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -56,7 +57,15 @@ MIDDLEWARE_CLASSES = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = (
+   'django.contrib.auth.backends.ModelBackend',
+   'django_browserid.auth.BrowserIDBackend',
+)
+
 ROOT_URLCONF = 'pastebin.urls'
+
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/login/"
 
 TEMPLATES = [
     {

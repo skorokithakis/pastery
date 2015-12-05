@@ -1,9 +1,11 @@
 Django~=1.9
 django-annoying~=0.8.4
 django-bootstrap3~=6.2.2
+django-browserid~=1.0.2
 django-debug-toolbar~=1.4
 django-extensions~=1.5.9
 pygments~=2.0.2
+pytz
 shortuuid~=0.4.2
 Werkzeug~=0.11.2
 

@@ -30,9 +30,9 @@ class Paste(models.Model):
     def get_absolute_url(self):
         return reverse("paste", args=[self.id])
 
-    @property
     def has_expired(self):
         return self.expiration < timezone.now()
+    has_expired.boolean = True
 
     @property
     def style(self):
