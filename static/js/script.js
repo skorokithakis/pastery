@@ -7,31 +7,35 @@ var ShareSelector = (function() {
 
     $('[data-placement="tooltip"],[data-toggle="tooltip"]').tooltip()
 
-    var label = $('#share-dropdown .dropdown-toggle em');
-    var choices = $('#share-dropdown .dropdown-menu a');
+    var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-    $('.action-copy button').on("click", function(e) {
+    if(iOS) {
+      $('.action-copy button').remove();
+      $('.paste .button-container input').css('padding', '10px');
+    }
+    else  
+      $('.action-copy button').on("click", function(e) {
 
-      var element = $(this).parent().parent().find('.btn-group input')[0];
+        var element = $(this).parent().parent().find('.btn-group input')[0];
 
-      element.setSelectionRange(0, element.value.length);
+        element.setSelectionRange(0, element.value.length);
 
-      $(this).tooltip('hide');
+        $(this).tooltip('hide');
 
-      try {
-        document.execCommand('copy');
-      } catch(err) { }
+        try {
+          document.execCommand('copy');
+        } catch(err) { }
 
-      $(element).tooltip('show');
+        $(element).tooltip('show');
 
-      setTimeout(function() {
+        setTimeout(function() {
 
-        $(element).tooltip('hide');
+          $(element).tooltip('hide');
 
-      }, 1000);
+        }, 1000);
 
-      e.stopPropagation();
-    });
+        e.stopPropagation();
+      });
 
     $('#share-dropdown input').on("click", function(e) {
 
