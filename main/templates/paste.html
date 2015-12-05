@@ -18,25 +18,26 @@
 				<ul class="dropdown-menu">
 					{% if 0 %}
 					<li>
-					<a href="javascript:void(0);" data-choice="Embed" class="selected">
+					<a href="javascript:void(0);" data-choice="embed" data-legend="Embed" class="selected">
 						<span class="glyphicon glyphicon-ok"></span> Embed
 					</a>
 					</li>
 					{% endif %}
 					<li>
-					<a href="javascript:void(0);" data-choice="Raw" class="selected">
+					<a href="javascript:void(0);" data-choice="raw" data-legend="Raw"class="selected">
 						<span class="glyphicon glyphicon-ok"></span> Raw
 					</a>
 					</li>
 					<li>
-					<a href="javascript:void(0);" data-choice="Link">
+					<a href="javascript:void(0);" data-choice="link" data-legend="Link">
 						<span class="glyphicon glyphicon-ok"></span> Link
 					</a>
 					</li>
 				</ul>
 			</div>
+
 			<div class="btn-group">
-				<input data-placement="top" title="Copied!" type="text" value="https://gist.github.com/stelabouras/aae57b27dea11c34523f" readonly=""/>
+				<input data-placement="top" title="Copied!" type="text" data-raw="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "raw-paste" paste.id %}" data-link="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "paste" paste.id %}" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "raw-paste" paste.id %}" readonly=""/>
 			</div>
 			<div class="btn-group action-copy">
 				<button aria-label="Copy to clipboard" id="copy-clipboard" title="Copy to clipboard" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
