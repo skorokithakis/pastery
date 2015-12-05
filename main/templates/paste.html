@@ -10,7 +10,8 @@
 
         <div class="btn-group button-container" id="share-dropdown">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Raw
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Raw <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
                     <div class="btn-group">
@@ -22,7 +23,9 @@
                 </ul>
             </div>
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Link</button>
+                <button type="button" class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Link <span class="caret"></span>
+                </button>
                 <ul class="dropdown-menu dropdown-menu-right">
                     <div class="btn-group">
                         <input data-placement="top" title="Copied!" type="text" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "paste" paste.id %}" readonly=""/>
