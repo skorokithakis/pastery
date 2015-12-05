@@ -3,6 +3,7 @@ import pygments
 from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 from pygments import highlight
 from pygments.lexers import guess_lexer, get_all_lexers
 from pygments.formatters import HtmlFormatter
@@ -21,13 +22,17 @@ class Paste(models.Model):
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     expiration = models.DateTimeField()
-    language = models.CharField(max_length=100, choices=LEXERS, blank=True)
+    language = models.CharField(max_length=100, choices=LEXERS, default="text")
 
     def __str__(self):
         return self.title if self.title else self.id
 
     def get_absolute_url(self):
         return reverse("paste", args=[self.id])
+
+    @property
+    def has_expired(self):
+        return self.expiration < timezone.now()
 
     @property
     def style(self):

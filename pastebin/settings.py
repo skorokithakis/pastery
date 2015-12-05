@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'main',
     'django_extensions',
     'debug_toolbar',
+    'bootstrap3',
 ]
 
 MIDDLEWARE_CLASSES = [
