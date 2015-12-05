@@ -36,7 +36,7 @@ def home(request):
             data = {}
             data["title"] = clean["title"]
             data["body"] = clean["body"]
-            data["language"] = clean["language"]
+            data["raw_language"] = clean["raw_language"]
             data["expiration"] = timezone.now() + datetime.timedelta(
                 minutes=int(form.cleaned_data["expires"]))
             if request.user.is_authenticated():
