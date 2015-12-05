@@ -1,5 +1,6 @@
 import shortuuid
 import pygments
+import markdown
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -54,12 +55,11 @@ class Paste(models.Model):
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     expiration = models.DateTimeField()
-    _language = models.CharField(
+    raw_language = models.CharField(
         verbose_name=_("Language"),
         max_length=100,
         choices=get_languages(),
-        default="autodetect",
-        db_column="language",
+        default="autodetect"
     )
 
     def __str__(self):
@@ -78,23 +78,23 @@ class Paste(models.Model):
         The final language of the lexer. This is either the user-specified
         language, or a guessed language, if the former was not specified.
         """
-        if self._language == "autodetect":
+        if self.raw_language == "autodetect":
             try:
                 language = guess_lexer(self.body).name
             except pygments.util.ClassNotFound:
                 language = "text"
         else:
-            language = self._language
+            language = self.raw_language
         return language
 
     @property
     def rendered_body(self):
         if self.language == "markdown":
-            return self.body
+            return markdown.markdown(self.body)
         elif self.language == "textie":
             return self.body
         elif self.language == "restructuredtext":
             return self.body
         else:
             formatter = HtmlFormatter(linenos="table", cssclass="paste")
-            return highlight(self.body, pygments.lexers.get_lexer_by_name(self.lexer_language), formatter)
+            return highlight(self.body, pygments.lexers.get_lexer_by_name(self.language), formatter)

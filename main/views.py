@@ -27,7 +27,7 @@ def home(request):
 
         class Meta:
             model = Paste
-            fields = ["title", "body", "_language"]
+            fields = ["title", "body", "raw_language"]
 
     if request.method == 'POST':
         form = PasteForm(request.POST)
