@@ -98,7 +98,6 @@ class Paste(models.Model):
 
     def has_expired(self):
         return self.expiration < timezone.now()
-
     has_expired.boolean = True
 
     @property
