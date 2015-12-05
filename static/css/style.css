@@ -23,11 +23,20 @@
     position: absolute;
     right: 0;
     top: -20px;
-    background: #999;
+    color: #888;
+}
+.top-header .persona em {
+    font-style: normal;
     padding: 5px 10px;
 }
 .top-header .persona a {
+    padding: 5px 10px;
+    background: #888;
     color: #fff;
+    display: inline-block;
+}
+.top-header .persona a:hover {
+    background-color: #999;
 }
 .top-header .persona a:focus,
 .top-header .persona a:active,
