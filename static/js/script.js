@@ -55,8 +55,8 @@ var ShareSelector = (function() {
 
       element.setSelectionRange(0, element.value.length);
 
-      try {  
-        document.execCommand('copy');  
+      try {
+        document.execCommand('copy');
       } catch(err) { }
 
       $(input).tooltip('show');
@@ -77,9 +77,9 @@ var ShareSelector = (function() {
       // range.selectNode(this);
       // window.getSelection().addRange(range);
 
-      // try {  
-      //   document.execCommand('copy');  
-      // } catch(err) { }  
+      // try {
+      //   document.execCommand('copy');
+      // } catch(err) { }
 
       // $(e.target).one('mouseup', function(e) { e.preventDefault(); });
     });
