@@ -22,18 +22,16 @@
             <h1>{{ current_site.name }}</h1>
             <h2>{% trans "So sweet. Much paste." %}</h2>
 
-            {% if 0 %}
             <div class="persona">
                 {% browserid_info %}
 
                 {% if user.is_authenticated %}
-                    Current user: {{ user.email }}
+                    <em>{{ user.email }}</em>
                     {% browserid_logout text='Logout' %}
                 {% else %}
                   {% browserid_login text='Login' color='dark' %}
                 {% endif %}
             </div>
-            {% endif %}
         </header>
 
         <article>
