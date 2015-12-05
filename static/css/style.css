@@ -275,6 +275,11 @@
         padding: 100px 0 0;
         background-position: center top;
         text-align: center;
+        margin-top: 40px;
+    }
+    .top-header .persona {
+        right: 15px;
+        top: -40px;
     }
     .top-header a.home {
         width: 100%;
