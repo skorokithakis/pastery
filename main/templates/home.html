@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load bootstrap3 i18n %}
+{% load bootstrap3 i18n cache %}
 
 {% block content %}
 
@@ -10,6 +10,7 @@
 
     {{ form.non_field_errors }}
 
+    {% cache 3600 pasteform %}
     <div class="fieldWrapper">
         {{ form.title.errors }}
         <input class="form-control" id="id_title" maxlength="500" name="title" placeholder="{{ form.title.help_text }}" type="text" />
@@ -30,6 +31,7 @@
     {% buttons %}
     <button type="submit" tabindex="2" class="btn btn-primary">{% trans "Create" %}</button>
     {% endbuttons %}
+    {% endcache %}
 </form>
 
 {% endblock %}

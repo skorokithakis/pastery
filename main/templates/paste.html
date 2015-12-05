@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load bootstrap3 i18n %}
+{% load bootstrap3 i18n cache %}
 
 {% block content %}
 
@@ -40,12 +40,13 @@
         {% if paste.title %}
         <h1>{{ paste }}</h1>
         {% endif %}
-
     </header>
 
+    {% cache 3600 pasteform paste.id request.user.style_name %}
     <div class="pretty-paste{% if paste.language == 'markdown' %} markdown-language{% endif %}">
     {{ paste.rendered_body|safe }}
     </div>
+    {% endcache %}
 
     <div class="expires">
         {% blocktrans with paste.expiration|timeuntil as until %}
