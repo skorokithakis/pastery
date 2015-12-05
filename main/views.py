@@ -22,7 +22,7 @@ def home(request):
             [30 * 24 * 60, _("a month")],
             [100 * 365 * 24 * 60, _("never")],
         ]
-        expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60)
+        expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60, label=_("Expires in"))
 
         class Meta:
             model = Paste
