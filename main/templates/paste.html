@@ -1,16 +1,5 @@
 {% extends "base.html" %}
 
-{% block extra_head %}
-<style>
-    .pastetable pre {
-        background-color: transparent;
-        border: 0;
-        color: inherit;
-    }
-{{ paste.style }}
-</style>
-{% endblock %}
-
 {% block content %}
 <h1>{{ paste }}</h1>
 {{ paste.rendered_body|safe }}

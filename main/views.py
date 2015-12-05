@@ -36,7 +36,8 @@ def home(request):
             data["title"] = clean["title"]
             data["body"] = clean["body"]
             data["language"] = clean["language"]
-            data["expiration"] = timezone.now() + datetime.timedelta(minutes=int(form.cleaned_data["expires"]))
+            data["expiration"] = timezone.now() + datetime.timedelta(
+                minutes=int(form.cleaned_data["expires"]))
             if request.user.is_authenticated():
                 data["user"] = request.user
             paste = Paste.objects.create(**data)
