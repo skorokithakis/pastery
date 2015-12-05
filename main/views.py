@@ -2,7 +2,7 @@ import datetime
 
 from annoying.decorators import render_to
 from django import forms
-from django.contrib import messages
+#from django.contrib import messages
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect
 from django.utils import timezone
@@ -42,7 +42,7 @@ def home(request):
             if request.user.is_authenticated():
                 data["user"] = request.user
             paste = Paste.objects.create(**data)
-            messages.success(request, _("Your paste has been created."))
+            #messages.success(request, _("Your paste has been created."))
             return redirect(paste)
     else:
         form = PasteForm()

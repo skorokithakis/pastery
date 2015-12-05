@@ -33,6 +33,7 @@ var ShareSelector = (function() {
 
     var label = $('#share-dropdown .dropdown-toggle em');
     var choices = $('#share-dropdown .dropdown-menu a');
+    var input = $('#share-dropdown input');
 
     $(choices).on('click', function() {
 
@@ -41,11 +42,12 @@ var ShareSelector = (function() {
 
       $('#share-dropdown a.selected').removeClass('selected');
       $(this).addClass('selected');
-      $(label).html($(this).data('choice'));
 
+      var choice = $(this).data('choice');
+
+      $(label).html($(this).data('legend'));
+      $(input).val($(input).data(choice));
     });
-
-    var input = $('#share-dropdown input');
 
     $('#copy-clipboard').on("click", function(e) {
 
