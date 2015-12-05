@@ -23,7 +23,8 @@ def get_languages():
 
     top = [
         "bash", "c", "csharp", "cpp", "css", "html", "java", "js", "json",
-        "lua", "text", "objective-c", "perl", "php", "python", "ruby", "swift"
+        "markdown", "lua", "text", "objective-c", "perl", "php", "python",
+        "ruby", "swift"
     ]
 
     top_languages = [["autodetect", _("Autodetect")]]
