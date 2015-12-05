@@ -1,27 +1,3 @@
-var LanguageSelector = (function() {
-
-  var init = function() {
-
-    var em = $('#selected-language');
-
-    if(em.length == 0)
-      return;
-
-    $('#id_raw_language').on('change', function(element) {
-
-      var value = this.selectedIndex;
-
-      var text = this.options[value].text;
-
-      $(em).html(text);
-    });
-  }
-
-  return {
-    'initialize': init
-  }
-})();
-
 var ShareSelector = (function() {
 
   var init = function() {
@@ -71,17 +47,6 @@ var ShareSelector = (function() {
     $(input).on("click", function(e) {
 
       this.setSelectionRange(0, this.value.length);
-
-      // console.log(this);
-      // var range = document.createRange();
-      // range.selectNode(this);
-      // window.getSelection().addRange(range);
-
-      // try {  
-      //   document.execCommand('copy');  
-      // } catch(err) { }  
-
-      // $(e.target).one('mouseup', function(e) { e.preventDefault(); });
     });
   }
 
@@ -93,5 +58,4 @@ var ShareSelector = (function() {
 $(document).ready(function() {
 
   ShareSelector.initialize();
-  LanguageSelector.initialize();
 });
