@@ -1,9 +1,43 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 
 {% block content %}
-<h1>{{ paste }}</h1>
 
-<div class="pretty-paste">
-{{ paste.rendered_body|safe }}
+{% bootstrap_messages %}
+
+<div class="paste">
+	<header>
+		<h1>{{ paste }}</h1>
+		<div class="btn-group btn-group-justified" role="group" aria-label="...">
+		  <div class="btn-group" role="group">
+			  <button type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Link</button>
+			  <ul class="dropdown-menu dropdown-menu-right">
+			    <li><a href="#">Action</a></li>
+			  </ul>
+		  </div>
+		  <div class="btn-group" role="group">
+			  <button type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Embed</button>
+			  <ul class="dropdown-menu dropdown-menu-right">
+			    <li><a href="#">Action</a></li>
+			  </ul>
+		  </div>
+		  <div class="btn-group" role="group">
+		  <button type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Raw</button>
+			  <ul class="dropdown-menu dropdown-menu-right">
+			    <li><a href="#">Action</a></li>
+			  </ul>
+		  </div>
+		</div>
+	</header>
+
+	<div class="pretty-paste">
+	{{ paste.rendered_body|safe }}
+	</div>
+
 </div>
+
+<div class="btn-container">
+	<a href="{% url 'home' %}" class="btn new-pastery">&larr; Create a new Pastery</a>
+<div>
+
 {% endblock %}
