@@ -1,6 +1,7 @@
-import shortuuid
-import pygments
 import markdown
+import pygments
+import shortuuid
+import textile
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -19,7 +20,6 @@ def get_languages():
     lexers += [
             ["markdown", "Markdown"],
             ["textile", "Textile"],
-            ["restructuredtext", "reStructuredText"],
         ]
     sorted_lexers = sorted(lexers, key=lambda x: x[0].lower())
     sorted_lexers = [
@@ -89,12 +89,11 @@ class Paste(models.Model):
 
     @property
     def rendered_body(self):
-        if self.language == "markdown":
+        language = self.language
+        if language == "markdown":
             return markdown.markdown(self.body)
-        elif self.language == "textie":
-            return self.body
-        elif self.language == "restructuredtext":
-            return self.body
+        elif language == "textile":
+            return textile.textile(self.body)
         else:
             formatter = HtmlFormatter(linenos="table", cssclass="paste")
-            return highlight(self.body, pygments.lexers.get_lexer_by_name(self.language), formatter)
+            return highlight(self.body, pygments.lexers.get_lexer_by_name(language), formatter)
