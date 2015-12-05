@@ -2,5 +2,8 @@
 
 {% block content %}
 <h1>{{ paste }}</h1>
+
+<div class="pretty-paste">
 {{ paste.rendered_body|safe }}
+</div>
 {% endblock %}

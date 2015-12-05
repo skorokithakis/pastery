@@ -71,14 +71,6 @@ class Paste(models.Model):
     has_expired.boolean = True
 
     @property
-    def style(self):
-        return self.formatter.get_style_defs(".pastetable")
-
-    @property
-    def formatter(self):
-        return HtmlFormatter(style="monokai", linenos="table", cssclass="paste")
-
-    @property
     def lexer_language(self):
         if self.language == "autodetect":
             try:
@@ -91,4 +83,5 @@ class Paste(models.Model):
 
     @property
     def rendered_body(self):
-        return highlight(self.body, pygments.lexers.get_lexer_by_name(self.lexer_language), self.formatter)
+        formatter = HtmlFormatter(linenos="table", cssclass="paste")
+        return highlight(self.body, pygments.lexers.get_lexer_by_name(self.lexer_language), formatter)

@@ -1,35 +1,35 @@
-pretty-paste .hll { background-color: #ffffcc }
-pretty-paste  { background: #ffffff; }
-pretty-paste .c { font-style: italic } /* Comment */
-pretty-paste .err { border: 1px solid #FF0000 } /* Error */
-pretty-paste .k { font-weight: bold } /* Keyword */
-pretty-paste .cm { font-style: italic } /* Comment.Multiline */
-pretty-paste .c1 { font-style: italic } /* Comment.Single */
-pretty-paste .cs { font-style: italic } /* Comment.Special */
-pretty-paste .ge { font-style: italic } /* Generic.Emph */
-pretty-paste .gh { font-weight: bold } /* Generic.Heading */
-pretty-paste .gp { font-weight: bold } /* Generic.Prompt */
-pretty-paste .gs { font-weight: bold } /* Generic.Strong */
-pretty-paste .gu { font-weight: bold } /* Generic.Subheading */
-pretty-paste .kc { font-weight: bold } /* Keyword.Constant */
-pretty-paste .kd { font-weight: bold } /* Keyword.Declaration */
-pretty-paste .kn { font-weight: bold } /* Keyword.Namespace */
-pretty-paste .kr { font-weight: bold } /* Keyword.Reserved */
-pretty-paste .s { font-style: italic } /* Literal.String */
-pretty-paste .nc { font-weight: bold } /* Name.Class */
-pretty-paste .ni { font-weight: bold } /* Name.Entity */
-pretty-paste .ne { font-weight: bold } /* Name.Exception */
-pretty-paste .nn { font-weight: bold } /* Name.Namespace */
-pretty-paste .nt { font-weight: bold } /* Name.Tag */
-pretty-paste .ow { font-weight: bold } /* Operator.Word */
-pretty-paste .sb { font-style: italic } /* Literal.String.Backtick */
-pretty-paste .sc { font-style: italic } /* Literal.String.Char */
-pretty-paste .sd { font-style: italic } /* Literal.String.Doc */
-pretty-paste .s2 { font-style: italic } /* Literal.String.Double */
-pretty-paste .se { font-weight: bold; font-style: italic } /* Literal.String.Escape */
-pretty-paste .sh { font-style: italic } /* Literal.String.Heredoc */
-pretty-paste .si { font-weight: bold; font-style: italic } /* Literal.String.Interpol */
-pretty-paste .sx { font-style: italic } /* Literal.String.Other */
-pretty-paste .sr { font-style: italic } /* Literal.String.Regex */
-pretty-paste .s1 { font-style: italic } /* Literal.String.Single */
-pretty-paste .ss { font-style: italic } /* Literal.String.Symbol */
+.pretty-paste .hll { background-color: #ffffcc }
+.pretty-paste  { background: #ffffff; }
+.pretty-paste .c { font-style: italic } /* Comment */
+.pretty-paste .err { border: 1px solid #FF0000 } /* Error */
+.pretty-paste .k { font-weight: bold } /* Keyword */
+.pretty-paste .cm { font-style: italic } /* Comment.Multiline */
+.pretty-paste .c1 { font-style: italic } /* Comment.Single */
+.pretty-paste .cs { font-style: italic } /* Comment.Special */
+.pretty-paste .ge { font-style: italic } /* Generic.Emph */
+.pretty-paste .gh { font-weight: bold } /* Generic.Heading */
+.pretty-paste .gp { font-weight: bold } /* Generic.Prompt */
+.pretty-paste .gs { font-weight: bold } /* Generic.Strong */
+.pretty-paste .gu { font-weight: bold } /* Generic.Subheading */
+.pretty-paste .kc { font-weight: bold } /* Keyword.Constant */
+.pretty-paste .kd { font-weight: bold } /* Keyword.Declaration */
+.pretty-paste .kn { font-weight: bold } /* Keyword.Namespace */
+.pretty-paste .kr { font-weight: bold } /* Keyword.Reserved */
+.pretty-paste .s { font-style: italic } /* Literal.String */
+.pretty-paste .nc { font-weight: bold } /* Name.Class */
+.pretty-paste .ni { font-weight: bold } /* Name.Entity */
+.pretty-paste .ne { font-weight: bold } /* Name.Exception */
+.pretty-paste .nn { font-weight: bold } /* Name.Namespace */
+.pretty-paste .nt { font-weight: bold } /* Name.Tag */
+.pretty-paste .ow { font-weight: bold } /* Operator.Word */
+.pretty-paste .sb { font-style: italic } /* Literal.String.Backtick */
+.pretty-paste .sc { font-style: italic } /* Literal.String.Char */
+.pretty-paste .sd { font-style: italic } /* Literal.String.Doc */
+.pretty-paste .s2 { font-style: italic } /* Literal.String.Double */
+.pretty-paste .se { font-weight: bold; font-style: italic } /* Literal.String.Escape */
+.pretty-paste .sh { font-style: italic } /* Literal.String.Heredoc */
+.pretty-paste .si { font-weight: bold; font-style: italic } /* Literal.String.Interpol */
+.pretty-paste .sx { font-style: italic } /* Literal.String.Other */
+.pretty-paste .sr { font-style: italic } /* Literal.String.Regex */
+.pretty-paste .s1 { font-style: italic } /* Literal.String.Single */
+.pretty-paste .ss { font-style: italic } /* Literal.String.Symbol */

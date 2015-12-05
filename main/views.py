@@ -21,6 +21,7 @@ def home(request):
             [7 * 24 * 60, _("A week")],
             [14 * 24 * 60, _("Two weeks")],
             [30 * 24 * 60, _("A month")],
+            [100 * 365 * 24 * 60, _("Never")],
         ]
         expires = forms.ChoiceField(choices=EXPIRATION)
 
