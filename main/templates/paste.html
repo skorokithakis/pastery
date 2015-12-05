@@ -49,7 +49,7 @@
 
     <div class="expires">
         {% blocktrans with paste.expiration|timeuntil as until %}
-        Expires in {{ until }}.
+        {% trans "Expires in" %} {{ until }}.
         {% endblocktrans %}
     </div>
 
