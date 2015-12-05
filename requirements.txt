@@ -7,6 +7,7 @@ django-extensions~=1.5.9
 docutils~=0.12
 Markdown~=2.6.5
 pygments~=2.0.2
+psycopg~=2.6.1
 pytz
 shortuuid~=0.4.2
 Textile~=2.2.2
