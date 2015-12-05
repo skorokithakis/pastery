@@ -1,5 +1,4 @@
-{% load bootstrap3 staticfiles %}
-{% load bootstrap3 browserid %}
+{% load bootstrap3 staticfiles browserid %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,10 +14,9 @@
 </head>
 <body>
     <div class="container">
-
         <header class="top-header clearfix">
-            <a href="{% url 'home' %}" class="home" title="Pastery Homepage">Pastery Homepage</a>
-            <h1>Pastery</h1>
+            <a href="{% url 'home' %}" class="home" title="{{ current_site.name }}">{{ current_site.name }}</a>
+            <h1>{{ current_site.name }}</h1>
             <h2>So sweet. Much paste.</h2>
 
             {% if 0 %}
@@ -33,7 +31,6 @@
                 {% endif %}
             </div>
             {% endif %}
-
         </header>
 
         <article>
