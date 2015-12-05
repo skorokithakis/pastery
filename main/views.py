@@ -51,12 +51,8 @@ def home(request):
 
 @render_to("paste.html")
 def paste(request, paste_id):
-    paste = Paste.get_by_id_or_404(paste_id)
-
-    return {"paste": paste}
+    return {"paste": Paste.get_by_id_or_404(paste_id)}
 
 
 def raw_paste(request, paste_id):
-    paste = Paste.get_by_id_or_404(paste_id)
-
-    return HttpResponse(paste.body, content_type="text/plain")
+    return HttpResponse(Paste.get_by_id_or_404(paste_id).body, content_type="text/plain")
