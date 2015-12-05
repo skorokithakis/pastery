@@ -91,7 +91,7 @@ class Paste(models.Model):
         """
         if self.raw_language == "autodetect":
             try:
-                language = guess_lexer(self.body).name
+                language = guess_lexer(self.body).aliases[0]
             except pygments.util.ClassNotFound:
                 language = "text"
         else:
