@@ -31,8 +31,8 @@ var ShareSelector = (function() {
 
       element.setSelectionRange(0, element.value.length);
 
-      try {  
-        document.execCommand('copy');  
+      try {
+        document.execCommand('copy');
       } catch(err) { }
 
       $(input).tooltip('show');
