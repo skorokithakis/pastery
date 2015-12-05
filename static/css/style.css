@@ -140,13 +140,16 @@
 .paste header {
     position: relative;
     margin-bottom: 20px;
+    min-height: 34px;
 }
 .paste header h1 {
     margin: 0;
     padding-right: 160px;
 }
 .paste .button-container {
-    float: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
 .paste .button-container .dropdown-toggle:focus,
 .paste .button-container .dropdown-toggle:hover,
@@ -156,7 +159,7 @@
     box-shadow: none;
     color: #fff;
     border-color: #fff;
-    padding: 5px 10px;
+    padding: 7px 10px;
     z-index: 0;
     font-weight: bold;
     text-transform: uppercase;
@@ -167,9 +170,13 @@
 .paste .button-container .open .dropdown-toggle {
     background: #EB1717;
 }
-
+.paste .button-container .tooltip {
+    white-space: nowrap;
+}
 .paste .button-container .dropdown-menu {
     padding: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 .paste .button-container .dropdown-toggle em {
     font-style: normal;
@@ -196,8 +203,8 @@
     top: 0;
 }
 .paste .button-container .action-copy .btn {
-    color: #D41616;
-    background-color: transparent;
+    color: #fff;
+    background-color: #D41616;
     border: none;
     padding: 10px 15px;
     border-radius: 0;
@@ -274,6 +281,7 @@
         padding-right: 0;
     }
     .paste .button-container {
+        position: static;
         float: none;
         margin: 0 0 20px;
     }
