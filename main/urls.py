@@ -1,10 +1,10 @@
 from django.conf.urls import url
-from django.contrib import admin
 
 from main import views
 
 
 urlpatterns = [
     url(r'^$', views.home, name="home"),
-    url(r'^(?P<paste_id>[a-z]{5,})$', views.paste, name="paste"),
+    url(r'^(?P<paste_id>[a-z]{4,})/raw/$', views.raw_paste, name="raw-paste"),
+    url(r'^(?P<paste_id>[a-z]{4,})/$', views.paste, name="paste"),
 ]
