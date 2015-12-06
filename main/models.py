@@ -39,7 +39,7 @@ def get_languages():
 
 
 LANGUAGES = get_languages()
-LANGUAGE_DICT = dict([[lexer[1][0], lexer[0]] for lexer in get_all_lexers()])
+LANGUAGE_DICT = dict(LANGUAGES)
 
 
 def paste_uuid():
