@@ -67,5 +67,6 @@ var UserStyles = {};
 {% for nick, name in languages %}
 UserStyles['{{ nick }}'] = '{% static "css/"|add:nick|add:".css" %}';
 {% endfor %}
+DefaultUserStyle = '{{ settings.DEFAULT_STYLE }}';
 </script>
 {% endblock %}

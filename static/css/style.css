@@ -333,6 +333,11 @@ select:focus {
 .account-form article {
     margin-bottom: 20px;
 }
+.account-form select {
+    max-width: 200px;
+    display: inline-block;
+    margin-left: 20px;
+}
 
 @media (max-width: 550px) {
 
