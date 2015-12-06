@@ -119,7 +119,7 @@ class Paste(models.Model):
     def rendered_body(self):
         language = self.language
         if language == "markdown":
-            return markdown.markdown(self.body)
+            return markdown.markdown(self.body, ["markdown.extensions.extra"])
         elif language == "textile":
             return textile.textile(self.body)
         else:
