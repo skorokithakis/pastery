@@ -8,7 +8,9 @@ from django.views.decorators.http import require_POST
 from django.utils import timezone
 from schema import Schema, Use, Optional, And, SchemaError
 
-from main.models import Paste
+from main.models import Paste, LANGUAGES
+
+LANGUAGE_NAMES = [x[0] for x in LANGUAGES]
 
 
 @require_POST
@@ -17,10 +19,9 @@ from main.models import Paste
 def paste(request):
     schema = Schema(
         And({
-            Optional("title", "hi"): And([str], Use(lambda x: x[0])),
-            Optional("language", "autodetect"): And([str], Use(lambda x: x[0])),
-            Optional("expiration", 1440): And([str], Use(lambda x: x[0]), Use(int)),
-            Optional(object): object,  # Ignore everything else.
+            Optional("title", default=""): And([str], Use(lambda x: x[0]), lambda x: len(x) < 200, error="\"title\" should be a string less than 200 characters long."),
+            Optional("language", default="autodetect"): And([str], Use(lambda x: x[0]), lambda x: x in LANGUAGE_NAMES, error="\"language\" should be the name of a supported language."),
+            Optional("duration", default=1440): And([str], Use(lambda x: x[0]), Use(int), Use(lambda x: x > 0), error="\"duration\" should be an integer number of minutes before the paste is deleted."),
             },
             # Make a named tuple out of the result.
             Use(lambda x: namedtuple('GenericDict', x.keys())(**x))
@@ -34,9 +35,9 @@ def paste(request):
 
     paste = Paste.objects.create(
             title=data.title,
-            language=data.language,
+            raw_language=data.language,
             body=request.body,
-            expiration=timezone.now() + datetime.timedelta(minutes=data.expiration),
+            expiration=timezone.now() + datetime.timedelta(minutes=data.duration),
             )
 
     return {"url": "https://%s%s" % (get_current_site(request).domain, paste.get_absolute_url())}
