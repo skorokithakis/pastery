@@ -49,31 +49,7 @@ var ShareSelector = (function() {
   }
 })();
 
-var FixWidth = (function() {
-
-  var init = function() {
-
-    if($('.pretty-paste').length == 0)
-      return;
-
-    var windowWidth = document.documentElement.clientWidth;
-    var containerWidth = $('.pretty-paste').width();
-    var codeWidth = $('.pretty-paste table').width();
-
-    if(windowWidth < codeWidth)
-      return;
-
-    $('.pretty-paste').addClass('enable');
-
-  };
-
-  return {
-    'initialize': init
-  }
-})();
-
 $(document).ready(function() {
 
-  FixWidth.initialize();
   ShareSelector.initialize();
 });

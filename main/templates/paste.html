@@ -49,17 +49,21 @@
     </div>
     {% endcache %}
 
-    {% if paste.expiration %}
-    <div class="expires">
-        {% blocktrans with paste.expiration|timeuntil as until %}
-        Expires in {{ until }}.
-        {% endblocktrans %}
-    </div>
-    {% endif %}
+    <div class="meta-footer clearfix">
 
-    <div class="language">
-        {% trans "Language:" %}
-        {{ paste.language }}
+        {% if paste.expiration %}
+        <div class="expires">
+            {% blocktrans with paste.expiration|timeuntil as until %}
+            Expires in {{ until }}
+            {% endblocktrans %}
+        </div>
+        {% endif %}
+
+        <div class="language">
+            {% trans "Language:" %}
+            {{ language }}
+        </div>
+
     </div>
 
 </div>

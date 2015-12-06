@@ -217,11 +217,13 @@
     border-radius: 0;
 }
 
-.paste .expires, .paste .language{
+.paste .meta-footer {
     padding: 20px 0 0;
     color: #666;
 }
-
+.paste .language{
+    float: left;
+}
 .paste .expires {
     float: right;
 }
@@ -259,12 +261,6 @@
 
 .pretty-paste {
     overflow: auto;
-}
-.pretty-paste.enable {
-    transition: width .25s ease-in;
-    position: relative;
-    left: 50%;
-    transform: translate(-50%,0);
 }
 .pretty-paste.markdown-language {
     padding: 0 15px;
@@ -317,6 +313,7 @@
         position: static;
         float: none;
         margin: 0 0 20px;
+        width: 100%;
     }
     .paste .button-container .btn-group {
         width: 100%;
