@@ -174,8 +174,8 @@
     text-transform: uppercase;
 }
 .paste .button-container .dropdown-toggle:hover,
-.paste .button-container .open .dropdown-toggle:focus, 
-.paste .button-container .open .dropdown-toggle:hover, 
+.paste .button-container .open .dropdown-toggle:focus,
+.paste .button-container .open .dropdown-toggle:hover,
 .paste .button-container .open .dropdown-toggle {
     background: #EB1717;
 }
@@ -247,13 +247,17 @@
     margin-bottom: 0;
     color: inherit;
 }
+.pastetable .linenos pre {
+    background: rgba(255,255,255,.2);
+    border-radius: 0;
+}
 
 
 .pretty-paste {
     overflow: auto;
 }
 .pretty-paste.markdown-language {
-    padding: 0 15px; 
+    padding: 0 15px;
     background: #f0f0f0;
     color: #333;
 }
@@ -323,8 +327,8 @@
         cursor: default;
     }
     .paste .button-container .dropdown-toggle:hover,
-    .paste .button-container .open .dropdown-toggle:focus, 
-    .paste .button-container .open .dropdown-toggle:hover, 
+    .paste .button-container .open .dropdown-toggle:focus,
+    .paste .button-container .open .dropdown-toggle:hover,
     .paste .button-container .open .dropdown-toggle {
         background: #D41616;
     }
@@ -352,7 +356,7 @@
     .paste .button-container .action-copy {
         display: none;
     }
-    .paste .expires { 
+    .paste .expires {
         padding: 20px 10px 0 0;
     }
 }
