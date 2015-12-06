@@ -19,6 +19,7 @@
     {% endblock %}
 </head>
 <body>
+    {% include "analytics.html" %}
     <header class="top-header clearfix">
         <div class="container">
             <h1><a tabindex="-1" href="{% url 'home' %}" title="{{ current_site.name }}">{{ current_site.name }}</a></h1>
