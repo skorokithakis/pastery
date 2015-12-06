@@ -55,7 +55,8 @@ class User(AbstractUser):
             verbose_name=_("Style name"),
             choices=[["", _("Default")]] + STYLES,
             max_length=50,
-            blank=True
+            blank=True,
+            help_text=_("Pick the color style you prefer for all pastes on the site."),
             )
 
     class Meta:
