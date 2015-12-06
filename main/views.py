@@ -80,6 +80,7 @@ def account(request):
         form = UserForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+            messages.success(request, _("Your settings have been saved."))
             return redirect(account)
     else:
         form = UserForm(instance=request.user)
