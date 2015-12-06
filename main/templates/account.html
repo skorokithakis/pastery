@@ -13,20 +13,45 @@
 
         <div class="paste">
             <div class="pretty-paste">
-                <div class="pretty-paste">
-                    <table class="pastetable">
-                        <tbody>
-                            <tr>
-                                <td class="linenos">
-                                    <div class="linenodiv"><pre>1</pre></div>
-                                </td>
-                                <td class="code">
-                                    <div class="paste"><pre>This is a preview sample paste</pre></div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+    <table class="pastetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="paste"><pre><span class="kn">import</span> <span class="nn">unittest</span>
+
+
+<span class="k">def</span> <span class="nf">median</span><span class="p">(</span><span class="n">pool</span><span class="p">):</span>
+    <span class="n">copy</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">copy</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">size</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">copy</span><span class="p">[(</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">copy</span><span class="p">[</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">copy</span><span class="p">[</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+
+
+<span class="k">class</span> <span class="nc">TestMedian</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">testMedian</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">failUnlessEqual</span><span class="p">(</span><span class="n">median</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">]),</span> <span class="mi">7</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</td></tr></table>
             </div>
         </div>
 
