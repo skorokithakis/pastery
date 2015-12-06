@@ -1,0 +1,14 @@
+from django.core.management.base import NoArgsCommand
+from django.utils import timezone
+
+from main.models import Paste
+
+
+class Command(NoArgsCommand):
+    help = 'Delete all expired pastes.'
+
+    def handle(self, *args, **options):
+        pastes = Paste.objects.filter(expiration__lt=timezone.now())
+        print("Deleting %s pastes..." % pastes.count())
+        pastes.delete()
+        print("Done.")
