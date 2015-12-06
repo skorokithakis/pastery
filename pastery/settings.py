@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'django_browserid',
     'main',
+    'api',
 ]
 
 MIDDLEWARE_CLASSES = [
