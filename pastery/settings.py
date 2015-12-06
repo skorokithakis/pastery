@@ -66,6 +66,8 @@ AUTHENTICATION_BACKENDS = (
    'django_browserid.auth.BrowserIDBackend',
 )
 
+DEFAULT_STYLE = "monokai"
+
 ROOT_URLCONF = 'pastery.urls'
 
 LOGIN_REDIRECT_URL = "/"

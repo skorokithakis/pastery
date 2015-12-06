@@ -40,7 +40,8 @@ def get_languages():
 
 LANGUAGES = get_languages()
 LANGUAGE_DICT = dict(LANGUAGES)
-STYLES = [[x[0], x[0].title()] for x in pygments.styles.STYLE_MAP.items()]
+# Rename the default style to avoid confusion.
+STYLES = sorted([[x[0], x[0].title().replace("Default", "Plain")] for x in pygments.styles.STYLE_MAP.items()], key=lambda x: x[1])
 
 
 def paste_uuid():
@@ -62,7 +63,7 @@ class User(AbstractUser):
 
     @property
     def style_name(self):
-        return self._style_name if self._style_name else "monokai"
+        return self._style_name if self._style_name else settings.DEFAULT_STYLE
 
 
 class Paste(models.Model):
