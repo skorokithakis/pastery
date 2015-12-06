@@ -12,4 +12,4 @@ class SettingAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
-    pass
+    fieldsets = UserAdmin.fieldsets + (('Various', {'fields': ('_style_name',)}),)

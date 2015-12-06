@@ -48,12 +48,14 @@ def paste_uuid():
 
 class User(AbstractUser):
     """A proxy for the User model, to add various methods."""
+    _style_name = models.CharField(max_length=50, blank=True)
 
     class Meta:
         db_table = "auth_user"
 
+    @property
     def style_name(self):
-        return "monokai"
+        return self._style_name if self._style_name else "monokai"
 
 
 class Paste(models.Model):
