@@ -39,14 +39,11 @@
                     </div>
                 </ul>
             </div>
+            {% if request.user.is_staff and paste %}
             <div class="btn-group dropdown-parent" role="group">
                 <a type="button" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'admin:main_paste_change' paste.id %}" type="button" >Admin</a>
-
-<!--             {% if request.user.is_stuff and paste %}
-            <a href="{% url 'admin:main_paste_change' paste.id %}">Admin</a>
+            </div>
             {% endif %}
- -->        </div>
-
     </header>
 
     {% cache 3600 pasteform paste.id request.user.style_name %}
