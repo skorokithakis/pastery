@@ -7,35 +7,36 @@ var ShareSelector = (function() {
 
     $('[data-placement="tooltip"],[data-toggle="tooltip"]').tooltip()
 
-    var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    $('.dropdown-parent').on('show.bs.dropdown', function () {
 
-    if(iOS) {
-      $('.action-copy button').remove();
-      $('.paste .button-container input').css('padding', '10px');
-    }
-    else  
-      $('.action-copy button').on("click", function(e) {
+      var element = $(this).find('.btn-group input')[0];
 
-        var element = $(this).parent().parent().find('.btn-group input')[0];
+      element.setSelectionRange(0, element.value.length);
+      
+    });
 
-        element.setSelectionRange(0, element.value.length);
+    $('.action-copy button').on("click", function(e) {
 
-        $(this).tooltip('hide');
+      var element = $(this).parent().parent().find('.btn-group input')[0];
 
-        try {
-          document.execCommand('copy');
-        } catch(err) { }
+      element.setSelectionRange(0, element.value.length);
 
-        $(element).tooltip('show');
+      $(this).tooltip('hide');
 
-        setTimeout(function() {
+      try {
+        document.execCommand('copy');
+      } catch(err) { }
 
-          $(element).tooltip('hide');
+      $(element).tooltip('show');
 
-        }, 1000);
+      setTimeout(function() {
 
-        e.stopPropagation();
-      });
+        $(element).tooltip('hide');
+
+      }, 1000);
+
+      e.stopPropagation();
+    });
 
     $('#share-dropdown input').on("click", function(e) {
 
