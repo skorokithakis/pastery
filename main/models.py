@@ -48,7 +48,11 @@ def paste_uuid():
 
 class User(AbstractUser):
     """A proxy for the User model, to add various methods."""
-    _style_name = models.CharField(max_length=50, blank=True)
+    _style_name = models.CharField(
+            choices=[["", _("Default")]] + list([x[0], x[0].title()] for x in pygments.styles.STYLE_MAP.items()),
+            max_length=50,
+            blank=True
+            )
 
     class Meta:
         db_table = "auth_user"
