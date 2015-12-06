@@ -7,8 +7,6 @@ from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
-from pygments.lexers import get_all_lexers
-
 from .models import Paste
 
 
@@ -55,17 +53,7 @@ def home(request):
 
 @render_to("paste.html")
 def paste(request, paste_id):
-
-    languages = dict([(lexer[1][0], lexer[0]) for lexer in get_all_lexers()])
-    languages['markdown'] = 'Markdown'
-    languages['textile'] = 'Textile'
-
-    paste = Paste.get_by_id_or_404(paste_id)
-
-    return {
-        "paste": paste,
-        "language": languages[paste.language]
-    }
+    return {"paste": Paste.get_by_id_or_404(paste_id)}
 
 
 def raw_paste(request, paste_id):

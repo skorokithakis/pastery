@@ -39,6 +39,7 @@ def get_languages():
 
 
 LANGUAGES = get_languages()
+LANGUAGE_DICT = dict([[lexer[1][0], lexer[0]] for lexer in get_all_lexers()])
 
 
 def paste_uuid():
@@ -105,6 +106,10 @@ class Paste(models.Model):
     def has_expired(self):
         return self.expiration and self.expiration < timezone.now()
     has_expired.boolean = True
+
+    def get_language_display(self):
+        """Return the human-readable language name."""
+        return LANGUAGE_DICT[self.language]
 
     @property
     def language(self):
