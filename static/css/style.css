@@ -1,28 +1,46 @@
+html,
+body {
+    background-color: #FFFBEC;
+    font-family: 'Open Sans', sans-serif;
+}
+
 .container {
     max-width: 980px;
 }
 
+footer {
+    padding: 20px 0;
+    text-align: center;
+}
+footer a,
+footer a:hover {
+    color: #CC1B1B;
+}
+
 /* Header */
 .top-header {
+    margin: 0 0 20px;
+    padding: 10px;
+    background: #CC1B1B;
+    max-height: 50px;
+    min-height: 30px;
+}
+.top-header .container {
     position: relative;
-    margin: 20px 0;
-    background: transparent url('images/logo.png') no-repeat scroll left center;
-    background-size: 150px;
-    padding: 20px 0 20px 170px;
 }
 .top-header a.home {
     position: absolute;
-    width: 150px;
-    height: 100px;
-    left: 0;
-    top: 0;
+    width: 30px;
+    height: 30px;
+    left: 10px;
+    top: -1px;
     text-indent: -99999px;
     outline: none;
 }
 .top-header .persona {
     position: absolute;
-    right: 0;
-    top: -20px;
+    top: -2px;
+    right: 15px;
     color: #888;
 }
 .top-header .persona em {
@@ -31,12 +49,17 @@
 }
 .top-header .persona a {
     padding: 5px 10px;
-    background: #888;
     color: #fff;
     display: inline-block;
 }
+.top-header .persona em {
+    color: rgba(255, 255, 255, .75);
+}
+.top-header .persona a {
+    background-color: rgba(255, 255, 255, .2);
+}
 .top-header .persona a:hover {
-    background-color: #999;
+    background-color: rgba(255, 255, 255, .4);
 }
 .top-header .persona a:focus,
 .top-header .persona a:active,
@@ -46,12 +69,15 @@
 
 .top-header h1 {
     font-weight: bold;
-    margin: 0 0 5px;
-}
-.top-header h2 {
+    font-size: 23px;
     margin: 0;
-    color: #888;
-    font-size: 22px;
+}
+.top-header h1 a {
+    outline: none;
+    color: #fff;
+    padding-left: 30px;
+    background: transparent url('images/small-logo.png') no-repeat scroll 0 7px;
+    background-size: 20px;
 }
 
 /* Pastery form */
@@ -67,10 +93,13 @@
 .pastery-form textarea {
     border-radius: 0;
 }
+.pastery-form textarea {
+    resize: vertical;
+}
 .pastery-form input:focus,
 .pastery-form textarea:focus {
     box-shadow: none;
-    border-color: #333;
+    border-color: #9DA668;
 }
 .pastery-form .fieldWrapper {
     margin-bottom: 20px;
@@ -93,7 +122,7 @@
 }
 .pastery-form .language select:focus {
     opacity: 1;
-    border-color: #333;
+    border-color: #9DA668;
     box-shadow: none;
     outline: none;
 }
@@ -191,6 +220,7 @@
     font-style: normal;
 }
 .paste .button-container input {
+    cursor: pointer;
     line-height: 1.5;
     font-size: 12px;
     border-left: none;
@@ -242,6 +272,8 @@
     text-transform: uppercase;
     color: #fff;
 }
+.new-paste:focus,
+.new-paste:active,
 .new-paste:hover {
     background-color: #EB1717;
     color: #fff;
@@ -256,6 +288,7 @@
 .pastetable .linenos pre {
     background: rgba(255,255,255,.2);
     border-radius: 0;
+    opacity: .5;
 }
 
 
@@ -273,31 +306,35 @@
 }
 
 @media (max-width: 550px) {
+
     .container {
         padding: 0;
     }
     .pastery-form {
         padding: 0 15px;
     }
+
     .top-header {
-        padding: 0 0 0 100px;
-        background-position: 10px 50%;
-        background-size: 80px;
-        text-align: left;
-        margin-top: 40px;
+        padding: 5px 0;
+        margin: 0 0 20px;
+    }
+    .top-header .container {
+        min-height: 36px;
     }
     .top-header .persona {
-        right: 15px;
-        top: -40px;
+        top: 3px;
     }
-    .top-header a.home {
-        width: 80px;
-        left: 10px;
-        height: 60px;
+    .top-header h1 {
+        margin: 5px 0 0 10px;
+        float: left;
     }
-    .top-header h2 {
-        font-size: 18px;
+    .top-header h1 a {
+        min-width: 30px;
+        display: block;
+        text-indent: -9999999px;
+        background-position: 4px 3px;
     }
+
     .paste header {
         text-align: left;
         margin-bottom: 0;
@@ -332,6 +369,7 @@
         z-index: 1 !important;
         top: 1px;
         cursor: default;
+        left: 1px;
     }
     .paste .button-container .dropdown-toggle:hover,
     .paste .button-container .open .dropdown-toggle:focus,
