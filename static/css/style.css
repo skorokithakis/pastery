@@ -216,10 +216,14 @@
     padding: 10px 15px;
     border-radius: 0;
 }
-.paste .expires {
-    text-align: right;
+
+.paste .expires, .paste .language{
     padding: 20px 0 0;
     color: #666;
+}
+
+.paste .expires {
+    float: right;
 }
 
 .btn-container {
