@@ -14,7 +14,7 @@
     {% else %}
     <link href="{% static "css/monokai.css" %}" rel="stylesheet"/>
     {% endif %}
-    <title>{{ current_site.name }}</title>
+    <title>{% block title %}{{ current_site.name }} - {% trans "The sweetest pastebin in the world." %}{% endblock %}</title>
     {% block extrahead %}
     {% endblock %}
 </head>
