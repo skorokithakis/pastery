@@ -119,6 +119,8 @@ var UserStyleSelector = (function() {
 
 $(document).ready(function() {
 
+  autosize($('textarea'));
+
   UserStyleSelector.initialize();
   ShareSelector.initialize();
 });

@@ -118,6 +118,8 @@ select:focus {
     border-radius: 0;
 }
 .pastery-form textarea {
+    max-height: 700px !important;
+    overflow: auto !important;
     resize: vertical;
 }
 .pastery-form input:focus,
@@ -187,8 +189,8 @@ select:focus {
 /* Alerts */
 .alert {
     border: none;
-    background-color: #F4D86D;
-    color: rgba(0,0,0,.5);
+    background-color: rgba(0,0,0,.1);
+    color: #666;
     font-weight: bold;
     font-size: 15px;
 }
@@ -196,6 +198,7 @@ select:focus {
     color: rgba(0,0,0,.5);
     opacity: 1;
     text-shadow: none;
+    top: 0 !important;
 }
 
 /* Paste */
