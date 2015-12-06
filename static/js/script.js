@@ -12,7 +12,7 @@ var ShareSelector = (function() {
       var element = $(this).find('.btn-group input')[0];
 
       element.setSelectionRange(0, element.value.length);
-      
+
     });
 
     $('.action-copy button').on("click", function(e) {
