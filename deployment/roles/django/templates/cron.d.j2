@@ -1,6 +1,4 @@
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 LANG=en_US.UTF-8
 
-0 0 1 * * root get_pastery_cert.sh 2>> /var/log/acme_tiny.log
-1 * * * * pastery  /var/projects/pastery/env/bin/python /var/projects/pastery/manage.py prune_pastes >> /dev/null 2&>1
-
+1 * * * * pastery  {{ project_root }}/certs/get_cert.sh >> /dev/null 2&>1

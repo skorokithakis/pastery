@@ -11,7 +11,7 @@ server {
     server_name  {{ domain }} *.{{ domain }};
 
     location /.well-known/acme-challenge/ {
-        alias /tmp/challenges/;
+        alias {{ project_root }}/certs/.well-known/acme-challenge/;
         try_files $uri =404;
     }
 
@@ -26,8 +26,8 @@ server {
     client_max_body_size 50K;
 
     ssl    on;
-    ssl_certificate    /etc/ssl/certs/{{ domain }}.unified.pem;
-    ssl_certificate_key     /etc/ssl/certs/{{ domain }}_domain.key;
+    ssl_certificate     {{ project_root }}/certs/fullchain.pem;
+    ssl_certificate_key {{ project_root }}/certs/key.pem;
 
     ssl_ciphers EECDH+AES128:EECDH+AES256:!3DES:!RC4:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
