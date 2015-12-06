@@ -18,9 +18,11 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 from main import urls as main_urls
+from api import urls as api_urls
 
 urlpatterns = [
     url(r'^narnia/', admin.site.urls),
     url(r'', include('django_browserid.urls')),
+    url(r'^api/', include(api_urls)),
     url(r'^', include(main_urls)),
 ]
