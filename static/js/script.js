@@ -103,7 +103,7 @@ var UserStyleSelector = (function() {
       var style = element.options[element.selectedIndex].value;
 
       if(style == '')
-        style = 'monokai';
+        style = DefaultUserStyle;
 
       var userStyle = UserStyles[style];
 
