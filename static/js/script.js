@@ -56,18 +56,64 @@ var UserStyleSelector = (function() {
     if($('.account-form').length == 0)
       return;
 
+    var options = $('.account-form select')[0].options;
+    var self = this;
+
+    $('.account-form select').on('keyup', function(event) {
+
+      var selectedIndex = $('.account-form select')[0].selectedIndex;
+
+      if(event.keyCode == 38) { //up
+
+        if(selectedIndex == 0)
+          return;
+
+        selectedIndex -= 1;
+
+        var style = this.options[selectedIndex].value;
+        $(this).val(style);
+
+        self.changeStyle();
+
+      } else if(event.keyCode == 40) { //down
+
+
+        if(selectedIndex == options.length - 1)
+          return;
+
+        selectedIndex += 1;
+
+        var style = this.options[selectedIndex].value;
+        $(this).val(style);
+
+        self.changeStyle();
+      }
+    });
+
     $('.account-form select').on('change', function() {
 
-      var style = this.options[this.selectedIndex].value;
+        self.changeStyle();
+    });
+  }
+
+  changeStyle = function() {
+
+      var element = $('.account-form select')[0];
+
+      var style = element.options[element.selectedIndex].value;
+
+      if(style == '')
+        style = 'monokai';
+
       var userStyle = UserStyles[style];
 
       $('.user-style').remove();
       $('<link href="' + userStyle + '" rel="stylesheet" class="user-style"/>').appendTo("head");
-    });
   }
 
   return {
-    'initialize': init
+    'initialize': init,
+    'changeStyle': changeStyle
   }
 })();
 
