@@ -17,6 +17,26 @@ footer a:hover {
     color: #CC1B1B;
 }
 
+.btn:focus,
+.btn:active,
+.btn:hover,
+.btn {
+    border-radius: 0;
+    outline: none;
+    font-weight: bold;
+    border-color: #D41616;
+    background-color: #D41616;
+    text-transform: uppercase;
+}
+.btn:hover {
+    background-color: #EB1717;
+}
+select:focus {
+    border-color: #9DA668 !important;
+    box-shadow: none !important;
+    outline: none;
+}
+
 /* Header */
 .top-header {
     margin: 0 0 20px;
@@ -43,17 +63,10 @@ footer a:hover {
     right: 15px;
     color: #888;
 }
-.top-header .persona em {
-    font-style: normal;
-    padding: 5px 10px;
-}
 .top-header .persona a {
     padding: 5px 10px;
     color: #fff;
     display: inline-block;
-}
-.top-header .persona em {
-    color: rgba(255, 255, 255, .75);
 }
 .top-header .persona a {
     background-color: rgba(255, 255, 255, .2);
@@ -66,6 +79,17 @@ footer a:hover {
 .top-header .persona a:hover {
     text-decoration: none;
 }
+.top-header .persona .account {
+    font-style: normal;
+    padding: 5px 10px;
+    color: rgba(255, 255, 255, .75);
+    background: transparent;
+}
+.top-header .persona .account:hover {
+    background: transparent;
+    text-decoration: underline;
+}
+
 
 .top-header h1 {
     font-weight: bold;
@@ -297,12 +321,17 @@ footer a:hover {
 }
 .pretty-paste.markdown-language {
     padding: 10px 15px 0;
-    background: #f0f0f0;
+    background: #f9f9f9;
     color: #333;
 }
 .pretty-paste.markdown-language a {
     color: #333;
     text-decoration: underline;
+}
+
+/* Account */
+.account-form article {
+    margin-bottom: 20px;
 }
 
 @media (max-width: 550px) {
@@ -356,10 +385,11 @@ footer a:hover {
         width: 100%;
     }
     .paste .button-container > div:first-child {
-        margin-bottom: 10px;
+        margin-top: 0;
     }
     .paste .button-container > div {
         float: none;
+        margin-top: 10px;
         position: relative;
     }
     .paste .button-container button {
@@ -410,5 +440,16 @@ footer a:hover {
     }
     .paste .meta-footer div {
         float: none;
+    }
+    .admin-button {
+        float: none !important;
+        border-radius: 3px !important;
+        display: block;
+        width: 100px;
+        margin: 0 auto !important;
+    }
+
+    .account-form {
+        padding: 0 15px;
     }
 }

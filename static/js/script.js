@@ -49,7 +49,30 @@ var ShareSelector = (function() {
   }
 })();
 
+var UserStyleSelector = (function() {
+
+  init = function() {
+
+    if($('.account-form').length == 0)
+      return;
+
+    $('.account-form select').on('change', function() {
+
+      var style = this.options[this.selectedIndex].value;
+      var userStyle = UserStyles[style];
+
+      $('.user-style').remove();
+      $('<link href="' + userStyle + '" rel="stylesheet" class="user-style"/>').appendTo("head");
+    });
+  }
+
+  return {
+    'initialize': init
+  }
+})();
+
 $(document).ready(function() {
 
+  UserStyleSelector.initialize();
   ShareSelector.initialize();
 });

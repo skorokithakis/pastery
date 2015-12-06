@@ -1,22 +1,46 @@
 {% extends "base.html" %}
 {% load bootstrap3 i18n static %}
 
-{% block extrahead %}
-{% for nick, name in languages %}
-<link href="{% static "css/"|add:nick|add:".css" %}" rel="stylesheet" data-nick="{{ nick }}" />
-{% endfor %}
-{% endblock %}
-
 {% block content %}
 {% bootstrap_messages %}
 
-<form action="{% url "account" %}" method="post">
+<form action="{% url "account" %}" method="post" class="account-form">
     {% csrf_token %}
 
     {% bootstrap_form form %}
+
+    <article>
+
+        <div class="paste">
+            <div class="pretty-paste">
+                <div class="pretty-paste">
+                    <table class="pastetable">
+                        <tbody>
+                            <tr>
+                                <td class="linenos">
+                                    <div class="linenodiv"><pre>1</pre></div>
+                                </td>
+                                <td class="code">
+                                    <div class="paste"><pre>This is a preview sample paste</pre></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </article>
 
     {% buttons %}
     <button type="submit" tabindex="2" class="btn btn-primary">{% trans "Save" %}</button>
     {% endbuttons %}
 </form>
+
+<script>
+var UserStyles = {};
+{% for nick, name in languages %}
+UserStyles['{{ nick }}'] = '{% static "css/"|add:nick|add:".css" %}';
+{% endfor %}
+</script>
 {% endblock %}
