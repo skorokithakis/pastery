@@ -1,27 +1,3 @@
-var LanguageSelector = (function() {
-
-  var init = function() {
-
-    var em = $('#selected-language');
-
-    if(em.length == 0)
-      return;
-
-    $('#id_raw_language').on('change', function(element) {
-
-      var value = this.selectedIndex;
-
-      var text = this.options[value].text;
-
-      $(em).html(text);
-    });
-  }
-
-  return {
-    'initialize': init
-  }
-})();
-
 var ShareSelector = (function() {
 
   var init = function() {
@@ -29,59 +5,42 @@ var ShareSelector = (function() {
     if($('#share-dropdown').length == 0)
       return;
 
-    $('[data-placement="tooltip"]').tooltip()
+    $('[data-placement="tooltip"],[data-toggle="tooltip"]').tooltip()
 
-    var label = $('#share-dropdown .dropdown-toggle em');
-    var choices = $('#share-dropdown .dropdown-menu a');
-    var input = $('#share-dropdown input');
+    $('.dropdown-parent').on('show.bs.dropdown', function () {
 
-    $(choices).on('click', function() {
-
-      if($(this).hasClass('selected'))
-        return;
-
-      $('#share-dropdown a.selected').removeClass('selected');
-      $(this).addClass('selected');
-
-      var choice = $(this).data('choice');
-
-      $(label).html($(this).data('legend'));
-      $(input).val($(input).data(choice));
-    });
-
-    $('#copy-clipboard').on("click", function(e) {
-
-      var element = $('#share-dropdown input')[0];
+      var element = $(this).find('.btn-group input')[0];
 
       element.setSelectionRange(0, element.value.length);
+      
+    });
+
+    $('.action-copy button').on("click", function(e) {
+
+      var element = $(this).parent().parent().find('.btn-group input')[0];
+
+      element.setSelectionRange(0, element.value.length);
+
+      $(this).tooltip('hide');
 
       try {
         document.execCommand('copy');
       } catch(err) { }
 
-      $(input).tooltip('show');
+      $(element).tooltip('show');
 
       setTimeout(function() {
 
-        $(input).tooltip('hide');
+        $(element).tooltip('hide');
 
       }, 1000);
+
+      e.stopPropagation();
     });
 
-    $(input).on("click", function(e) {
+    $('#share-dropdown input').on("click", function(e) {
 
       this.setSelectionRange(0, this.value.length);
-
-      // console.log(this);
-      // var range = document.createRange();
-      // range.selectNode(this);
-      // window.getSelection().addRange(range);
-
-      // try {
-      //   document.execCommand('copy');
-      // } catch(err) { }
-
-      // $(e.target).one('mouseup', function(e) { e.preventDefault(); });
     });
   }
 
@@ -93,5 +52,4 @@ var ShareSelector = (function() {
 $(document).ready(function() {
 
   ShareSelector.initialize();
-  LanguageSelector.initialize();
 });

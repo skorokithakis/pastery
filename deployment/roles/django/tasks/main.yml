@@ -6,6 +6,7 @@
     - python-setuptools
     - git
     - postgresql
+    - redis-server
     - zlib1g-dev
 
 - name: Install Python packages.

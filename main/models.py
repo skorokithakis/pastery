@@ -18,15 +18,27 @@ from pygments.formatters import HtmlFormatter
 def get_languages():
     """Return the list of all supported languages."""
     lexers = [[lexer[1][0], lexer[0]] for lexer in get_all_lexers()]
-    lexers += [
-            ["markdown", "Markdown"],
-            ["textile", "Textile"],
-        ]
+    lexers += [["markdown", "Markdown"], ["textile", "Textile"], ]
     sorted_lexers = sorted(lexers, key=lambda x: x[0].lower())
-    sorted_lexers = [
-            ["autodetect", _("Autodetect")],
-        ] + sorted_lexers
-    return sorted_lexers
+
+    top = [
+        "bash", "c", "csharp", "cpp", "css", "html", "java", "js", "json",
+        "markdown", "lua", "text", "objective-c", "perl", "php", "python",
+        "ruby", "swift"
+    ]
+
+    top_languages = [["autodetect", _("Autodetect")]]
+    bottom_languages = [["autodetect", "--------"]]
+    for language in sorted_lexers:
+        if language[0] in top:
+            top_languages.append(language)
+        else:
+            bottom_languages.append(language)
+
+    return top_languages + bottom_languages
+
+
+LANGUAGES = get_languages()
 
 
 def paste_uuid():
@@ -36,11 +48,18 @@ def paste_uuid():
 
 class User(AbstractUser):
     """A proxy for the User model, to add various methods."""
+    _style_name = models.CharField(
+            choices=[["", _("Default")]] + list([x[0], x[0].title()] for x in pygments.styles.STYLE_MAP.items()),
+            max_length=50,
+            blank=True
+            )
+
     class Meta:
         db_table = "auth_user"
 
+    @property
     def style_name(self):
-        return "monokai"
+        return self._style_name if self._style_name else "monokai"
 
 
 class Paste(models.Model):
@@ -52,14 +71,18 @@ class Paste(models.Model):
         editable=False
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
-    title = models.CharField(max_length=500, blank=True, help_text=_("The title of the paste."))
+    title = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text=_("The title of the paste.")
+    )
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     expiration = models.DateTimeField()
     raw_language = models.CharField(
         verbose_name=_("Language"),
         max_length=100,
-        choices=get_languages(),
+        choices=LANGUAGES,
         default="autodetect"
     )
 
@@ -91,7 +114,7 @@ class Paste(models.Model):
         """
         if self.raw_language == "autodetect":
             try:
-                language = guess_lexer(self.body).name
+                language = guess_lexer(self.body).aliases[0]
             except pygments.util.ClassNotFound:
                 language = "text"
         else:
@@ -102,9 +125,12 @@ class Paste(models.Model):
     def rendered_body(self):
         language = self.language
         if language == "markdown":
-            return markdown.markdown(self.body)
+            return markdown.markdown(self.body, ["markdown.extensions.extra"])
         elif language == "textile":
             return textile.textile(self.body)
         else:
             formatter = HtmlFormatter(linenos="table", cssclass="paste")
-            return highlight(self.body, pygments.lexers.get_lexer_by_name(language), formatter)
+            return highlight(
+                self.body, pygments.lexers.get_lexer_by_name(language),
+                formatter
+            )

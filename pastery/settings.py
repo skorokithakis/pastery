@@ -24,10 +24,9 @@ SECRET_KEY = '#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*a-%&$r&n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+BROWSERID_AUDIENCES = []
 
 ALLOWED_HOSTS = [".pastery.net"]
-
-BROWSERID_AUDIENCES = ["https://www.pastery.net"]
 
 # Application definition
 
@@ -164,6 +163,8 @@ RAVEN_CONFIG = {"dsn": None}
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "_static")
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
