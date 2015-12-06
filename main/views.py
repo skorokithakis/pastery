@@ -2,12 +2,16 @@ import datetime
 
 from annoying.decorators import render_to
 from django import forms
+from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
-from .models import Paste
+from .models import Paste, STYLES
+
+User = get_user_model()
 
 
 class PasteForm(forms.ModelForm):
@@ -25,6 +29,12 @@ class PasteForm(forms.ModelForm):
     class Meta:
         model = Paste
         fields = ["title", "body", "raw_language"]
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["_style_name"]
 
 
 @render_to("home.html")
@@ -58,3 +68,19 @@ def paste(request, paste_id):
 
 def raw_paste(request, paste_id):
     return HttpResponse(Paste.get_by_id_or_404(paste_id).body, content_type="text/plain")
+
+
+@render_to("account.html")
+def account(request):
+    if request.user.is_anonymous():
+        messages.error(request, _("You need to log in first."))
+        return redirect(home)
+
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect(account)
+    else:
+        form = UserForm(instance=request.user)
+    return {"form": form, "languages": STYLES}

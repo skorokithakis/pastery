@@ -40,6 +40,7 @@ def get_languages():
 
 LANGUAGES = get_languages()
 LANGUAGE_DICT = dict(LANGUAGES)
+STYLES = [[x[0], x[0].title()] for x in pygments.styles.STYLE_MAP.items()]
 
 
 def paste_uuid():
@@ -50,7 +51,8 @@ def paste_uuid():
 class User(AbstractUser):
     """A proxy for the User model, to add various methods."""
     _style_name = models.CharField(
-            choices=[["", _("Default")]] + list([x[0], x[0].title()] for x in pygments.styles.STYLE_MAP.items()),
+            verbose_name=_("Style name"),
+            choices=[["", _("Default")]] + STYLES,
             max_length=50,
             blank=True
             )

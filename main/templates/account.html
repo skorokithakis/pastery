@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load bootstrap3 i18n static %}
+
+{% block extrahead %}
+{% for nick, name in languages %}
+<link href="{% static "css/"|add:nick|add:".css" %}" rel="stylesheet" data-nick="{{ nick }}" />
+{% endfor %}
+{% endblock %}
+
+{% block content %}
+{% bootstrap_messages %}
+
+<form action="{% url "account" %}" method="post">
+    {% csrf_token %}
+
+    {% bootstrap_form form %}
+
+    {% buttons %}
+    <button type="submit" tabindex="2" class="btn btn-primary">{% trans "Save" %}</button>
+    {% endbuttons %}
+</form>
+{% endblock %}
