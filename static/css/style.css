@@ -263,7 +263,7 @@
     overflow: auto;
 }
 .pretty-paste.markdown-language {
-    padding: 0 15px;
+    padding: 10px 15px 0;
     background: #f0f0f0;
     color: #333;
 }
@@ -363,7 +363,14 @@
     .paste .button-container .action-copy {
         display: none;
     }
-    .paste .expires {
-        padding: 20px 10px 0 0;
+    .paste .meta-footer {
+        text-align: right;
+        padding:  20px 20px 0;
+    }
+    .paste .meta-footer .expires {
+        margin-bottom: 5px;
+    }
+    .paste .meta-footer div {
+        float: none;
     }
 }
