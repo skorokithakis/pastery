@@ -1,5 +1,5 @@
 .container {
-    max-width: 800px;
+    max-width: 980px;
 }
 
 /* Header */
@@ -259,6 +259,12 @@
 
 .pretty-paste {
     overflow: auto;
+}
+.pretty-paste.enable {
+    transition: width .25s ease-in;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%,0);
 }
 .pretty-paste.markdown-language {
     padding: 0 15px;
