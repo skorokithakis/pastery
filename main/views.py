@@ -5,6 +5,7 @@ from django import forms
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
+from django.views.decorators.http import require_POST
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.translation import ugettext as _
@@ -68,6 +69,17 @@ def paste(request, paste_id):
 
 def raw_paste(request, paste_id):
     return HttpResponse(Paste.get_by_id_or_404(paste_id).body, content_type="text/plain")
+
+
+@require_POST
+def delete_paste(request, paste_id):
+    paste = Paste.get_by_id_or_404(paste_id)
+    if request.user != paste.user:
+        messages.error(request, _("That's not your paste, you naughty girl."))
+    else:
+        paste.delete()
+        messages.success(request, _("Your paste has been deleted."))
+    return redirect(home)
 
 
 @render_to("account.html")
