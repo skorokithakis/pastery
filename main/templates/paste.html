@@ -49,11 +49,13 @@
     </div>
     {% endcache %}
 
+    {% if paste.expiration %}
     <div class="expires">
         {% blocktrans with paste.expiration|timeuntil as until %}
         Expires in {{ until }}.
         {% endblocktrans %}
     </div>
+    {% endif %}
 
     <div class="language">
         {% trans "Language:" %}

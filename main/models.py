@@ -78,7 +78,7 @@ class Paste(models.Model):
     )
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-    expiration = models.DateTimeField()
+    expiration = models.DateTimeField(blank=True, null=True)
     raw_language = models.CharField(
         verbose_name=_("Language"),
         max_length=100,
@@ -103,7 +103,7 @@ class Paste(models.Model):
         return reverse("paste", args=[self.id])
 
     def has_expired(self):
-        return self.expiration < timezone.now()
+        return self.expiration and self.expiration < timezone.now()
     has_expired.boolean = True
 
     @property

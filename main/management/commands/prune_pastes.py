@@ -8,7 +8,7 @@ class Command(NoArgsCommand):
     help = 'Delete all expired pastes.'
 
     def handle(self, *args, **options):
-        pastes = Paste.objects.filter(expiration__lt=timezone.now())
+        pastes = Paste.objects.filter(expiration__lt=timezone.now()).exclude(expiration__isnull=True)
         print("Deleting %s pastes..." % pastes.count())
         pastes.delete()
         print("Done.")

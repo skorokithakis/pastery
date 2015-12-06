@@ -18,9 +18,9 @@ class PasteForm(forms.ModelForm):
         [7 * 24 * 60, _("a week")],
         [14 * 24 * 60, _("two weeks")],
         [30 * 24 * 60, _("a month")],
-        [100 * 365 * 24 * 60, _("never")],
+        [None, _("never")],
     ]
-    expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60, label=_("Expires in"))
+    expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60, label=_("Expires in"), required=False)
 
     class Meta:
         model = Paste
@@ -37,10 +37,13 @@ def home(request):
             data["title"] = clean["title"]
             data["body"] = clean["body"]
             data["raw_language"] = clean["raw_language"]
-            data["expiration"] = timezone.now() + datetime.timedelta(
-                minutes=int(form.cleaned_data["expires"]))
+
+            if clean["expires"]:
+                data["expiration"] = timezone.now() + datetime.timedelta(minutes=int(clean["expires"]))
+
             if request.user.is_authenticated():
                 data["user"] = request.user
+
             paste = Paste.objects.create(**data)
             return redirect(paste)
     else:
