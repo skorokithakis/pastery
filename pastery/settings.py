@@ -85,6 +85,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 "pastery.context_processors.current_site",
+                "pastery.context_processors.settings",
             ],
         },
     },
