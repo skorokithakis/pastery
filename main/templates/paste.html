@@ -13,6 +13,11 @@
         {% endif %}
 
         <div class="btn-group button-container" id="share-dropdown">
+            {% if request.user.is_staff %}
+            <div class="btn-group dropdown-parent" role="group">
+                <a type="button" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'admin:main_paste_change' paste.id %}" type="button">{% trans "Admin" %}</a>
+            </div>
+            {% endif %}
             <div class="btn-group dropdown-parent" role="group">
                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {% trans "Raw" %} <span class="caret"></span>
@@ -39,11 +44,6 @@
                     </div>
                 </ul>
             </div>
-            {% if request.user.is_staff and paste %}
-            <div class="btn-group dropdown-parent" role="group">
-                <a type="button" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'admin:main_paste_change' paste.id %}" type="button" >Admin</a>
-            </div>
-            {% endif %}
     </header>
 
     {% cache 3600 pasteform paste.id request.user.style_name %}
