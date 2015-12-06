@@ -8,8 +8,12 @@
 <div class="paste">
     <header class="clearfix">
 
+        {% if paste.title %}
+        <h1>{{ paste }}</h1>
+        {% endif %}
+
         <div class="btn-group button-container" id="share-dropdown">
-            <div class="btn-group" role="group">
+            <div class="btn-group dropdown-parent" role="group">
                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {% trans "Raw" %} <span class="caret"></span>
                 </button>
@@ -22,7 +26,7 @@
                     </div>
                 </ul>
             </div>
-            <div class="btn-group" role="group">
+            <div class="btn-group dropdown-parent" role="group">
                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {% trans "Link" %} <span class="caret"></span>
                 </button>
@@ -37,9 +41,6 @@
             </div>
         </div>
 
-        {% if paste.title %}
-        <h1>{{ paste }}</h1>
-        {% endif %}
     </header>
 
     {% cache 3600 pasteform paste.id request.user.style_name %}

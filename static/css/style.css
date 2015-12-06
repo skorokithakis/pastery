@@ -193,14 +193,12 @@
 .paste .button-container input {
     line-height: 1.5;
     font-size: 12px;
-    padding: 5px;
     border-left: none;
     border-right: none;
     margin: 0px 1px;
     font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
     background-color: #fff;
-    color: #D41616;
-    border: 1px solid #D41616;
+    color: #555;
     padding: 10px;
     width: 350px;
     border: none;
@@ -272,9 +270,10 @@
         padding: 0 15px;
     }
     .top-header {
-        padding: 100px 0 0;
-        background-position: center top;
-        text-align: center;
+        padding: 0 0 0 100px;
+        background-position: 10px 50%;
+        background-size: 80px;
+        text-align: left;
         margin-top: 40px;
     }
     .top-header .persona {
@@ -282,25 +281,76 @@
         top: -40px;
     }
     .top-header a.home {
-        width: 100%;
+        width: 80px;
+        left: 10px;
+        height: 60px;
+    }
+    .top-header h2 {
+        font-size: 18px;
     }
     .paste header {
-        text-align: right;
+        text-align: left;
         margin-bottom: 0;
         padding: 0 10px;
     }
     .paste header h1 {
-        text-align: center;
+        text-align: left;
         margin-bottom: 20px;
         padding-right: 0;
+        font-size: 22px;
     }
     .paste .button-container {
         position: static;
         float: none;
         margin: 0 0 20px;
     }
+    .paste .button-container .btn-group {
+        width: 100%;
+    }
+    .paste .button-container > div:first-child {
+        margin-bottom: 10px;
+    }
+    .paste .button-container > div {
+        float: none;
+        position: relative;
+    }
+    .paste .button-container button {
+        border-radius: 0;
+        border: none;
+        position: absolute;
+        z-index: 1 !important;
+        top: 1px;
+        cursor: default;
+    }
+    .paste .button-container .dropdown-toggle:hover,
+    .paste .button-container .open .dropdown-toggle:focus, 
+    .paste .button-container .open .dropdown-toggle:hover, 
+    .paste .button-container .open .dropdown-toggle {
+        background: #D41616;
+    }
+    .paste .button-container .caret {
+        display: none;
+    }
+    .paste .button-container .dropdown-menu {
+        width: 100%;
+        border-radius: 0;
+        padding: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        display: block;
+        position: static;
+        box-shadow: none;
+        margin: 0;
+    }
     .paste .button-container input {
-        width: 260px;
+        border-radius: 0;
+        border: none;
+        padding: 7px 5px 7px 60px;
+        width: 100%;
+        margin: 0;
+    }
+    .paste .button-container .action-copy {
+        display: none;
     }
     .paste .expires { 
         padding: 20px 10px 0 0;
