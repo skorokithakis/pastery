@@ -13,8 +13,18 @@
         {% endif %}
 
         <div class="btn-group button-container" id="share-dropdown">
+
+            {% if paste.user == request.user %}
+            <div class="btn-group admin-parent" role="group">
+                <form action="{% url "delete-paste" paste.id %}" id="delete-paste" method="post">
+                    {% csrf_token %}
+                    <button type="submit" tabindex="2" class="btn btn-default btn-sm dropdown-toggle admin-button">{% trans "Delete" %}</button>
+                </form>
+            </div>
+            {% endif %}
+
             {% if request.user.is_staff %}
-            <div class="btn-group dropdown-parent" role="group">
+            <div class="btn-group admin-parent" role="group">
                 <a type="button" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'admin:main_paste_change' paste.id %}" type="button">{% trans "Admin" %}</a>
             </div>
             {% endif %}

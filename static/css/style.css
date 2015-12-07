@@ -27,6 +27,7 @@ footer a:hover {
     border-color: #D41616;
     background-color: #D41616;
     text-transform: uppercase;
+    color: #fff;
 }
 .btn:hover {
     background-color: #EB1717;
@@ -344,11 +345,18 @@ select:focus {
 
 @media (max-width: 550px) {
 
+    .alert {
+        margin: 0 15px 20px;
+    }
+
     .container {
         padding: 0;
     }
     .pastery-form {
         padding: 0 15px;
+    }
+    .pastery-form textarea {
+        max-height: 300px !important;
     }
 
     .top-header {
@@ -384,6 +392,7 @@ select:focus {
         font-size: 22px;
     }
     .paste .button-container {
+        text-align: right;
         position: static;
         float: none;
         margin: 0 0 20px;
@@ -391,6 +400,23 @@ select:focus {
     }
     .paste .button-container .btn-group {
         width: 100%;
+    }
+    .paste .button-container .admin-parent {
+        display: inline-block;
+        width: auto;
+        margin: 0;
+    }
+    .paste .button-container .admin-parent form {
+        display: inline-block;
+        padding: 0;
+    }
+    .paste .button-container .admin-parent a,
+    .paste .button-container .admin-parent button {
+        position: static;
+        border-radius: 0;
+        display: inline-block;
+        width: auto;
+        margin: 0;
     }
     .paste .button-container > div:first-child {
         margin-top: 0;
@@ -451,7 +477,6 @@ select:focus {
     }
     .admin-button {
         float: none !important;
-        border-radius: 3px !important;
         display: block;
         width: 100px;
         margin: 0 auto !important;
