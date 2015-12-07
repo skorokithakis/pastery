@@ -97,7 +97,7 @@ class Paste(models.Model):
     @classmethod
     def get_by_id_or_404(cls, paste_id):
         """Retrieve a paste by its ID, or None if it doesn't exist."""
-        paste = cls.objects.filter(pk=paste_id).first()
+        paste = cls.objects.filter(pk=paste_id.lower()).first()
 
         if not paste or paste.has_expired():
             raise Http404
