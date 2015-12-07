@@ -4,6 +4,8 @@
 {% block content %}
 {% bootstrap_messages %}
 
+<h1>{% trans "Preferences" %}</h1>
+
 <form action="{% url "account" %}" method="post" class="account-form">
     {% csrf_token %}
 
@@ -61,6 +63,24 @@
     <button type="submit" tabindex="2" class="btn btn-primary">{% trans "Save" %}</button>
     {% endbuttons %}
 </form>
+
+<h1>{% trans "Your pastes" %}</h1>
+
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>{% trans "Title" %}</th>
+        <th>{% trans "Created on" %}</th>
+        <th>{% trans "Expires on" %}</th>
+    </tr>
+
+    {% for paste in pastes %}
+    <tr>
+        <td><a href="{{ paste.get_absolute_url }}">{{ paste }}</a></td>
+        <td>{{ paste.created|date:"Y-m-d" }}</td>
+        <td>{{ paste.expiration|date:"Y-m-d"|default:"&infin;" }}</td>
+    </tr>
+    {% endfor %}
+</table>
 
 <script>
 var UserStyles = {};

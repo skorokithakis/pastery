@@ -108,6 +108,7 @@ def account(request):
         messages.error(request, _("You need to log in first."))
         return redirect(home)
 
+    pastes = []
     if request.method == 'POST':
         form = UserForm(request.POST, instance=request.user)
         if form.is_valid():
@@ -116,7 +117,8 @@ def account(request):
             return redirect(account)
     else:
         form = UserForm(instance=request.user)
-    return {"form": form, "languages": STYLES}
+        pastes = request.user.paste_set.all().order_by("-created")
+    return {"form": form, "languages": STYLES, "pastes": pastes}
 
 
 def logout(request):
