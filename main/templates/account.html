@@ -79,6 +79,8 @@
         <td>{{ paste.created|date:"Y-m-d" }}</td>
         <td>{{ paste.expiration|date:"Y-m-d"|default:"&infin;" }}</td>
     </tr>
+    {% empty %}
+    <tr><td colspan=3>{% trans "You have no pastes." %}</td></tr>
     {% endfor %}
 </table>
 
