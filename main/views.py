@@ -3,7 +3,7 @@ import datetime
 from annoying.decorators import render_to
 from django import forms
 from django.contrib import messages
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, logout as djlogout
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from django.shortcuts import redirect
@@ -97,3 +97,9 @@ def account(request):
     else:
         form = UserForm(instance=request.user)
     return {"form": form, "languages": STYLES}
+
+
+def logout(request):
+    djlogout(request)
+    messages.success(request, _("You have been logged out."))
+    return redirect(home)
