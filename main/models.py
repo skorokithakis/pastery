@@ -3,6 +3,7 @@ import pygments
 import shortuuid
 import textile
 from django.db import models
+from django.db.utils import IntegrityError
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.urlresolvers import reverse
@@ -67,6 +68,18 @@ class User(AbstractUser):
         return self._style_name if self._style_name else settings.DEFAULT_STYLE
 
 
+class PasteManager(models.Manager):
+    def create(self, *args, **kwargs):
+        # Try to create new IDs for the paste if one collides.
+        tries = 10
+        for x in range(tries):
+            try:
+                return super(PasteManager, self).create(*args, **kwargs)
+            except IntegrityError:
+                print("Collision %s." % x)
+        raise IntegrityError("Could not find a paste ID after %s tries." % tries)
+
+
 class Paste(models.Model):
     id = models.CharField(
         max_length=100,
@@ -90,6 +103,8 @@ class Paste(models.Model):
         choices=LANGUAGES,
         default="autodetect"
     )
+
+    objects = PasteManager()
 
     def __str__(self):
         return self.title if self.title else self.id
