@@ -70,6 +70,9 @@ AUTHENTICATION_BACKENDS = (
 
 DEFAULT_STYLE = random.choice([
     "monokai",
+    "solarized",
+    "solarized_dark",
+    "solarized_dark256",
     "manni",
     "tango",
     "default",

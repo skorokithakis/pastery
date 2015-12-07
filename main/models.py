@@ -40,10 +40,22 @@ def get_languages():
     return top_languages + bottom_languages
 
 
+def get_styles():
+    """Return all available styles and their names."""
+
+    styles = list(pygments.styles.STYLE_MAP.items())
+    styles = styles + [
+        ["solarized", "Solarized"],
+        ["solarized_dark", "Solarized Dark"],
+        ["solarized_dark256", "Solarized Dark 256"],
+    ]
+    styles = [[x[0], x[0].title().replace("Default", "Plain")] for x in styles]
+    return sorted(styles, key=lambda x: x[1])
+
 LANGUAGES = get_languages()
 LANGUAGE_DICT = dict(LANGUAGES)
 # Rename the default style to avoid confusion.
-STYLES = sorted([[x[0], x[0].title().replace("Default", "Plain")] for x in pygments.styles.STYLE_MAP.items()], key=lambda x: x[1])
+STYLES = get_styles()
 
 
 def paste_uuid():
