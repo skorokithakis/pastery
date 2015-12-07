@@ -7,40 +7,71 @@ var ShareSelector = (function() {
 
     $('[data-placement="tooltip"],[data-toggle="tooltip"]').tooltip()
 
+    // Select text when dropdown shows
     $('.dropdown-parent').on('show.bs.dropdown', function () {
 
       var element = $(this).find('.btn-group input')[0];
 
-      element.setSelectionRange(0, element.value.length);
+      setTimeout(function() {
+
+        element.focus();
+        element.setSelectionRange(0, element.value.length);
+
+      }, 100);
 
     });
+
+    // Select text when user clicks on the code
+    $('#share-dropdown input').on("click", function(e) {
+
+      this.focus();
+      this.setSelectionRange(0, this.value.length);
+    });
+
+    // Disable clipboard buttons in Safari
+    // until further notice
+    var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
+    var is_safari = navigator.userAgent.indexOf("Safari") > -1;
+    var is_opera = navigator.userAgent.toLowerCase().indexOf("op") > -1;
+
+    if ((is_chrome)&&(is_safari)) {is_safari=false;}
+    if ((is_chrome)&&(is_opera)) {is_chrome=false;}
+
+    if(is_safari) {
+
+      $('.action-copy button').remove();
+      return;
+    }
 
     $('.action-copy button').on("click", function(e) {
 
       var element = $(this).parent().parent().find('.btn-group input')[0];
 
+      element.focus();
       element.setSelectionRange(0, element.value.length);
 
       $(this).tooltip('hide');
 
+      var copied = false;
+
       try {
-        document.execCommand('copy');
-      } catch(err) { }
 
-      $(element).tooltip('show');
+        copied = document.execCommand('copy');
 
-      setTimeout(function() {
+      } catch(err) {}
 
-        $(element).tooltip('hide');
+      if(copied) {
 
-      }, 1000);
+        $(element).tooltip('show');
+
+        setTimeout(function() {
+
+          $(element).tooltip('hide');
+
+        }, 1000);
+      }
 
       e.stopPropagation();
-    });
-
-    $('#share-dropdown input').on("click", function(e) {
-
-      this.setSelectionRange(0, this.value.length);
     });
   }
 
