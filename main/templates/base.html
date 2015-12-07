@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <meta name="HandheldFriendly" content="True"/>
     <meta name="MobileOptimized" content="320"/>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'/>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous"/>
     <link href="{% static "css/style.css" %}" rel="stylesheet"/>
     {% if request.user.is_authenticated %}
@@ -20,7 +20,11 @@
     <meta property="og:title" content="{{ current_site.name }}"/>
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}"/>
-    <meta property="og:description" content="{% trans "The sweetest pastebin in the world." %}" />
+    <meta property="og:description" content="{% trans "The sweetest pastebin in the world." %}"/>
+    <link rel="icon" type="image/png" href="{% static "images/favicon-32x32.png" %}" sizes="32x32"/>
+    <link rel="icon" type="image/png" href="{% static "images/favicon-16x16.png" %}" sizes="16x16"/>
+    <link rel="shortcut icon" href="{% static "images/favicon.ico" %}" type="image/x-icon"/>
+    <link rel="icon" href="{% static "images/favicon.ico" %}" type="image/x-icon"/>
     {% block extrahead %}
     {% endblock %}
 </head>
