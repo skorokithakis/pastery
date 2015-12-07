@@ -3,7 +3,9 @@ import pygments
 import shortuuid
 import textile
 from django.db import models
+from django.db.models.signals import post_save
 from django.db.utils import IntegrityError
+from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.cache import cache
@@ -185,3 +187,15 @@ class Paste(models.Model):
             )
         cache.set(key, rendered, settings.CACHING_TIME)
         return rendered
+
+
+@receiver(post_save, sender=Paste)
+def clear_cache(sender, instance, created, **kwargs):
+    """
+    Clear the cache when a paste is saved. Users can't really save
+    pastes, but admins can, and it might be useful.
+    """
+    cache.delete_many([
+        "pastery:paste_%s_language" % instance.id,
+        "pastery:paste_%s_rendered_body" % instance.id,
+    ])
