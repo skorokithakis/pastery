@@ -146,6 +146,8 @@ USE_TZ = True
 
 RAVEN_CONFIG = {"dsn": None}
 
+CACHING_TIME = 24 * 3600
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 

@@ -6,6 +6,7 @@ from django.db import models
 from django.db.utils import IntegrityError
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.utils import timezone
@@ -136,6 +137,11 @@ class Paste(models.Model):
         The final language of the lexer. This is either the user-specified
         language, or a guessed language, if the former was not specified.
         """
+        key = "pastery:paste_%s_language" % self.id
+        value = cache.get(key, None)
+        if value:
+            return value
+
         if self.raw_language == "autodetect":
             try:
                 language = guess_lexer(self.body).aliases[0]
@@ -143,6 +149,8 @@ class Paste(models.Model):
                 language = "text"
         else:
             language = self.raw_language
+
+        cache.set(key, language, settings.CACHING_TIME)
         return language
 
     @property
