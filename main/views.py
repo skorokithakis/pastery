@@ -58,7 +58,19 @@ def home(request):
             paste = Paste.objects.create(**data)
             return redirect(paste)
     else:
-        form = PasteForm()
+        # See if the user wants to clone a paste.
+        initial = {"title": "", "body": ""}
+        clone = request.GET.get("clone")
+        if clone:
+            paste = Paste.objects.filter(pk=clone).first()
+            if paste and not paste.has_expired():
+                initial = {
+                    "title": paste.title,
+                    "body": paste.body,
+                    "raw_language": paste.language,
+                }
+
+        form = PasteForm(initial=initial)
     return {"form": form}
 
 

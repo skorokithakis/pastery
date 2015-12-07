@@ -14,6 +14,10 @@
 
         <div class="btn-group button-container" id="share-dropdown">
 
+            <div class="btn-group admin-parent" role="group">
+                <a type="button" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'home' %}?clone={{ paste.id }}" type="button">{% trans "Clone" %}</a>
+            </div>
+
             {% if paste.user == request.user %}
             <div class="btn-group admin-parent" role="group">
                 <form action="{% url "delete-paste" paste.id %}" id="delete-paste" method="post">
