@@ -190,8 +190,6 @@ select:focus {
 /* Alerts */
 .alert {
     border: none;
-    background-color: rgba(0,0,0,.1);
-    color: #666;
     font-weight: bold;
     font-size: 15px;
 }
