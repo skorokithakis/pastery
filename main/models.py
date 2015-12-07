@@ -155,14 +155,21 @@ class Paste(models.Model):
 
     @property
     def rendered_body(self):
+        key = "pastery:paste_%s_rendered_body" % self.id
+        value = cache.get(key, None)
+        if value:
+            return value
+
         language = self.language
         if language == "markdown":
-            return markdown.markdown(self.body, ["markdown.extensions.extra"])
+            rendered = markdown.markdown(self.body, ["markdown.extensions.extra"])
         elif language == "textile":
-            return textile.textile(self.body)
+            rendered = textile.textile(self.body)
         else:
             formatter = HtmlFormatter(linenos="table", cssclass="paste")
-            return highlight(
+            rendered = highlight(
                 self.body, pygments.lexers.get_lexer_by_name(language),
                 formatter
             )
+        cache.set(key, rendered, settings.CACHING_TIME)
+        return rendered

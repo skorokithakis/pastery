@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load bootstrap3 i18n cache %}
+{% load bootstrap3 i18n %}
 
 {% block content %}
 
@@ -56,11 +56,9 @@
             </div>
     </header>
 
-    {% cache 3600 pasteform paste.id request.user.style_name %}
     <div class="pretty-paste{% if paste.language == 'markdown' %} markdown-language{% endif %}">
     {{ paste.rendered_body|safe }}
     </div>
-    {% endcache %}
 
     <div class="meta-footer clearfix">
 
