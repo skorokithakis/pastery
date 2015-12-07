@@ -11,9 +11,10 @@ from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
-from .models import Paste, STYLES
+from .models import Paste, STYLES, LANGUAGE_DICT
 
 User = get_user_model()
+LANGUAGE_NAMES = LANGUAGE_DICT.keys()
 
 
 class PasteForm(forms.ModelForm):
@@ -67,7 +68,11 @@ def home(request):
             return redirect(paste)
     else:
         # See if the user wants to clone a paste.
-        initial = {"title": "", "body": ""}
+        initial = {
+            "title": request.GET.get("title", ""),
+            "body": "",
+            "raw_language": request.GET["lang"] if request.GET.get("lang") in LANGUAGE_NAMES else "autodetect"
+        }
         clone = request.GET.get("clone")
         if clone:
             paste = Paste.objects.filter(pk=clone).first()
