@@ -3,6 +3,7 @@ import json
 from collections import namedtuple
 
 from annoying.decorators import ajax_request
+from brake.decorators import ratelimit
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -16,9 +17,16 @@ LANGUAGE_NAMES = [x[0] for x in LANGUAGES]
 
 
 @require_POST
+@ratelimit(rate="1000/d")
+@ratelimit(rate="500/h")
+@ratelimit(rate="20/m")
 @csrf_exempt
 @ajax_request
 def paste(request):
+    if getattr(request, 'limited', False):
+        response = {"result": "error", "error_msg": "You're pasting too much, please slow down."}
+        return HttpResponse(json.dumps(response), content_type="application/json", status=429)
+
     schema = Schema(
         And({
             Optional("title", default=""): And([str], Use(lambda x: x[0]), lambda x: len(x) < 200, error="\"title\" should be a string less than 200 characters long."),
