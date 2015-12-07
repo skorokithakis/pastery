@@ -27,6 +27,7 @@ footer a:hover {
     border-color: #D41616;
     background-color: #D41616;
     text-transform: uppercase;
+    color: #fff;
 }
 .btn:hover {
     background-color: #EB1717;
@@ -343,6 +344,10 @@ select:focus {
 }
 
 @media (max-width: 550px) {
+
+    .alert {
+        margin: 0 15px 20px;
+    }
 
     .container {
         padding: 0;

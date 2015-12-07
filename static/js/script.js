@@ -117,10 +117,29 @@ var UserStyleSelector = (function() {
   }
 })();
 
+var DeleteConfirm = (function() {
+
+  init = function() {
+
+    if($('#delete-paste').length == 0)
+      return;
+
+    $('#delete-paste').on('submit', function() {
+
+      return confirm("Are you sure you want to delete this paste?");
+    });
+  }
+
+  return {
+      'initialize': init
+  }
+})();
+
 $(document).ready(function() {
 
   autosize($('textarea'));
 
+  DeleteConfirm.initialize();
   UserStyleSelector.initialize();
   ShareSelector.initialize();
 });
