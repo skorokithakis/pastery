@@ -8,6 +8,7 @@ class SettingAdmin(admin.ModelAdmin):
     list_display = ["id", "user", "title", "created", "expiration", "has_expired"]
     search_fields = ["user", "title"]
     list_filter = ('created', "expiration")
+    ordering = ["-created"]
 
 
 @admin.register(User)
