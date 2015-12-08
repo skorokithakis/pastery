@@ -29,6 +29,13 @@ class PasteForm(forms.ModelForm):
         [None, _("never")],
     ]
     expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60, label=_("Expires in"), required=False)
+    work = forms.CharField(required=False)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("work", ""):
+            raise forms.ValidationError(_("Please stop being a bot and try pasting again."))
+        return cleaned_data
 
     class Meta:
         model = Paste

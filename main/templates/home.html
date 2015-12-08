@@ -28,6 +28,10 @@
                 <label for="{{ form.sender.id_for_label }}">{{ form.expires.label }}</label>
                 {{ form.expires|tabindex:4 }}
             </div>
+            <div style="display: none">
+                {{ form.work.errors }}
+                {{ form.work }}
+            </div>
 
             {% buttons %}
             <button type="submit" tabindex="3" class="btn btn-primary">{% trans "Create" %}</button>
