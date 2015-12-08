@@ -244,7 +244,7 @@ select:focus {
 .paste .button-container .dropdown-toggle em {
     font-style: normal;
 }
-.paste .button-container input {
+.button-container input {
     cursor: pointer;
     line-height: 1.5;
     font-size: 12px;
@@ -259,12 +259,12 @@ select:focus {
     border: none;
     padding-right: 42px;
 }
-.paste .button-container .action-copy {
+.button-container .action-copy {
     position: absolute;
     right: 0;
     top: 0;
 }
-.paste .button-container .action-copy .btn {
+.button-container .action-copy .btn {
     color: #fff;
     background-color: #D41616;
     border: none;
@@ -364,15 +364,20 @@ select:focus {
     color: #555;
     text-align: right;
 }
-.account .apikey {
-    background: #E6E2D4;
-    box-shadow: none;
-}
-.account .apikey:focus {
-    box-shadow: none;
-    border-color: #9DA668;
-}
 
+.account .button-container .btn-group {
+    display: block;
+}
+.account .button-container {
+    position: relative;
+}
+.account .button-container .action-copy {
+    top: 1px;
+}
+.account .button-container input {
+    width: 100%;
+    border: 1px solid #d2d2d2;
+}
 .account-form article {
     margin-bottom: 20px;
 }

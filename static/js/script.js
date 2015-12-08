@@ -2,7 +2,7 @@ var ShareSelector = (function() {
 
   var init = function() {
 
-    if($('#share-dropdown').length == 0)
+    if($('#copy-code').length == 0)
       return;
 
     $('[data-placement="tooltip"],[data-toggle="tooltip"]').tooltip()
@@ -22,7 +22,7 @@ var ShareSelector = (function() {
     });
 
     // Select text when user clicks on the code
-    $('#share-dropdown input').on("click", function(e) {
+    $('#copy-code input').on("click", function(e) {
 
       this.focus();
       this.setSelectionRange(0, this.value.length);

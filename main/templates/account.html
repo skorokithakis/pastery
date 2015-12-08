@@ -112,9 +112,14 @@ This is your API key. For more details on how to use it, visit the
 {% endblocktrans %}
 </p>
 
-<p>
-<input class="apikey form-control" placeholder="{% trans "Your API key" %}" value="{{ user.api_key }}" readonly >
-</p>
+<div class="button-container" id="copy-code">
+    <div class="btn-group">
+        <input class="apikey" title="Copied!" value="{{ user.api_key }}" readonly />
+    </div>
+    <div class="btn-group action-copy">
+        <button data-trigger="hover" data-toggle="tooltip" title="" aria-label="Copy to clipboard" class="btn btn-default btn-sm" type="button" data-original-title="Copy to clipboard"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
+    </div>
+</div>
 
 </section>
 </article>
