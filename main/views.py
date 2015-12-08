@@ -3,6 +3,7 @@ import datetime
 from annoying.decorators import render_to
 from brake.decorators import ratelimit
 from django import forms
+from django.db.models import Count
 from django.contrib import messages
 from django.contrib.auth import get_user_model, logout as djlogout
 from django.http import HttpResponse
@@ -122,7 +123,11 @@ def account(request):
             return redirect(account)
     else:
         form = UserForm(instance=request.user)
-        pastes = Paste.active.filter(user=request.user).order_by("-created")
+        pastes = Paste.active.filter(
+                user=request.user
+            ).annotate(
+                null_expiration=Count('expiration')
+            ).order_by('-null_expiration', 'expiration')
     return {"form": form, "languages": STYLES, "pastes": pastes}
 
 
