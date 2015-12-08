@@ -75,8 +75,8 @@ def home(request):
         }
         clone = request.GET.get("clone")
         if clone:
-            paste = Paste.objects.filter(pk=clone).first()
-            if paste and not paste.has_expired():
+            paste = Paste.active.filter(pk=clone).first()
+            if paste:
                 initial = {
                     "title": paste.title,
                     "body": paste.body,
@@ -122,7 +122,7 @@ def account(request):
             return redirect(account)
     else:
         form = UserForm(instance=request.user)
-        pastes = request.user.paste_set.all().order_by("-created")
+        pastes = Paste.active.filter(user=request.user).order_by("-created")
     return {"form": form, "languages": STYLES, "pastes": pastes}
 
 

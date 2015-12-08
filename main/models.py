@@ -85,6 +85,7 @@ class User(AbstractUser):
 
 class PasteManager(models.Manager):
     def create(self, *args, **kwargs):
+        """Create a paste, retrying if there's an ID collision."""
         # Try to create new IDs for the paste if one collides.
         tries = 10
         for x in range(tries):
@@ -93,6 +94,12 @@ class PasteManager(models.Manager):
             except IntegrityError:
                 print("Collision %s." % x)
         raise IntegrityError("Could not find a paste ID after %s tries." % tries)
+
+
+class ActivePasteManager(models.Manager):
+    """A manager that ignores expired pastes."""
+    def get_queryset(self):
+        return super().get_queryset().filter(expiration__gt=timezone.now())
 
 
 class Paste(models.Model):
@@ -120,6 +127,7 @@ class Paste(models.Model):
     )
 
     objects = PasteManager()
+    active = ActivePasteManager()
 
     def __str__(self):
         return self.title if self.title else self.id
@@ -127,9 +135,9 @@ class Paste(models.Model):
     @classmethod
     def get_by_id_or_404(cls, paste_id):
         """Retrieve a paste by its ID, or None if it doesn't exist."""
-        paste = cls.objects.filter(pk=paste_id.lower()).first()
+        paste = cls.active.filter(pk=paste_id.lower()).first()
 
-        if not paste or paste.has_expired():
+        if not paste:
             raise Http404
         else:
             return paste
