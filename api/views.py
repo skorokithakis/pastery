@@ -4,6 +4,7 @@ from collections import namedtuple
 
 from annoying.decorators import ajax_request
 from brake.decorators import ratelimit
+from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -12,6 +13,8 @@ from django.utils import timezone
 from schema import Schema, Use, Optional, And, SchemaError
 
 from main.models import Paste, LANGUAGE_DICT
+
+User = get_user_model()
 
 
 @require_POST
@@ -30,6 +33,7 @@ def paste(request):
             Optional("title", default=""): And([str], Use(lambda x: x[0]), lambda x: len(x) < 200, error="\"title\" should be a string less than 200 characters long."),
             Optional("language", default="autodetect"): And([str], Use(lambda x: x[0]), Use(lambda x: x if x in LANGUAGE_DICT.keys() else "autodetect"), error="\"language\" should be the name of a supported language."),
             Optional("duration", default=1440): And([str], Use(lambda x: x[0]), Use(int), Use(lambda x: x > 0), error="\"duration\" should be an integer number of minutes before the paste is deleted."),
+            Optional("api_key", default=None): Use(lambda x: User.objects.get(api_key=x[0]), error="\"api_key\" must be a valid API key."),
             },
             # Make a named tuple out of the result.
             Use(lambda x: namedtuple('GenericDict', x.keys())(**x))
@@ -52,6 +56,7 @@ def paste(request):
             title=data.title,
             raw_language=data.language,
             body=body,
+            user=data.api_key,
             expiration=timezone.now() + datetime.timedelta(minutes=data.duration),
             )
 
