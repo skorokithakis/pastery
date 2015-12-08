@@ -99,7 +99,7 @@ class PasteManager(models.Manager):
 class ActivePasteManager(models.Manager):
     """A manager that ignores expired pastes."""
     def get_queryset(self):
-        return super().get_queryset().filter(expiration__gt=timezone.now())
+        return super().get_queryset().exclude(expiration__lt=timezone.now())
 
 
 class Paste(models.Model):
