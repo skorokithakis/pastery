@@ -8,6 +8,7 @@ from django.db.utils import IntegrityError
 from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import Http404
@@ -144,6 +145,15 @@ class Paste(models.Model):
     def __str__(self):
         return self.title if self.title else self.id
 
+    def as_dict(self):
+        """Represent the object as a dictionary."""
+        return {
+            "title": self.title,
+            "url": self.get_full_url(),
+            "language": self.language,
+            "duration": int((self.expiration - timezone.now()).seconds / 60) if self.expiration else None,
+        }
+
     @classmethod
     def get_by_id_or_404(cls, paste_id):
         """Retrieve a paste by its ID, or None if it doesn't exist."""
@@ -153,6 +163,9 @@ class Paste(models.Model):
             raise Http404
         else:
             return paste
+
+    def get_full_url(self):
+        return "https://%s%s" % (Site.objects.get_current().domain, self.get_absolute_url())
 
     def get_absolute_url(self):
         return reverse("paste", args=[self.id])

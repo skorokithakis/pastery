@@ -129,4 +129,4 @@ def account(request):
 def logout(request):
     djlogout(request)
     messages.success(request, _("You have been logged out."))
-    return redirect(home)
+    return redirect(request.META.get("HTTP_REFERER", home))
