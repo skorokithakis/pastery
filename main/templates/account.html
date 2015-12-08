@@ -84,6 +84,19 @@
     {% endfor %}
 </table>
 
+<h1>{% trans "Your API key" %}</h1>
+
+<p>
+{% blocktrans %}
+This is your API key. For more details on how to use it, visit the
+<a href="/api/">page</a>.
+{% endblocktrans %}
+</p>
+
+<p>
+<input class="form-control" placeholder="{% trans "Your API key" %}" value="{{ user.api_key }}" >
+</p>
+
 <script>
 var UserStyles = {};
 {% for nick, name in languages %}
