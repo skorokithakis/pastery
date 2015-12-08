@@ -60,13 +60,24 @@ LANGUAGE_DICT = dict(LANGUAGES)
 STYLES = get_styles()
 
 
-def paste_uuid():
+def generate_api_key():
+    """Create an API key for a user."""
+    return shortuuid.ShortUUID().random()[:32]
+
+
+def generate_paste_uuid():
     """Create a UUID for a paste."""
     return shortuuid.ShortUUID("abdcefghjkmnpqrstuvwxyz").random()[:6]
 
 
 class User(AbstractUser):
     """A proxy for the User model, to add various methods."""
+    api_key = models.CharField(
+            verbose_name=_("API key"),
+            max_length=64,
+            help_text=_("Your API key."),
+            default=generate_api_key,
+            )
     _style_name = models.CharField(
             verbose_name=_("Style name"),
             choices=[["", _("Default")]] + STYLES,
@@ -107,7 +118,7 @@ class Paste(models.Model):
         max_length=100,
         primary_key=True,
         db_index=True,
-        default=paste_uuid,
+        default=generate_paste_uuid,
         editable=False
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)

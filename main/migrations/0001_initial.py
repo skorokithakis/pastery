@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Paste',
             fields=[
-                ('id', models.CharField(db_index=True, default=main.models.paste_uuid, editable=False, max_length=100, primary_key=True, serialize=False)),
+                ('id', models.CharField(db_index=True, default=main.models.generate_paste_uuid, editable=False, max_length=100, primary_key=True, serialize=False)),
                 ('title', models.CharField(blank=True, help_text='The title of the paste.', max_length=500)),
                 ('body', models.TextField()),
                 ('created', models.DateTimeField(auto_now_add=True)),

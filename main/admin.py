@@ -13,4 +13,6 @@ class SettingAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
-    fieldsets = UserAdmin.fieldsets + (('Various', {'fields': ('_style_name',)}),)
+    fieldsets = UserAdmin.fieldsets + (
+        ('Various', {'fields': ('_style_name', "api_key")}),
+    )
