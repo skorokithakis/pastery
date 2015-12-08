@@ -62,7 +62,7 @@ STYLES = get_styles()
 
 def generate_api_key():
     """Create an API key for a user."""
-    return shortuuid.ShortUUID().random()[:32]
+    return shortuuid.ShortUUID().random(32)
 
 
 def generate_paste_uuid():
@@ -77,6 +77,7 @@ class User(AbstractUser):
             max_length=64,
             help_text=_("Your API key."),
             default=generate_api_key,
+            unique=True,
             )
     _style_name = models.CharField(
             verbose_name=_("Style name"),
