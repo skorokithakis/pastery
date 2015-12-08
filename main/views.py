@@ -2,8 +2,10 @@ import datetime
 
 from annoying.decorators import render_to
 from brake.decorators import ratelimit
+from captcha.fields import ReCaptchaField
 from django import forms
 from django.db.models import Count
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, logout as djlogout
 from django.http import HttpResponse
@@ -30,6 +32,8 @@ class PasteForm(forms.ModelForm):
     ]
     expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60, label=_("Expires in"), required=False)
     work = forms.CharField(required=False)
+    if settings.ENABLE_CAPTCHA:
+        captcha = ReCaptchaField()
 
     def clean(self):
         cleaned_data = super().clean()

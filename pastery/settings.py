@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'debug_toolbar',
     'bootstrap3',
+    'captcha',
     'django_browserid',
     'main',
     'api',
@@ -158,6 +159,13 @@ USE_TZ = True
 RAVEN_CONFIG = {"dsn": None}
 
 CACHING_TIME = 24 * 3600
+
+RECAPTCHA_PUBLIC_KEY = '6LfkpBITAAAAACCMrowwJj4dcUmcjKrZs7CfTqiu'
+RECAPTCHA_PRIVATE_KEY = 'override me'
+RECAPTCHA_USE_SSL = True
+NOCAPTCHA = True
+
+ENABLE_CAPTCHA = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
