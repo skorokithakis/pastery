@@ -3,6 +3,9 @@
 {% load staticfiles i18n %}
 
 {% block content %}
+<div class="container">
+    <article>
+
 <div class="paste">
     <h1>{% trans "Page not found" %}</h1>
     <div class="pretty-paste">
@@ -21,5 +24,8 @@ expired. Go back to the home page and try again.{% endblocktrans %}</pre></div>
             </tbody>
         </table>
     </div>
+</div>
+
+    </article>
 </div>
 {% endblock %}

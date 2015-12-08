@@ -141,21 +141,12 @@ select:focus {
 .pastery-form .language select {
     border-color: rgba(0,0,0,.25);
     max-width: 200px;
-    opacity: .3;
     transition: opacity .2s ease-in;
 }
-.pastery-form .language select:hover {
-    opacity: 1;
-}
 .pastery-form .language select:focus {
-    opacity: 1;
     border-color: #9DA668;
     box-shadow: none;
     outline: none;
-}
-.pastery-form .language em {
-    opacity: 0;
-    font-style: normal;
 }
 .pastery-form label {
     font-weight: normal;
@@ -227,6 +218,8 @@ select:focus {
     z-index: 0;
     font-weight: bold;
     text-transform: uppercase;
+    border-top: none;
+    border-bottom: none;
 }
 .paste .button-container .dropdown-toggle:hover,
 .paste .button-container .open .dropdown-toggle:focus,
@@ -316,8 +309,6 @@ select:focus {
     border-radius: 0;
     opacity: .5;
 }
-
-
 .pretty-paste {
     overflow: auto;
 }
@@ -332,6 +323,39 @@ select:focus {
 }
 
 /* Account */
+.account section {
+    margin-bottom: 30px;
+}
+.account h1 {
+    margin: 0 0 20px;
+    font-weight: bold;
+}
+.account section a {
+    color: #CC1B1B;
+}
+.account table.pastes {
+    font-size: 15px;
+}
+.account table.pastes thead {
+    font-weight: bold;
+    font-size: 18px;
+}
+.account table.pastes thead th {
+    border: none;
+    padding: 0 0 5px;
+}
+.account table.pastes tbody tr:first-child td {
+    border-width: 2px;
+}
+.account table.pastes tbody td {
+    padding: 15px 0;
+    border-color: rgba(0, 0, 0, .05);
+}
+.account table.pastes .expires {
+    color: #555;
+    text-align: right;
+}
+
 .account-form article {
     margin-bottom: 20px;
 }
@@ -480,7 +504,7 @@ select:focus {
         margin: 0 auto !important;
     }
 
-    .account-form {
+    .account section {
         padding: 0 15px;
     }
 }

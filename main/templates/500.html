@@ -3,6 +3,9 @@
 {% load staticfiles i18n %}
 
 {% block content %}
+<div class="container">
+    <article>
+
 <div class="paste">
     <h1>{% trans "Server error" %}</h1>
     <div class="pretty-paste">
@@ -23,5 +26,8 @@ check back in a bit.{% endblocktrans %}</pre></div>
             </tbody>
         </table>
     </div>
+</div>
+
+    </article>
 </div>
 {% endblock %}
