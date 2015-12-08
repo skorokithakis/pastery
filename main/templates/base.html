@@ -28,7 +28,7 @@
     {% block extrahead %}
     {% endblock %}
 </head>
-<body>
+<body class="{% block pageclass %}home{% endblock %}">
     {% include "analytics.html" %}
     <header class="top-header clearfix">
         <div class="container">
@@ -46,13 +46,11 @@
             </div>
         </div>
     </header>
+
+    {% block content %}
+    {% endblock %}
+
     <div class="container">
-
-        <article>
-            {% block content %}
-            {% endblock %}
-        </article>
-
         <footer>
             <a href="/api/">API</a> | <a href="/about/">{% trans "About" %}</a> | <a href="/plugins/">{% trans "Plugins" %}</a>
         </footer>
