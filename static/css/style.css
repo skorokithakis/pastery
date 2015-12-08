@@ -11,10 +11,16 @@ body {
 footer {
     padding: 20px 0;
     text-align: center;
+    font-size: 13px;
+    color: #666;
 }
-footer a,
+footer a {
+    color: #999;
+    text-decoration: underline;
+}
 footer a:hover {
-    color: #CC1B1B;
+    color: #999;
+    text-decoration: none;
 }
 
 .btn:focus,
@@ -348,12 +354,21 @@ select:focus {
     border-width: 2px;
 }
 .account table.pastes tbody td {
-    padding: 15px 0;
+    padding: 7px 0;
+    vertical-align: middle;
     border-color: rgba(0, 0, 0, .05);
 }
 .account table.pastes .expires {
     color: #555;
     text-align: right;
+}
+.account .apikey {
+    background: #E6E2D4;
+    box-shadow: none;
+}
+.account .apikey:focus {
+    box-shadow: none;
+    border-color: #9DA668;
 }
 
 .account-form article {
