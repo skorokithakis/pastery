@@ -27,14 +27,9 @@ class PasteView(View):
         return super().dispatch(*args, **kwargs)
 
     def get(self, request, paste_id=None):
-        schema = Schema(
-            And({
+        schema = Schema({
                 "api_key": Use(lambda x: User.objects.get(api_key=x[0]), error="\"api_key\" must be a valid API key."),
-                },
-                # Make a named tuple out of the result.
-                Use(lambda x: namedtuple('GenericDict', x.keys())(**x))
-                )
-        )
+                })
 
         try:
             data = schema.validate(dict(request.GET))
@@ -42,7 +37,7 @@ class PasteView(View):
             response = {"result": "error", "error_msg": str(e)}
             return HttpResponse(json.dumps(response), content_type="application/json", status=422)
 
-        qs = Paste.active.filter(user=data.api_key).order_by("-created")
+        qs = Paste.active.filter(user=data["api_key"]).order_by("-created")
         if paste_id:
             qs = qs.filter(pk=paste_id)
 
@@ -80,11 +75,26 @@ class PasteView(View):
             return HttpResponse(json.dumps(response), content_type="application/json", status=422)
 
         paste = Paste.objects.create(
-                title=data.title,
-                raw_language=data.language,
-                body=body,
-                user=data.api_key,
-                expiration=timezone.now() + datetime.timedelta(minutes=data.duration),
-                )
+            title=data.title,
+            raw_language=data.language,
+            body=body,
+            user=data.api_key,
+            expiration=timezone.now() + datetime.timedelta(minutes=data.duration),
+        )
 
         return paste.as_dict()
+
+    def delete(self, request, paste_id=None):
+        schema = Schema({
+                "api_key": Use(lambda x: User.objects.get(api_key=x[0]), error="\"api_key\" must be a valid API key."),
+                })
+
+        try:
+            data = schema.validate(dict(request.GET))
+        except SchemaError as e:
+            response = {"result": "error", "error_msg": str(e)}
+            return HttpResponse(json.dumps(response), content_type="application/json", status=422)
+
+        Paste.objects.filter(user=data["api_key"], pk=paste_id).delete()
+
+        return {"result": "success"}
