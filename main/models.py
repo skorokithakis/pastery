@@ -148,6 +148,7 @@ class Paste(models.Model):
     def as_dict(self):
         """Represent the object as a dictionary."""
         return {
+            "id": self.id,
             "title": self.title,
             "url": self.get_full_url(),
             "language": self.language,

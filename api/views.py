@@ -42,9 +42,13 @@ class PasteView(View):
             response = {"result": "error", "error_msg": str(e)}
             return HttpResponse(json.dumps(response), content_type="application/json", status=422)
 
-        pastes = [paste.as_dict() for paste in Paste.active.filter(user=data.api_key).order_by("-created")]
+        qs = Paste.active.filter(user=data.api_key).order_by("-created")
+        if paste_id:
+            print(paste_id)
+            qs = qs.filter(pk=paste_id)
+
         return {
-                "pastes": pastes,
+                "pastes": [paste.as_dict() for paste in qs],
                }
 
     def post(self, request, paste_id=None):
