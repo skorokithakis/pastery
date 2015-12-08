@@ -44,7 +44,6 @@ class PasteView(View):
 
         qs = Paste.active.filter(user=data.api_key).order_by("-created")
         if paste_id:
-            print(paste_id)
             qs = qs.filter(pk=paste_id)
 
         return {
