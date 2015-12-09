@@ -120,6 +120,14 @@ def raw_paste(request, paste_id):
 
 
 @require_POST
+@ratelimit(method=["POST"], rate="2/m")
+def report_paste(request, paste_id):
+    Paste.get_by_id_or_404(paste_id)
+    messages.success(request, _("Thank you for your report. We will investigate as soon as possible."))
+    return redirect(home)
+
+
+@require_POST
 def delete_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id)
     if request.user != paste.user:
