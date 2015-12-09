@@ -152,6 +152,24 @@ var UserStyleSelector = (function() {
   }
 })();
 
+var ReportConfirm = (function() {
+
+  init = function() {
+
+    if($('#report-paste').length == 0)
+      return;
+
+    $('#report-paste').on('submit', function() {
+
+      return confirm("Are you sure you want to report this paste?");
+    });
+  }
+
+  return {
+      'initialize': init
+  }
+})();
+
 var DeleteConfirm = (function() {
 
   init = function() {
