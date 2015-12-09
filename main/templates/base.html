@@ -44,6 +44,9 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li><a class="account" href="{% url 'account' %}">{{ user.email }}</a></li>
+                        {% if request.user.is_staff %}
+                        <li><a class="account" href="{% url 'admin:index' %}">{% trans "Admin" %}</a></li>
+                        {% endif %}
                         <li role="separator" class="divider"></li>
                         <li>{% browserid_logout text='Logout' %}</li>
                     </ul>
