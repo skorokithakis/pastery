@@ -14,6 +14,7 @@ from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
+from raven.contrib.django.raven_compat.models import client
 
 
 from .models import Paste, STYLES, LANGUAGE_DICT
@@ -122,7 +123,8 @@ def raw_paste(request, paste_id):
 @require_POST
 @ratelimit(method=["POST"], rate="2/m")
 def report_paste(request, paste_id):
-    Paste.get_by_id_or_404(paste_id)
+    paste = Paste.get_by_id_or_404(paste_id)
+    client.captureMessage("A paste was reported: %s" % paste.get_full_url())
     messages.success(request, _("Thank you for your report. We will investigate as soon as possible."))
     return redirect(home)
 
