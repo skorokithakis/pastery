@@ -68,8 +68,15 @@ class PasteView(View):
             response = {"result": "error", "error_msg": str(e)}
             return HttpResponse(json.dumps(response), content_type="application/json", status=422)
 
+        if request.FILES:
+            # Get the first file in a form-data form.
+            filename = list(request.FILES.keys())[0]
+            body = request.FILES[filename].read()
+        else:
+            body = request.body
+
         try:
-            body = request.body.decode("utf8")
+            body = body.decode("utf8")
         except UnicodeDecodeError:
             response = {"result": "error", "error_msg": "Your request body was not valid UTF-8."}
             return HttpResponse(json.dumps(response), content_type="application/json", status=422)

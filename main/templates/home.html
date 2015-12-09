@@ -18,7 +18,7 @@
             </div>
             <div class="fieldWrapper">
                 {{ form.body.errors }}
-                <textarea autofocus required tabindex="2" class="form-control" cols="40" id="id_body" name="body" rows="10">{{ form.body.value }}</textarea>
+                <textarea autofocus required tabindex="2" class="form-control" cols="40" id="id_body" name="body" rows="10" >{{ form.body.value }}</textarea>
                 <div class="language">
                     {{ form.raw_language|tabindex:5 }}
                 </div>
