@@ -57,7 +57,7 @@ article {
     overflow: auto;
 }
 .pretty-paste.markdown-language {
-    padding: 10px 15px 0;
+    padding: 10px 15px;
     background: #E6E2D4;
     color: #333;
     max-width: 950px;
@@ -96,4 +96,9 @@ footer .raw:hover {
     background-color: #CC1B1B;
     color: #fff;
     text-decoration: none;
+}
+@media (max-width: 230px) {
+    footer .raw {
+        display: none;
+    }
 }
