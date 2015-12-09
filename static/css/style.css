@@ -76,7 +76,6 @@ select:focus {
 .top-header .persona .btn {
     background-color: transparent;
     border-color: transparent;
-    transition: background-color .2s ease-in;
 }
 .top-header .persona .btn:hover,
 .top-header .persona .open .btn {
@@ -108,9 +107,6 @@ select:focus {
     padding: 5px 10px;
     color: #fff;
     display: inline-block;
-}
-.top-header .persona a.browserid-login {
-    transition: background-color .2s ease-in;
 }
 .top-header .persona a.browserid-login:hover {
     background-color: rgba(255, 255, 255, .2);
