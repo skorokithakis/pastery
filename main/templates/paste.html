@@ -23,7 +23,7 @@
                 <div class="btn-group admin-parent" role="group">
                     <form action="{% url "delete-paste" paste.id %}" id="delete-paste" method="post">
                         {% csrf_token %}
-                        <button type="submit" data-toggle="tooltip" title="{% trans "Delete" %}" tabindex="2" class="btn btn-default btn-sm dropdown-toggle admin-button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                        <button type="submit" data-toggle="tooltip" title="{% trans "Delete" %}" class="btn btn-default btn-sm dropdown-toggle admin-button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                     </form>
                 </div>
                 {% endif %}
@@ -84,17 +84,20 @@
     <div class="container">
         <div class="meta-footer clearfix">
 
-            {% if paste.expiration %}
-            <div class="expires">
+            <div class="pull-right">
+                {{ paste.get_language_display }}
+            </div>
+
+            <div class="pull-left">
+                {% if paste.expiration %}
                 {% blocktrans with paste.expiration|timeuntil as until %}
                 Expires in {{ until }}
-                {% endblocktrans %}
-            </div>
-            {% endif %}
-
-            <div class="language">
-                {% trans "Language:" %}
-                {{ paste.get_language_display }}
+                {% endblocktrans %} |
+                {% endif %}
+                <form action="{% url "report-paste" paste.id %}" id="report-paste" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Report abuse</button>
+                </form>
             </div>
 
         </div>

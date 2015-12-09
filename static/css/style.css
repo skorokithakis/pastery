@@ -297,11 +297,19 @@ select:focus {
     padding: 20px 0 0;
     color: #666;
 }
-.paste .language{
-    float: left;
+.paste #report-paste {
+    display: inline;
 }
-.paste .expires {
-    float: right;
+.paste #report-paste button {
+    display: inline;
+    background-color: transparent;
+    border: none;
+    text-decoration: underline;
+    padding: 0;
+    outline: none;
+}
+.paste #report-paste button:hover {
+    text-decoration: none;
 }
 
 .btn-container {
@@ -529,11 +537,11 @@ select:focus {
         text-align: right;
         padding:  20px 20px 0;
     }
-    .paste .meta-footer .expires {
+    .paste .meta-footer div:first-child {
         margin-bottom: 5px;
     }
     .paste .meta-footer div {
-        float: none;
+        float: none !important;
     }
     .admin-button {
         float: none !important;
