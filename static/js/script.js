@@ -192,6 +192,7 @@ $(document).ready(function() {
 
   autosize($('textarea'));
 
+  ReportConfirm.initialize();
   DeleteConfirm.initialize();
   UserStyleSelector.initialize();
   ShareSelector.initialize();
