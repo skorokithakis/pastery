@@ -1,3 +1,4 @@
+import bleach
 import markdown
 import pygments
 import shortuuid
@@ -210,9 +211,9 @@ class Paste(models.Model):
 
         language = self.language
         if language == "markdown":
-            rendered = markdown.markdown(self.body, ["markdown.extensions.extra"])
+            rendered = markdown.markdown(bleach.clean(self.body), ["markdown.extensions.extra"])
         elif language == "textile":
-            rendered = textile.textile(self.body)
+            rendered = textile.textile(bleach.clean(self.body))
         else:
             formatter = HtmlFormatter(linenos="table", cssclass="paste")
             rendered = highlight(
