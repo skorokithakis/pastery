@@ -5,7 +5,9 @@ var ShareSelector = (function() {
     if($('#copy-code').length == 0)
       return;
 
-    $('[data-placement="tooltip"],[data-toggle="tooltip"]').tooltip()
+    $('[data-placement="tooltip"],[data-toggle="tooltip"]').tooltip({
+      'placement': 'top'
+    });
 
     // Select text when dropdown shows
     $('.dropdown-parent').on('show.bs.dropdown', function () {
@@ -16,6 +18,8 @@ var ShareSelector = (function() {
 
         element.focus();
         element.setSelectionRange(0, element.value.length);
+
+        $(element).tooltip('hide');
 
       }, 100);
 
