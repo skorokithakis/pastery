@@ -101,7 +101,7 @@ def home(request):
 
 @render_to("embed.html")
 def embed_paste(request, paste_id):
-    return {"paste": Paste.get_by_id_or_404(paste_id)}
+    return {"paste": Paste.get_by_id_or_404(paste_id), "host": request.GET.get("host", "")}
 
 
 @render_to("paste.html")
