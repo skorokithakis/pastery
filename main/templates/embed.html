@@ -17,7 +17,7 @@
             </div>
 
             <footer>
-                <a href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "paste" paste.id %}">{% if paste.title %}{{ paste }}{% else %}{% trans "Paste" %}{% endif %}</a>
+                <a href="{{ paste.get_full_url }}">{% if paste.title %}{{ paste }}{% else %}{% trans "Paste" %}{% endif %}</a>
                  {% trans "hosted by" %}
                 <a class="website" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url 'home' %}" title="{{ current_site.name }}">{{ current_site.name }}</a>
                 <a class="raw" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "raw-paste" paste.id %}">Raw</a>
