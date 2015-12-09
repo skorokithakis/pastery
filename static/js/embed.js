@@ -32,7 +32,7 @@
             var iframe = document.createElement('iframe');
 
             var pasteid = pasteElement.getAttribute('data-pasteid');
-            var src  = "https://www.pastery.net/";
+            var src = "https://www.pastery.net/";
 
             iframe.id = 'pasteid-' + pasteid;
             iframe.src = src + pasteid + '/embed/?host=' + window.location.href;

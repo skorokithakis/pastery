@@ -40,7 +40,7 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <div class="btn-group">
-                            <input title="{% trans "Copied!" %}" type="text" value="&lt;script&gt;(function(d, s, id) {var js, pastejs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src ='//{{ current_site.domain }}{% static "js/embed.js" %}';pastejs.parentNode.insertBefore(js, pastejs);}(document, 'script', 'linkpack-jssdk'));&lt;/script&gt;&#13;&#10;&lt;div class='paste-list' data-pasteid='{{ paste.id }}'&gt;&lt;/div&gt;" readonly=""/>
+                            <input title="{% trans "Copied!" %}" type="text" value="&lt;script&gt;(function(d, s, id) {var js, pastejs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src ='https://{{ current_site.domain }}{% static "js/embed.js" %}';pastejs.parentNode.insertBefore(js, pastejs);}(document, 'script', 'linkpack-jssdk'));&lt;/script&gt;&#13;&#10;&lt;div class='paste-list' data-pasteid='{{ paste.id }}'&gt;&lt;/div&gt;" readonly=""/>
                         </div>
                         <div class="btn-group action-copy">
                             <button data-trigger="hover" data-toggle="tooltip" title="{% trans "Copy to clipboard" %}" aria-label="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
