@@ -48,11 +48,11 @@
                         <li><a class="account" href="{% url 'admin:index' %}">{% trans "Admin" %}</a></li>
                         {% endif %}
                         <li role="separator" class="divider"></li>
-                        <li>{% browserid_logout text='Logout' %}</li>
+                        <li><a data-next="{{ request.get_full_path }}" class="browserid-logout" href="{% url "browserid.logout" %}" >{% trans "Logout" %}</a></li>
                     </ul>
                 </div>
                 {% else %}
-                    {% browserid_login text='Login' color='dark' %}
+                <a data-next="{{ request.get_full_path }}" class="browserid-login persona-button dark" href="#" >{% trans "Login" %}</a>
                 {% endif %}
             </div>
         </div>
