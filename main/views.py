@@ -121,9 +121,15 @@ def raw_paste(request, paste_id):
 
 
 @require_POST
+@ratelimit(method=["POST"], rate="50/d")
 @ratelimit(method=["POST"], rate="2/m")
 def report_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id)
+
+    if getattr(request, 'limited', False):
+        messages.error(request, _("You're reporting too many paste. If there's something widespread going on, please contact us directly."))
+        return redirect(paste)
+
     client.captureMessage("A paste was reported: %s" % paste.get_full_url())
     messages.success(request, _("Thank you for your report. We will investigate as soon as possible."))
     return redirect(home)
