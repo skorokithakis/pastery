@@ -64,37 +64,61 @@ select:focus {
     text-indent: -99999px;
     outline: none;
 }
+
+
+
 .top-header .persona {
     position: absolute;
-    top: -2px;
+    top: -3px;
     right: 15px;
     color: #888;
 }
-.top-header .persona a {
+.top-header .persona .btn {
+    background-color: transparent;
+    border-color: transparent;
+    transition: background-color .2s ease-in;
+}
+.top-header .persona .btn:hover,
+.top-header .persona .open .btn {
+    background-color: rgba(255, 255, 255, .2);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: none;
+}
+.top-header .persona .dropdown-menu {
+    border-radius: 0;
+    margin-top: 10px;
+    padding: 0;
+    text-align: right;
+}
+.top-header .persona .dropdown-menu .divider {
+    margin: 0;
+}
+.top-header .persona .dropdown-menu a {
+    color: #CC1B1B;
+    padding: 5px 10px;
+    display: block;
+}
+.top-header .persona .dropdown-menu a:hover {
+    text-decoration: none;
+    background-color: #f0f0f0;
+}
+
+.top-header .persona a.browserid-login {
     padding: 5px 10px;
     color: #fff;
     display: inline-block;
 }
-.top-header .persona a {
+.top-header .persona a.browserid-login {
+    transition: background-color .2s ease-in;
+}
+.top-header .persona a.browserid-login:hover {
     background-color: rgba(255, 255, 255, .2);
 }
-.top-header .persona a:hover {
-    background-color: rgba(255, 255, 255, .4);
-}
-.top-header .persona a:focus,
-.top-header .persona a:active,
-.top-header .persona a:hover {
+.top-header .persona a.browserid-login:focus,
+.top-header .persona a.browserid-login:active,
+.top-header .persona a.browserid-login:hover {
     text-decoration: none;
-}
-.top-header .persona .account {
-    font-style: normal;
-    padding: 5px 10px;
-    color: rgba(255, 255, 255, .75);
-    background: transparent;
-}
-.top-header .persona .account:hover {
-    background: transparent;
-    text-decoration: underline;
 }
 
 
@@ -226,6 +250,7 @@ select:focus {
     text-transform: uppercase;
     border-top: none;
     border-bottom: none;
+    min-width: 44px;
 }
 .paste .button-container .dropdown-toggle:hover,
 .paste .button-container .open .dropdown-toggle:focus,
@@ -412,16 +437,11 @@ select:focus {
     }
     .top-header .persona {
         top: 3px;
+        right: 10px;
     }
     .top-header h1 {
         margin: 5px 0 0 10px;
         float: left;
-    }
-    .top-header h1 a {
-        min-width: 30px;
-        display: block;
-        text-indent: -9999999px;
-        background-position: 4px 3px;
     }
 
     .paste header {

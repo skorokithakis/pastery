@@ -38,10 +38,18 @@
                 {% browserid_info %}
 
                 {% if user.is_authenticated %}
-                    <a class="account" href="{% url 'account' %}">{{ user.email }}</a>
-                    {% browserid_logout text='Logout' %}
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-cog"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="account" href="{% url 'account' %}">{{ user.email }}</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li>{% browserid_logout text='Logout' %}</li>
+                    </ul>
+                </div>
                 {% else %}
-                  {% browserid_login text='Login' color='dark' %}
+                    {% browserid_login text='Login' color='dark' %}
                 {% endif %}
             </div>
         </div>
