@@ -153,7 +153,7 @@ class Paste(models.Model):
             "title": self.title,
             "url": self.get_full_url(),
             "language": self.language,
-            "duration": int((self.expiration - timezone.now()).seconds / 60) if self.expiration else None,
+            "duration": int((self.expiration - timezone.now()).total_seconds() / 60) if self.expiration else None,
         }
 
     @classmethod
