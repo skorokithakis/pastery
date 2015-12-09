@@ -13,6 +13,8 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from django.views.decorators.clickjacking import xframe_options_exempt
+
 
 from .models import Paste, STYLES, LANGUAGE_DICT
 
@@ -99,9 +101,13 @@ def home(request):
     return {"form": form}
 
 
+@xframe_options_exempt
 @render_to("embed.html")
 def embed_paste(request, paste_id):
-    return {"paste": Paste.get_by_id_or_404(paste_id)}
+    return {
+        "paste": Paste.get_by_id_or_404(paste_id),
+        "host": request.GET.get('host')
+    }
 
 
 @render_to("paste.html")
