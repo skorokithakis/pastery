@@ -99,6 +99,11 @@ def home(request):
     return {"form": form}
 
 
+@render_to("embed.html")
+def embed_paste(request, paste_id):
+    return {"paste": Paste.get_by_id_or_404(paste_id)}
+
+
 @render_to("paste.html")
 def paste(request, paste_id):
     return {"paste": Paste.get_by_id_or_404(paste_id)}
