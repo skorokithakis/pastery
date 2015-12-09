@@ -30,7 +30,7 @@
 
                 {% if request.user.is_staff %}
                 <div class="btn-group admin-parent" role="group">
-                    <a type="button" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'admin:main_paste_change' paste.id %}" type="button">{% trans "Admin" %}</a>
+                    <a type="button" data-toggle="tooltip" title="{% trans "Admin" %}" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'admin:main_paste_change' paste.id %}" type="button"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
                 </div>
                 {% endif %}
 
