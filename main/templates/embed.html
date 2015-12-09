@@ -1,0 +1,47 @@
+{% load staticfiles i18n %}<!doctype html>
+<html id="page-widget">
+    <head>
+        <meta charset="UTF-8"/>
+        <link href="{% static "css/embed.css" %}" rel="stylesheet"/>
+        {% if request.user.is_authenticated %}
+        <link href="{% static "css/"|add:request.user.style_name|add:".css" %}" rel="stylesheet" class="user-style"/>
+        {% else %}
+        <link href="{% static "css/monokai.css" %}" rel="stylesheet"/>
+        {% endif %}
+    </head>
+    <body>
+        <article class="paste" id="paste-embed">
+
+            {% if paste.title %}
+            <h1>{{ paste }}</h1>
+            {% endif %}
+
+            <div class="pretty-paste{% if paste.language == 'markdown' %} markdown-language{% endif %}">
+            {{ paste.rendered_body|safe }}
+            </div>
+
+            {% if paste.expiration %}
+            <div class="meta-footer clearfix">
+
+                <div class="expires">
+                    {% blocktrans with paste.expiration|timeuntil as until %}
+                    Expires in {{ until }}
+                    {% endblocktrans %}
+                </div>
+            </div>
+            {% endif %}
+
+        </article>
+        <script>
+        window.addEventListener('DOMContentLoaded', function() {
+
+            var height = document.getElementById('paste-embed').offsetHeight;
+
+            window.parent.postMessage({ 'height': height,
+                                        'paste-id': '{{ paste.id }}'
+                                    }, '{{ host }}');
+
+        }, false);
+        </script>
+    </body>
+</html>

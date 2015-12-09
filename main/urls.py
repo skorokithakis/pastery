@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^account/$', views.account, name="account"),
     url(r'^logout/$', views.logout, name="logout"),
     url(r'^(?P<paste_id>[^/]+)/delete/$', views.delete_paste, name="delete-paste"),
+    url(r'^(?P<paste_id>[^/]+)/embed/$', views.embed_paste, name="embed-paste"),
     url(r'^(?P<paste_id>[^/]+)/raw/$', views.raw_paste, name="raw-paste"),
     url(r'^(?P<paste_id>[^/]+)/$', views.paste, name="paste"),
 ]

@@ -1,0 +1,68 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, Verdana, sans-serif;
+}
+* {
+    margin: 0;
+}
+h1 {
+    margin-bottom: 10px;
+    padding: 0 10px;
+}
+table {
+    border-collapse: collapse;
+}
+pre {
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+    overflow: auto;
+}
+article {
+    position: relative;
+}
+.meta-footer {
+    text-align: right;
+    color: #999;
+    padding: 7px;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    font-size: 11px;
+}
+.pastetable pre {
+    background-color: transparent;
+    border: 0;
+    margin-bottom: 0;
+    color: inherit;
+}
+.pastetable .linenos pre {
+    background: rgba(255,255,255,.2);
+    border-radius: 0;
+    opacity: .5;
+}
+.pretty-paste {
+    overflow: auto;
+}
+.pretty-paste.markdown-language {
+    padding: 10px 15px 0;
+    background: #E6E2D4;
+    color: #333;
+    max-width: 950px;
+    margin: 0 auto;
+}
+.pretty-paste.markdown-language a {
+    color: #333;
+    text-decoration: underline;
+}
