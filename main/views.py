@@ -14,6 +14,7 @@ from django.shortcuts import redirect
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
+from ipware.ip import get_ip
 from raven.contrib.django.raven_compat.models import client
 
 
@@ -72,6 +73,7 @@ def home(request):
             data["title"] = clean["title"]
             data["body"] = clean["body"]
             data["raw_language"] = clean["raw_language"]
+            data["user_address"] = get_ip(request) or ""
 
             if clean["expires"]:
                 data["expiration"] = timezone.now() + datetime.timedelta(minutes=int(clean["expires"]))

@@ -139,6 +139,7 @@ class Paste(models.Model):
         choices=LANGUAGES,
         default="autodetect"
     )
+    user_address = models.CharField(max_length=1000, blank=True)
 
     objects = PasteManager()
     active = ActivePasteManager()

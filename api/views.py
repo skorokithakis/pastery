@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 from django.utils import timezone
 from django.utils.decorators import method_decorator
+from ipware.ip import get_ip
 from schema import Schema, Use, Optional, And, SchemaError
 
 from main.models import Paste, LANGUAGE_DICT
@@ -87,6 +88,7 @@ class PasteView(View):
             body=body,
             user=data.api_key,
             expiration=timezone.now() + datetime.timedelta(minutes=data.duration),
+            user_address=get_ip(request) or "",
         )
 
         return paste.as_dict()
