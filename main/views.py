@@ -106,7 +106,7 @@ def home(request):
 def embed_paste(request, paste_id):
     return {
         "paste": Paste.get_by_id_or_404(paste_id),
-        "host": request.GET.get('host')
+        "host": request.GET.get("host", "")
     }
 
 
