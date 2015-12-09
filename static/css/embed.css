@@ -61,6 +61,11 @@ article {
     background: #E6E2D4;
     color: #333;
     margin: 0 auto;
+    line-height: 1.42857143;
+    font-size: 14px;
+}
+.pretty-paste.markdown-language p {
+    margin: 0 0 10px;
 }
 .pretty-paste.markdown-language a {
     color: #333;
