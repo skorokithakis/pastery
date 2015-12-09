@@ -143,6 +143,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_HOST_USER = 'postmaster@pastery.net'
+EMAIL_HOST_PASSWORD = 'override me'
+EMAIL_PORT = 587
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
