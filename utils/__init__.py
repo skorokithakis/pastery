@@ -1,5 +1,4 @@
 from mixpanel import Mixpanel
-from mixpanel_async import AsyncBufferedConsumer
 from django.conf import settings
 
 
@@ -8,7 +7,7 @@ def send_event(user_id, name, data):
     if getattr(settings, "MIXPANEL_TOKEN", None) is None:
         return
 
-    mp = Mixpanel(settings.MIXPANEL_TOKEN, consumer=AsyncBufferedConsumer())
+    mp = Mixpanel(settings.MIXPANEL_TOKEN)
     mp.track(user_id, name, data)
 
 
