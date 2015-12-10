@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model, logout as djlogout
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -107,10 +107,29 @@ def home(request):
 @xframe_options_exempt
 @render_to("embed.html")
 def embed_paste(request, paste_id):
-    return {
-        "paste": Paste.get_by_id_or_404(paste_id),
+    paste = Paste.active.filter(pk=paste_id.lower()).first()
+    if not paste:
+        status = 404
+        # Construct a fake paste to show.
+        paste = Paste(
+            id="embed404",
+            raw_language="markdown",
+            title=_("Former paste"),
+            body=_("""# Something terrible has happened.
+This paste has expired or has been deleted. Sorry about that :(
+
+You should make your own, beautiful pastes that will last much longer
+than this one at [Pastery](https://www.pastery.net/)."""),
+        )
+    else:
+        status = 200
+
+    data = {
+        "paste": paste,
         "host": request.GET.get("host", "")
     }
+    response = render(request, "embed.html", data, status=status)
+    return response
 
 
 @render_to("paste.html")
