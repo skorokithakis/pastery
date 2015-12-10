@@ -211,8 +211,6 @@ def oembed(request):
         paste_id = ""
     paste = Paste.get_by_id_or_404(paste_id)
 
-    maxwidth = request.GET.get("maxwidth")
-    maxheight = request.GET.get("maxheight")
     site = Site.objects.get_current()
 
     data = {
@@ -226,9 +224,5 @@ def oembed(request):
 
     if paste.title:
         data["title"] = paste.title
-    if maxwidth:
-        data["width"] = maxwidth
-    if maxheight:
-        data["width"] = maxwidth
 
     return data
