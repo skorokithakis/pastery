@@ -115,8 +115,11 @@ class PasteManager(models.Manager):
         else:
             raise IntegrityError("Could not find a paste ID after %s tries." % tries)
 
-        address = hashlib.sha256(kwargs["user_address"].encode("utf8")).hexdigest()[:16]
-        user_id = address if address else kwargs["user"].username
+        if kwargs["user"]:
+            user_id = kwargs["user"].username
+        else:
+            user_id = hashlib.sha256(kwargs["user_address"].encode("utf8")).hexdigest()[:16]
+
         send_event(user_id, "new_paste", {
             "raw_language": kwargs["raw_language"],
             "id": paste.id,
