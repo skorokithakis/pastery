@@ -354,6 +354,14 @@ select:focus {
     max-width: 950px;
     margin: 0 auto;
 }
+.pretty-paste.markdown-language h1,
+.pretty-paste.markdown-language h2,
+.pretty-paste.markdown-language h3,
+.pretty-paste.markdown-language h4,
+.pretty-paste.markdown-language h5,
+.pretty-paste.markdown-language h6 {
+    margin-bottom: 10px;
+}
 .pretty-paste.markdown-language h2 {
     font-weight: bold;
 }
