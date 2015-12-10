@@ -1,6 +1,7 @@
 import datetime
+import re
 
-from annoying.decorators import render_to
+from annoying.decorators import render_to, ajax_request
 from brake.decorators import ratelimit
 from captcha.fields import ReCaptchaField
 from django import forms
@@ -8,9 +9,11 @@ from django.db.models import Count
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, logout as djlogout
+from django.contrib.sites.models import Site
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -105,7 +108,6 @@ def home(request):
 
 
 @xframe_options_exempt
-@render_to("embed.html")
 def embed_paste(request, paste_id):
     paste = Paste.active.filter(pk=paste_id.lower()).first()
     if not paste:
@@ -186,3 +188,38 @@ def logout(request):
     djlogout(request)
     messages.success(request, _("You have been logged out."))
     return redirect(request.META.get("HTTP_REFERER", home))
+
+
+@ajax_request
+def oembed(request):
+    if request.GET.get("format", "json").lower() != "json":
+        return HttpResponse("Format not supported", status=501)
+
+    paste_re = re.search("^https?://.*?/(.*?)(/.*)?$", request.GET.get("url", ""))
+    if paste_re:
+        paste_id = paste_re.group(1)
+    else:
+        paste_id = ""
+    paste = Paste.get_by_id_or_404(paste_id)
+
+    maxwidth = request.GET.get("maxwidth")
+    maxheight = request.GET.get("maxheight")
+    site = Site.objects.get_current()
+
+    data = {
+        "version": "1.0",
+        "type": "rich",
+        "html": render_to_string("embed_code.html", {"paste": paste}, request=request),
+        "url": paste.get_full_url(),
+        "provider_name": site.name,
+        "provider_url": "https://%s/" % site.domain,
+    }
+
+    if paste.title:
+        data["title"] = paste.title
+    if maxwidth:
+        data["width"] = maxwidth
+    if maxheight:
+        data["width"] = maxwidth
+
+    return data
