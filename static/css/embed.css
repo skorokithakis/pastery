@@ -14,10 +14,6 @@ ol, ul {
     margin-top: 0;
     margin-bottom: 10px;
 }
-h1 {
-    margin-bottom: 10px;
-    padding: 0 10px;
-}
 table {
     border-collapse: collapse;
 }
@@ -70,6 +66,9 @@ article {
     margin: 0 auto;
     line-height: 1.42857143;
     font-size: 14px;
+}
+.pretty-paste.markdown-language h1 {
+    margin-bottom: 10px;
 }
 .pretty-paste.markdown-language h2 {
     font-weight: bold;
