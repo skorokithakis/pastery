@@ -354,6 +354,12 @@ select:focus {
     max-width: 950px;
     margin: 0 auto;
 }
+.pretty-paste.markdown-language h2 {
+    font-weight: bold;
+}
+.pretty-paste.markdown-language h3 {
+    font-size: 20px;
+}
 .pretty-paste.markdown-language a {
     color: #333;
     text-decoration: underline;
