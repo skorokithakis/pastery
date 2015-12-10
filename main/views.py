@@ -5,7 +5,6 @@ from annoying.decorators import render_to, ajax_request
 from brake.decorators import ratelimit
 from captcha.fields import ReCaptchaField
 from django import forms
-from django.db.models import Count
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, logout as djlogout
@@ -187,9 +186,7 @@ def account(request):
         form = UserForm(instance=request.user)
         pastes = Paste.active.filter(
                 user=request.user
-            ).annotate(
-                null_expiration=Count('expiration')
-            ).order_by('-null_expiration', 'expiration')
+            ).order_by('-created')
     return {"form": form, "languages": STYLES, "pastes": pastes}
 
 
