@@ -360,8 +360,10 @@ select:focus {
 .pretty-paste.markdown-language h4,
 .pretty-paste.markdown-language h5,
 .pretty-paste.markdown-language h6 {
+    margin-top: 0;
     margin-bottom: 10px;
 }
+.pretty-paste.markdown-language h1,
 .pretty-paste.markdown-language h2 {
     font-weight: bold;
 }
