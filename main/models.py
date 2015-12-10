@@ -115,7 +115,7 @@ class PasteManager(models.Manager):
         else:
             raise IntegrityError("Could not find a paste ID after %s tries." % tries)
 
-        if kwargs["user"]:
+        if "user" in kwargs:
             user_id = kwargs["user"].username
         else:
             user_id = hashlib.sha256(kwargs["user_address"].encode("utf8")).hexdigest()[:16]
