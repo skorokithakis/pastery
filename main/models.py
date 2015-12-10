@@ -1,4 +1,5 @@
 import bleach
+import hashlib
 import markdown
 import pygments
 import shortuuid
@@ -19,6 +20,8 @@ from django.utils.translation import ugettext_lazy as _
 from pygments import highlight
 from pygments.lexers import guess_lexer, get_all_lexers
 from pygments.formatters import HtmlFormatter
+
+from utils import send_event, identify_user
 
 
 def get_languages():
@@ -100,6 +103,11 @@ class User(AbstractUser):
 class PasteManager(models.Manager):
     def create(self, *args, **kwargs):
         """Create a paste, retrying if there's an ID collision."""
+
+        address = hashlib.sha256(kwargs["user_address"].encode("utf8")).hexdigest()[:16]
+        user_id = address if address else kwargs["user"].username
+        send_event(user_id, "new_paste", {"raw_language": kwargs["raw_language"]})
+
         # Try to create new IDs for the paste if one collides.
         tries = 10
         for x in range(tries):
@@ -223,6 +231,14 @@ class Paste(models.Model):
             )
         cache.set(key, rendered, settings.CACHING_TIME)
         return rendered
+
+
+@receiver(post_save, sender=User)
+def identify(sender, instance, created, **kwargs):
+    """
+    Identify a user to Mixpanel.
+    """
+    identify_user(instance.username, instance)
 
 
 @receiver(post_save, sender=Paste)
