@@ -104,18 +104,26 @@ class PasteManager(models.Manager):
     def create(self, *args, **kwargs):
         """Create a paste, retrying if there's an ID collision."""
 
-        address = hashlib.sha256(kwargs["user_address"].encode("utf8")).hexdigest()[:16]
-        user_id = address if address else kwargs["user"].username
-        send_event(user_id, "new_paste", {"raw_language": kwargs["raw_language"]})
-
         # Try to create new IDs for the paste if one collides.
         tries = 10
         for x in range(tries):
             try:
-                return super(PasteManager, self).create(*args, **kwargs)
+                paste = super(PasteManager, self).create(*args, **kwargs)
+                break
             except IntegrityError:
                 print("Collision %s." % x)
-        raise IntegrityError("Could not find a paste ID after %s tries." % tries)
+        else:
+            raise IntegrityError("Could not find a paste ID after %s tries." % tries)
+
+        address = hashlib.sha256(kwargs["user_address"].encode("utf8")).hexdigest()[:16]
+        user_id = address if address else kwargs["user"].username
+        send_event(user_id, "new_paste", {
+            "raw_language": kwargs["raw_language"],
+            "id": paste.id,
+            "url": paste.get_full_url(),
+            })
+
+        return paste
 
 
 class ActivePasteManager(models.Manager):
