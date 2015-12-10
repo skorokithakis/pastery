@@ -249,7 +249,7 @@ def identify(sender, instance, created, **kwargs):
     """
     Identify a user to Mixpanel.
     """
-    identify_user(instance.username, instance)
+    identify_user(instance)
 
 
 @receiver(post_save, sender=Paste)

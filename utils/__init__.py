@@ -16,11 +16,18 @@ def send_event(user_id, name, data):
     mp.track(user_id, name, data)
 
 
-def identify_user(user_id, user):
+def identify_user(user):
     if not mp:
         return
 
-    mp.people_set(user_id, {
+    if isinstance(user.username, bytes):
+        # It may sometimes occur that persona usernames are bytes before being
+        # saved. We guard against that here.
+        username = user.username.decode("utf8")
+    else:
+        username = user.username
+
+    mp.people_set(username, {
         "$email": user.email,
         "style": user._style_name
     })
