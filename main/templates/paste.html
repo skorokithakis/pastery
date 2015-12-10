@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% load staticfiles bootstrap3 i18n %}
 
+{% block extrahead %}
+<link rel="alternate" type="application/json+oembed"
+    href="https://{{ current_site.domain }}{% url "oembed" %}?format=json&url={{ paste.get_full_url|urlencode }}"
+    title="Pastery oEmbed Goodness" />
+{% endblock %}
+
 {% block content %}
 <div class="paste">
     <div class="container">
