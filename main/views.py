@@ -110,17 +110,8 @@ def embed_paste(request, paste_id):
     paste = Paste.active.filter(pk=paste_id.lower()).first()
     if not paste:
         status = 404
-        # Construct a fake paste to show.
-        paste = Paste(
-            id="embed404",
-            raw_language="markdown",
-            title=_("Former paste"),
-            body=_("""# Something terrible has happened.
-This paste has expired or has been deleted. Sorry about that :(
-
-You should make your own, beautiful pastes that will last much longer
-than this one at [Pastery](https://www.pastery.net/)."""),
-        )
+        # Show a specific paste.
+        paste = Paste.active.get(pk="embed404")
     else:
         status = 200
 
