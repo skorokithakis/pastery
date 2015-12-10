@@ -148,7 +148,7 @@ def report_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id)
 
     if getattr(request, 'limited', False):
-        messages.error(request, _("You're reporting too many paste. If there's something widespread going on, please contact us directly."))
+        messages.error(request, _("You're reporting too many pastes. If there's something widespread going on, please contact us directly."))
         return redirect(paste)
 
     reporter = request.user.username if request.user.is_authenticated() else get_ip(request)
