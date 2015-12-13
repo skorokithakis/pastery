@@ -213,7 +213,7 @@ def oembed(request):
     data = {
         "version": "1.0",
         "type": "rich",
-        "html": render_to_string("embed_code.html", {"paste": paste}, request=request),
+        "html": render_to_string("oembed_code.html", {"paste": paste}, request=request),
         "provider_name": site.name,
         "provider_url": "https://%s/" % site.domain,
     }
