@@ -25,7 +25,16 @@ from utils import send_event, identify_user
 
 
 def get_languages():
-    """Return the list of all supported languages."""
+    """
+    Return the list of all supported languages.
+
+    Pygments' get_lexer_by_name is odd in that it doesn't accept a name at all,
+    but rather an alias. This function generates the list of all lexers, along
+    with their friendly names, by picking the first alias for each lexer and
+    returning a list with it, after reordering the most frequent aliases to the
+    top.
+    """
+    # Create a tuple of (first_alias, friendly_name) for each lexer.
     lexers = [[lexer[1][0], lexer[0]] for lexer in get_all_lexers()]
     lexers += [["markdown", "Markdown"], ["textile", "Textile"], ]
     sorted_lexers = sorted(lexers, key=lambda x: x[0].lower())
@@ -47,6 +56,21 @@ def get_languages():
     return top_languages + bottom_languages
 
 
+def get_aliases():
+    """
+    Return an alias dictionary.
+
+    This function constructs a dictionary that maps all Pygments aliases to
+    the lexer's first alias. This way, any language that comes in can be mapped
+    to the alias that Pygments supports for that language.
+    """
+    alias_dict = {}
+    for name, aliases, filetypes, mimetypes in get_all_lexers():
+        for alias in aliases:
+            alias_dict[alias] = aliases[0]
+    return alias_dict
+
+
 def get_styles():
     """Return all available styles and their names."""
 
@@ -61,6 +85,8 @@ def get_styles():
 
 LANGUAGES = get_languages()
 LANGUAGE_DICT = dict(LANGUAGES)
+ALIAS_DICT = get_aliases()
+
 # Rename the default style to avoid confusion.
 STYLES = get_styles()
 

@@ -13,7 +13,7 @@ from django.utils.decorators import method_decorator
 from ipware.ip import get_ip
 from schema import Schema, Use, Optional, And, SchemaError
 
-from main.models import Paste, LANGUAGE_DICT
+from main.models import Paste, ALIAS_DICT
 
 User = get_user_model()
 
@@ -54,7 +54,7 @@ class PasteView(View):
         schema = Schema(
             And({
                 Optional("title", default=""): And([str], Use(lambda x: x[0]), lambda x: len(x) < 200, error="\"title\" should be a string less than 200 characters long."),
-                Optional("language", default="autodetect"): And([str], Use(lambda x: x[0]), Use(lambda x: x if x in LANGUAGE_DICT.keys() else "autodetect"), error="\"language\" should be the name of a supported language."),
+                Optional("language", default="autodetect"): And([str], Use(lambda x: x[0]), Use(lambda x: ALIAS_DICT.get(x, "autodetect")), error="\"language\" should be the name of a supported language."),
                 Optional("duration", default=1440): And([str], Use(lambda x: int(x[0])), lambda x: x > 0, Use(lambda x: min(x, 43200)), error="\"duration\" should be an integer number of minutes before the paste is deleted."),
                 Optional("api_key", default=None): Use(lambda x: User.objects.get(api_key=x[0]), error="\"api_key\" must be a valid API key."),
                 },
