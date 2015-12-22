@@ -22,6 +22,7 @@ from pygments.lexers import guess_lexer, get_all_lexers
 from pygments.formatters import HtmlFormatter
 
 from utils import send_event, identify_user
+from utils.md_nofollow import NofollowExtension
 
 
 def get_languages():
@@ -257,9 +258,9 @@ class Paste(models.Model):
 
         language = self.language
         if language == "markdown":
-            rendered = markdown.markdown(bleach.clean(self.body), ["markdown.extensions.extra"])
+            rendered = markdown.markdown(bleach.clean(self.body), ["markdown.extensions.extra", NofollowExtension()])
         elif language == "textile":
-            rendered = textile.textile(bleach.clean(self.body))
+            rendered = textile.textile_restricted(self.body)
         else:
             formatter = HtmlFormatter(linenos="table", cssclass="paste")
             rendered = highlight(
