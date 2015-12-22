@@ -210,10 +210,15 @@ def oembed(request):
 
     site = Site.objects.get_current()
 
+    if request.GET.get("embedly"):
+        template_name = "embedly_embed_code.html"
+    else:
+        template_name = "embed_code.html"
+
     data = {
         "version": "1.0",
         "type": "rich",
-        "html": render_to_string("oembed_code.html", {"paste": paste}, request=request),
+        "html": render_to_string(template_name, {"paste": paste}, request=request),
         "provider_name": site.name,
         "provider_url": "https://%s/" % site.domain,
     }
