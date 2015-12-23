@@ -377,7 +377,7 @@ select:focus {
 .pretty-paste.markdown-language table {
     width: 100%;
     border: 1px solid #B4A87E;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 .pretty-paste.markdown-language th {
     background-color: #D0C9AF;
