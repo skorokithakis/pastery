@@ -374,6 +374,20 @@ select:focus {
     color: #333;
     text-decoration: underline;
 }
+.pretty-paste.markdown-language table {
+    width: 100%;
+    border: 1px solid #B4A87E;
+    margin-bottom: 15px;
+}
+.pretty-paste.markdown-language th {
+    background-color: #D0C9AF;
+}
+.pretty-paste.markdown-language td,
+.pretty-paste.markdown-language th {
+    border-bottom: 1px solid #B4A87E;
+    border-right: 1px solid #B4A87E;
+    padding: 5px;
+}
 
 /* Account */
 .account section {
