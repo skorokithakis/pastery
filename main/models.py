@@ -92,7 +92,10 @@ def get_aliases():
     the lexer's first alias. This way, any language that comes in can be mapped
     to the alias that Pygments supports for that language.
     """
-    alias_dict = {}
+    alias_dict = {
+            "markdown": "markdown",
+            "textile": "textile"
+            }
     for name, aliases, filetypes, mimetypes in get_all_lexers():
         for alias in aliases:
             alias_dict[alias] = aliases[0]
