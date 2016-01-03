@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles bootstrap3 i18n %}
 
-{% block pageclass %}page-paste{% endblock %}
+{% block pageclass %}{% if paste.language != 'markdown' and paste.language != 'textile' %}page-paste{% endif %}{% endblock %}
 
 {% block extrahead %}
 <link rel="alternate" type="application/json+oembed"
