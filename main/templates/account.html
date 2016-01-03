@@ -118,9 +118,9 @@ This is your API key. For more details on how to use it, visit the
     </div>
     <div class="btn-group action-copy">
         <button data-trigger="hover" data-toggle="tooltip" title="" aria-label="Copy to clipboard" class="btn btn-default btn-sm" type="button" data-original-title="Copy to clipboard"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
-        <form data-confirm="{% trans "Are you sure you want to refresh your API key?" %}" action="{% url "reset-key" %}" method="post">
+        <form data-confirm="{% trans "Are you sure you want to reset your API key?" %}" action="{% url "reset-key" %}" method="post">
             {% csrf_token %}
-            <button type="submit" data-toggle="tooltip" title="{% trans "Refresh API Key" %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+            <button type="submit" data-toggle="tooltip" title="{% trans "Reset API Key" %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
         </form>
     </div>
 </div>
