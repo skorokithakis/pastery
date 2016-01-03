@@ -156,6 +156,11 @@ class User(AbstractUser):
     def style_name(self):
         return self._style_name if self._style_name else settings.DEFAULT_STYLE
 
+    def reset_key(self):
+        "Reset the user's API key."
+        self.api_key = generate_api_key()
+        self.save()
+
 
 class PasteManager(models.Manager):
     def create(self, *args, **kwargs):

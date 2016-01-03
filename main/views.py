@@ -155,6 +155,17 @@ def report_paste(request, paste_id):
 
 
 @require_POST
+def reset_key(request):
+    if request.user.is_anonymous():
+        messages.error(request, _("Please log in first."))
+        return redirect(home)
+    else:
+        request.user.reset_key()
+        messages.success(request, _("Your API key has been reset."))
+        return redirect(account)
+
+
+@require_POST
 def delete_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id)
     if request.user != paste.user:
