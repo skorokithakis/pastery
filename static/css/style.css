@@ -47,7 +47,7 @@ select:focus {
 /* Header */
 .top-header {
     margin: 0 0 20px;
-    padding: 10px;
+    padding: 10px 15px;
     background: #CC1B1B;
     max-height: 50px;
     min-height: 30px;
@@ -293,6 +293,19 @@ select:focus {
     border-radius: 0;
 }
 
+.page-paste .top-header .container {
+    max-width: 100%;
+    width: 100%;
+    padding: 0;
+}
+.page-paste .paste .container {
+    width: 100%;
+    max-width: 100%;
+}
+.page-paste .top-header .persona {
+    right: 0;
+}
+
 .paste .meta-footer {
     padding: 20px 0 0;
     color: #666;
@@ -475,10 +488,10 @@ select:focus {
     }
     .top-header .persona {
         top: 3px;
-        right: 10px;
+        right: 15px;
     }
     .top-header h1 {
-        margin: 5px 0 0 10px;
+        margin: 5px 0 0 15px;
         float: left;
     }
 

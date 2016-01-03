@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load staticfiles bootstrap3 i18n %}
 
+{% block pageclass %}page-paste{% endblock %}
+
 {% block extrahead %}
 <link rel="alternate" type="application/json+oembed"
     href="https://{{ current_site.domain }}{% url "oembed" %}?format=json&url={{ paste.get_full_url|urlencode }}"
