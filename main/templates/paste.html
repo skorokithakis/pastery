@@ -27,7 +27,7 @@
 
                 {% if paste.user == request.user %}
                 <div class="btn-group admin-parent" role="group">
-                    <form action="{% url "delete-paste" paste.id %}" id="delete-paste" method="post">
+                    <form data-confirm="{% trans "Are you sure you want to delete this paste?" %}" action="{% url "delete-paste" paste.id %}" id="delete-paste" method="post">
                         {% csrf_token %}
                         <button type="submit" data-toggle="tooltip" title="{% trans "Delete" %}" class="btn btn-default btn-sm dropdown-toggle admin-button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                     </form>
@@ -100,7 +100,7 @@
                 Expires in {{ until }}
                 {% endblocktrans %} |
                 {% endif %}
-                <form action="{% url "report-paste" paste.id %}" id="report-paste" method="post">
+                <form data-confirm="{% trans "Are you sure you want to report this paste?" %}" action="{% url "report-paste" paste.id %}" id="report-paste" method="post">
                     {% csrf_token %}
                     <button type="submit">Report abuse</button>
                 </form>

@@ -432,6 +432,10 @@ select:focus {
 }
 .account .button-container .action-copy {
     top: 1px;
+    width: 85px;
+}
+.account .button-container .action-copy > button {
+    margin-right: 1px;
 }
 .account .button-container input {
     width: 100%;

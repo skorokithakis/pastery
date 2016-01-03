@@ -152,34 +152,18 @@ var UserStyleSelector = (function() {
   }
 })();
 
-var ReportConfirm = (function() {
+var ConfirmAction = (function() {
 
   init = function() {
 
-    if($('#report-paste').length == 0)
+    if($('[data-confirm]').length == 0)
       return;
 
-    $('#report-paste').on('submit', function() {
+    $('[data-confirm]').on('submit', function() {
 
-      return confirm("Are you sure you want to report this paste?");
-    });
-  }
+        var question = $(this).data('confirm');
 
-  return {
-      'initialize': init
-  }
-})();
-
-var DeleteConfirm = (function() {
-
-  init = function() {
-
-    if($('#delete-paste').length == 0)
-      return;
-
-    $('#delete-paste').on('submit', function() {
-
-      return confirm("Are you sure you want to delete this paste?");
+        return confirm(question);
     });
   }
 
@@ -192,8 +176,7 @@ $(document).ready(function() {
 
   autosize($('textarea'));
 
-  ReportConfirm.initialize();
-  DeleteConfirm.initialize();
+  ConfirmAction.initialize();
   UserStyleSelector.initialize();
   ShareSelector.initialize();
 });
