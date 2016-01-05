@@ -74,9 +74,6 @@ DEFAULT_STYLE = random.choice([
     "solarized",
     "solarized_dark",
     "solarized_dark256",
-    "manni",
-    "tango",
-    "default",
     "paraiso-dark",
     "native",
 ])
