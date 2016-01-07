@@ -490,9 +490,15 @@ select:focus {
         top: 3px;
         right: 15px;
     }
+    .page-paste .top-header .persona {
+        right: 10px;
+    }
     .top-header h1 {
         margin: 5px 0 0 15px;
         float: left;
+    }
+    .page-paste .top-header h1 {
+        margin-left: 10px;
     }
 
     .paste header {
