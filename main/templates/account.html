@@ -21,44 +21,44 @@
     <label class="control-label" for="id__paste">{% trans "Style sample" %}</label>
         <div class="paste">
             <div class="pretty-paste">
-    <table class="pastetable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19</pre></div></td><td class="code"><div class="paste"><pre><span class="kn">import</span> <span class="nn">unittest</span>
-
-
-<span class="k">def</span> <span class="nf">median</span><span class="p">(</span><span class="n">pool</span><span class="p">):</span>
-    <span class="n">copy</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
-    <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">copy</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">size</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">copy</span><span class="p">[(</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">copy</span><span class="p">[</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">copy</span><span class="p">[</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
-
-
-<span class="k">class</span> <span class="nc">TestMedian</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">testMedian</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">failUnlessEqual</span><span class="p">(</span><span class="n">median</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">]),</span> <span class="mi">7</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
-</pre></div>
+<table class="pastetable"><tr><td class="linenos"><div class="linenodiv"><pre><a href="#l-1"> 1</a>
+<a href="#l-2"> 2</a>
+<a href="#l-3"> 3</a>
+<a href="#l-4"> 4</a>
+<a href="#l-5"> 5</a>
+<a href="#l-6"> 6</a>
+<a href="#l-7"> 7</a>
+<a href="#l-8"> 8</a>
+<a href="#l-9"> 9</a>
+<a href="#l-10">10</a>
+<a href="#l-11">11</a>
+<a href="#l-12">12</a>
+<a href="#l-13">13</a>
+<a href="#l-14">14</a>
+<a href="#l-15">15</a>
+<a href="#l-16">16</a>
+<a href="#l-17">17</a>
+<a href="#l-18">18</a>
+<a href="#l-19">19</a></pre></div></td><td class="code"><div class="paste"><pre><span id="line-1"><a name="l-1"></a><span class="kn">import</span> <span class="nn">unittest</span>
+</span><span id="line-2"><a name="l-2"></a>
+</span><span id="line-3"><a name="l-3"></a>
+</span><span id="line-4"><a name="l-4"></a><span class="k">def</span> <span class="nf">median</span><span class="p">(</span><span class="n">pool</span><span class="p">):</span>
+</span><span id="line-5"><a name="l-5"></a>    <span class="n">copy</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+</span><span id="line-6"><a name="l-6"></a>    <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">copy</span><span class="p">)</span>
+</span><span id="line-7"><a name="l-7"></a>    <span class="k">if</span> <span class="n">size</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span><span id="line-8"><a name="l-8"></a>        <span class="k">return</span> <span class="n">copy</span><span class="p">[(</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span>
+</span><span id="line-9"><a name="l-9"></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="line-10"><a name="l-10"></a>        <span class="k">return</span> <span class="p">(</span><span class="n">copy</span><span class="p">[</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">copy</span><span class="p">[</span><span class="n">size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+</span><span id="line-11"><a name="l-11"></a>
+</span><span id="line-12"><a name="l-12"></a>
+</span><span id="line-13"><a name="l-13"></a><span class="k">class</span> <span class="nc">TestMedian</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+</span><span id="line-14"><a name="l-14"></a>    <span class="k">def</span> <span class="nf">testMedian</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="line-15"><a name="l-15"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">failUnlessEqual</span><span class="p">(</span><span class="n">median</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">]),</span> <span class="mi">7</span><span class="p">)</span>
+</span><span id="line-16"><a name="l-16"></a>
+</span><span id="line-17"><a name="l-17"></a>
+</span><span id="line-18"><a name="l-18"></a><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+</span><span id="line-19"><a name="l-19"></a>    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</span></pre></div>
 </td></tr></table>
             </div>
         </div>

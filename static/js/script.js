@@ -191,7 +191,7 @@ var LineSelector = (function() {
 
     var hash = location.hash;
 
-    if(hash.indexOf('#pastery-') < 0)
+    if(hash.indexOf('#l-') < 0)
       return;
 
     if(this.lastSelectedLineNumber != '') {
@@ -200,7 +200,7 @@ var LineSelector = (function() {
       $('a[href=#pastery-' + this.lastSelectedLineNumber + ']').removeClass('selected');
     }
 
-    var lineNumber = hash.split(/#pastery-/)[1];
+    var lineNumber = hash.split(/#l-/)[1];
 
     $('#line-' + lineNumber).addClass('selected');
     $('a[href=#pastery-' + lineNumber + ']').addClass('selected');
