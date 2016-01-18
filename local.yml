@@ -27,6 +27,11 @@
     sudo: yes
     sudo_user: pastery
 
+  - name: Clear cache.
+    shell: "{{ env_root }}/bin/python {{ project_root }}/manage.py clear_cache"
+    sudo: yes
+    sudo_user: pastery
+
   - name: Reload uWSGI.
     service: name=pastery_uwsgi state=reloaded
 
