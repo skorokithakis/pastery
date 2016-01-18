@@ -297,7 +297,7 @@ class Paste(models.Model):
         elif language == "textile":
             rendered = clean(textile.textile_restricted(self.body))
         else:
-            formatter = HtmlFormatter(linenos="table", cssclass="paste")
+            formatter = HtmlFormatter(linenos="table", linespans="line", cssclass="paste")
             rendered = highlight(
                 self.body, pygments.lexers.get_lexer_by_name(language),
                 formatter
