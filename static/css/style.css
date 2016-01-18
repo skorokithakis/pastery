@@ -346,6 +346,9 @@ select:focus {
     color: #fff;
 }
 
+.pastetable {
+    width: 100%;
+}
 .pastetable pre {
     background-color: transparent;
     border: 0;
@@ -355,7 +358,25 @@ select:focus {
 .pastetable .linenos pre {
     background: rgba(255,255,255,.2);
     border-radius: 0;
+    text-align: right;
+}
+.pastetable .linenos pre a {
+    color: inherit;
     opacity: .5;
+    transition: opacity .2s ease-in;
+}
+.pastetable .linenos pre a:hover,
+.pastetable .linenos pre a:focus,
+.pastetable .linenos pre a:active,
+.pastetable .linenos pre a.selected {
+    opacity: 1;
+    text-decoration: none;
+}
+.pastetable .paste pre > span {
+    display: block;
+}
+.pastetable .paste pre > span.selected {
+    background-color: rgba(255, 255, 255, .15);
 }
 .pretty-paste {
     overflow: auto;

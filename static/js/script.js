@@ -172,10 +172,54 @@ var ConfirmAction = (function() {
   }
 })();
 
+var LineSelector = (function() {
+
+  lastSelectedLineNumber = '';
+
+  init = function() {
+
+    var self = this;
+
+    $(window).on('hashchange', function() {
+      self.parseHash();
+    });
+
+    this.parseHash();
+  }
+
+  parseHash = function() {
+
+    var hash = location.hash;
+
+    if(hash.indexOf('#pastery-') < 0)
+      return;
+
+    if(this.lastSelectedLineNumber != '') {
+
+      $('#line-' + this.lastSelectedLineNumber).removeClass('selected');
+      $('a[href=#pastery-' + this.lastSelectedLineNumber + ']').removeClass('selected');
+    }
+
+    var lineNumber = hash.split(/#pastery-/)[1];
+
+    $('#line-' + lineNumber).addClass('selected');
+    $('a[href=#pastery-' + lineNumber + ']').addClass('selected');
+
+    this.lastSelectedLineNumber = lineNumber;
+  }
+
+  return {
+    'initialize': init,
+    'parseHash': parseHash,
+    'lastSelectedLineNumber': lastSelectedLineNumber
+  }
+})();
+
 $(document).ready(function() {
 
   autosize($('textarea'));
 
+  LineSelector.initialize();
   ConfirmAction.initialize();
   UserStyleSelector.initialize();
   ShareSelector.initialize();
