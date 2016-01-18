@@ -379,7 +379,7 @@ select:focus {
     display: block;
 }
 .pastetable .paste pre > span.selected {
-    background-color: rgba(255, 255, 255, .15);
+    background-color: rgba(255, 251, 236, .15);
 }
 .pretty-paste {
     overflow: auto;

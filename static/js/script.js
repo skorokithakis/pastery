@@ -180,14 +180,19 @@ var LineSelector = (function() {
 
     var self = this;
 
-    $(window).on('hashchange', function() {
-      self.parseHash();
+    $(window).on('hashchange', function(event) {
+
+      console.log(123);
+
+      self.parseHash(false);
+
+      event.stopPropagation();
     });
 
-    this.parseHash();
+    this.parseHash(true);
   }
 
-  parseHash = function() {
+  parseHash = function(delay) {
 
     var hash = location.hash;
 
@@ -197,15 +202,30 @@ var LineSelector = (function() {
     if(this.lastSelectedLineNumber != '') {
 
       $('#line-' + this.lastSelectedLineNumber).removeClass('selected');
-      $('a[href=#pastery-' + this.lastSelectedLineNumber + ']').removeClass('selected');
+      $('a[href=#l-' + this.lastSelectedLineNumber + ']').removeClass('selected');
     }
 
     var lineNumber = hash.split(/#l-/)[1];
 
-    $('#line-' + lineNumber).addClass('selected');
-    $('a[href=#pastery-' + lineNumber + ']').addClass('selected');
+    var lineElement = $('#line-' + lineNumber);
+
+    $(lineElement).addClass('selected');
+    $('a[href=#l-' + lineNumber + ']').addClass('selected');
 
     this.lastSelectedLineNumber = lineNumber;
+
+    var scrollObject = $(lineElement).offset();
+    var scrollHeight = scrollObject.top;
+    var windowHeight = $(window).height();
+
+    if(delay) {
+
+      setTimeout(function() {
+        window.scrollTo(0, scrollHeight - (windowHeight / 2.0));
+      }, 1);
+    }
+    else
+        window.scrollTo(0, scrollHeight - (windowHeight / 2.0));
   }
 
   return {
