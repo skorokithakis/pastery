@@ -263,6 +263,14 @@ class Paste(models.Model):
         return LANGUAGE_DICT[self.language]
 
     @property
+    def filename(self):
+        """
+        Something that looks like a filename this paste
+        can be represented by.
+        """
+        return self.id
+
+    @property
     def language(self):
         """
         The final language of the lexer. This is either the user-specified

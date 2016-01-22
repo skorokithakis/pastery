@@ -130,8 +130,19 @@ def paste(request, paste_id):
     return {"paste": Paste.get_by_id_or_404(paste_id)}
 
 
+def download_paste(request, paste_id):
+    paste = Paste.get_by_id_or_404(paste_id)
+    response = HttpResponse(paste.body, content_type="text/plain")
+    response["Content-Disposition"] = "attachment; filename=" + paste.filename
+    return response
+
+
 def raw_paste(request, paste_id):
-    return HttpResponse(Paste.get_by_id_or_404(paste_id).body, content_type="text/plain")
+    paste = Paste.get_by_id_or_404(paste_id)
+    response = HttpResponse(paste.body, content_type="text/plain")
+    if request.GET.get("dl") == "1":
+        response["Content-Disposition"] = "attachment; filename=" + paste.filename
+    return response
 
 
 @require_POST
