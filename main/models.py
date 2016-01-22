@@ -278,7 +278,7 @@ class Paste(models.Model):
         Something that looks like a filename this paste
         can be represented by.
         """
-        key = "pastery:paste_%s_language_extension" % self.language
+        key = "pastery:language_%s_extension" % self.language
         glob = cache.get(key, None)
         if not glob:
             if self.language == "markdown":
