@@ -57,6 +57,7 @@ class PasteView(View):
                 Optional("language", default="autodetect"): And([str], Use(lambda x: x[0]), Use(lambda x: ALIAS_DICT.get(x, "autodetect")), error="\"language\" should be the name of a supported language."),
                 Optional("duration", default=1440): And([str], Use(lambda x: int(x[0])), lambda x: x > 0, Use(lambda x: min(x, 43200)), error="\"duration\" should be an integer number of minutes before the paste is deleted."),
                 Optional("api_key", default=None): Use(lambda x: User.objects.get(api_key=x[0]), error="\"api_key\" must be a valid API key."),
+                Optional("max_views", default=0): And([str], Use(lambda x: int(x[0])), lambda x: x >= 0, error="\"max_views\" should be a non-negative integer number of views before the paste is deleted."),
                 },
                 # Make a named tuple out of the result.
                 Use(lambda x: namedtuple('GenericDict', x.keys())(**x))
@@ -87,6 +88,7 @@ class PasteView(View):
             raw_language=data.language,
             body=body,
             user=data.api_key,
+            max_views=data.max_views,
             expiration=timezone.now() + datetime.timedelta(minutes=data.duration),
             user_address=get_ip(request) or "",
         )
