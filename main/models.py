@@ -18,7 +18,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from pygments import highlight
-from pygments.lexers import guess_lexer, get_all_lexers
+from pygments.lexers import guess_lexer, get_all_lexers, get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
 from utils import send_event, identify_user
@@ -268,7 +268,16 @@ class Paste(models.Model):
         Something that looks like a filename this paste
         can be represented by.
         """
-        return self.id
+        key = "pastery:paste_%s_language_extension" % self.language
+        glob = cache.get(key, None)
+        if not glob:
+            lexer = get_lexer_by_name(self.language)
+            if lexer.filenames and "*" in lexer.filenames[0]:
+                glob = lexer.filenames[0]
+            else:
+                glob = "*"
+            cache.set(key, glob, settings.CACHING_TIME)
+        return glob.replace("*", self.id)
 
     @property
     def language(self):
