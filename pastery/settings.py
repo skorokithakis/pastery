@@ -105,7 +105,7 @@ TEMPLATES = [
 DEBUG_TOOLBAR_PATCH_SETTINGS = True
 
 DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": lambda request: False and ((not request.is_ajax()) and request.user.is_authenticated() and request.user.is_superuser),
+    "SHOW_TOOLBAR_CALLBACK": lambda request: ((not request.is_ajax()) and request.user.is_authenticated() and request.user.is_superuser),
 }
 
 WSGI_APPLICATION = 'pastery.wsgi.application'
