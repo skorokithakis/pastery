@@ -6,6 +6,7 @@ import shortuuid
 import textile
 from django.db import models
 from django.db.models.signals import post_save
+from django.db.models import Q, F
 from django.db.utils import IntegrityError
 from django.dispatch import receiver
 from django.conf import settings
@@ -194,7 +195,10 @@ class PasteManager(models.Manager):
 class ActivePasteManager(models.Manager):
     """A manager that ignores expired pastes."""
     def get_queryset(self):
-        return super().get_queryset().exclude(expiration__lt=timezone.now())
+        qs = super().get_queryset()
+        # Exclude pastes that are over time or over views.
+        qs = qs.exclude(Q(expiration__lt=timezone.now()) | (Q(max_views__gt=0) & Q(views__gte=F("max_views"))))
+        return qs
 
 
 class Paste(models.Model):
@@ -257,7 +261,9 @@ class Paste(models.Model):
         return reverse("paste", args=[self.id])
 
     def has_expired(self):
-        return self.expiration and self.expiration < timezone.now()
+        return ((self.expiration and
+                 self.expiration < timezone.now()) or
+                (self.max_views and self.views >= self.max_views))
     has_expired.boolean = True
 
     def get_language_display(self):

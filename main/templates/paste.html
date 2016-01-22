@@ -93,6 +93,10 @@
         <div class="meta-footer clearfix">
 
             <div class="pull-right">
+                {% if request.user.is_staff %}
+                {% trans "Views:" %} {{ paste.views }}
+                {% if paste.max_views %} / {{ paste.max_views }} {% endif %} |
+                {% endif %}
                 {{ paste.get_language_display }}
             </div>
 

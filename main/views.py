@@ -77,6 +77,7 @@ def home(request):
             data["body"] = clean["body"]
             data["raw_language"] = clean["raw_language"]
             data["user_address"] = get_ip(request) if get_ip(request) else ""
+            data["views"] = -1
 
             if clean["expires"]:
                 data["expiration"] = timezone.now() + datetime.timedelta(minutes=int(clean["expires"]))
