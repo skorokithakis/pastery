@@ -170,11 +170,8 @@ class PasteManager(models.Manager):
         # Try to create new IDs for the paste if one collides.
         tries = 10
         for x in range(tries):
-            try:
-                paste = super(PasteManager, self).create(*args, **kwargs)
-                break
-            except IntegrityError:
-                print("Collision %s." % x)
+            paste = super(PasteManager, self).create(*args, **kwargs)
+            break
         else:
             raise IntegrityError("Could not find a paste ID after %s tries." % tries)
 
@@ -284,11 +281,16 @@ class Paste(models.Model):
         key = "pastery:paste_%s_language_extension" % self.language
         glob = cache.get(key, None)
         if not glob:
-            lexer = get_lexer_by_name(self.language)
-            if lexer.filenames and "*" in lexer.filenames[0]:
-                glob = lexer.filenames[0]
+            if self.language == "markdown":
+                glob = "*.md"
+            elif self.language == "textile":
+                glob = "*.txl"
             else:
-                glob = "*"
+                lexer = get_lexer_by_name(self.language)
+                if lexer.filenames and "*" in lexer.filenames[0]:
+                    glob = lexer.filenames[0]
+                else:
+                    glob = "*"
             cache.set(key, glob, settings.CACHING_TIME)
         return glob.replace("*", self.id)
 
