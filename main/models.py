@@ -270,6 +270,7 @@ class Paste(models.Model):
     def increment_views(self):
         """Increment the view counter."""
         self.views += 1
+        self._skip_invalidation = True
         self.save()
 
     @property
@@ -352,6 +353,10 @@ def clear_cache(sender, instance, created, **kwargs):
     Clear the cache when a paste is saved. Users can't really save
     pastes, but admins can, and it might be useful.
     """
+    if getattr(instance, "_skip_invalidation", False):
+        # Reset attribute, just in case.
+        instance._skip_invalidation = False
+        return
     cache.delete_many([
         "pastery:paste_%s_language" % instance.id,
         "pastery:paste_%s_rendered_body" % instance.id,
