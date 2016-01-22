@@ -221,6 +221,8 @@ class Paste(models.Model):
         default="autodetect"
     )
     user_address = models.CharField(max_length=1000, blank=True)
+    views = models.IntegerField(default=0, blank=False)
+    max_views = models.IntegerField(default=0, blank=False)
 
     objects = PasteManager()
     active = ActivePasteManager()
@@ -261,6 +263,11 @@ class Paste(models.Model):
     def get_language_display(self):
         """Return the human-readable language name."""
         return LANGUAGE_DICT[self.language]
+
+    def increment_views(self):
+        """Increment the view counter."""
+        self.views += 1
+        self.save()
 
     @property
     def filename(self):

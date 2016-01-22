@@ -127,21 +127,23 @@ def embed_paste(request, paste_id):
 
 @render_to("paste.html")
 def paste(request, paste_id):
-    return {"paste": Paste.get_by_id_or_404(paste_id)}
+    paste = Paste.get_by_id_or_404(paste_id)
+    paste.increment_views()
+    return {"paste": paste}
 
 
 def download_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id)
     response = HttpResponse(paste.body, content_type="text/plain")
     response["Content-Disposition"] = "attachment; filename=" + paste.filename
+    paste.increment_views()
     return response
 
 
 def raw_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id)
     response = HttpResponse(paste.body, content_type="text/plain")
-    if request.GET.get("dl") == "1":
-        response["Content-Disposition"] = "attachment; filename=" + paste.filename
+    paste.increment_views()
     return response
 
 
