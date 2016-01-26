@@ -180,16 +180,27 @@ var LineSelector = (function() {
 
     var self = this;
 
-    $(window).on('hashchange', function(event) {
-
-      console.log(123);
-
+    $(window).on('hashchange', function() {
       self.parseHash(false);
-
-      event.stopPropagation();
     });
 
+    if(this.supportsHistory()) {
+
+      $('a[href^="#l-"]').click(function(event) {
+
+        event.preventDefault();
+
+        history.pushState(null, null, $(this).attr('href'));
+
+        self.parseHash(false);
+      });
+    }
+
     this.parseHash(true);
+  }
+
+  supportsHistory = function() {
+    return !!(window.history && history.pushState);
   }
 
   parseHash = function(delay) {
@@ -226,12 +237,15 @@ var LineSelector = (function() {
     }
     else
         window.scrollTo(0, scrollHeight - (windowHeight / 2.0));
+
+    return;
   }
 
   return {
     'initialize': init,
     'parseHash': parseHash,
-    'lastSelectedLineNumber': lastSelectedLineNumber
+    'lastSelectedLineNumber': lastSelectedLineNumber,
+    'supportsHistory': supportsHistory
   }
 })();
 
