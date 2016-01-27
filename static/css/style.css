@@ -375,11 +375,18 @@ select:focus {
     opacity: 1;
     text-decoration: none;
 }
+.pastetable .paste pre {
+    padding-left: 0;
+    padding-right: 0;
+}
 .pastetable .paste pre > span {
     display: block;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .pastetable .paste pre > span.selected {
     background-color: rgba(255, 251, 236, .15);
+    box-shadow: inset 0px 1px 0px rgba(0,0,0,0.25),inset 0px -1px 0px rgba(0,0,0,.25);
 }
 .pretty-paste {
     overflow: auto;
