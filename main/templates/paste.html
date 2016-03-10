@@ -31,22 +31,27 @@
 
             <div class="btn-group button-container" id="copy-code">
 
-                <div class="btn-group admin-parent" role="group">
+                <div class="btn-group admin-parent dropdown-parent" role="group">
                     <a type="button" data-toggle="tooltip" title="{% trans "Clone" %}" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'home' %}?clone={{ paste.id }}" type="button"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span></a>
+                    <div class="dropdown-menu pseudo-dropdown">{% trans "Clone" %}</div>
                 </div>
 
                 {% if paste.user == request.user %}
-                <div class="btn-group admin-parent" role="group">
+                <div class="btn-group admin-parent dropdown-parent" role="group">
                     <form data-confirm="{% trans "Are you sure you want to delete this paste?" %}" action="{% url "delete-paste" paste.id %}" id="delete-paste" method="post">
                         {% csrf_token %}
                         <button type="submit" data-toggle="tooltip" title="{% trans "Delete" %}" class="btn btn-default btn-sm dropdown-toggle admin-button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                     </form>
+                    <div class="dropdown-menu pseudo-dropdown">{% trans "Delete" %}</div>
                 </div>
                 {% endif %}
 
                 {% if request.user.is_staff %}
-                <div class="btn-group admin-parent" role="group">
+                <div class="btn-group admin-parent dropdown-parent" role="group">
                     <a type="button" data-toggle="tooltip" title="{% trans "Admin" %}" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'admin:main_paste_change' paste.id %}" type="button"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+                    <div class="dropdown-menu pseudo-dropdown">
+                        <div class="btn-group">{% trans "Admin" %}</div>
+                    </div>
                 </div>
                 {% endif %}
 
@@ -54,41 +59,41 @@
                     <button type="button" title="{% trans "Embed" %}" class="btn btn-default btn-sm dropdown-toggle" type="button" data-placement="tooltip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="glyphicon glyphicon-share" aria-hidden="true"></span> <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu dropdown-menu-right">
                         <div class="btn-group">
                             <input title="{% trans "Copied!" %}" type="text" value="{% include "embed_code.html" %}" readonly=""/>
                         </div>
                         <div class="btn-group action-copy">
                             <button data-trigger="hover" data-toggle="tooltip" title="{% trans "Copy to clipboard" %}" aria-label="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
                         </div>
-                    </ul>
+                    </div>
                 </div>
 
                 <div class="btn-group dropdown-parent" role="group">
                     <button type="button" title="{% trans "Raw" %}" class="btn btn-default btn-sm dropdown-toggle" type="button" data-placement="tooltip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu dropdown-menu-right">
                         <div class="btn-group">
                             <input title="{% trans "Copied!" %}" type="text" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "raw-paste" paste.id %}" readonly=""/>
                         </div>
                         <div class="btn-group action-copy">
                             <button data-trigger="hover" data-toggle="tooltip" title="{% trans "Copy to clipboard" %}" aria-label="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
                         </div>
-                    </ul>
+                    </div>
                 </div>
                 <div class="btn-group dropdown-parent" role="group">
                     <button type="button" class="btn btn-default btn-sm dropdown-toggle" title="{% trans "Link" %}" type="button" data-placement="tooltip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="glyphicon glyphicon-link" aria-hidden="true"></span> <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-menu dropdown-menu-right">
                         <div class="btn-group">
                             <input data-placement="top" title="Copied!" type="text" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "paste" paste.id %}" readonly=""/>
                         </div>
                         <div class="btn-group action-copy">
                             <button data-trigger="hover" data-toggle="tooltip" title="{% trans "Copy to clipboard" %}" aria-label="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
                         </div>
-                    </ul>
+                    </div>
                 </div>
         </header>
     </div>

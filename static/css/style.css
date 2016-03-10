@@ -262,23 +262,26 @@ select:focus {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
+.paste .button-container .pseudo-dropdown {
+    display: none;
+}
 .paste .button-container .dropdown-toggle em {
     font-style: normal;
 }
 .button-container input {
     cursor: pointer;
+    margin: 0px 1px;
+    padding: 10px 42px 10px 10px;
+    width: 350px;
+    border: none;
+}
+.paste .button-container .pseudo-dropdown,
+.button-container input {
     line-height: 1.5;
     font-size: 12px;
-    border-left: none;
-    border-right: none;
-    margin: 0px 1px;
     font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
     background-color: #fff;
     color: #555;
-    padding: 10px;
-    width: 350px;
-    border: none;
-    padding-right: 42px;
 }
 .button-container .action-copy {
     position: absolute;
@@ -553,11 +556,6 @@ select:focus {
     .paste .button-container .btn-group {
         width: 100%;
     }
-    .paste .button-container .admin-parent {
-        display: inline-block;
-        width: auto;
-        margin: 0;
-    }
     .paste .button-container .admin-parent form {
         display: inline-block;
         padding: 0;
@@ -578,7 +576,9 @@ select:focus {
         margin-top: 10px;
         position: relative;
     }
-    .paste .button-container button {
+    .paste .button-container button,
+    .paste .button-container #delete-paste,
+    .paste .button-container a.admin-button {
         border-radius: 0;
         border: none;
         position: absolute;
@@ -610,9 +610,12 @@ select:focus {
     .paste .button-container input {
         border-radius: 0;
         border: none;
+        margin: 0;
+    }
+    .paste .button-container .pseudo-dropdown,
+    .paste .button-container input {
         padding: 7px 5px 7px 60px;
         width: 100%;
-        margin: 0;
     }
     .paste .button-container .action-copy {
         display: none;
