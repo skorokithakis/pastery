@@ -30,6 +30,7 @@
   sudo_user: "{{ project_name }}"
   notify:
     - collectstatic
+    - compilemessages
     - migrate
     - reload uwsgi
 

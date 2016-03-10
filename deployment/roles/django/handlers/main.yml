@@ -19,3 +19,6 @@
 
 - name: collectstatic
   shell: "{{ env_root }}/bin/python {{ project_root }}/manage.py collectstatic --noinput"
+
+- name: collectstatic
+  shell: "{{ env_root }}/bin/python {{ project_root }}/manage.py compilemessages"

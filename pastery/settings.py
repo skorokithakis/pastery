@@ -55,6 +55,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -152,6 +153,10 @@ EMAIL_PORT = 587
 
 LANGUAGE_CODE = 'en-us'
 
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, "locale"),
+]
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -177,7 +182,6 @@ ENABLE_CAPTCHA = False
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "_static")
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),

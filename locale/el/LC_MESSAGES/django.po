@@ -1,0 +1,307 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Pastery\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-03-10 02:28+0000\n"
+"PO-Revision-Date: 2016-03-10 04:39+0200\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.4\n"
+
+#: main/models.py:77
+msgid "Autodetect"
+msgstr "Ανίχνευση"
+
+#: main/models.py:139
+msgid "API key"
+msgstr "Κλειδί API"
+
+#: main/models.py:141
+msgid "Your API key."
+msgstr "Το κλειδί σας για το API."
+
+#: main/models.py:146
+msgid "Style name"
+msgstr "Όνομα στυλ"
+
+#: main/models.py:147
+msgid "Default"
+msgstr "Προεπιλεγμένο"
+
+#: main/models.py:150
+msgid "Pick the color style you prefer for all pastes on the site."
+msgstr ""
+"Διαλέξτε το στυλ χρώματος που προτιμάτε για όλες τις επικολλήσεις στον "
+"ιστότοπο."
+
+#: main/models.py:213
+msgid "The title of the paste."
+msgstr "Ο τίτλος της επικόλλησης"
+
+#: main/models.py:219
+msgid "Language"
+msgstr "Γλώσσα"
+
+#: main/templates/404.html:10
+msgid "Page not found"
+msgstr "Η σελίδα δε βρέθηκε"
+
+#: main/templates/404.html:20
+msgid ""
+"That page was not found. Maybe it was never here, or maybe it just\n"
+"expired. Go back to the home page and try again."
+msgstr ""
+"Αυτή η σελίδα δε βρέθηκε. Ίσως να μην ήταν ποτέ έδω, ή ίσως να έληξε. Πάτε "
+"πίσω στην αρχική και ξαναπροσπαθήστε."
+
+#: main/templates/500.html:10
+msgid "Server error"
+msgstr "Σφάλμα διακομιστή"
+
+#: main/templates/500.html:21
+msgid ""
+"There has been a server error. This one is totally on us.\n"
+"We have been notified and are probably fixing it right now,\n"
+"check back in a bit."
+msgstr ""
+"Υπήρξε ένα σφάλμα διακομιστή. Εμείς την κάναμε τη βλακεία, σόρι. Έχουμε ήδη "
+"ειδοποιηθεί και μάλλον το διορθώνουμε τώρα που μιλάμε, ξαναελάτε μετά από "
+"λίγο."
+
+#: main/templates/account.html:13
+msgid "Preferences"
+msgstr "Επιλογές"
+
+#: main/templates/account.html:21
+msgid "Style sample"
+msgstr "Δείγμα στυλ"
+
+#: main/templates/account.html:69
+msgid "Save"
+msgstr "Αποθήκευση"
+
+#: main/templates/account.html:77
+msgid "Your pastes"
+msgstr "Οι επικολλήσεις σας"
+
+#: main/templates/account.html:83 main/views.py:40
+msgid "Expires in"
+msgstr "Λήγει σε"
+
+#: main/templates/account.html:91
+#, python-format
+msgid ""
+"\n"
+"            %(until)s\n"
+"            "
+msgstr ""
+"\n"
+"            %(until)s\n"
+"            "
+
+#: main/templates/account.html:97
+msgid "You have no pastes."
+msgstr "Δεν έχετε επικολλήσεις."
+
+#: main/templates/account.html:106
+msgid "Your API key"
+msgstr "Το κλειδί σας για το API"
+
+#: main/templates/account.html:109
+msgid ""
+"\n"
+"This is your API key. For more details on how to use it, visit the\n"
+"<a href=\"/api/\">API documentation</a>.\n"
+msgstr ""
+"\n"
+"Αυτό είναι το κλειδί σας για το API. Για περισσότερες λεπτομέρειες για τη "
+"χρήση του, δείτε τη\n"
+"<a href=\"/api/\">βοήθεια για το API.</a>.\n"
+
+#: main/templates/account.html:121
+msgid "Are you sure you want to reset your API key?"
+msgstr "Είστε σίγουροι ότι θέλετε να ανανεώσετε το κλειδί του API σας;"
+
+#: main/templates/account.html:123
+msgid "Reset API Key"
+msgstr "Ανανέωση κλειδιού API"
+
+#: main/templates/base.html:17 main/templates/base.html.py:23
+#: main/templates/paste.html:8
+msgid "The sweetest pastebin in the world."
+msgstr "Το γλυκότερο pastebin του κόσμου."
+
+#: main/templates/base.html:45 main/templates/paste.html.py:49
+msgid "Admin"
+msgstr "Διαχείριση"
+
+#: main/templates/base.html:48
+msgid "Logout"
+msgstr "Έξοδος"
+
+#: main/templates/base.html:54
+msgid "Login"
+msgstr "Είσοδος"
+
+#: main/templates/base.html:65
+msgid "About"
+msgstr "Περί"
+
+#: main/templates/base.html:65
+msgid "Plugins"
+msgstr "Επεκτάσεις"
+
+#: main/templates/embed.html:20
+msgid "Paste"
+msgstr "Επικόλληση"
+
+#: main/templates/embed.html:21
+msgid "hosted by"
+msgstr "φτιαγμένο από"
+
+#: main/templates/home.html:46
+msgid "Create"
+msgstr "Δημιουργία"
+
+#: main/templates/paste.html:35
+msgid "Clone"
+msgstr "Αντιγραφή"
+
+#: main/templates/paste.html:40
+msgid "Are you sure you want to delete this paste?"
+msgstr "Είστε σίγουρος ότι θέλετε να διαγράψετε αυτή την επικόλληση;"
+
+#: main/templates/paste.html:42
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: main/templates/paste.html:54
+msgid "Embed"
+msgstr "Εισαγωγή"
+
+#: main/templates/paste.html:59 main/templates/paste.html.py:73
+msgid "Copied!"
+msgstr "Αντιγράφηκε!"
+
+#: main/templates/paste.html:62 main/templates/paste.html.py:76
+#: main/templates/paste.html:89
+msgid "Copy to clipboard"
+msgstr "Αντιγραφή στο πρόχειρο"
+
+#: main/templates/paste.html:68
+msgid "Raw"
+msgstr "Ωμό"
+
+#: main/templates/paste.html:81
+msgid "Link"
+msgstr "Σύνδεσμος"
+
+#: main/templates/paste.html:105
+msgid "Views:"
+msgstr "Προβολές:"
+
+#: main/templates/paste.html:113
+#, python-format
+msgid ""
+"\n"
+"                Expires in %(until)s\n"
+"                "
+msgstr ""
+"\n"
+"                Λήγει σε %(until)s\n"
+"                "
+
+#: main/templates/paste.html:117
+msgid "Are you sure you want to report this paste?"
+msgstr "Είστε σίγουροι ότι θέλετε να αναφέρετε αυτή την επικόλληση;"
+
+#: main/templates/paste.html:130
+msgid "New paste"
+msgstr "Νέα επικόλληση"
+
+#: main/views.py:32
+msgid "ten minutes"
+msgstr "δέκα λεπτά"
+
+#: main/views.py:33
+msgid "an hour"
+msgstr "μία ώρα"
+
+#: main/views.py:34
+msgid "a day"
+msgstr "μία μέρα"
+
+#: main/views.py:35
+msgid "a week"
+msgstr "μία βδομάδα"
+
+#: main/views.py:36
+msgid "two weeks"
+msgstr "δύο βδομάδες"
+
+#: main/views.py:37
+msgid "a month"
+msgstr "ένα μήνα"
+
+#: main/views.py:38
+msgid "never"
+msgstr "ποτέ"
+
+#: main/views.py:48
+msgid "Please stop being a bot and try pasting again."
+msgstr ""
+"Παρακαλώ σταματήστε να είστε ρομπότ και προσπαθήστε να επικολλήσετε ξανά."
+
+#: main/views.py:68
+msgid "You're pasting too much, please slow down."
+msgstr "Ανεβάζεις πολύ γρήγορα, ηρέμησε λίγο."
+
+#: main/views.py:158
+msgid ""
+"You're reporting too many pastes. If there's something widespread going on, "
+"please contact us directly."
+msgstr ""
+"Αναφέρετε υπερβολικά πολλές επικολλήσεις. Αν υπάρχει κάποιο πρόβλημα, "
+"επικοινωνήστε μαζί μας απευθείας."
+
+#: main/views.py:167
+msgid "Thank you for your report. We will investigate as soon as possible."
+msgstr "Ευχαριστούμε για την αναφορά. Θα το ερευνήσουμε άμεσα."
+
+#: main/views.py:174
+msgid "Please log in first."
+msgstr "Παρακαλώ εισαχθείτε πρώτα."
+
+#: main/views.py:178
+msgid "Your API key has been reset."
+msgstr "Το κλειδί API σας ανανεώθηκε."
+
+#: main/views.py:186
+msgid "That's not your paste, you naughty girl."
+msgstr "Αυτή δεν είναι δικιά σου επικόλληση, άτακτο κορίτσι."
+
+#: main/views.py:193
+msgid "Your paste has been deleted."
+msgstr "Η επικόλλησή σας διαγράφηκε."
+
+#: main/views.py:200
+msgid "You need to log in first."
+msgstr "Πρέπει να εισαχθείτε πρώτα."
+
+#: main/views.py:208
+msgid "Your settings have been saved."
+msgstr "Οι ρυθμίσεις σας αποθηκεύτηκαν."
+
+#: main/views.py:220
+msgid "You have been logged out."
+msgstr "Έχετε εξαχθεί."
