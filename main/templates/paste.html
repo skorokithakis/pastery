@@ -2,7 +2,11 @@
 {% load staticfiles bootstrap3 i18n %}
 
 {% block title %}
-{% if paste.title %}{{ paste }} - {% endif %}{{ current_site.name }} - {% trans "The sweetest pastebin in the world." %}
+{% if paste.title %}
+{{ paste }} - {{ current_site.name }}
+{% else %}
+{{ current_site.name }} - {% trans "The sweetest pastebin in the world." %}
+{% endif %}
 {% endblock %}
 
 {% block pageclass %}{% if paste.language != 'markdown' and paste.language != 'textile' %}page-paste{% endif %}{% endblock %}
