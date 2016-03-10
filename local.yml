@@ -22,7 +22,7 @@
     sudo: yes
     sudo_user: pastery
 
-  - name: Migrate Django database.
+  - name: Collect static media.
     shell: "{{ env_root }}/bin/python {{ project_root }}/manage.py collectstatic --noinput"
     sudo: yes
     sudo_user: pastery
