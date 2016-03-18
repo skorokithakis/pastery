@@ -2,6 +2,7 @@
 <html id="page-widget">
     <head>
         <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
         <link href="{% static "css/embed.css" %}" rel="stylesheet"/>
         {% if request.user.is_authenticated %}
         <link href="{% static "css/"|add:request.user.style_name|add:".css" %}" rel="stylesheet" class="user-style"/>
