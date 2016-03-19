@@ -128,6 +128,11 @@ footer .raw:hover {
     color: #fff;
     text-decoration: none;
 }
+@media (max-width: 500px) {
+    .linenodiv {
+        display: none;
+    }
+}
 @media (max-width: 230px) {
     footer .raw {
         display: none;
