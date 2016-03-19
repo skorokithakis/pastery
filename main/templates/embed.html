@@ -2,7 +2,6 @@
 <html id="page-widget">
     <head>
         <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
         <link href="{% static "css/embed.css" %}" rel="stylesheet"/>
         {% if request.user.is_authenticated %}
         <link href="{% static "css/"|add:request.user.style_name|add:".css" %}" rel="stylesheet" class="user-style"/>
@@ -18,10 +17,10 @@
             </div>
 
             <footer>
-                <a href="{{ paste.get_full_url }}">{% if paste.title %}{{ paste }}{% else %}{% trans "Paste" %}{% endif %}</a>
+                <a target="_blank" href="{{ paste.get_full_url }}">{% if paste.title %}{{ paste }}{% else %}{% trans "Paste" %}{% endif %}</a>
                 {% trans "hosted by" %}
-                <a class="website" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url 'home' %}" title="{{ current_site.name }}">{{ current_site.name }}</a>
-                <a class="raw" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "raw-paste" paste.id %}">Raw</a>
+                <a target="_blank" class="website" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url 'home' %}" title="{{ current_site.name }}">{{ current_site.name }}</a>
+                <a target="_blank" class="raw" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "raw-paste" paste.id %}">Raw</a>
             </footer>
         </article>
         <script>
