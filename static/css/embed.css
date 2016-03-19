@@ -1,3 +1,12 @@
+html {
+  font-family: sans-serif; /* 1 */
+  -ms-text-size-adjust: 100%; /* 2 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+}
+td,
+th {
+  padding: 0;
+}
 html,
 body {
     margin: 0;
@@ -127,11 +136,6 @@ footer .raw:hover {
     background-color: #CC1B1B;
     color: #fff;
     text-decoration: none;
-}
-@media (max-width: 500px) {
-    .linenodiv {
-        display: none;
-    }
 }
 @media (max-width: 230px) {
     footer .raw {

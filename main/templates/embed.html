@@ -13,7 +13,7 @@
     <body>
         <article class="paste" id="paste-embed">
 
-            <div class="pretty-paste{% if paste.language == 'markdown' %} markdown-language{% endif %}">
+            <div class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}">
             {{ paste.rendered_body|safe }}
             </div>
 
