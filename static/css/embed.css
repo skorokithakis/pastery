@@ -72,6 +72,8 @@ article {
 }
 .pretty-paste {
     overflow: auto;
+    width: 1px;
+    min-width: 100%;
 }
 .pretty-paste.markdown-language {
     padding: 10px 15px;
