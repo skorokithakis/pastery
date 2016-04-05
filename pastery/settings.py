@@ -75,7 +75,6 @@ DEFAULT_STYLE = random.choice([
     "monokai",
     "solarized",
     "solarized_dark",
-    "solarized_dark256",
     "paraiso-dark",
     "native",
 ])
