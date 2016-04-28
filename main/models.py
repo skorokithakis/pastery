@@ -178,7 +178,7 @@ class PasteManager(models.Manager):
         if kwargs.get("user"):
             user_id = kwargs["user"].username
         else:
-            user_id = hashlib.sha256(kwargs["user_address"].encode("utf8")).hexdigest()[:16]
+            user_id = hashlib.sha256(kwargs.get("user_address", "").encode("utf8")).hexdigest()[:16]
 
         send_event(user_id, "new_paste", {
             "raw_language": kwargs["raw_language"],
