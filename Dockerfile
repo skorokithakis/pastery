@@ -1,4 +1,4 @@
-FROM python:2.7
+FROM python:latest
 ENV PYTHONUNBUFFERED 1
 RUN apt-get update
 RUN apt-get install -y swig libssl-dev dpkg-dev
