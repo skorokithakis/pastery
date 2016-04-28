@@ -1,4 +1,4 @@
-ansible~=1.9.4  # Later versions don't seem to support py3 well enough.
+ansible
 bleach~=1.4.2
 coverage
 Django~=1.9
