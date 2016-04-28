@@ -1,7 +1,7 @@
 image: python:latest
 
 before_script:
-  - pip install -U requirements.txt
+  - pip install -Ur requirements.txt
   - python manage.py migrate
 
 build:
