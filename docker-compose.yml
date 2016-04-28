@@ -1,0 +1,32 @@
+version: '2'
+services:
+  redis:
+    image: redis
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data
+  migration:
+    build: .
+    image: pastery
+    command: python manage.py migrate
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+  web:
+    image: pastery
+    command: python manage.py runserver_plus 0.0.0.0:8000
+    volumes:
+      - .:/code
+    depends_on:
+      - migration
+  webserver:
+    image: jumanjiman/caddy
+    depends_on:
+      - web
+    ports:
+      - "80:8000"
+    command: -port 8000 -host 0.0.0.0 "proxy / web:8000 { proxy_header Host localsc.ch }"
