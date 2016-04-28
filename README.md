@@ -1,6 +1,8 @@
 Pastery
 =======
 
+[![build status](https://gitlab.com/skorokithakis/pastery/badges/master/build.svg)](https://gitlab.com/skorokithakis/pastery/commits/master)
+
 Pastery is the best pastebin in the world.
 
 

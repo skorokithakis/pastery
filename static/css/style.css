@@ -127,7 +127,7 @@ select:focus {
     outline: none;
     color: #fff;
     padding-left: 30px;
-    background: transparent url('images/small-logo.png') no-repeat scroll 0 7px;
+    background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAsCAMAAAAkRNp0AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAYUExURf///0xpcf///////////////////////73SUKYAAAAIdFJOU/4A3z6PILVhjg8XegAAAPtJREFUOMuN1FsWxRAMBVANYf4zvhL0Iq/mr9ZebeWE9IjC3EsuP+l8zKVCooLs0kwMJk3ZpNhgsWEBdYqFXnSUsINKyFZS+nTSqt60GvC2qUunyk7Rk7DblPtCAdu2k1JKENpJOVPDZkE5Wc8elHpcFYsq1fSMWKE0OlWxKhWax4Fo0mZ+jOUeMdMegqH/7S7jByiAQPeWrX/1NEcJZduWpxsdpqMDpkZBTa3SuZNLW1TRDr31on0FAz0p3ymBZsozN3R1NNM5oeO+qla6i8YaNxroi85Tq2pJV7BDt4C+Qwe7tqiiHXpoaAE9dUR3HdN1EOETfcfg+VjYfvuECJkyTAUAAAAAAElFTkSuQmCC) no-repeat scroll 0 7px;
     background-size: 20px;
 }
 
