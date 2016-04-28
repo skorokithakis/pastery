@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 import random
+from subprocess import check_output
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -166,6 +167,11 @@ EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_HOST_USER = 'postmaster@pastery.net'
 EMAIL_HOST_PASSWORD = 'override me'
 EMAIL_PORT = 587
+
+try:
+    COMMIT_HASH = check_output(['git', 'rev-parse', '--short', 'HEAD'])
+except:
+    COMMIT_HASH = "Not a git repo"
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
