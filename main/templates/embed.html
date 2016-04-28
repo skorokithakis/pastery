@@ -20,8 +20,8 @@
             <footer>
                 <a target="_blank" href="{{ paste.get_full_url }}">{% if paste.title %}{{ paste }}{% else %}{% trans "Paste" %}{% endif %}</a>
                 {% trans "hosted by" %}
-                <a target="_blank" class="website" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url 'home' %}" title="{{ current_site.name }}">{{ current_site.name }}</a>
-                <a target="_blank" class="raw" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "raw-paste" paste.id %}">Raw</a>
+                <a target="_blank" class="website" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url 'main:home' %}" title="{{ current_site.name }}">{{ current_site.name }}</a>
+                <a target="_blank" class="raw" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}">Raw</a>
             </footer>
         </article>
         <script>

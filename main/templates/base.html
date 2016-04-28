@@ -40,12 +40,12 @@
                         <span class="glyphicon glyphicon-cog"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="account" href="{% url 'account' %}">{{ user.email }}</a></li>
+                        <li><a class="account" href="{% url 'main:account' %}">{{ user.email }}</a></li>
                         {% if request.user.is_staff %}
                         <li><a class="account" href="{% url 'admin:index' %}">{% trans "Admin" %}</a></li>
                         {% endif %}
                         <li role="separator" class="divider"></li>
-                        <li><a data-next="{{ request.get_full_path }}" class="browserid-logout" href="{% url "logout" %}" >{% trans "Logout" %}</a></li>
+                        <li><a data-next="{{ request.get_full_path }}" class="browserid-logout" href="{% url "main:logout" %}" >{% trans "Logout" %}</a></li>
                     </ul>
                 </div>
                 {% else %}
