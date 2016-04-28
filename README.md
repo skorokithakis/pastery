@@ -19,3 +19,16 @@ $ ./manage.py runserver_plus
 ~~~
 
 And just visit http://localhost:8000/, you're done.
+
+
+Installation with Docker
+------------------------
+
+To run Pastery using Docker:
+
+~~~
+$ docker-compose up
+(in another shell) $ docker-compose run web /code/manage.py createsuperuser
+~~~
+
+Visit http://localhost/, done.
