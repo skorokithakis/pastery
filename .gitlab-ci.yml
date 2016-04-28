@@ -1,0 +1,8 @@
+image: python:latest
+
+before_script:
+  - pip install -U requirements.txt
+  - python manage.py migrate
+
+build:
+  script: python manage.py test
