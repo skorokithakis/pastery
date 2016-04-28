@@ -255,7 +255,7 @@ class Paste(models.Model):
         return "https://%s%s" % (Site.objects.get_current().domain, self.get_absolute_url())
 
     def get_absolute_url(self):
-        return reverse("paste", args=[self.id])
+        return reverse("main:paste", args=[self.id])
 
     def has_expired(self):
         return ((self.expiration and

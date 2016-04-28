@@ -5,6 +5,5 @@ from django.core.urlresolvers import reverse
 @override_settings(PASSWORD_HASHERS=['django.contrib.auth.hashers.MD5PasswordHasher'])
 class SmokeTests(TestCase):
     def test_urls(self):
-        print(reverse("main:home"))
-        response = self.client.get(reverse("main:home"))
+        response = self.client.post(reverse("api:paste"), "stuff", content_type='application/x-www-form-urlencoded')
         self.assertEqual(response.status_code, 200)
