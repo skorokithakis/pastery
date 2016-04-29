@@ -8,23 +8,6 @@ import hypothesis.strategies as st
 from .models import Paste
 
 
-#class PasteFactory(factory.django.DjangoModelFactory):
-#    class Meta:
-#        model = 'main.Paste'
-#    raw_language = "autodetect"
-#    title = factory.Faker("text")
-#    body = factory.Faker("text")
-#
-#
-#class UserFactory(factory.django.DjangoModelFactory):
-#    class Meta:
-#        model = 'main.User'
-#        django_get_or_create = ('username',)
-#
-#    username = factory.Sequence(lambda n: 'user%d' % n)
-#    password = "pass"
-
-
 User = get_user_model()
 
 UserFactory = models(
