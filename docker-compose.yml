@@ -7,21 +7,15 @@ services:
       POSTGRES_PASSWORD: password
     volumes:
       - ./dbdata:/var/lib/postgresql/data
-  migration:
-    build: .
+  web:
+    # Docker hack to wait until Postgres is up, then run stuff.
+    command: bash -c "while ! nc -w 1 -z db 5432; do sleep 0.1; done; python manage.py migrate; python manage.py runserver_plus 0.0.0.0:8000"
     image: pastery
-    command: python manage.py migrate
+    build: .
     volumes:
       - .:/code
     depends_on:
       - db
-  web:
-    image: pastery
-    command: bash -c "sleep 3; python manage.py runserver_plus 0.0.0.0:8000"
-    volumes:
-      - .:/code
-    depends_on:
-      - migration
     environment:
       IN_DOCKER: 1
   webserver:
@@ -31,5 +25,3 @@ services:
     ports:
       - "80:8000"
     command: -port 8000 -host 0.0.0.0 "proxy / web:8000 { proxy_header Host localsc.ch }"
-    environment:
-      IN_DOCKER: 1
