@@ -24,4 +24,4 @@ services:
       - web
     ports:
       - "80:8000"
-    command: -port 8000 -host 0.0.0.0 "proxy / web:8000 { proxy_header Host localsc.ch }"
+    command: -port 8000 -host 0.0.0.0 "proxy / web:8000 { }"
