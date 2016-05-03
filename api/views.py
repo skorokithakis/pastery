@@ -2,7 +2,6 @@ import datetime
 import json
 from collections import namedtuple
 
-from annoying.decorators import ajax_request
 from brake.decorators import ratelimit
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
@@ -23,9 +22,29 @@ class PasteView(View):
     @method_decorator(ratelimit(rate="500/h", method=["POST"]))
     @method_decorator(ratelimit(rate="20/m", method=["POST"]))
     @method_decorator(csrf_exempt)
-    @method_decorator(ajax_request)
     def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+        data = super().dispatch(*args, **kwargs)
+
+        if isinstance(data, HttpResponse):
+            return data
+
+        status_code = 200
+
+        if data.get("result") == "error":
+            status_code = 422
+
+        if "status_code" in data:
+            status_code = data["status_code"]
+            del data["status_code"]
+
+        data_str = json.dumps(data)
+        response = HttpResponse(
+            data_str,
+            content_type="application/json",
+            status=status_code
+        )
+        response['content-length'] = len(data_str)
+        return response
 
     def get(self, request, paste_id=None):
         schema = Schema({
@@ -35,12 +54,12 @@ class PasteView(View):
         try:
             data = schema.validate(dict(request.GET))
         except SchemaError as e:
-            response = {"result": "error", "error_msg": str(e)}
-            return HttpResponse(json.dumps(response), content_type="application/json", status=422)
+            return {"result": "error", "error_msg": str(e)}
 
-        qs = Paste.active.filter(user=data["api_key"]).order_by("-created")
         if paste_id:
-            qs = qs.filter(pk=paste_id)
+            qs = Paste.active.filter(pk=paste_id)
+        else:
+            qs = Paste.active.filter(user=data["api_key"]).order_by("-created")
 
         return {
                 "pastes": [paste.as_dict() for paste in qs],
@@ -48,8 +67,7 @@ class PasteView(View):
 
     def post(self, request, paste_id=None):
         if getattr(request, 'limited', False):
-            response = {"result": "error", "error_msg": "You're pasting too much, please slow down."}
-            return HttpResponse(json.dumps(response), content_type="application/json", status=429)
+            return {"result": "error", "error_msg": "You're pasting too much, please slow down.", "status_code": 429}
 
         schema = Schema(
             And({
@@ -67,8 +85,7 @@ class PasteView(View):
         try:
             data = schema.validate(dict(request.GET))
         except SchemaError as e:
-            response = {"result": "error", "error_msg": str(e)}
-            return HttpResponse(json.dumps(response), content_type="application/json", status=422)
+            return {"result": "error", "error_msg": str(e)}
 
         if request.FILES:
             # Get the first file in a form-data form.
@@ -80,8 +97,7 @@ class PasteView(View):
         try:
             body = body.decode("utf8")
         except UnicodeDecodeError:
-            response = {"result": "error", "error_msg": "Your request body was not valid UTF-8."}
-            return HttpResponse(json.dumps(response), content_type="application/json", status=422)
+            return {"result": "error", "error_msg": "Your request body was not valid UTF-8."}
 
         paste = Paste.objects.create(
             title=data.title,
@@ -103,9 +119,11 @@ class PasteView(View):
         try:
             data = schema.validate(dict(request.GET))
         except SchemaError as e:
-            response = {"result": "error", "error_msg": str(e)}
-            return HttpResponse(json.dumps(response), content_type="application/json", status=422)
+            return {"result": "error", "error_msg": str(e)}
 
-        Paste.objects.filter(user=data["api_key"], pk=paste_id).delete()
-
-        return {"result": "success"}
+        paste = Paste.objects.filter(user=data["api_key"], pk=paste_id).first()
+        if paste:
+            paste.delete()
+            return {"result": "success"}
+        else:
+            return {"result": "error", "error_msg": "That paste does not belong to you."}
