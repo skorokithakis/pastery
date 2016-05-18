@@ -6,4 +6,6 @@ before_script:
   - python manage.py collectstatic --noinput
 
 build:
-  script: python manage.py test
+  script:
+    - flake8 .
+    - python manage.py test
