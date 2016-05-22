@@ -125,12 +125,12 @@ ALIAS_DICT = get_aliases()
 STYLES = get_styles()
 
 
-def generate_api_key():
+def generate_api_key() -> str:
     """Create an API key for a user."""
     return shortuuid.ShortUUID().random(32)
 
 
-def generate_paste_uuid():
+def generate_paste_uuid() -> str:
     """Create a UUID for a paste."""
     return shortuuid.ShortUUID("abdcefghjkmnpqrstuvwxyz").random()[:6]
 

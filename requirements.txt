@@ -34,3 +34,4 @@ html5lib
 flake8
 pip
 captainwebhook
+mypy-lang
