@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 import random
+from typing import Union, List  # noqa
 from subprocess import check_output
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -26,7 +27,7 @@ SECRET_KEY = '#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*a-%&$r&n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-BROWSERID_AUDIENCES = []
+BROWSERID_AUDIENCES = []  # type: List[str]
 
 ALLOWED_HOSTS = [".pastery.net"]
 
@@ -190,7 +191,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-RAVEN_CONFIG = {"dsn": None}
+RAVEN_CONFIG = {"dsn": None}  # type: Dict[str, Union[None, str]]
 
 CACHING_TIME = 24 * 3600
 

@@ -261,7 +261,7 @@ class Paste(models.Model):
         return ((self.expiration and
                  self.expiration < timezone.now()) or
                 (self.max_views and self.views >= self.max_views))
-    has_expired.boolean = True
+    has_expired.boolean = True  # type: ignore
 
     def get_language_display(self):
         """Return the human-readable language name."""
