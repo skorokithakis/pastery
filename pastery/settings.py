@@ -86,7 +86,7 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 NOSE_ARGS = ["--nocapture", "--nologcapture", "--stop"]
 NOSE_ARGS += ["--cover-package=pastery", "--cover-package=main", "--cover-package=api", "--cover-erase", "--cover-html", "--cover-html-dir=htmlcov"]
-NOSE_ARGS += ["--with-coverage"]
+NOSE_ARGS += ["--with-coverage", "--pdb"]
 
 ROOT_URLCONF = 'pastery.urls'
 
@@ -168,6 +168,8 @@ EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_HOST_USER = 'postmaster@pastery.net'
 EMAIL_HOST_PASSWORD = 'override me'
 EMAIL_PORT = 587
+
+RATELIMIT_STATUS_CODE = 429
 
 try:
     COMMIT_HASH = check_output(['git', 'rev-parse', '--short', 'HEAD'])

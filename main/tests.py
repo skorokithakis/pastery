@@ -14,6 +14,7 @@ UserFactory = models(
         User,
         password=st.just("pass"),
         _style_name=st.just(""),
+        api_key=st.just("apikey"),
     )
 PasteFactory = models(
         Paste,
