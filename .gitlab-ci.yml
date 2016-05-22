@@ -5,8 +5,19 @@ before_script:
   - python manage.py migrate
   - python manage.py collectstatic --noinput
 
-build:
+stages:
+  - staticcheck
+  - typecheck
+  - test
+
+staticcheck:
+  script:
+    - flake8 .
+
+typecheck:
   script:
     - mypy -s .
-    - flake8 .
+
+test:
+  script:
     - python manage.py test
