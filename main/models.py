@@ -4,6 +4,8 @@ import markdown
 import pygments
 import shortuuid
 import textile
+from typing import Dict, List
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.db.models import Q, F
@@ -26,7 +28,7 @@ from utils import send_event, identify_user
 from utils.md_nofollow import NofollowExtension
 
 
-def clean(text):
+def clean(text: str) -> str:
     """Convenience method to bleach.clean()."""
     allowed_tags = ['a', 'abbr', 'acronym', 'address', 'area', 'b', 'bdo',
         'big', 'blockquote', 'br', 'button', 'caption', 'center', 'cite',
@@ -43,7 +45,7 @@ def clean(text):
         'acronym': ['title'],
         'img': ['src', 'title', 'alt', 'width', 'height'],
     }
-    allowed_styles = []
+    allowed_styles = ["font-weight", "text-align", "text-transform"]
 
     return bleach.clean(
             text,
@@ -53,7 +55,7 @@ def clean(text):
             )
 
 
-def get_languages():
+def get_languages() -> List:
     """
     Return the list of all supported languages.
 
@@ -85,7 +87,7 @@ def get_languages():
     return top_languages + bottom_languages
 
 
-def get_aliases():
+def get_aliases() -> Dict[str, str]:
     """
     Return an alias dictionary.
 
@@ -103,7 +105,7 @@ def get_aliases():
     return alias_dict
 
 
-def get_styles():
+def get_styles() -> List:
     """Return all available styles and their names."""
 
     styles = list(pygments.styles.STYLE_MAP.items())
