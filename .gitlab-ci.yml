@@ -13,11 +13,14 @@ stages:
 staticcheck:
   script:
     - flake8 .
+  stage: staticcheck
 
 typecheck:
   script:
     - mypy -s .
+  stage: typecheck
 
 test:
   script:
     - python manage.py test
+  stage: test
