@@ -166,7 +166,7 @@ class User(AbstractUser):
 
 
 class PasteManager(models.Manager):
-    def create(self, *args, **kwargs):
+    def create(self, *args, **kwargs) -> "Paste":
         """Create a paste, retrying if there's an ID collision."""
 
         # Try to create new IDs for the paste if one collides.
@@ -230,10 +230,10 @@ class Paste(models.Model):
     objects = PasteManager()
     active = ActivePasteManager()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.title if self.title else self.id
 
-    def as_dict(self):
+    def as_dict(self) -> Dict:
         """Represent the object as a dictionary."""
         return {
             "id": self.id,
@@ -244,7 +244,7 @@ class Paste(models.Model):
         }
 
     @classmethod
-    def get_by_id_or_404(cls, paste_id):
+    def get_by_id_or_404(cls, paste_id) -> "Paste":
         """Retrieve a paste by its ID, or None if it doesn't exist."""
         paste = cls.active.filter(pk=paste_id.lower()).first()
 
@@ -253,19 +253,19 @@ class Paste(models.Model):
         else:
             return paste
 
-    def get_full_url(self):
+    def get_full_url(self) -> str:
         return "https://%s%s" % (Site.objects.get_current().domain, self.get_absolute_url())
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
         return reverse("main:paste", args=[self.id])
 
-    def has_expired(self):
+    def has_expired(self) -> bool:
         return ((self.expiration and
                  self.expiration < timezone.now()) or
                 (self.max_views and self.views >= self.max_views))
     has_expired.boolean = True  # type: ignore
 
-    def get_language_display(self):
+    def get_language_display(self) -> bool:
         """Return the human-readable language name."""
         return LANGUAGE_DICT[self.language]
 
@@ -276,7 +276,7 @@ class Paste(models.Model):
         self.save()
 
     @property
-    def filename(self):
+    def filename(self) -> str:
         """
         Something that looks like a filename this paste
         can be represented by.
@@ -298,7 +298,7 @@ class Paste(models.Model):
         return glob.replace("*", self.id)
 
     @property
-    def language(self):
+    def language(self) -> str:
         """
         The final language of the lexer. This is either the user-specified
         language, or a guessed language, if the former was not specified.
@@ -320,7 +320,7 @@ class Paste(models.Model):
         return language
 
     @property
-    def rendered_body(self):
+    def rendered_body(self) -> str:
         key = "pastery:paste_%s_rendered_body" % self.id
         value = cache.get(key, None)
         if value:
