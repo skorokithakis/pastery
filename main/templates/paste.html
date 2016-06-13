@@ -23,7 +23,7 @@
 
 {% block extrahead %}
 <link rel="alternate" type="application/json+oembed"
-    href="https://{{ current_site.domain }}{% url "oembed" %}?format=json&url={{ paste.get_full_url|urlencode }}"
+    href="https://{{ current_site.domain }}{% url "main:oembed" %}?format=json&url={{ paste.get_full_url|urlencode }}"
     title="Pastery oEmbed Goodness" />
 {% endblock %}
 
@@ -42,13 +42,13 @@
             <div class="btn-group button-container" id="copy-code">
 
                 <div class="btn-group admin-parent dropdown-parent" role="group">
-                    <a type="button" data-toggle="tooltip" title="{% trans "Clone" %}" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'home' %}?clone={{ paste.id }}" type="button"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span></a>
+                    <a type="button" data-toggle="tooltip" title="{% trans "Clone" %}" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'main:home' %}?clone={{ paste.id }}" type="button"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span></a>
                     <div class="dropdown-menu pseudo-dropdown">{% trans "Clone" %}</div>
                 </div>
 
                 {% if paste.user == request.user %}
                 <div class="btn-group admin-parent dropdown-parent" role="group">
-                    <form data-confirm="{% trans "Are you sure you want to delete this paste?" %}" action="{% url "delete-paste" paste.id %}" id="delete-paste" method="post">
+                    <form data-confirm="{% trans "Are you sure you want to delete this paste?" %}" action="{% url "main:delete-paste" paste.id %}" id="delete-paste" method="post">
                         {% csrf_token %}
                         <button type="submit" data-toggle="tooltip" title="{% trans "Delete" %}" class="btn btn-default btn-sm dropdown-toggle admin-button"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                     </form>
@@ -85,7 +85,7 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
                         <div class="btn-group">
-                            <input title="{% trans "Copied!" %}" type="text" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "raw-paste" paste.id %}" readonly=""/>
+                            <input title="{% trans "Copied!" %}" type="text" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}" readonly=""/>
                         </div>
                         <div class="btn-group action-copy">
                             <button data-trigger="hover" data-toggle="tooltip" title="{% trans "Copy to clipboard" %}" aria-label="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
@@ -98,7 +98,7 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
                         <div class="btn-group">
-                            <input data-placement="top" title="Copied!" type="text" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "paste" paste.id %}" readonly=""/>
+                            <input data-placement="top" title="Copied!" type="text" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:paste" paste.id %}" readonly=""/>
                         </div>
                         <div class="btn-group action-copy">
                             <button data-trigger="hover" data-toggle="tooltip" title="{% trans "Copy to clipboard" %}" aria-label="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
@@ -129,7 +129,7 @@
                 Expires in {{ until }}
                 {% endblocktrans %} |
                 {% endif %}
-                <form data-confirm="{% trans "Are you sure you want to report this paste?" %}" action="{% url "report-paste" paste.id %}" id="report-paste" method="post">
+                <form data-confirm="{% trans "Are you sure you want to report this paste?" %}" action="{% url "main:report-paste" paste.id %}" id="report-paste" method="post">
                     {% csrf_token %}
                     <button type="submit">Report abuse</button>
                 </form>
@@ -142,7 +142,7 @@
 
 <div class="container">
     <div class="btn-container">
-        <a href="{% url 'home' %}" class="btn new-paste">{% trans "New paste" %}</a>
+        <a href="{% url 'main:home' %}" class="btn new-paste">{% trans "New paste" %}</a>
     </div>
 </div>
 {% endblock %}

@@ -4,6 +4,8 @@ import markdown
 import pygments
 import shortuuid
 import textile
+from typing import Dict, List
+
 from django.db import models
 from django.db.models.signals import post_save
 from django.db.models import Q, F
@@ -26,7 +28,7 @@ from utils import send_event, identify_user
 from utils.md_nofollow import NofollowExtension
 
 
-def clean(text):
+def clean(text: str) -> str:
     """Convenience method to bleach.clean()."""
     allowed_tags = ['a', 'abbr', 'acronym', 'address', 'area', 'b', 'bdo',
         'big', 'blockquote', 'br', 'button', 'caption', 'center', 'cite',
@@ -43,7 +45,7 @@ def clean(text):
         'acronym': ['title'],
         'img': ['src', 'title', 'alt', 'width', 'height'],
     }
-    allowed_styles = []
+    allowed_styles = ["font-weight", "text-align", "text-transform"]
 
     return bleach.clean(
             text,
@@ -53,7 +55,7 @@ def clean(text):
             )
 
 
-def get_languages():
+def get_languages() -> List:
     """
     Return the list of all supported languages.
 
@@ -85,7 +87,7 @@ def get_languages():
     return top_languages + bottom_languages
 
 
-def get_aliases():
+def get_aliases() -> Dict[str, str]:
     """
     Return an alias dictionary.
 
@@ -103,7 +105,7 @@ def get_aliases():
     return alias_dict
 
 
-def get_styles():
+def get_styles() -> List:
     """Return all available styles and their names."""
 
     styles = list(pygments.styles.STYLE_MAP.items())
@@ -123,12 +125,12 @@ ALIAS_DICT = get_aliases()
 STYLES = get_styles()
 
 
-def generate_api_key():
+def generate_api_key() -> str:
     """Create an API key for a user."""
     return shortuuid.ShortUUID().random(32)
 
 
-def generate_paste_uuid():
+def generate_paste_uuid() -> str:
     """Create a UUID for a paste."""
     return shortuuid.ShortUUID("abdcefghjkmnpqrstuvwxyz").random()[:6]
 
@@ -164,7 +166,7 @@ class User(AbstractUser):
 
 
 class PasteManager(models.Manager):
-    def create(self, *args, **kwargs):
+    def create(self, *args, **kwargs) -> "Paste":
         """Create a paste, retrying if there's an ID collision."""
 
         # Try to create new IDs for the paste if one collides.
@@ -178,7 +180,7 @@ class PasteManager(models.Manager):
         if kwargs.get("user"):
             user_id = kwargs["user"].username
         else:
-            user_id = hashlib.sha256(kwargs["user_address"].encode("utf8")).hexdigest()[:16]
+            user_id = hashlib.sha256(kwargs.get("user_address", "").encode("utf8")).hexdigest()[:16]
 
         send_event(user_id, "new_paste", {
             "raw_language": kwargs["raw_language"],
@@ -228,10 +230,10 @@ class Paste(models.Model):
     objects = PasteManager()
     active = ActivePasteManager()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.title if self.title else self.id
 
-    def as_dict(self):
+    def as_dict(self) -> Dict:
         """Represent the object as a dictionary."""
         return {
             "id": self.id,
@@ -242,7 +244,7 @@ class Paste(models.Model):
         }
 
     @classmethod
-    def get_by_id_or_404(cls, paste_id):
+    def get_by_id_or_404(cls, paste_id) -> "Paste":
         """Retrieve a paste by its ID, or None if it doesn't exist."""
         paste = cls.active.filter(pk=paste_id.lower()).first()
 
@@ -251,19 +253,19 @@ class Paste(models.Model):
         else:
             return paste
 
-    def get_full_url(self):
+    def get_full_url(self) -> str:
         return "https://%s%s" % (Site.objects.get_current().domain, self.get_absolute_url())
 
-    def get_absolute_url(self):
-        return reverse("paste", args=[self.id])
+    def get_absolute_url(self) -> str:
+        return reverse("main:paste", args=[self.id])
 
-    def has_expired(self):
+    def has_expired(self) -> bool:
         return ((self.expiration and
                  self.expiration < timezone.now()) or
                 (self.max_views and self.views >= self.max_views))
-    has_expired.boolean = True
+    has_expired.boolean = True  # type: ignore
 
-    def get_language_display(self):
+    def get_language_display(self) -> bool:
         """Return the human-readable language name."""
         return LANGUAGE_DICT[self.language]
 
@@ -274,7 +276,7 @@ class Paste(models.Model):
         self.save()
 
     @property
-    def filename(self):
+    def filename(self) -> str:
         """
         Something that looks like a filename this paste
         can be represented by.
@@ -296,7 +298,7 @@ class Paste(models.Model):
         return glob.replace("*", self.id)
 
     @property
-    def language(self):
+    def language(self) -> str:
         """
         The final language of the lexer. This is either the user-specified
         language, or a guessed language, if the former was not specified.
@@ -318,7 +320,7 @@ class Paste(models.Model):
         return language
 
     @property
-    def rendered_body(self):
+    def rendered_body(self) -> str:
         key = "pastery:paste_%s_rendered_body" % self.id
         value = cache.get(key, None)
         if value:

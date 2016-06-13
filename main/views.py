@@ -66,7 +66,7 @@ class UserForm(forms.ModelForm):
 def home(request):
     if getattr(request, 'limited', False):
         messages.error(request, _("You're pasting too much, please slow down."))
-        return redirect(home)
+        return redirect("main:home")
 
     if request.method == 'POST':
         form = PasteForm(request.POST)
@@ -165,18 +165,18 @@ def report_paste(request, paste_id):
         "url": paste.get_full_url(),
     })
     messages.success(request, _("Thank you for your report. We will investigate as soon as possible."))
-    return redirect(home)
+    return redirect("main:home")
 
 
 @require_POST
 def reset_key(request):
     if request.user.is_anonymous():
         messages.error(request, _("Please log in first."))
-        return redirect(home)
+        return redirect("main:home")
     else:
         request.user.reset_key()
         messages.success(request, _("Your API key has been reset."))
-        return redirect(account)
+        return redirect("main:account")
 
 
 @require_POST
@@ -191,14 +191,14 @@ def delete_paste(request, paste_id):
         })
         paste.delete()
         messages.success(request, _("Your paste has been deleted."))
-    return redirect(home)
+    return redirect("main:home")
 
 
 @render_to("account.html")
 def account(request):
     if request.user.is_anonymous():
         messages.error(request, _("You need to log in first."))
-        return redirect(home)
+        return redirect("main:home")
 
     pastes = []
     if request.method == 'POST':
@@ -206,7 +206,7 @@ def account(request):
         if form.is_valid():
             form.save()
             messages.success(request, _("Your settings have been saved."))
-            return redirect(account)
+            return redirect("main:account")
     else:
         form = UserForm(instance=request.user)
         pastes = Paste.active.filter(
@@ -218,7 +218,7 @@ def account(request):
 def logout(request):
     djlogout(request)
     messages.success(request, _("You have been logged out."))
-    return redirect(request.META.get("HTTP_REFERER", home))
+    return redirect(request.META.get("HTTP_REFERER", "main:home"))
 
 
 @ajax_request

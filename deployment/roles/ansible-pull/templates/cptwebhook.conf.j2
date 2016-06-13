@@ -9,4 +9,5 @@ respawn limit 10 30
 env ENVIRONMENT="{{ env_root }}"
 env PROJECT="{{ project_root }}"
 
-exec {{ env_root }}/bin/cptwebhook -i 127.0.0.1 -p {{ cptwebhook_port }} -k {{ webhook_key }} "{{ env_root }}/bin/ansible-pull -o -C {{ branch }} -d {{ project_root }} -U {{ repo }}"
+# Use system Ansible, because it doesn't support py3.
+exec {{ env_root }}/bin/cptwebhook -i 127.0.0.1 -p {{ cptwebhook_port }} -k {{ webhook_key }} "/usr/local/bin/ansible-pull -o -C {{ branch }} -d {{ project_root }} -U {{ repo }}"

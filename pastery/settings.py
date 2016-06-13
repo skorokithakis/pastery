@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 import random
+from typing import Union, List  # noqa
+from subprocess import check_output
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +27,7 @@ SECRET_KEY = '#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*a-%&$r&n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-BROWSERID_AUDIENCES = []
+BROWSERID_AUDIENCES = []  # type: List[str]
 
 ALLOWED_HOSTS = [".pastery.net"]
 
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
     'django_browserid',
     'main',
     'api',
+    "django_nose",
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -78,6 +81,12 @@ DEFAULT_STYLE = random.choice([
     "paraiso-dark",
     "native",
 ])
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = ["--nocapture", "--nologcapture", "--stop"]
+NOSE_ARGS += ["--cover-package=pastery", "--cover-package=main", "--cover-package=api", "--cover-erase", "--cover-html", "--cover-html-dir=htmlcov"]
+NOSE_ARGS += ["--with-coverage", "--pdb"]
 
 ROOT_URLCONF = 'pastery.urls'
 
@@ -160,6 +169,13 @@ EMAIL_HOST_USER = 'postmaster@pastery.net'
 EMAIL_HOST_PASSWORD = 'override me'
 EMAIL_PORT = 587
 
+RATELIMIT_STATUS_CODE = 429
+
+try:
+    COMMIT_HASH = check_output(['git', 'rev-parse', '--short', 'HEAD'])
+except:
+    COMMIT_HASH = "Not a git repo"
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
@@ -177,7 +193,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-RAVEN_CONFIG = {"dsn": None}
+RAVEN_CONFIG = {"dsn": None}  # type: Dict[str, Union[None, str]]
 
 CACHING_TIME = 24 * 3600
 

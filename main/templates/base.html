@@ -34,7 +34,7 @@
     {% include "analytics.html" %}
     <header class="top-header clearfix">
         <div class="container">
-            <h1><a tabindex="-1" href="{% url 'home' %}" title="{{ current_site.name }}">{{ current_site.name }}</a></h1>
+            <h1><a tabindex="-1" href="{% url 'main:home' %}" title="{{ current_site.name }}">{{ current_site.name }}</a></h1>
             <div class="persona">
                 {% if user.is_authenticated %}
                 <div class="btn-group">
@@ -42,12 +42,12 @@
                         <span class="glyphicon glyphicon-cog"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="account" href="{% url 'account' %}">{{ user.email }}</a></li>
+                        <li><a class="account" href="{% url 'main:account' %}">{{ user.email }}</a></li>
                         {% if request.user.is_staff %}
                         <li><a class="account" href="{% url 'admin:index' %}">{% trans "Admin" %}</a></li>
                         {% endif %}
                         <li role="separator" class="divider"></li>
-                        <li><a data-next="{{ request.get_full_path }}" class="browserid-logout" href="{% url "logout" %}" >{% trans "Logout" %}</a></li>
+                        <li><a data-next="{{ request.get_full_path }}" class="browserid-logout" href="{% url "main:logout" %}" >{% trans "Logout" %}</a></li>
                     </ul>
                 </div>
                 {% else %}
@@ -64,7 +64,7 @@
 
     <div class="container">
         <footer>
-            <a href="/api/">API</a> | <a href="/about/">{% trans "About" %}</a> | <a href="/plugins/">{% trans "Plugins" %}</a>
+            <a href="/api/">API</a> | <a href="/about/">{% trans "About" %}</a> | <a href="/plugins/">{% trans "Plugins" %}</a> | {{ settings.COMMIT_HASH }}
         </footer>
     </div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

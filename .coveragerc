@@ -1,0 +1,6 @@
+[run]
+omit =
+  */management/*
+  */migrations/*
+  admin.py
+  */urls.py
