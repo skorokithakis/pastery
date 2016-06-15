@@ -92,8 +92,12 @@ def home(request):
         initial = {
             "title": request.GET.get("title", ""),
             "body": "",
-            "raw_language": request.GET["lang"] if request.GET.get("lang") in LANGUAGE_NAMES else "autodetect"
+            "raw_language": request.GET["lang"] if request.GET.get("lang") in LANGUAGE_NAMES else "autodetect",
         }
+
+        if "expires" in request.GET:
+            initial["expires"] = request.GET["expires"]
+
         clone = request.GET.get("clone")
         if clone:
             paste = Paste.active.filter(pk=clone).first()
