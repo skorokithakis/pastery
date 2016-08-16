@@ -1,5 +1,4 @@
 from django.core.management.base import NoArgsCommand
-from django.utils import timezone
 
 from main.models import Paste
 
