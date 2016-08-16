@@ -18,8 +18,14 @@ SPAM_TERMS = [
     "-hdrip-",
     "hdrrip-",
     "paypal",
+    "vodlocker",
+    "putlocker",
     "/adfoc.us",
     "/soci.ga",
+    "hatelabo.jp/",
+    "we are anonymous",
+    "transitionnetwork.org/",
+    "playbuzz.com/",
 ]
 
 
@@ -28,11 +34,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         counter = 0
-        for paste in Paste.active.all():
+        for paste in Paste.objects.all():
             haystack = paste.body.lower()
             for spam_term in SPAM_TERMS:
                 if spam_term in haystack:
-                    print("Deleting %s..." % paste.id)
+                    print("Deleting %s because of \"%s\"..." % (paste.id, spam_term))
                     paste.delete()
                     counter += 1
                     break
