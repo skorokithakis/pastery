@@ -16,6 +16,8 @@ SPAM_TERMS = [
     "fullhd-",
     "moviehd-",
     "-hdrip-",
+    "-movie",
+    "_movie",
     "hdrrip-",
     "paypal",
     "vodlocker",
