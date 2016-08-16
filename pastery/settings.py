@@ -86,7 +86,7 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 NOSE_ARGS = ["--nocapture", "--nologcapture", "--stop"]
 NOSE_ARGS += ["--cover-package=pastery", "--cover-package=main", "--cover-package=api", "--cover-erase", "--cover-html", "--cover-html-dir=htmlcov"]
-NOSE_ARGS += ["--with-coverage", "--pdb"]
+NOSE_ARGS += ["--with-coverage"]
 
 ROOT_URLCONF = 'pastery.urls'
 
