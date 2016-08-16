@@ -1,4 +1,4 @@
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 
 from main.models import Paste
 
@@ -23,7 +23,7 @@ SPAM_TERMS = [
 ]
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = 'Delete all expired pastes.'
 
     def handle(self, *args, **options):
