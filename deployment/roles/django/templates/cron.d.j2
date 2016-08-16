@@ -3,3 +3,4 @@ LANG=en_US.UTF-8
 
 1 1 * * * pastery {{ project_root }}/certs/get_cert.sh >> /dev/null 2>&1
 1 * * * * pastery {{ env_root }}/bin/python {{ project_root }}/manage.py prune_pastes >> /dev/null 2>&1
+0 */3 * * * pastery {{ env_root }}/bin/python {{ project_root }}/manage.py remove_spam >> /dev/null 2>&1
