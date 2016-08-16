@@ -16,8 +16,7 @@ SPAM_TERMS = [
     "fullhd-",
     "moviehd-",
     "-hdrip-",
-    "-movie",
-    "_movie",
+    "movie",
     "hdrrip-",
     "paypal",
     "vodlocker",
@@ -28,6 +27,9 @@ SPAM_TERMS = [
     "we are anonymous",
     "transitionnetwork.org/",
     "playbuzz.com/",
+    "sitepalace.com/",
+    "theknot.com/",
+    "soundation.com/",
 ]
 
 
