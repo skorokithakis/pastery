@@ -172,8 +172,12 @@ class PasteManager(models.Manager):
         # Try to create new IDs for the paste if one collides.
         tries = 10
         for x in range(tries):
-            paste = super(PasteManager, self).create(*args, **kwargs)
-            break
+            try:
+                paste = super(PasteManager, self).create(*args, **kwargs)
+            except IntegrityError:
+                continue
+            else:
+                break
         else:
             raise IntegrityError("Could not find a paste ID after %s tries." % tries)
 
