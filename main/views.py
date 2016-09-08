@@ -239,18 +239,22 @@ def oembed(request):
 
     site = Site.objects.get_current()
 
+    data = {}
+
     if request.GET.get("embedly"):
         template_name = "embedly_embed_code.html"
+        data["width"] = 700
+        data["height"] = 400
     else:
         template_name = "embed_code.html"
 
-    data = {
+    data.update({
         "version": "1.0",
         "type": "rich",
         "html": render_to_string(template_name, {"paste": paste}, request=request),
         "provider_name": site.name,
         "provider_url": "https://%s/" % site.domain,
-    }
+    })
 
     if paste.title:
         data["title"] = paste.title
