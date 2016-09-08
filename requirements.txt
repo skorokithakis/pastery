@@ -7,7 +7,7 @@
 ansible==2.1.1.0
 bleach==1.4.3
 captainwebhook==0.2.0
-cffi==1.7.0               # via cryptography
+cffi==1.8.2               # via cryptography
 coverage==4.2
 cryptography==1.5         # via paramiko
 django-annoying==0.8.7
@@ -41,7 +41,7 @@ pycrypto==2.6.1           # via ansible
 pygments==2.0.2
 python-dateutil==2.5.3    # via fake-factory
 pytz==2016.6.1
-PyYAML==3.11              # via ansible
+PyYAML==3.12              # via ansible
 raven==5.8.1
 redis==2.10.5             # via django-redis
 requests==2.11.1
@@ -52,7 +52,7 @@ sqlparse==0.2.1
 Textile==2.2.2
 uwsgi==2.0.13.1
 webencodings==0.5
-Werkzeug==0.11.10
+Werkzeug==0.11.11
 
 # The following packages are commented out because they are
 # considered to be unsafe in a requirements file:
