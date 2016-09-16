@@ -38,7 +38,7 @@
     sudo_user: pastery
 
   - name: Reload uWSGI.
-    service: name=pastery_uwsgi state=reloaded
+    service: name=pastery_uwsgi state=restarted
 
   - name: Chown everything.
     shell: chown -R pastery:pastery {{ project_root }}
