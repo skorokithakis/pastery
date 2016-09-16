@@ -16,7 +16,7 @@
 <meta property="og:title" content="{% trans "The sweetest pastebin in the world." %}"/>
 {% endif %}
 <meta property="og:url" content="{{ paste.get_full_url }}"/>
-<meta property="og:image" content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% static "images/favicon-32x32.png" %}"/>
+<meta property="og:image" content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% static "images/icons/favicon-32x32.png" %}"/>
 {% endblock %}
 
 {% block pageclass %}{% if paste.language != 'markdown' and paste.language != 'textile' %}page-paste{% endif %}{% endblock %}
