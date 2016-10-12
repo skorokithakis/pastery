@@ -133,7 +133,7 @@
                 {% endif %} |
                 <form data-confirm="{% trans "Are you sure you want to report this paste?" %}" action="{% url "main:report-paste" paste.id %}" id="report-paste" method="post">
                     {% csrf_token %}
-                    <button type="submit">Report abuse</button>
+                    <button type="submit">{% trans "Report abuse" %}</button>
                 </form>
             </div>
 
