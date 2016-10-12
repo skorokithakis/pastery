@@ -53,6 +53,16 @@ class PasteForm(forms.ModelForm):
         fields = ["title", "body", "raw_language"]
 
 
+class EmailForm(forms.Form):
+    email = forms.EmailField(label="Your email address")
+    confirmation = forms.EmailField(label="Enter your email address again")
+
+    def clean_confirmation(self):
+        if self.cleaned_data.get("email") != self.cleaned_data.get("confirmation"):
+            raise forms.ValidationError(_("The email addresses must match."))
+        return self.cleaned_data["confirmation"]
+
+
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
@@ -206,17 +216,30 @@ def account(request):
 
     pastes = []
     if request.method == 'POST':
-        form = UserForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
+        pref_form = UserForm(request.POST, instance=request.user)
+        email_form = EmailForm(request.POST)
+        if request.POST.get("form") == "preferences" and pref_form.is_valid():
+            pref_form.save()
             messages.success(request, _("Your settings have been saved."))
             return redirect("main:account")
+        elif request.POST.get("form") == "email" and email_form.is_valid():
+            request.user.email = email_form.cleaned_data["email"]
+            request.user.save()
+            messages.success(request, _("Your email address has been changed."))
+            return redirect("main:account")
+        messages.error(request, _("There were errors in the form below."))
     else:
-        form = UserForm(instance=request.user)
+        pref_form = UserForm(instance=request.user)
+        email_form = EmailForm(initial={"email": request.user.email})
         pastes = Paste.active.filter(
                 user=request.user
             ).order_by('-created')
-    return {"form": form, "languages": STYLES, "pastes": pastes}
+    return {
+        "email_form": email_form,
+        "pref_form": pref_form,
+        "languages": STYLES,
+        "pastes": pastes
+    }
 
 
 def logout(request):

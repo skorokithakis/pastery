@@ -15,7 +15,8 @@
 <form action="{% url "main:account" %}" method="post" class="account-form">
     {% csrf_token %}
 
-    {% bootstrap_form form %}
+    {% bootstrap_form pref_form %}
+    <input type="hidden" name="form" value="preferences" />
 
     <article>
     <label class="control-label" for="id__paste">{% trans "Style sample" %}</label>
@@ -98,6 +99,27 @@
     {% endfor %}
     </tbody>
 </table>
+
+</section>
+
+<section>
+
+<h1>{% trans "Your email address" %}</h1>
+
+<p>
+{% blocktrans %}
+Here you can change your email address. Make absolutely sure you enter a valid,
+working email address, otherwise you won't be able to log in again.
+<strong>There will be no confirmation email!</strong>
+{% endblocktrans %}
+</p>
+
+<form action="{% url "main:account" %}" method="post" class="account-form">{% csrf_token %}
+    {% bootstrap_form email_form %}
+    <input type="hidden" name="form" value="email" />
+
+    <button type="submit" class="btn btn-primary">{% trans "Change email" %}</button>
+</form>
 
 </section>
 

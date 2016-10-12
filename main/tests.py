@@ -123,7 +123,7 @@ class SmokeTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Paste.objects.filter(id=paste_id).count(), 0)
 
-        response = self.client.post(reverse("main:account"), follow=True)
+        response = self.client.post(reverse("main:account"), data={"form": "preferences"}, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, reverse("main:account"))
 
