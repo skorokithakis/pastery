@@ -51,12 +51,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         counter = 0
-        for paste in Paste.objects.all():
-            haystack = paste.body.lower()
-            for spam_term in SPAM_TERMS:
-                if spam_term in haystack:
-                    print("Deleting %s because of \"%s\"..." % (paste.id, spam_term))
-                    paste.delete()
-                    counter += 1
-                    break
+        for term in SPAM_TERMS:
+            print("Deleting pastes for %s..." % term)
+            deleted = Paste.objects.filter(body__icontains=term).delete()
+            print("Deleted %s pastes." % deleted[0])
+            counter += deleted[0]
         print("Deleted %s pastes." % counter)
