@@ -3,7 +3,13 @@ from django.core.management.base import BaseCommand
 from main.models import Paste
 
 
-SPAM_TERMS = {
+TITLE_TERMS = {
+    "Watch ",
+    "Live ",
+    "Stream ",
+}
+
+BODY_TERMS = {
     "/successfulmotto",
     "/mightyscenery44",
     "/jbrown316",
@@ -66,6 +72,13 @@ SPAM_TERMS = {
     ".shotblogs.com/",
     ".canariblogs.com",
     ".angelfire.com",
+    ".ampedpages.com/",
+    ".pages10.com/",
+    ".endomondo.com/",
+    ".comunidades.net/",
+    ".sitepronews.com/",
+    ".bitlanders.com/",
+    ".openprinting.org/",
     "isblog.net/",
 }
 
@@ -75,9 +88,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         counter = 0
-        for term in SPAM_TERMS:
+        for term in BODY_TERMS:
             print("Deleting pastes for %s..." % term)
             deleted = Paste.objects.filter(body__contains=term).delete()
             print("Deleted %s pastes." % deleted[0])
             counter += deleted[0]
-        print("Deleted %s pastes." % counter)
+
+        for term in TITLE_TERMS:
+            print("Deleting pastes for %s..." % term)
+            deleted = Paste.objects.filter(title__startswith=term).delete()
+            print("Deleted %s pastes." % deleted[0])
+            counter += deleted[0]
+        print("Deleted %s pastes in total." % counter)
