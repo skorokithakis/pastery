@@ -33,6 +33,7 @@ SPAM_TERMS = {
     "blogzet.com/",
     "alltdesign.com/",
     "bloggersdelight.dk/",
+    "indyarocks.com/",
     "logdown.com/",
     "minds.com/",
     "mybjjblog.com/",
@@ -41,7 +42,19 @@ SPAM_TERMS = {
     "theknot.com/",
     "soundation.com/",
     "blogocial.com/",
+    "skyrock.com/",
+    "page.tl/",
+    "eklablog.com/",
+    "blogdon.net/",
+    "pointblog.net/",
     "blogminds.com/",
+    ".blogkoo.com/",
+    ".blogster.com/",
+    ".blogdigy.com/",
+    ".tblogz.com/",
+    ".shotblogs.com/",
+    ".canariblogs.com",
+    ".angelfire.com",
     "isblog.net/",
 }
 
@@ -53,7 +66,7 @@ class Command(BaseCommand):
         counter = 0
         for term in SPAM_TERMS:
             print("Deleting pastes for %s..." % term)
-            deleted = Paste.objects.filter(body__icontains=term).delete()
+            deleted = Paste.objects.filter(body__contains=term).delete()
             print("Deleted %s pastes." % deleted[0])
             counter += deleted[0]
         print("Deleted %s pastes." % counter)
