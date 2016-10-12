@@ -4,9 +4,8 @@ from main.models import Paste
 
 
 TITLE_TERMS = {
-    "Watch ",
-    "Live ",
-    "Stream ",
+    "watch ",
+    "live stream",
 }
 
 BODY_TERMS = {
@@ -90,13 +89,13 @@ class Command(BaseCommand):
         counter = 0
         for term in BODY_TERMS:
             print("Deleting pastes for %s..." % term)
-            deleted = Paste.objects.filter(body__contains=term).delete()
+            deleted = Paste.objects.filter(body__contains=term, user=None).delete()
             print("Deleted %s pastes." % deleted[0])
             counter += deleted[0]
 
         for term in TITLE_TERMS:
             print("Deleting pastes for %s..." % term)
-            deleted = Paste.objects.filter(title__startswith=term).delete()
+            deleted = Paste.objects.filter(title__icontains=term, user=None).delete()
             print("Deleted %s pastes." % deleted[0])
             counter += deleted[0]
         print("Deleted %s pastes in total." % counter)
