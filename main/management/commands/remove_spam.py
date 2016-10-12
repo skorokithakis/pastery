@@ -3,15 +3,15 @@ from django.core.management.base import BaseCommand
 from main.models import Paste
 
 
-SPAM_TERMS = [
+SPAM_TERMS = {
     "/successfulmotto",
     "/mightyscenery44",
     "/jbrown316",
     "/genglobal.org",
-    "http://h.hatena.ne.jp",
+    "h.hatena.ne.jp",
     "-putlocker-",
     "aaaukce.cz",
-    "http://www.victorialostpets.com/",
+    "www.victorialostpets.com/",
     "watchhd-",
     "fullhd-",
     "moviehd-",
@@ -27,10 +27,23 @@ SPAM_TERMS = [
     "we are anonymous",
     "transitionnetwork.org/",
     "playbuzz.com/",
+    "donnael.com/",
+    "suomiblog.com/",
+    "amoblog.com/",
+    "blogzet.com/",
+    "alltdesign.com/",
+    "bloggersdelight.dk/",
+    "logdown.com/",
+    "minds.com/",
+    "mybjjblog.com/",
+    "blogolize.com/",
     "sitepalace.com/",
     "theknot.com/",
     "soundation.com/",
-]
+    "blogocial.com/",
+    "blogminds.com/",
+    "isblog.net/",
+}
 
 
 class Command(BaseCommand):
