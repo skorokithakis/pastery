@@ -6,9 +6,9 @@
     <article class="login-container">
         <h1>{% trans "Register or log in" %}</h1>
         <form action="{% url "main:login" %}" method="post" class="account-form">{% csrf_token %}
-            <p> To register or log in, just enter your email address below. You will receive a link to your email, which you can click to log in.</p>
+            <p>To register or log in, just enter your email address below. You will receive an email with a link, which you can visit to log in.</p>
             <p>There is no username or password to remember, just your email address.</p>
-            <p>Oh, and please don't share the link we will send you, as it will allow anyone to log in to your account.</p>
+            <p>The link will expire in a few hours, but you will stay logged in until you choose to log out. However, be careful not to share it, as it will allow anyone to log in to your account.</p>
             {% bootstrap_form form show_label=False %}
 
             <input type="hidden" name="form" value="email" />
