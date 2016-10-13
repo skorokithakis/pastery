@@ -11,6 +11,7 @@ from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, logout as djlogout, authenticate, login as djlogin
+from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.core.signing import Signer
@@ -196,14 +197,11 @@ def report_paste(request, paste_id):
 
 
 @require_POST
+@login_required
 def reset_key(request):
-    if request.user.is_anonymous():
-        messages.error(request, _("Please log in first."))
-        return redirect("main:home")
-    else:
-        request.user.reset_key()
-        messages.success(request, _("Your API key has been reset."))
-        return redirect("main:account")
+    request.user.reset_key()
+    messages.success(request, _("Your API key has been reset."))
+    return redirect("main:account")
 
 
 @require_POST
@@ -221,12 +219,9 @@ def delete_paste(request, paste_id):
     return redirect("main:home")
 
 
+@login_required
 @render_to("account.html")
 def account(request):
-    if request.user.is_anonymous():
-        messages.error(request, _("You need to log in first."))
-        return redirect("main:home")
-
     pastes = []
     if request.method == 'POST':
         pref_form = UserForm(request.POST, instance=request.user)
@@ -303,6 +298,7 @@ def login(request):
     return {"form": form}
 
 
+@login_required
 def logout(request):
     djlogout(request)
     messages.success(request, _("You have been logged out."))
