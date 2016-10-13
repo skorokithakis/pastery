@@ -89,7 +89,7 @@ class SmokeTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_logged_in(self):
-        self.client.force_login(self.user1, backend=settings.AUTHENTICATION_BACKENDS[1])
+        self.client.force_login(self.user1, backend=settings.AUTHENTICATION_BACKENDS[2])
 
         response = self.client.get(reverse("main:home"))
         form = response.context["form"]
@@ -131,7 +131,7 @@ class SmokeTests(TestCase):
         self.assertRedirects(response, reverse("main:home"))
 
     def test_submitting(self):
-        self.client.force_login(self.user1, backend=settings.AUTHENTICATION_BACKENDS[1])
+        self.client.force_login(self.user1, backend=settings.AUTHENTICATION_BACKENDS[2])
 
         response = self.client.get(reverse("main:home"))
         form = response.context["form"]

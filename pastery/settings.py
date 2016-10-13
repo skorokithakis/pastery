@@ -18,6 +18,7 @@ from subprocess import check_output
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+DEFAULT_FROM_EMAIL = "noreply@pastery.com"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -68,7 +69,10 @@ MIDDLEWARE_CLASSES = [
 
 AUTH_USER_MODEL = "main.User"
 
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+
 AUTHENTICATION_BACKENDS = (
+   'pastery.auth_backends.EmailTokenBackend',
    'django.contrib.auth.backends.ModelBackend',
    'django_browserid.auth.LocalBrowserIDBackend',
    'django_browserid.auth.BrowserIDBackend',

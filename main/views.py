@@ -1,5 +1,8 @@
+import base64
+import json
 import datetime
 import re
+import time
 
 from annoying.decorators import render_to, ajax_request
 from brake.decorators import ratelimit
@@ -7,15 +10,17 @@ from captcha.fields import ReCaptchaField
 from django import forms
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import get_user_model, logout as djlogout
+from django.contrib.auth import get_user_model, logout as djlogout, authenticate, login as djlogin
 from django.contrib.sites.models import Site
+from django.core.mail import send_mail
+from django.core.signing import Signer
 from django.http import HttpResponse
-from django.views.decorators.http import require_POST
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
+from django.views.decorators.http import require_POST
 from ipware.ip import get_ip
 from raven.contrib.django.raven_compat.models import client
 
@@ -28,6 +33,7 @@ LANGUAGE_NAMES = LANGUAGE_DICT.keys()
 
 
 class PasteForm(forms.ModelForm):
+    "The form for a new paste."
     EXPIRATION = [
         [10, _("ten minutes")],
         [60, _("an hour")],
@@ -54,6 +60,12 @@ class PasteForm(forms.ModelForm):
 
 
 class EmailForm(forms.Form):
+    "The email form for the login page."
+    email = forms.EmailField(label="Your email address")
+
+
+class EmailChangeForm(forms.Form):
+    "The email changing form for the account page."
     email = forms.EmailField(label="Your email address")
     confirmation = forms.EmailField(label="Enter your email address again")
 
@@ -64,6 +76,7 @@ class EmailForm(forms.Form):
 
 
 class UserForm(forms.ModelForm):
+    "The user preferences form for the account page."
     class Meta:
         model = User
         fields = ["_style_name"]
@@ -217,7 +230,7 @@ def account(request):
     pastes = []
     if request.method == 'POST':
         pref_form = UserForm(request.POST, instance=request.user)
-        email_form = EmailForm(request.POST)
+        email_form = EmailChangeForm(request.POST)
         if request.POST.get("form") == "preferences" and pref_form.is_valid():
             pref_form.save()
             messages.success(request, _("Your settings have been saved."))
@@ -237,7 +250,7 @@ def account(request):
         messages.error(request, _("There were errors in the form below."))
     else:
         pref_form = UserForm(instance=request.user)
-        email_form = EmailForm(initial={"email": request.user.email})
+        email_form = EmailChangeForm(initial={"email": request.user.email})
         pastes = Paste.active.filter(
                 user=request.user
             ).order_by('-created')
@@ -247,6 +260,47 @@ def account(request):
         "languages": STYLES,
         "pastes": pastes
     }
+
+
+@render_to("login.html")
+def login(request):
+    if request.user.is_authenticated():
+        messages.error(request, _("You are already logged in."))
+        return redirect("main:home")
+
+    # The user has clicked a login link.
+    if request.GET.get("d"):
+        user = authenticate(token=request.GET["d"])
+        if user is not None:
+            djlogin(request, user)
+            messages.success(request, _("Login successful."))
+            return redirect("main:home")
+        messages.error(request, _("The login link was invalid or has expired. Please try to log in again."))
+
+    # The user has submitted the email form.
+    if request.method == "POST":
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            messages.success(request, _("Login email sent! Please check your"
+                " inbox and click on the link to be logged in."))
+
+            # Create the signed structrure containing the time and email address.
+            email = form.cleaned_data["email"].lower().strip()
+            data = {"t": int(time.time()), "e": email}
+            data = Signer().sign(base64.b64encode(json.dumps(data).encode("utf8")))
+
+            # Send the link by email.
+            send_mail(
+                    _('Your Pastery login link'),
+                    render_to_string("login_email.txt", {"data": data}, request=request),
+                    'noreply@pastery.com',
+                    [email],
+                    fail_silently=False
+                    )
+            return redirect("main:home")
+    else:
+        form = EmailForm()
+    return {"form": form}
 
 
 def logout(request):

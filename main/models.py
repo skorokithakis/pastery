@@ -13,6 +13,7 @@ from django.db.utils import IntegrityError
 from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
@@ -137,8 +138,19 @@ def generate_paste_uuid() -> str:
 
 class User(AbstractUser):
     """A proxy for the User model, to add various methods."""
-    first_name = None
-    last_name = None
+    username = models.CharField(
+        _('username'),
+        max_length=150,
+        default=generate_api_key,
+        unique=True,
+        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        validators=[UnicodeUsernameValidator()],
+        error_messages={
+            'unique': _("A user with that username already exists."),
+        },
+    )
+    first_name = None  # type: None
+    last_name = None  # type: None
     email = models.EmailField(_('email address'), unique=True)
     api_key = models.CharField(
             verbose_name=_("API key"),

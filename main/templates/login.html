@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load bootstrap3 i18n %}
+
+{% block content %}
+<div class="container">
+    <form action="{% url "main:login" %}" method="post" class="account-form">{% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="hidden" name="form" value="email" />
+
+        <button type="submit" class="btn btn-primary">{% trans "Log in" %}</button>
+    </form>
+</div>
+{% endblock %}
