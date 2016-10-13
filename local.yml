@@ -41,4 +41,4 @@
     service: name=pastery_uwsgi state=restarted
 
   - name: Chown everything.
-    shell: chown -R pastery:pastery {{ project_root }}
+    file: path={{ project_root }} owner=pastery group=pastery recurse=yes
