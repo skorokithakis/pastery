@@ -293,7 +293,7 @@ def login(request):
             send_mail(
                     _('Your Pastery login link'),
                     render_to_string("login_email.txt", {"data": data}, request=request),
-                    'noreply@pastery.com',
+                    settings.DEFAULT_FROM_EMAIL,
                     [email],
                     fail_silently=False
                     )
