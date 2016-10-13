@@ -70,6 +70,7 @@ MIDDLEWARE_CLASSES = [
 AUTH_USER_MODEL = "main.User"
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
 
 AUTHENTICATION_BACKENDS = (
    'pastery.auth_backends.EmailTokenBackend',
