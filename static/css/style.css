@@ -103,17 +103,17 @@ select:focus {
     background-color: #f0f0f0;
 }
 
-.top-header .persona a.browserid-login {
+.top-header .persona a.login {
     padding: 5px 10px;
     color: #fff;
     display: inline-block;
 }
-.top-header .persona a.browserid-login:hover {
+.top-header .persona a.login:hover {
     background-color: rgba(255, 255, 255, .2);
 }
-.top-header .persona a.browserid-login:focus,
-.top-header .persona a.browserid-login:active,
-.top-header .persona a.browserid-login:hover {
+.top-header .persona a.login:focus,
+.top-header .persona a.login:active,
+.top-header .persona a.login:hover {
     text-decoration: none;
 }
 
@@ -497,6 +497,31 @@ select:focus {
     margin-left: 20px;
 }
 
+/* Login form */
+.login-container h1 {
+    margin: 0 0 20px;
+    font-weight: bold;
+}
+.login-container p {
+    color: #666;    
+}
+.login-container .form-group {
+    width: 500px;
+    margin: 20px auto;
+    font-size: 30px;
+    text-align: center;
+}
+.login-container .form-control {
+    font-size: 25px;
+    text-align: center;
+    padding: 20px;
+}
+.login-container .btn-primary {
+    display: block;
+    margin: 0 auto;
+    width: 100px;
+}
+
 @media (max-width: 550px) {
 
     .alert {
@@ -639,5 +664,16 @@ select:focus {
 
     .account section {
         padding: 0 15px;
+    }
+
+    .login-container {
+        padding: 0 10px;
+    }
+    .login-container .form-group {
+        width: 100%;
+    }
+    .login-container .form-control {
+        display: inline-block;
+        width: auto;
     }
 }
