@@ -13,6 +13,7 @@ from django.db.utils import IntegrityError
 from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
@@ -137,6 +138,20 @@ def generate_paste_uuid() -> str:
 
 class User(AbstractUser):
     """A proxy for the User model, to add various methods."""
+    username = models.CharField(
+        _('username'),
+        max_length=150,
+        default=generate_api_key,
+        unique=True,
+        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        validators=[UnicodeUsernameValidator()],
+        error_messages={
+            'unique': _("A user with that username already exists."),
+        },
+    )
+    first_name = None  # type: None
+    last_name = None  # type: None
+    email = models.EmailField(_('email address'), unique=True)
     api_key = models.CharField(
             verbose_name=_("API key"),
             max_length=64,
@@ -155,6 +170,10 @@ class User(AbstractUser):
     class Meta:
         db_table = "auth_user"
 
+    def get_full_name(self):
+        return self.email
+    get_short_name = get_full_name
+
     @property
     def style_name(self):
         return self._style_name if self._style_name else settings.DEFAULT_STYLE
@@ -172,8 +191,12 @@ class PasteManager(models.Manager):
         # Try to create new IDs for the paste if one collides.
         tries = 10
         for x in range(tries):
-            paste = super(PasteManager, self).create(*args, **kwargs)
-            break
+            try:
+                paste = super(PasteManager, self).create(*args, **kwargs)
+            except IntegrityError:
+                continue
+            else:
+                break
         else:
             raise IntegrityError("Could not find a paste ID after %s tries." % tries)
 

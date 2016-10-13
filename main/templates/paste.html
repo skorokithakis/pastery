@@ -16,7 +16,7 @@
 <meta property="og:title" content="{% trans "The sweetest pastebin in the world." %}"/>
 {% endif %}
 <meta property="og:url" content="{{ paste.get_full_url }}"/>
-<meta property="og:image" content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% static "images/favicon-32x32.png" %}"/>
+<meta property="og:image" content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% static "images/icons/favicon-32x32.png" %}"/>
 {% endblock %}
 
 {% block pageclass %}{% if paste.language != 'markdown' and paste.language != 'textile' %}page-paste{% endif %}{% endblock %}
@@ -30,8 +30,6 @@
 {% block content %}
 <div class="paste">
     <div class="container">
-
-        {% bootstrap_messages %}
 
         <header class="clearfix">
 
@@ -127,11 +125,13 @@
                 {% if paste.expiration %}
                 {% blocktrans with paste.expiration|timeuntil as until %}
                 Expires in {{ until }}
-                {% endblocktrans %} |
-                {% endif %}
+                {% endblocktrans %}
+                {% else %}
+                {% trans "Never expires" %}
+                {% endif %} |
                 <form data-confirm="{% trans "Are you sure you want to report this paste?" %}" action="{% url "main:report-paste" paste.id %}" id="report-paste" method="post">
                     {% csrf_token %}
-                    <button type="submit">Report abuse</button>
+                    <button type="submit">{% trans "Report abuse" %}</button>
                 </form>
             </div>
 

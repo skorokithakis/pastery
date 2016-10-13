@@ -1,10 +1,10 @@
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 from django.utils import timezone
 
 from main.models import Paste
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = 'Delete all expired pastes.'
 
     def handle(self, *args, **options):

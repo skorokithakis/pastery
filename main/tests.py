@@ -1,5 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
+from django.conf import settings
 from django.test import TestCase
+from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from hypothesis.extra.django.models import models, default_value
@@ -19,7 +21,7 @@ UserFactory = models(
 PasteFactory = models(
         Paste,
         id=default_value,
-        expiration=st.integers(min_value=0, max_value=100).map(lambda x: datetime.now() + timedelta(minutes=x)),
+        expiration=st.integers(min_value=0, max_value=100).map(lambda x: timezone.now() + timedelta(minutes=x)),
         raw_language=default_value,
         views=default_value,
         max_views=default_value,
@@ -87,7 +89,7 @@ class SmokeTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_logged_in(self):
-        self.client.force_login(self.user1)
+        self.client.force_login(self.user1, backend=settings.AUTHENTICATION_BACKENDS[2])
 
         response = self.client.get(reverse("main:home"))
         form = response.context["form"]
@@ -121,7 +123,7 @@ class SmokeTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Paste.objects.filter(id=paste_id).count(), 0)
 
-        response = self.client.post(reverse("main:account"), follow=True)
+        response = self.client.post(reverse("main:account"), data={"form": "preferences"}, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, reverse("main:account"))
 
@@ -129,7 +131,7 @@ class SmokeTests(TestCase):
         self.assertRedirects(response, reverse("main:home"))
 
     def test_submitting(self):
-        self.client.force_login(self.user1)
+        self.client.force_login(self.user1, backend=settings.AUTHENTICATION_BACKENDS[2])
 
         response = self.client.get(reverse("main:home"))
         form = response.context["form"]
