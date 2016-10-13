@@ -88,9 +88,13 @@
     <tr>
         <td><a href="{{ paste.get_absolute_url }}">{{ paste }}</a></td>
         <td class="expires">
+            {% if paste.expiration %}
             {% blocktrans with paste.expiration|timeuntil as until %}
             {{ until }}
             {% endblocktrans %}
+            {% else %}
+            {% trans "Never expires" %}
+            {% endif %}
         </td>
     </tr>
     {% empty %}

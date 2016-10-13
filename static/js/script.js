@@ -91,6 +91,9 @@ var UserStyleSelector = (function() {
     if($('.account-form').length == 0)
       return;
 
+    if($('.account-form select')[0] == undefined)
+      return;
+    
     var options = $('.account-form select')[0].options;
     var self = this;
 
