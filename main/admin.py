@@ -15,11 +15,11 @@ class SettingAdmin(admin.ModelAdmin):
 @admin.register(User)
 class MyUserAdmin(UserAdmin):
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
+        (_("Credentials"), {'fields': ('username', 'email', 'password')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
-        ('Various', {'fields': ('_style_name', "api_key")}),
+        (_('Various'), {'fields': ('_style_name', "api_key")}),
     )
     list_display = ('username', 'email', 'is_staff')
     search_fields = ('username', 'email')
