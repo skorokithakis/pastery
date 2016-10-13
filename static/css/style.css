@@ -514,7 +514,8 @@ select:focus {
 .login-container .form-control {
     font-size: 25px;
     text-align: center;
-    padding: 20px;
+    padding: 0 20px;
+    height: auto;
 }
 .login-container .btn-primary {
     display: block;
