@@ -3,7 +3,18 @@
 
 {% block content %}
 <div class="container">
+    <h1>{% trans "Create account or log in" %}</h1>
     <form action="{% url "main:login" %}" method="post" class="account-form">{% csrf_token %}
+        <p>
+        To create an account or log in, just enter your email address below. We
+        will send a link to your email, which you can click to log in. There
+        will be no username or password to remember, just your email address.
+        </p>
+        <p>
+        The link we send will expire in a few hours, but you will stay logged in
+        until you click "log out" on the menu above. Please don't share your
+        link, as it will allow anyone to log in to your account.
+        </p>
         {% bootstrap_form form %}
         <input type="hidden" name="form" value="email" />
 
