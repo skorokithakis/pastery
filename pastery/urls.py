@@ -22,7 +22,6 @@ from api import urls as api_urls
 
 urlpatterns = [
     url(r'^narnia/', admin.site.urls),
-    url(r'', include('django_browserid.urls')),
     url(r'^api/', include(api_urls, namespace="api", app_name="api")),
     url(r'^', include(main_urls, namespace="main", app_name="main")),
 ]

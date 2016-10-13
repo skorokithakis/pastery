@@ -28,7 +28,6 @@ SECRET_KEY = '#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*a-%&$r&n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-BROWSERID_AUDIENCES = []  # type: List[str]
 
 ALLOWED_HOSTS = [".pastery.net"]
 
@@ -47,7 +46,6 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'bootstrap3',
     'captcha',
-    'django_browserid',
     'main',
     'api',
     "django_nose",
@@ -75,8 +73,6 @@ SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
 AUTHENTICATION_BACKENDS = (
    'pastery.auth_backends.EmailTokenBackend',
    'django.contrib.auth.backends.ModelBackend',
-   'django_browserid.auth.LocalBrowserIDBackend',
-   'django_browserid.auth.BrowserIDBackend',
 )
 
 DEFAULT_STYLE = random.choice([
