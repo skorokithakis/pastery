@@ -137,6 +137,9 @@ def generate_paste_uuid() -> str:
 
 class User(AbstractUser):
     """A proxy for the User model, to add various methods."""
+    first_name = None
+    last_name = None
+    email = models.EmailField(_('email address'), unique=True)
     api_key = models.CharField(
             verbose_name=_("API key"),
             max_length=64,
@@ -154,6 +157,10 @@ class User(AbstractUser):
 
     class Meta:
         db_table = "auth_user"
+
+    def get_full_name(self):
+        return self.email
+    get_short_name = get_full_name
 
     @property
     def style_name(self):

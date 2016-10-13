@@ -223,10 +223,17 @@ def account(request):
             messages.success(request, _("Your settings have been saved."))
             return redirect("main:account")
         elif request.POST.get("form") == "email" and email_form.is_valid():
-            request.user.email = email_form.cleaned_data["email"]
-            request.user.save()
-            messages.success(request, _("Your email address has been changed."))
-            return redirect("main:account")
+            email = email_form.cleaned_data["email"].lower().strip()
+            if User.objects.filter(email=email).count():
+                messages.error(request, _("That email address is already associated with another user. "
+                    "Try logging in with it and changing it from the other account if you want to use it"
+                    " with this one."))
+                return redirect("main:account")
+            else:
+                request.user.email = email
+                request.user.save()
+                messages.success(request, _("Your email address has been changed."))
+                return redirect("main:account")
         messages.error(request, _("There were errors in the form below."))
     else:
         pref_form = UserForm(instance=request.user)

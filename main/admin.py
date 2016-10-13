@@ -13,6 +13,8 @@ class SettingAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class MyUserAdmin(UserAdmin):
+    list_display = ('username', 'email', 'is_staff')
+    search_fields = ('username', 'email')
     fieldsets = UserAdmin.fieldsets + (
         ('Various', {'fields': ('_style_name', "api_key")}),
     )
