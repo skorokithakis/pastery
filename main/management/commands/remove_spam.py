@@ -5,7 +5,8 @@ from main.models import Paste
 
 TITLE_TERMS = {
     "watch ",
-    "live stream",
+    "stream",
+    "episode",
 }
 
 BODY_TERMS = {
@@ -53,6 +54,8 @@ BODY_TERMS = {
     "blogdon.net/",
     "pointblog.net/",
     "blogminds.com/",
+    "vyzon.net/",
+    "vlurn.com/",
     ".blogkoo.com/",
     ".blogster.com/",
     ".blogdigy.com/",
