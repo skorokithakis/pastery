@@ -118,6 +118,7 @@ def get_styles() -> List:
     styles = [[x[0], x[0].title().replace("Default", "Plain")] for x in styles]
     return sorted(styles, key=lambda x: x[1])
 
+
 LANGUAGES = get_languages()
 LANGUAGE_DICT = dict(LANGUAGES)
 ALIAS_DICT = get_aliases()
