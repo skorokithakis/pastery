@@ -76,6 +76,8 @@ BODY_TERMS = {
     ".angelfire.com",
     ".ampedpages.com/",
     ".pages10.com/",
+    ".tinyblogging.com/",
+    ".full-design.com/",
     ".endomondo.com/",
     ".comunidades.net/",
     ".sitepronews.com/",
