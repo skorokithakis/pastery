@@ -93,14 +93,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         counter = 0
         for term in BODY_TERMS:
-            print("Deleting pastes for %s..." % term)
             deleted = Paste.objects.filter(body__contains=term, user=None).delete()
-            print("Deleted %s pastes." % deleted[0])
             counter += deleted[0]
 
         for term in TITLE_TERMS:
-            print("Deleting pastes for %s..." % term)
             deleted = Paste.objects.filter(title__icontains=term, user=None).delete()
-            print("Deleted %s pastes." % deleted[0])
             counter += deleted[0]
         print("Deleted %s pastes in total." % counter)
