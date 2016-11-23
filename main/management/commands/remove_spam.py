@@ -33,7 +33,7 @@ BODY_TERMS = {
     "we are anonymous",
     "transitionnetwork.org/",
     "playbuzz.com/",
-    "donnael.com/",
+    "donnael.com",
     "suomiblog.com/",
     "amoblog.com/",
     "blogzet.com/",
