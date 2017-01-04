@@ -225,7 +225,7 @@ select:focus {
 }
 .paste header h1 {
     margin: 0;
-    padding-right: 160px;
+    padding-right: 220px;
 }
 .paste .button-container {
     position: absolute;
@@ -503,7 +503,7 @@ select:focus {
     font-weight: bold;
 }
 .login-container p {
-    color: #666;    
+    color: #666;
 }
 .login-container .form-group {
     width: 500px;
