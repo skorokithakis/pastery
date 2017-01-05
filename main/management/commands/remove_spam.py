@@ -1,3 +1,4 @@
+import datetime
 import re
 
 from django.core.management.base import BaseCommand
@@ -124,4 +125,11 @@ class Command(BaseCommand):
             if ratio > 0.2:
                 paste.delete()
                 counter += 1
+
+        # Make all userless, non-expiring pastes last a month.
+        Paste.objects \
+            .filter(user=None) \
+            .filter(expiration=None) \
+            .update(expiration=datetime.datetime.now() + datetime.timedelta(days=30))
+
         print("Deleted %s pastes in total." % counter)
