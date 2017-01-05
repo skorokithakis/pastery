@@ -1,3 +1,5 @@
+import re
+
 from django.core.management.base import BaseCommand
 
 from main.models import Paste
@@ -93,6 +95,17 @@ BODY_TERMS = {
 }
 
 
+def calculate_link_ratio(text):
+    if len(text) == 0:
+        return 0
+
+    regex = re.compile(r'https?://\S+', re.IGNORECASE)
+
+    total_urls = regex.findall(text)
+    url_length = len("".join(total_urls))
+    return url_length / len(text)
+
+
 class Command(BaseCommand):
     help = 'Delete all expired pastes.'
 
@@ -105,4 +118,10 @@ class Command(BaseCommand):
         for term in TITLE_TERMS:
             deleted = Paste.objects.filter(title__icontains=term, user=None).delete()
             counter += deleted[0]
+
+        for paste in Paste.objects.filter(user=None):
+            ratio = calculate_link_ratio(paste.body)
+            if ratio > 0.2:
+                paste.delete()
+                counter += 1
         print("Deleted %s pastes in total." % counter)
