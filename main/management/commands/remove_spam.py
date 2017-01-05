@@ -55,6 +55,7 @@ BODY_TERMS = {
     "pointblog.net/",
     "blogminds.com/",
     "vyzon.net/",
+    "oximity.com/",
     "vlurn.com/",
     ".blogkoo.com/",
     ".blogster.com/",
