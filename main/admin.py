@@ -24,7 +24,7 @@ class PasteAdmin(admin.ModelAdmin):
                 paste.delete()
                 paste_counter += 1
             self.message_user(request, "%s users and %s pastes deleted." % (user_counter, paste_counter))
-    purge_user.short_description = "Delete selected pastes and their users"
+    purge_user.short_description = "Delete selected pastes and their users"  # type: ignore
 
 
 @admin.register(User)
