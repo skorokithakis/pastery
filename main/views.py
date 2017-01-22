@@ -1,16 +1,16 @@
 import base64
-import json
 import datetime
+import json
 import re
 import time
 
-from annoying.decorators import render_to, ajax_request
+from annoying.decorators import ajax_request, render_to
 from brake.decorators import ratelimit
 from captcha.fields import ReCaptchaField
 from django import forms
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import get_user_model, logout as djlogout, authenticate, login as djlogin
+from django.contrib.auth import authenticate, get_user_model, login as djlogin, logout as djlogout
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
@@ -26,8 +26,8 @@ from ipware.ip import get_ip
 from raven.contrib.django.raven_compat.models import client
 
 
-from .models import Paste, STYLES, LANGUAGE_DICT
-from utils import send_event
+from .models import LANGUAGE_DICT, Paste, STYLES
+from ..utils import send_event
 
 User = get_user_model()
 LANGUAGE_NAMES = LANGUAGE_DICT.keys()

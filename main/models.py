@@ -1,31 +1,32 @@
-import bleach
 import hashlib
+from typing import Dict, List
+
+import bleach
 import markdown
 import pygments
 import shortuuid
 import textile
-from typing import Dict, List
 
-from django.db import models
-from django.db.models.signals import post_save
-from django.db.models import Q, F
-from django.db.utils import IntegrityError
-from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
+from django.db import models
+from django.db.models import F, Q
+from django.db.models.signals import post_save
+from django.db.utils import IntegrityError
+from django.dispatch import receiver
 from django.http import Http404
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from pygments import highlight
-from pygments.lexers import guess_lexer, get_all_lexers, get_lexer_by_name
 from pygments.formatters import HtmlFormatter
+from pygments.lexers import get_all_lexers, get_lexer_by_name, guess_lexer
 
-from utils import send_event, identify_user
+from utils import identify_user, send_event
 from utils.md_nofollow import NofollowExtension
 
 
