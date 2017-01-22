@@ -8,10 +8,11 @@ to all generated links.
 
 from __future__ import absolute_import
 from __future__ import unicode_literals
+
 from markdown import Extension
 from markdown.inlinepatterns import \
-    LinkPattern, ReferencePattern, AutolinkPattern, AutomailPattern, \
-    LINK_RE, REFERENCE_RE, SHORT_REF_RE, AUTOLINK_RE, AUTOMAIL_RE
+    AUTOLINK_RE, AutolinkPattern, AUTOMAIL_RE, AutomailPattern, \
+    LINK_RE, LinkPattern, REFERENCE_RE, ReferencePattern, SHORT_REF_RE
 
 
 class NofollowMixin(object):

@@ -5,14 +5,14 @@ from collections import namedtuple
 from brake.decorators import ratelimit
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import View
 from django.utils import timezone
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import View
 from ipware.ip import get_ip
-from schema import Schema, Use, Optional, And, SchemaError
+from schema import And, Optional, Schema, SchemaError, Use
 
-from main.models import Paste, ALIAS_DICT
+from .main.models import ALIAS_DICT, Paste
 
 User = get_user_model()
 

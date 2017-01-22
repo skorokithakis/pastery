@@ -17,8 +17,8 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from api import urls as api_urls
-from main import urls as main_urls
+from .api import urls as api_urls
+from .main import urls as main_urls
 
 urlpatterns = [
     url(r'^narnia/', admin.site.urls),

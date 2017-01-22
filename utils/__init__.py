@@ -1,6 +1,6 @@
+from django.conf import settings
 from mixpanel import Mixpanel
 from mixpanel_async import AsyncBufferedConsumer
-from django.conf import settings
 
 if getattr(settings, "MIXPANEL_TOKEN", None):
     mp = Mixpanel(settings.MIXPANEL_TOKEN, consumer=AsyncBufferedConsumer())
