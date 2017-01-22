@@ -27,7 +27,7 @@ from raven.contrib.django.raven_compat.models import client
 
 
 from .models import LANGUAGE_DICT, Paste, STYLES
-from ..utils import send_event
+from utils import send_event  # noqa
 
 User = get_user_model()
 LANGUAGE_NAMES = LANGUAGE_DICT.keys()
