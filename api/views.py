@@ -12,7 +12,7 @@ from django.views.generic import View
 from ipware.ip import get_ip
 from schema import And, Optional, Schema, SchemaError, Use
 
-from .main.models import ALIAS_DICT, Paste
+from main.models import ALIAS_DICT, Paste  # noqa
 
 User = get_user_model()
 
