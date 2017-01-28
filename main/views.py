@@ -5,8 +5,11 @@ import re
 import time
 
 from annoying.decorators import ajax_request, render_to
+
 from brake.decorators import ratelimit
+
 from captcha.fields import ReCaptchaField
+
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -22,7 +25,9 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_POST
+
 from ipware.ip import get_ip
+
 from raven.contrib.django.raven_compat.models import client
 
 
@@ -138,16 +143,19 @@ def home(request):
 
 @xframe_options_exempt
 def embed_paste(request, paste_id):
-    paste = Paste.active.filter(pk=paste_id.lower()).first()
-    if not paste:
+
+    pasteIds = paste_id.split('+')[:3]
+
+    pastes = Paste.active.filter(pk__in=pasteIds)
+    if not pastes:
         status = 404
         # Show a specific paste.
-        paste = Paste.active.get(pk="embed404")
+        pastes = [Paste.active.get(pk="embed404")]
     else:
         status = 200
 
     data = {
-        "paste": paste,
+        "pastes": pastes,
         "host": request.GET.get("host", "")
     }
     response = render(request, "embed.html", data, status=status)
