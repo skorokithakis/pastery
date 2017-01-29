@@ -144,9 +144,9 @@ def home(request):
 @xframe_options_exempt
 def embed_paste(request, paste_id):
 
-    pasteIds = paste_id.split('+')[:3]
+    paste_ids = paste_id.split('+')[:3]
 
-    pastes = Paste.active.filter(pk__in=pasteIds)
+    pastes = Paste.active.filter(pk__in=paste_ids)
     if not pastes:
         status = 404
         # Show a specific paste.
