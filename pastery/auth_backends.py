@@ -9,7 +9,7 @@ from django.core.signing import Signer
 class EmailTokenBackend:
     def get_user(self, user_id):
         "Get a user by their email address."
-        User = get_user_model()
+        User = get_user_model()  # noqa
         try:
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
@@ -26,7 +26,7 @@ class EmailTokenBackend:
         if data["t"] < time.time() - 24 * 60 * 60:
             return
 
-        User = get_user_model()
+        User = get_user_model()  # noqa
 
         user, created = User.objects.get_or_create(email=data["e"])
         return user

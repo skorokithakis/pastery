@@ -16,7 +16,7 @@ from markdown.inlinepatterns import \
 
 
 class NofollowMixin(object):
-    def handleMatch(self, m):
+    def handleMatch(self, m):  # noqa
         el = super(NofollowMixin, self).handleMatch(m)
         if el is not None:
             el.set('rel', 'nofollow')
@@ -41,7 +41,7 @@ class NofollowAutomailPattern(NofollowMixin, AutomailPattern):
 
 class NofollowExtension(Extension):
     """Modifies HTML output to open links in a new tab."""
-    def extendMarkdown(self, md, md_globals):
+    def extendMarkdown(self, md, md_globals):  # noqa
         md.inlinePatterns['link'] = \
             NofollowLinkPattern(LINK_RE, md)
         md.inlinePatterns['reference'] = \
@@ -54,5 +54,5 @@ class NofollowExtension(Extension):
             NofollowAutomailPattern(AUTOMAIL_RE, md)
 
 
-def makeExtension(configs={}):
+def makeExtension(configs={}):  # noqa
     return NofollowExtension(configs=configs)
