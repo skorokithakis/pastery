@@ -336,10 +336,57 @@ var TabbedPastes = (function() {
 
 })();
 
+var CopyToClipboard = (function() {
+
+  init = function() {
+
+    var self = this;
+
+    $('.copy-clipboard').on('click', function() {
+
+        var element = $(this);
+
+        var paste= document.querySelector('.pretty-paste[aria-hidden=""]');
+        var hasMarkdown = (paste.className.indexOf('markdown-language') > 0);
+        var code = '';
+
+        if(hasMarkdown)
+            code = paste.innerText;
+        else
+            code = document.querySelector('.pretty-paste[aria-hidden=""] .code pre').innerText;
+
+        var copied = self.copyTextToClipboard(code);
+
+        if(copied) {
+
+            $(element).tooltip({title: 'Copied!'});
+            $(element).tooltip('show');
+
+            setTimeout(function() {
+
+              $(element).tooltip('destroy');
+
+            }, 1000);
+        }
+
+    });
+  },
+
+  copyTextToClipboard = function(a){
+    var b=document.createElement("textarea");b.style.position="fixed",b.style.top=0,b.style.left=0,b.style.width="2em",b.style.height="2em",b.style.padding=0,b.style.border="none",b.style.outline="none",b.style.boxShadow="none",b.style.background="transparent",b.value=a,document.body.appendChild(b),b.select();var c=!1;try{c=document.execCommand("copy")}catch(a){}return document.body.removeChild(b),c
+  }
+
+  return {
+      'initialize': init,
+      'copyTextToClipboard': copyTextToClipboard
+  }
+})();
+
 $(document).ready(function() {
 
   autosize($('textarea'));
 
+  CopyToClipboard.initialize();
   TabbedPastes.initialize();
   LineSelector.initialize();
   ConfirmAction.initialize();

@@ -79,7 +79,14 @@
 
             document.querySelector('span[data-copy]').addEventListener('click', function() {
 
-                var code = document.querySelector('.pretty-paste[aria-hidden=""] .code pre').innerText;
+                var paste= document.querySelector('.pretty-paste[aria-hidden=""]');
+                var hasMarkdown = (paste.className.indexOf('markdown-language') > 0);
+                var code = '';
+
+                if(hasMarkdown)
+                    code = paste.innerText;
+                else
+                    code = document.querySelector('.pretty-paste[aria-hidden=""] .code pre').innerText;
 
                 var copyElement = this;
 

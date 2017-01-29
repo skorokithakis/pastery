@@ -628,6 +628,7 @@ select:focus {
     }
     .paste .button-container button,
     .paste .button-container #delete-paste,
+    .paste .button-container a.copy-clipboard,
     .paste .button-container a.admin-button {
         border-radius: 0;
         border: none;

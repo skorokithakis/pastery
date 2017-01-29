@@ -71,6 +71,14 @@ Multiple pastes
                 </div>
                 {% endif %}
 
+                <!-- Copy to clipboard -->
+                <div class="btn-group dropdown-parent" role="group">
+                    <a type="button" class="btn btn-default btn-sm dropdown-toggle copy-clipboard" href="javascript:void(0);" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></a>
+                    <div class="dropdown-menu pseudo-dropdown">
+                        <div class="btn-group">{% trans "Copy to clipboard" %}</div>
+                    </div>
+                </div>
+
                 <!-- Embed -->
                 <div class="btn-group dropdown-parent" role="group">
                     <button type="button" title="{% trans "Embed" %}" class="btn btn-default btn-sm dropdown-toggle" type="button" data-placement="tooltip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
