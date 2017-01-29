@@ -7,14 +7,14 @@ stages:
 
 staticcheck:
   before_script:
-    - pip install -U flake8
+    - pip install -Ur requirements-dev.txt
   script:
     - flake8 .
   stage: staticcheck
 
 typecheck:
   before_script:
-    - pip install -U mypy-lang
+    - pip install -Ur requirements-dev.txt
   script:
     - mypy -s .
   stage: typecheck
