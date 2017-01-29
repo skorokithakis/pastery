@@ -93,7 +93,7 @@ var UserStyleSelector = (function() {
 
     if($('.account-form select')[0] == undefined)
       return;
-    
+
     var options = $('.account-form select')[0].options;
     var self = this;
 
@@ -252,6 +252,67 @@ var LineSelector = (function() {
   }
 })();
 
+var TabbedPastes = (function() {
+
+  init = function() {
+
+    var tabs = $('[data-tab]');
+
+    if(tabs.length == 0)
+      return;
+
+    var pastes = $('[data-pasteid]');
+    var self = this;
+
+    tabs.on('click', function() {
+
+        var pasteId = $(this).data('tab');
+
+        $.each(tabs, function() {
+
+            var tId = $(this).data('tab');
+
+            if(tId.localeCompare(pasteId) == 0)
+                $(this).addClass('active');
+            else
+                $(this).removeClass('active');
+        });
+
+        $.each(pastes, function() {
+
+            var cId = $(this).data('pasteid');
+
+            if(cId.localeCompare(pasteId) == 0) {
+
+                self.fillPaste($(this));
+
+                $(this).attr('aria-hidden', '');
+            }
+            else
+                $(this).attr('aria-hidden', 'true');
+        });
+    });
+  },
+
+  fillPaste = function(pasteElement) {
+
+    var language = $(pasteElement).data('language');
+    var expires = $(pasteElement).data('expires');
+    var reporturl = $(pasteElement).data('reporturl');
+    var rawurl = $(pasteElement).data('rawurl');
+
+    $('[data-container-language]')[0].innerText = language;
+    $('[data-container-expiration]')[0].innerText = expires;
+    $('[data-container-report]')[0].action = reporturl;
+    $('[data-container-raw]')[0].value = rawurl;
+  }
+
+  return {
+      'initialize': init,
+      'fillPaste': fillPaste
+  }
+})();
+
 $(document).ready(function() {
 
   autosize($('textarea'));
@@ -260,4 +321,5 @@ $(document).ready(function() {
   ConfirmAction.initialize();
   UserStyleSelector.initialize();
   ShareSelector.initialize();
+  TabbedPastes.initialize();
 });

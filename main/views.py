@@ -144,7 +144,7 @@ def home(request):
 @xframe_options_exempt
 def embed_paste(request, paste_id):
 
-    paste_ids = paste_id.split('+')[:3]
+    paste_ids = paste_id.split('+')[:settings.MAX_MULTIPLE_PASTES]
 
     pastes = Paste.active.filter(pk__in=paste_ids)
     if not pastes:
@@ -162,11 +162,30 @@ def embed_paste(request, paste_id):
     return response
 
 
-@render_to("paste.html")
 def paste(request, paste_id):
-    paste = Paste.get_by_id_or_404(paste_id)
-    paste.increment_views()
-    return {"paste": paste}
+
+    paste_ids = paste_id.split('+')[:settings.MAX_MULTIPLE_PASTES]
+
+    pastes = Paste.active.filter(pk__in=paste_ids)
+
+    for paste in pastes:
+        paste.increment_views()
+
+    data = {}
+
+    if len(pastes) > 0:
+        status = 200
+        data = {
+            "pastes": pastes,
+            "paste": pastes[0],
+            "paste_id": paste_id,
+            "has_multiple": len(pastes) > 1
+        }
+
+    else:
+        status = 404
+
+    return render(request, "paste.html", data, status=status)
 
 
 def download_paste(request, paste_id):

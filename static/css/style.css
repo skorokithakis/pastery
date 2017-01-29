@@ -227,6 +227,22 @@ select:focus {
     margin: 0;
     padding-right: 220px;
 }
+.paste header h1.tabs {
+    margin-left: 12px;
+    font-size: 17px;
+}
+.paste header h1.tabs .tab {
+    padding: 5px 10px 10px;
+    position: relative;
+    top: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.paste header h1.tabs .active {
+    background: #CC1B1B;
+    color: #fff;
+    cursor: default;
+}
 .paste .button-container {
     position: absolute;
     bottom: 0;
@@ -394,12 +410,14 @@ select:focus {
 .pretty-paste {
     overflow: auto;
 }
+.pretty-paste[aria-hidden="true"] {
+    visibility: hidden;
+    display: none;
+}
 .pretty-paste.markdown-language {
     padding: 10px 15px 0;
     background: #E6E2D4;
     color: #333;
-    max-width: 950px;
-    margin: 0 auto;
 }
 .pretty-paste.markdown-language h1,
 .pretty-paste.markdown-language h2,
@@ -571,6 +589,12 @@ select:focus {
         margin-bottom: 20px;
         padding-right: 0;
         font-size: 22px;
+    }
+    .paste header h1.tabs {
+        margin-left: 0;
+    }
+    .paste header h1.tabs .tab {
+        top: 8px;
     }
     .paste .button-container {
         text-align: right;
