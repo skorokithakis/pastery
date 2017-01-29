@@ -193,7 +193,12 @@ var LineSelector = (function() {
 
         event.preventDefault();
 
-        history.pushState(null, null, $(this).attr('href'));
+        var url = $(this).attr('href');
+
+        if(TabbedPastes.hasTabs)
+            url += '-' + TabbedPastes.activePasteId;
+
+        history.pushState(null, null, url);
 
         self.parseHash(false);
       });
@@ -219,7 +224,12 @@ var LineSelector = (function() {
       $('a[href=#l-' + this.lastSelectedLineNumber + ']').removeClass('selected');
     }
 
-    var lineNumber = hash.split(/#l-/)[1];
+    var lineObjects= hash.split(/-/);
+
+    if(lineObjects.length > 2)
+        TabbedPastes.selectPasteWithId(lineObjects[2]);
+
+    var lineNumber = lineObjects[1];
 
     var lineElement = $('#line-' + lineNumber);
 
@@ -256,70 +266,83 @@ var TabbedPastes = (function() {
 
   init = function() {
 
-    var tabs = $('[data-tab]');
+    this.tabs = $('[data-tab]');
 
-    if(tabs.length == 0)
+    if(this.tabs.length == 0)
       return;
 
-    var pastes = $('[data-pasteid]');
+    this.hasTabs = true;
+    this.pastes = $('[data-pasteid]');
+    this.activePasteId = $('.active[data-tab]')[0].dataset.tab;
+
     var self = this;
 
-    tabs.on('click', function() {
+    this.tabs.on('click', function() {
 
         var pasteId = $(this).data('tab');
 
-        $.each(tabs, function() {
-
-            var tId = $(this).data('tab');
-
-            if(tId.localeCompare(pasteId) == 0)
-                $(this).addClass('active');
-            else
-                $(this).removeClass('active');
-        });
-
-        $.each(pastes, function() {
-
-            var cId = $(this).data('pasteid');
-
-            if(cId.localeCompare(pasteId) == 0) {
-
-                self.fillPaste($(this));
-
-                $(this).attr('aria-hidden', '');
-            }
-            else
-                $(this).attr('aria-hidden', 'true');
-        });
+        self.selectPasteWithId(pasteId);
     });
   },
 
-  fillPaste = function(pasteElement) {
+  selectPasteWithId = function(pasteId) {
 
-    var language = $(pasteElement).data('language');
-    var expires = $(pasteElement).data('expires');
-    var reporturl = $(pasteElement).data('reporturl');
-    var rawurl = $(pasteElement).data('rawurl');
+    if(this.activePasteId.localeCompare(pasteId) == 0)
+        return;
 
-    $('[data-container-language]')[0].innerText = language;
-    $('[data-container-expiration]')[0].innerText = expires;
-    $('[data-container-report]')[0].action = reporturl;
-    $('[data-container-raw]')[0].value = rawurl;
+    this.activePasteId = pasteId;
+
+    $.each(this.tabs, function() {
+
+        var tId = $(this).data('tab');
+
+        if(tId.localeCompare(pasteId) == 0)
+            $(this).addClass('active');
+        else
+            $(this).removeClass('active');
+    });
+
+    $.each(this.pastes, function() {
+
+        var cId = $(this).data('pasteid');
+
+        if(cId.localeCompare(pasteId) == 0) {
+
+            var language = $(this).data('language');
+            var expires = $(this).data('expires');
+            var reporturl = $(this).data('reporturl');
+            var rawurl = $(this).data('rawurl');
+
+            $('[data-container-language]')[0].innerText = language;
+            $('[data-container-expiration]')[0].innerText = expires;
+            $('[data-container-report]')[0].action = reporturl;
+            $('[data-container-raw]')[0].value = rawurl;
+
+            $(this).attr('aria-hidden', '');
+        }
+        else
+            $(this).attr('aria-hidden', 'true');
+    });
   }
 
   return {
       'initialize': init,
-      'fillPaste': fillPaste
+      'selectPasteWithId': selectPasteWithId,
+      'tabs': [],
+      'pastes': [],
+      'hasTabs': false,
+      'activePasteId': ''
   }
+
 })();
 
 $(document).ready(function() {
 
   autosize($('textarea'));
 
+  TabbedPastes.initialize();
   LineSelector.initialize();
   ConfirmAction.initialize();
   UserStyleSelector.initialize();
   ShareSelector.initialize();
-  TabbedPastes.initialize();
 });
