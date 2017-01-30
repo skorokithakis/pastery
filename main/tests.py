@@ -41,6 +41,9 @@ class SmokeTests(TestCase):
         response = self.client.get(reverse("main:home"))
         self.assertEqual(response.status_code, 200)
 
+        response = self.client.get("/nourlthere/")
+        self.assertEqual(response.status_code, 404)
+
     def test_anonymous(self):
         response = self.client.get(reverse("main:home"))
         form = response.context["form"]
