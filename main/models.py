@@ -258,15 +258,20 @@ class Paste(models.Model):
     def __str__(self) -> str:
         return self.title if self.title else self.id
 
-    def as_dict(self) -> Dict:
+    def as_dict(self, include_body: bool=False) -> Dict:
         """Represent the object as a dictionary."""
-        return {
+        r = {
             "id": self.id,
             "title": self.title,
             "url": self.get_full_url(),
             "language": self.language,
             "duration": int((self.expiration - timezone.now()).total_seconds() / 60) if self.expiration else None,
         }
+
+        if include_body:
+            r["body"] = self.body
+
+        return r
 
     @classmethod
     def get_by_id_or_404(cls, paste_id) -> "Paste":

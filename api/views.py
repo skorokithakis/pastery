@@ -62,7 +62,7 @@ class PasteView(View):
             qs = Paste.active.filter(user=data["api_key"]).order_by("-created")
 
         return {
-                "pastes": [paste.as_dict() for paste in qs],
+                "pastes": [paste.as_dict(include_body=paste_id is not None) for paste in qs],
                }
 
     def post(self, request, paste_id=None):

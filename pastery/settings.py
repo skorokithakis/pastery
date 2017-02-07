@@ -29,7 +29,7 @@ SECRET_KEY = '#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*a-%&$r&n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [".pastery.net"]
+ALLOWED_HOSTS = ["localhost"]
 
 # Application definition
 
@@ -164,11 +164,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_HOST_USER = 'postmaster@pastery.net'
-EMAIL_HOST_PASSWORD = 'override me'
-EMAIL_PORT = 587
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 RATELIMIT_STATUS_CODE = 429
 
@@ -201,7 +197,7 @@ CACHING_TIME = 24 * 3600
 RECAPTCHA_PUBLIC_KEY = '6LfkpBITAAAAACCMrowwJj4dcUmcjKrZs7CfTqiu'
 RECAPTCHA_PRIVATE_KEY = 'override me'
 RECAPTCHA_USE_SSL = True
-NOCAPTCHA = True
+NOCAPTCHA = True  # Use the new-style NoCAPTCHA.
 
 ENABLE_CAPTCHA = False
 
