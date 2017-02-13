@@ -10,7 +10,6 @@ from hypothesis.extra.django.models import default_value, models
 
 from .models import Paste
 
-
 User = get_user_model()
 
 UserFactory = models(
