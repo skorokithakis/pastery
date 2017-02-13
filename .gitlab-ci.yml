@@ -4,6 +4,7 @@ stages:
   - staticcheck
   - typecheck
   - test
+  - deploy
 
 staticcheck:
   before_script:
@@ -27,3 +28,10 @@ test:
   script:
     - python manage.py test
   stage: test
+
+deploy to production:
+  stage: deploy
+  script: curl https://www.pastery.net/webhook/${PRODUCTION_DEPLOY_KEY}/
+  environment: production
+  only:
+    - master
