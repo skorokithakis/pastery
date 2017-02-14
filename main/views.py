@@ -157,7 +157,7 @@ def embed_paste(request, paste_id):
 
 
 def paste(request, paste_id):
-    paste_ids = paste_id.split('+')[:settings.MAX_COMBINED_PASTES]
+    paste_ids = paste_id.strip("+").split('+')[:settings.MAX_COMBINED_PASTES]
 
     # Create a dictionary out of the pastes so we can order them.
     db_pastes = {paste.id: paste for paste in Paste.active.filter(pk__in=paste_ids)}

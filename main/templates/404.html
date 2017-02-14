@@ -9,20 +9,7 @@
 <div class="paste">
     <h1>{% trans "Page not found" %}</h1>
     <div class="pretty-paste">
-        <table class="pastetable">
-            <tbody>
-                <tr>
-                    <td class="linenos">
-                        <div class="linenodiv"><pre>1
-2</pre></div>
-                    </td>
-                    <td class="code">
-                        <div class="paste"><pre>{% blocktrans %}That page was not found. Maybe it was never here, or maybe it just
-expired. Go back to the home page and try again.{% endblocktrans %}</pre></div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        {% include "404_body.html" %}
     </div>
 </div>
 

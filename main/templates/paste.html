@@ -152,7 +152,7 @@ Multiple pastes
         {% if paste %}
         {{ paste.rendered_body|safe }}
         {% else %}
-        Paste expired or not found.
+        {% include "404_body.html" %}
         {% endif %}
         </div>
     {% endfor %}
