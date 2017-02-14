@@ -166,6 +166,10 @@ def paste(request, paste_id):
 
     pastes = [db_pastes.get(paste_id) for paste_id in paste_ids]
 
+    # If there's only one paste id and it wasn't found, raise a 404.
+    if pastes == [None]:
+        raise Http404
+
     return render(request, "paste.html", {
         "pastes": pastes,
         "paste": pastes[0],
