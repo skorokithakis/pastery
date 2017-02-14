@@ -199,6 +199,9 @@ RECAPTCHA_PRIVATE_KEY = 'override me'
 RECAPTCHA_USE_SSL = True
 NOCAPTCHA = True  # Use the new-style NoCAPTCHA.
 
+CLOUDFLARE_EMAIL = "example@example.com"
+CLOUDFLARE_API_KEY = "example"
+
 ENABLE_CAPTCHA = False
 
 # Static files (CSS, JavaScript, Images)

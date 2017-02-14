@@ -2,6 +2,9 @@ import datetime
 import re
 
 from django.core.management.base import BaseCommand
+from django.conf import settings
+
+import requests
 
 from main.models import Paste
 
@@ -107,17 +110,45 @@ def calculate_link_ratio(text):
     return url_length / len(text)
 
 
+def ban_ip(ip):
+    url = "https://api.cloudflare.com/client/v4/zones/f1928f8f37c9e76fc7c99a7cc9455702/firewall/access_rules/rules"
+    r = requests.post(
+        url,
+        headers={
+            "X-Auth-Email": settings.CLOUDFLARE_EMAIL,
+            "X-Auth-Key": settings.CLOUDFLARE_API_KEY
+        },
+        json={
+            "mode": "challenge",
+            "configuration": {
+                "target": "ip",
+                "value": ip
+                },
+            "notes": "Banned bot: %s" % datetime.date.today().strftime("%Y-%m-%d"),
+        }
+    )
+    return r
+
+
 class Command(BaseCommand):
     help = 'Delete all expired pastes.'
 
     def handle(self, *args, **options):
         counter = 0
         for term in BODY_TERMS:
-            deleted = Paste.objects.filter(body__contains=term, user=None).delete()
+            pastes = Paste.objects.filter(body__contains=term, user=None)
+            for paste in pastes:
+                print("Banning %s..." % paste.user_address)
+                ban_ip(paste.user_address)
+            deleted = pastes.delete()
             counter += deleted[0]
 
         for term in TITLE_TERMS:
-            deleted = Paste.objects.filter(title__icontains=term, user=None).delete()
+            pastes = Paste.objects.filter(title__icontains=term, user=None)
+            for paste in pastes:
+                print("Banning %s..." % paste.user_address)
+                ban_ip(paste.user_address)
+            deleted = pastes.delete()
             counter += deleted[0]
 
         for paste in Paste.objects.filter(user=None):
