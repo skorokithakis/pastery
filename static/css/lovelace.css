@@ -1,4 +1,5 @@
 .pretty-paste .hll { background-color: #ffffcc }
+.pretty-paste  { background: #ffffff; }
 .pretty-paste .c { color: #888888; font-style: italic } /* Comment */
 .pretty-paste .err { background-color: #a848a8 } /* Error */
 .pretty-paste .k { color: #2838b0 } /* Keyword */

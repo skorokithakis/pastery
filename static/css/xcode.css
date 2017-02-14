@@ -6,8 +6,10 @@
 .pretty-paste .l { color: #1C01CE } /* Literal */
 .pretty-paste .n { color: #000000 } /* Name */
 .pretty-paste .o { color: #000000 } /* Operator */
+.pretty-paste .ch { color: #177500 } /* Comment.Hashbang */
 .pretty-paste .cm { color: #177500 } /* Comment.Multiline */
 .pretty-paste .cp { color: #633820 } /* Comment.Preproc */
+.pretty-paste .cpf { color: #177500 } /* Comment.PreprocFile */
 .pretty-paste .c1 { color: #177500 } /* Comment.Single */
 .pretty-paste .cs { color: #177500 } /* Comment.Special */
 .pretty-paste .kc { color: #A90D91 } /* Keyword.Constant */

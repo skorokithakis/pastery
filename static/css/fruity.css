@@ -10,8 +10,10 @@
 .pretty-paste .o { color: #ffffff } /* Operator */
 .pretty-paste .x { color: #ffffff } /* Other */
 .pretty-paste .p { color: #ffffff } /* Punctuation */
+.pretty-paste .ch { color: #008800; font-style: italic; background-color: #0f140f } /* Comment.Hashbang */
 .pretty-paste .cm { color: #008800; font-style: italic; background-color: #0f140f } /* Comment.Multiline */
 .pretty-paste .cp { color: #ff0007; font-weight: bold; font-style: italic; background-color: #0f140f } /* Comment.Preproc */
+.pretty-paste .cpf { color: #008800; font-style: italic; background-color: #0f140f } /* Comment.PreprocFile */
 .pretty-paste .c1 { color: #008800; font-style: italic; background-color: #0f140f } /* Comment.Single */
 .pretty-paste .cs { color: #008800; font-style: italic; background-color: #0f140f } /* Comment.Special */
 .pretty-paste .gd { color: #ffffff } /* Generic.Deleted */

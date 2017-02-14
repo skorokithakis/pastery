@@ -2,8 +2,10 @@
 .pretty-paste  { background: #000000; }
 .pretty-paste .c { color: #00ff00 } /* Comment */
 .pretty-paste .k { color: #ff0000 } /* Keyword */
+.pretty-paste .ch { color: #00ff00 } /* Comment.Hashbang */
 .pretty-paste .cm { color: #00ff00 } /* Comment.Multiline */
 .pretty-paste .cp { color: #e5e5e5 } /* Comment.Preproc */
+.pretty-paste .cpf { color: #00ff00 } /* Comment.PreprocFile */
 .pretty-paste .c1 { color: #00ff00 } /* Comment.Single */
 .pretty-paste .cs { color: #00ff00 } /* Comment.Special */
 .pretty-paste .kc { color: #ff0000 } /* Keyword.Constant */

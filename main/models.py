@@ -108,16 +108,40 @@ def get_aliases() -> Dict[str, str]:
 
 
 def get_styles() -> List:
-    """Return all available styles and their names."""
-
-    styles = list(pygments.styles.STYLE_MAP.items())
-    styles = styles + [
-        ["solarized", "Solarized"],
-        ["solarized_dark", "Solarized Dark"],
-        ["solarized_dark256", "Solarized Dark 256"],
+    """Return all available highlighters and their names."""
+    highlighters = [
+        ['default', 'Plain'],
+        ['algol', 'Algol'],
+        ['algol_nu', 'Algol_Nu'],
+        ['arduino', 'Arduino'],
+        ['autumn', 'Autumn'],
+        ['borland', 'Borland'],
+        ['bw', 'Bw'],
+        ['colorful', 'Colorful'],
+        ['emacs', 'Emacs'],
+        ['friendly', 'Friendly'],
+        ['fruity', 'Fruity'],
+        ['igor', 'Igor'],
+        ['lovelace', 'Lovelace'],
+        ['manni', 'Manni'],
+        ['monokai', 'Monokai'],
+        ['murphy', 'Murphy'],
+        ['native', 'Native'],
+        ['paraiso-dark', 'Paraiso-Dark'],
+        ['paraiso-light', 'Paraiso-Light'],
+        ['pastie', 'Pastie'],
+        ['perldoc', 'Perldoc'],
+        ['rrt', 'Rrt'],
+        ['solarized', 'Solarized'],
+        ['solarized_dark', 'Solarized_Dark'],
+        ['solarized_dark256', 'Solarized_Dark256'],
+        ['tango', 'Tango'],
+        ['trac', 'Trac'],
+        ['vim', 'Vim'],
+        ['vs', 'Vs'],
+        ['xcode', 'Xcode'],
     ]
-    styles = [[x[0], x[0].title().replace("Default", "Plain")] for x in styles]
-    return sorted(styles, key=lambda x: x[1])
+    return highlighters
 
 
 LANGUAGES = get_languages()

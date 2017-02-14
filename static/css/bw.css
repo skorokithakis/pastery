@@ -3,7 +3,9 @@
 .pretty-paste .c { font-style: italic } /* Comment */
 .pretty-paste .err { border: 1px solid #FF0000 } /* Error */
 .pretty-paste .k { font-weight: bold } /* Keyword */
+.pretty-paste .ch { font-style: italic } /* Comment.Hashbang */
 .pretty-paste .cm { font-style: italic } /* Comment.Multiline */
+.pretty-paste .cpf { font-style: italic } /* Comment.PreprocFile */
 .pretty-paste .c1 { font-style: italic } /* Comment.Single */
 .pretty-paste .cs { font-style: italic } /* Comment.Special */
 .pretty-paste .ge { font-style: italic } /* Generic.Emph */

@@ -7,8 +7,10 @@
 .pretty-paste .n { color: #e7e9db } /* Name */
 .pretty-paste .o { color: #5bc4bf } /* Operator */
 .pretty-paste .p { color: #e7e9db } /* Punctuation */
+.pretty-paste .ch { color: #776e71 } /* Comment.Hashbang */
 .pretty-paste .cm { color: #776e71 } /* Comment.Multiline */
 .pretty-paste .cp { color: #776e71 } /* Comment.Preproc */
+.pretty-paste .cpf { color: #776e71 } /* Comment.PreprocFile */
 .pretty-paste .c1 { color: #776e71 } /* Comment.Single */
 .pretty-paste .cs { color: #776e71 } /* Comment.Special */
 .pretty-paste .gd { color: #ef6155 } /* Generic.Deleted */
