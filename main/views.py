@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.core.signing import Signer
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -164,7 +164,6 @@ def paste(request, paste_id):
         paste.increment_views()
 
     if pastes:
-        status = 200
         data = {
             "pastes": pastes,
             "paste": pastes[0],
@@ -173,10 +172,9 @@ def paste(request, paste_id):
         }
 
     else:
-        data = {}
-        status = 404
+        raise Http404
 
-    return render(request, "paste.html", data, status=status)
+    return render(request, "paste.html", data)
 
 
 def download_paste(request, paste_id):
