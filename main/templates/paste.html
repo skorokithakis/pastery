@@ -129,7 +129,7 @@ Multiple pastes
             {% if has_multiple %}
             <h1 class="tabs">
                 {% for paste in pastes %}
-                <span class="tab{% if forloop.counter0 == 0 %} active{% endif %}" data-tab="{{ paste.id }}" href="javascript:void(0);">{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}</span>
+                <span class="tab{% if forloop.first %} active{% endif %}" data-tab="{{ paste.id }}" href="javascript:void(0);">{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}</span>
                 {% endfor %}
             </h1>
             {% elif paste.title %}
@@ -145,7 +145,7 @@ Multiple pastes
                 data-expires="{% if paste.expiration %}{% blocktrans with paste.expiration|timeuntil as until %}Expires in {{ until }}{% endblocktrans %}{% else %}{% trans "Never expires" %}{% endif %}"
                 data-reporturl="{% url "main:report-paste" paste.id %}"
                 data-rawurl="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}"
-                aria-hidden="{% if forloop.counter0 > 0 %}true{% endif %}"
+                aria-hidden="{% if not forloop.first %}true{% endif %}"
                 class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}">
         {{ paste.rendered_body|safe }}
         </div>
