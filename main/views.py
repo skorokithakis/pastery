@@ -159,23 +159,19 @@ def embed_paste(request, paste_id):
 def paste(request, paste_id):
     paste_ids = paste_id.split('+')[:settings.MAX_COMBINED_PASTES]
 
-    pastes = Paste.active.filter(pk__in=paste_ids)
-    # Create a dictionary of {id: order}.
-    paste_order = {key: count for count, key in enumerate(paste_ids)}
-    # Sort pastes according to the above dictionary.
-    pastes = sorted(pastes, key=lambda paste: paste_order[paste.id])
-    for paste in pastes:
+    # Create a dictionary out of the pastes so we can order them.
+    db_pastes = {paste.id: paste for paste in Paste.active.filter(pk__in=paste_ids)}
+    for paste in db_pastes.values():
         paste.increment_views()
 
-    if pastes:
-        return render(request, "paste.html", {
-            "pastes": pastes,
-            "paste": pastes[0],
-            "paste_id": paste_id,
-            "has_multiple": len(pastes) > 1
-        })
-    else:
-        raise Http404
+    pastes = [db_pastes.get(paste_id) for paste_id in paste_ids]
+
+    return render(request, "paste.html", {
+        "pastes": pastes,
+        "paste": pastes[0],
+        "paste_id": paste_id,
+        "has_multiple": len(pastes) > 1
+    })
 
 
 def download_paste(request, paste_id):
