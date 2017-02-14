@@ -283,6 +283,8 @@ var TabbedPastes = (function() {
 
         self.selectPasteWithId(pasteId);
     });
+
+    this.applyActivePaste();
   },
 
   selectPasteWithId = function(pasteId) {
@@ -308,47 +310,57 @@ var TabbedPastes = (function() {
 
         if(cId.localeCompare(pasteId) == 0) {
 
-            var language = $(this).data('language');
-            var expires = $(this).data('expires');
-            var reporturl = $(this).data('reporturl');
-            var rawurl = $(this).data('rawurl');
-
-            var notFound = $(this).hasClass('not-found');
-
-            if(notFound)
-                $('.copy-clipboard').addClass('disabled');
-            else
-                $('.copy-clipboard').removeClass('disabled');
-
-            $('[data-container-language]')[0].innerText = language;
-            $('[data-container-expiration]')[0].innerText = expires;
-
-            if(!notFound) {
-
-                $('#report-paste button')[0].disabled = '';
-                $('[data-container-report]')[0].action = reporturl;
-            }
-            else
-                $('#report-paste button')[0].disabled = 'disabled';
-
-            if(!notFound) {
-
-                $('[data-container-raw]')[0].value = rawurl;
-                $('button[data-original-title="Raw"]')[0].disabled = '';
-            }
-            else
-                $('button[data-original-title="Raw"]')[0].disabled = 'disabled';
-
             $(this).attr('aria-hidden', '');
         }
         else
             $(this).attr('aria-hidden', 'true');
     });
+
+    this.applyActivePaste();
+  },
+
+  applyActivePaste = function() {
+
+    var paste= document.querySelector('.pretty-paste[aria-hidden=""]');
+
+    var language = $(paste).data('language');
+    var expires = $(paste).data('expires');
+    var reporturl = $(paste).data('reporturl');
+    var rawurl = $(paste).data('rawurl');
+
+    var notFound = $(paste).hasClass('not-found');
+
+    if(notFound)
+        $('.copy-clipboard').addClass('disabled');
+    else
+        $('.copy-clipboard').removeClass('disabled');
+
+    $('[data-container-language]')[0].innerText = language;
+    $('[data-container-expiration]')[0].innerText = expires;
+
+    if(!notFound) {
+
+        $('#report-paste button')[0].disabled = '';
+        $('[data-container-report]')[0].action = reporturl;
+    }
+    else
+        $('#report-paste button')[0].disabled = 'disabled';
+
+    if(!notFound) {
+
+        $('[data-container-raw]')[0].value = rawurl;
+        $('[data-raw]')[0].disabled = '';
+    }
+    else
+        $('[data-raw]')[0].disabled = 'disabled';
+
+    $(this).attr('aria-hidden', '');
   }
 
   return {
       'initialize': init,
       'selectPasteWithId': selectPasteWithId,
+      'applyActivePaste': applyActivePaste,
       'tabs': [],
       'pastes': [],
       'hasTabs': false,
