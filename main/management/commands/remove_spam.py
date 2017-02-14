@@ -23,6 +23,7 @@ BODY_TERMS = {
     "-putlocker-",
     "aaaukce.cz",
     "www.victorialostpets.com/",
+    "lolita",
     "ghostsfund",
     "soci,cf",
     "watchhd-",
