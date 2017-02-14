@@ -204,7 +204,7 @@ CLOUDFLARE_API_KEY = "example"
 
 ENABLE_CAPTCHA = False
 
-MAX_COMBINED_PASTES = 3
+MAX_COMBINED_PASTES = 5
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/

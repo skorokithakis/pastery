@@ -160,21 +160,22 @@ def paste(request, paste_id):
     paste_ids = paste_id.split('+')[:settings.MAX_COMBINED_PASTES]
 
     pastes = Paste.active.filter(pk__in=paste_ids)
+    # Create a dictionary of {id: order}.
+    paste_order = {key: count for count, key in enumerate(paste_ids)}
+    # Sort pastes according to the above dictionary.
+    pastes = sorted(pastes, key=lambda paste: paste_order[paste.id])
     for paste in pastes:
         paste.increment_views()
 
     if pastes:
-        data = {
+        return render(request, "paste.html", {
             "pastes": pastes,
             "paste": pastes[0],
             "paste_id": paste_id,
             "has_multiple": len(pastes) > 1
-        }
-
+        })
     else:
         raise Http404
-
-    return render(request, "paste.html", data)
 
 
 def download_paste(request, paste_id):
