@@ -313,10 +313,31 @@ var TabbedPastes = (function() {
             var reporturl = $(this).data('reporturl');
             var rawurl = $(this).data('rawurl');
 
+            var notFound = $(this).hasClass('not-found');
+
+            if(notFound)
+                $('.copy-clipboard').addClass('disabled');
+            else
+                $('.copy-clipboard').removeClass('disabled');
+
             $('[data-container-language]')[0].innerText = language;
             $('[data-container-expiration]')[0].innerText = expires;
-            $('[data-container-report]')[0].action = reporturl;
-            $('[data-container-raw]')[0].value = rawurl;
+
+            if(!notFound) {
+
+                $('#report-paste button')[0].disabled = '';
+                $('[data-container-report]')[0].action = reporturl;
+            }
+            else
+                $('#report-paste button')[0].disabled = 'disabled';
+
+            if(!notFound) {
+
+                $('[data-container-raw]')[0].value = rawurl;
+                $('button[data-original-title="Raw"]')[0].disabled = '';
+            }
+            else
+                $('button[data-original-title="Raw"]')[0].disabled = 'disabled';
 
             $(this).attr('aria-hidden', '');
         }
@@ -352,8 +373,15 @@ var CopyToClipboard = (function() {
 
         if(hasMarkdown)
             code = paste.innerText;
-        else
-            code = document.querySelector('.pretty-paste[aria-hidden=""] .code pre').innerText;
+        else {
+
+            var preElement = document.querySelector('.pretty-paste[aria-hidden=""] .code pre');
+
+            if(!preElement)
+                return;
+
+            code = preElement.innerText;
+        }
 
         var copied = self.copyTextToClipboard(code);
 

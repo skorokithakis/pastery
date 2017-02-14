@@ -79,21 +79,6 @@ Multiple pastes
                     </div>
                 </div>
 
-                <!-- Embed -->
-                <div class="btn-group dropdown-parent" role="group">
-                    <button type="button" title="{% trans "Embed" %}" class="btn btn-default btn-sm dropdown-toggle" type="button" data-placement="tooltip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="glyphicon glyphicon-share" aria-hidden="true"></span> <span class="caret"></span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <div class="btn-group">
-                            <input title="{% trans "Copied!" %}" type="text" value="{% include "embed_code.html" %}" readonly=""/>
-                        </div>
-                        <div class="btn-group action-copy">
-                            <button data-trigger="hover" data-toggle="tooltip" title="{% trans "Copy to clipboard" %}" aria-label="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Raw -->
                 <div class="btn-group dropdown-parent" role="group">
                     <button type="button" title="{% trans "Raw" %}" class="btn btn-default btn-sm dropdown-toggle" type="button" data-placement="tooltip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -102,6 +87,21 @@ Multiple pastes
                     <div class="dropdown-menu dropdown-menu-right">
                         <div class="btn-group">
                             <input data-container-raw title="{% trans "Copied!" %}" type="text" value="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}" readonly=""/>
+                        </div>
+                        <div class="btn-group action-copy">
+                            <button data-trigger="hover" data-toggle="tooltip" title="{% trans "Copy to clipboard" %}" aria-label="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Embed -->
+                <div class="btn-group dropdown-parent" role="group">
+                    <button type="button" title="{% trans "Embed" %}" class="btn btn-default btn-sm dropdown-toggle" type="button" data-placement="tooltip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-share" aria-hidden="true"></span> <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="btn-group">
+                            <input title="{% trans "Copied!" %}" type="text" value="{% include "embed_code.html" %}" readonly=""/>
                         </div>
                         <div class="btn-group action-copy">
                             <button data-trigger="hover" data-toggle="tooltip" title="{% trans "Copy to clipboard" %}" aria-label="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
@@ -129,7 +129,7 @@ Multiple pastes
             {% if has_multiple %}
             <h1 class="tabs">
                 {% for paste in pastes %}
-                <span class="tab{% if forloop.first %} active{% endif %}" data-tab="{{ paste.id }}" href="javascript:void(0);">{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}</span>
+                <span class="tab{% if forloop.first %} active{% endif %}{% if not paste %} not-found{% endif %}" data-tab="{{ paste.id }}" href="javascript:void(0);">{% if paste %}{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}{% else %}Unknown{% endif %}</span>
                 {% endfor %}
             </h1>
             {% elif paste.title %}
@@ -143,11 +143,17 @@ Multiple pastes
         <div    data-pasteid="{{ paste.id }}"
                 data-language="{{ paste.get_language_display }}"
                 data-expires="{% if paste.expiration %}{% blocktrans with paste.expiration|timeuntil as until %}Expires in {{ until }}{% endblocktrans %}{% else %}{% trans "Never expires" %}{% endif %}"
+                {% if paste %}
                 data-reporturl="{% url "main:report-paste" paste.id %}"
                 data-rawurl="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}"
+                {% endif %}
                 aria-hidden="{% if not forloop.first %}true{% endif %}"
-                class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}">
+                class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}{% if not paste %} not-found{% endif %}">
+        {% if paste %}
         {{ paste.rendered_body|safe }}
+        {% else %}
+        Paste expired or not found.
+        {% endif %}
         </div>
     {% endfor %}
 

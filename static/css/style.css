@@ -232,16 +232,30 @@ select:focus {
     font-size: 17px;
 }
 .paste header h1.tabs .tab {
-    padding: 5px 10px 10px;
+    padding: 7px 10px 10px;
     position: relative;
-    top: 24px;
+    top: 23px;
     font-weight: bold;
     cursor: pointer;
+    background: rgba(204, 27, 27, 0.1);
+    transition: .25s background;
+    display: inline-block;
+    max-width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.paste header h1.tabs .tab:not(.active):not(.not-found):hover {
+    background: rgba(204, 27, 27, 0.25);
 }
 .paste header h1.tabs .active {
     background: #CC1B1B;
     color: #fff;
     cursor: default;
+}
+.paste header h1.tabs .not-found {
+    background-color: #ddd;
+    color: #666;
 }
 .paste .button-container {
     position: absolute;
@@ -407,6 +421,9 @@ select:focus {
     background-color: rgba(255, 251, 236, .15);
     box-shadow: inset 0px 1px 0px rgba(0,0,0,0.25),inset 0px -1px 0px rgba(0,0,0,.25);
 }
+.pretty-paste.not-found {
+    padding: 20px 30px;
+}
 .pretty-paste {
     overflow: auto;
 }
@@ -541,6 +558,13 @@ select:focus {
     width: 100px;
 }
 
+@media (max-width: 730px) {
+
+    .paste header h1.tabs .tab {
+        max-width: 54px;
+    }
+}
+
 @media (max-width: 550px) {
 
     .alert {
@@ -592,9 +616,11 @@ select:focus {
     }
     .paste header h1.tabs {
         margin-left: 0;
+        margin-bottom: 0;
     }
     .paste header h1.tabs .tab {
-        top: 8px;
+        top: 3px;
+        max-width: 70px;
     }
     .paste .button-container {
         text-align: right;
