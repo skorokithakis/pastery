@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.core.signing import Signer
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -138,27 +138,44 @@ def home(request):
 
 @xframe_options_exempt
 def embed_paste(request, paste_id):
-    paste = Paste.active.filter(pk=paste_id.lower()).first()
-    if not paste:
+    paste_ids = paste_id.split('+')[:settings.MAX_COMBINED_PASTES]
+
+    pastes = Paste.active.filter(pk__in=paste_ids)
+    if not pastes:
         status = 404
         # Show a specific paste.
-        paste = Paste.active.get(pk="embed404")
+        pastes = [Paste.active.get(pk="embed404")]
     else:
         status = 200
 
     data = {
-        "paste": paste,
+        "pastes": pastes,
         "host": request.GET.get("host", "")
     }
     response = render(request, "embed.html", data, status=status)
     return response
 
 
-@render_to("paste.html")
 def paste(request, paste_id):
-    paste = Paste.get_by_id_or_404(paste_id)
-    paste.increment_views()
-    return {"paste": paste}
+    paste_ids = paste_id.strip("+").split('+')[:settings.MAX_COMBINED_PASTES]
+
+    # Create a dictionary out of the pastes so we can order them.
+    db_pastes = {paste.id: paste for paste in Paste.active.filter(pk__in=paste_ids)}
+    for paste in db_pastes.values():
+        paste.increment_views()
+
+    pastes = [db_pastes.get(paste_id) for paste_id in paste_ids]
+
+    # If there's only one paste id and it wasn't found, raise a 404.
+    if pastes == [None]:
+        raise Http404
+
+    return render(request, "paste.html", {
+        "pastes": pastes,
+        "paste": pastes[0],
+        "paste_id": paste_id,
+        "has_multiple": len(pastes) > 1
+    })
 
 
 def download_paste(request, paste_id):

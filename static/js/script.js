@@ -93,7 +93,7 @@ var UserStyleSelector = (function() {
 
     if($('.account-form select')[0] == undefined)
       return;
-    
+
     var options = $('.account-form select')[0].options;
     var self = this;
 
@@ -193,7 +193,12 @@ var LineSelector = (function() {
 
         event.preventDefault();
 
-        history.pushState(null, null, $(this).attr('href'));
+        var url = $(this).attr('href');
+
+        if(TabbedPastes.hasTabs)
+            url += '-' + TabbedPastes.activePasteId;
+
+        history.pushState(null, null, url);
 
         self.parseHash(false);
       });
@@ -219,7 +224,12 @@ var LineSelector = (function() {
       $('a[href=#l-' + this.lastSelectedLineNumber + ']').removeClass('selected');
     }
 
-    var lineNumber = hash.split(/#l-/)[1];
+    var lineObjects= hash.split(/-/);
+
+    if(lineObjects.length > 2)
+        TabbedPastes.selectPasteWithId(lineObjects[2]);
+
+    var lineNumber = lineObjects[1];
 
     var lineElement = $('#line-' + lineNumber);
 
@@ -252,10 +262,172 @@ var LineSelector = (function() {
   }
 })();
 
+var TabbedPastes = (function() {
+
+  init = function() {
+
+    this.tabs = $('[data-tab]');
+
+    if(this.tabs.length == 0)
+      return;
+
+    this.hasTabs = true;
+    this.pastes = $('[data-pasteid]');
+    this.activePasteId = $('.active[data-tab]')[0].dataset.tab;
+
+    var self = this;
+
+    this.tabs.on('click', function() {
+
+        var pasteId = $(this).data('tab');
+
+        self.selectPasteWithId(pasteId);
+    });
+
+    this.applyActivePaste();
+  },
+
+  selectPasteWithId = function(pasteId) {
+
+    if(this.activePasteId.localeCompare(pasteId) == 0)
+        return;
+
+    this.activePasteId = pasteId;
+
+    $.each(this.tabs, function() {
+
+        var tId = $(this).data('tab');
+
+        if(tId.localeCompare(pasteId) == 0)
+            $(this).addClass('active');
+        else
+            $(this).removeClass('active');
+    });
+
+    $.each(this.pastes, function() {
+
+        var cId = $(this).data('pasteid');
+
+        if(cId.localeCompare(pasteId) == 0) {
+
+            $(this).attr('aria-hidden', '');
+        }
+        else
+            $(this).attr('aria-hidden', 'true');
+    });
+
+    this.applyActivePaste();
+  },
+
+  applyActivePaste = function() {
+
+    var paste= document.querySelector('.pretty-paste[aria-hidden=""]');
+
+    var language = $(paste).data('language');
+    var expires = $(paste).data('expires');
+    var reporturl = $(paste).data('reporturl');
+    var rawurl = $(paste).data('rawurl');
+
+    var notFound = $(paste).hasClass('not-found');
+
+    if(notFound)
+        $('.copy-clipboard').addClass('disabled');
+    else
+        $('.copy-clipboard').removeClass('disabled');
+
+    $('[data-container-language]')[0].innerText = language;
+    $('[data-container-expiration]')[0].innerText = expires;
+
+    if(!notFound) {
+
+        $('#report-paste button')[0].disabled = '';
+        $('[data-container-report]')[0].action = reporturl;
+    }
+    else
+        $('#report-paste button')[0].disabled = 'disabled';
+
+    if(!notFound) {
+
+        $('[data-container-raw]')[0].value = rawurl;
+        $('[data-raw]')[0].disabled = '';
+    }
+    else
+        $('[data-raw]')[0].disabled = 'disabled';
+
+    $(this).attr('aria-hidden', '');
+  }
+
+  return {
+      'initialize': init,
+      'selectPasteWithId': selectPasteWithId,
+      'applyActivePaste': applyActivePaste,
+      'tabs': [],
+      'pastes': [],
+      'hasTabs': false,
+      'activePasteId': ''
+  }
+
+})();
+
+var CopyToClipboard = (function() {
+
+  init = function() {
+
+    var self = this;
+
+    $('.copy-clipboard').on('click', function() {
+
+        var element = $(this);
+
+        var paste= document.querySelector('.pretty-paste[aria-hidden=""]');
+        var hasMarkdown = (paste.className.indexOf('markdown-language') > 0);
+        var code = '';
+
+        if(hasMarkdown)
+            code = paste.innerText;
+        else {
+
+            var preElement = document.querySelector('.pretty-paste[aria-hidden=""] .code pre');
+
+            if(!preElement)
+                return;
+
+            code = preElement.innerText;
+        }
+
+        var copied = self.copyTextToClipboard(code);
+
+        if(copied) {
+
+            $(element).tooltip({title: 'Copied!'});
+            $(element).tooltip('show');
+
+            setTimeout(function() {
+
+              $(element).tooltip('destroy');
+
+            }, 1000);
+        }
+
+    });
+  },
+
+  copyTextToClipboard = function(a){
+    var b=document.createElement("textarea");b.style.position="fixed",b.style.top=0,b.style.left=0,b.style.width="2em",b.style.height="2em",b.style.padding=0,b.style.border="none",b.style.outline="none",b.style.boxShadow="none",b.style.background="transparent",b.value=a,document.body.appendChild(b),b.select();var c=!1;try{c=document.execCommand("copy")}catch(a){}return document.body.removeChild(b),c
+  }
+
+  return {
+      'initialize': init,
+      'copyTextToClipboard': copyTextToClipboard
+  }
+})();
+
 $(document).ready(function() {
 
   autosize($('textarea'));
 
+  CopyToClipboard.initialize();
+  TabbedPastes.initialize();
   LineSelector.initialize();
   ConfirmAction.initialize();
   UserStyleSelector.initialize();

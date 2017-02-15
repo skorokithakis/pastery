@@ -227,6 +227,36 @@ select:focus {
     margin: 0;
     padding-right: 220px;
 }
+.paste header h1.tabs {
+    margin-left: 12px;
+    font-size: 17px;
+}
+.paste header h1.tabs .tab {
+    padding: 7px 10px 10px;
+    position: relative;
+    top: 23px;
+    font-weight: bold;
+    cursor: pointer;
+    background: rgba(204, 27, 27, 0.1);
+    transition: .25s background;
+    display: inline-block;
+    max-width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.paste header h1.tabs .tab:not(.active):not(.not-found):hover {
+    background: rgba(204, 27, 27, 0.25);
+}
+.paste header h1.tabs .active {
+    background: #CC1B1B;
+    color: #fff;
+    cursor: default;
+}
+.paste header h1.tabs .not-found {
+    background-color: #ddd;
+    color: #666;
+}
 .paste .button-container {
     position: absolute;
     bottom: 0;
@@ -394,12 +424,14 @@ select:focus {
 .pretty-paste {
     overflow: auto;
 }
+.pretty-paste[aria-hidden="true"] {
+    visibility: hidden;
+    display: none;
+}
 .pretty-paste.markdown-language {
     padding: 10px 15px 0;
     background: #E6E2D4;
     color: #333;
-    max-width: 950px;
-    margin: 0 auto;
 }
 .pretty-paste.markdown-language h1,
 .pretty-paste.markdown-language h2,
@@ -523,6 +555,13 @@ select:focus {
     width: 100px;
 }
 
+@media (max-width: 730px) {
+
+    .paste header h1.tabs .tab {
+        max-width: 54px;
+    }
+}
+
 @media (max-width: 550px) {
 
     .alert {
@@ -572,6 +611,14 @@ select:focus {
         padding-right: 0;
         font-size: 22px;
     }
+    .paste header h1.tabs {
+        margin-left: 0;
+        margin-bottom: 0;
+    }
+    .paste header h1.tabs .tab {
+        top: 3px;
+        max-width: 70px;
+    }
     .paste .button-container {
         text-align: right;
         position: static;
@@ -604,6 +651,7 @@ select:focus {
     }
     .paste .button-container button,
     .paste .button-container #delete-paste,
+    .paste .button-container a.copy-clipboard,
     .paste .button-container a.admin-button {
         border-radius: 0;
         border: none;

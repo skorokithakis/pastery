@@ -13,25 +13,96 @@
     <body>
         <article class="paste" id="paste-embed">
 
-            <div class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}">
-            {{ paste.rendered_body|safe }}
-            </div>
+            {% for paste in pastes %}
+                <div data-tabcontent="{{ paste.id }}" aria-hidden="{% if forloop.counter0 > 0 %}true{% endif %}" data-rawurl="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}" class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}">
+                {{ paste.rendered_body|safe }}
+                </div>
+            {% endfor %}
 
             <footer>
+                {% if pastes|length > 1 %}
+                {% for paste in pastes %}
+                <span class="tab{% if forloop.counter0 == 0 %} active{% endif %}" data-tab="{{ paste.id }}" href="javascript:void(0);">{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}</span>
+                {% endfor %}
+                {% else %}
                 <a target="_blank" href="{{ paste.get_full_url }}">{% if paste.title %}{{ paste }}{% else %}{% trans "Paste" %}{% endif %}</a>
+                {% endif %}
                 {% trans "hosted by" %}
                 <a target="_blank" class="website" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url 'main:home' %}" title="{{ current_site.name }}">{{ current_site.name }}</a>
-                <a target="_blank" class="raw" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}">Raw</a>
+                <span class="copy" data-copy>Copy</span>
+                <span class="raw" data-raw>Raw</span>
             </footer>
         </article>
         <script>
+        function copyTextToClipboard(a){var b=document.createElement("textarea");b.style.position="fixed",b.style.top=0,b.style.left=0,b.style.width="2em",b.style.height="2em",b.style.padding=0,b.style.border="none",b.style.outline="none",b.style.boxShadow="none",b.style.background="transparent",b.value=a,document.body.appendChild(b),b.select();var c=!1;try{c=document.execCommand("copy")}catch(a){}return document.body.removeChild(b),c}
+
         window.addEventListener('DOMContentLoaded', function() {
 
+            var tabs = document.querySelectorAll('[data-tab]');
+
+            for (var i = 0; i < tabs.length; ++i) {
+
+                var tabContents = document.querySelectorAll('[data-tabcontent]');
+
+                tabs[i].addEventListener('click', function() {
+
+                    var tabId = this.dataset.tab;
+
+                    for (var k = 0; k < tabs.length; ++k) {
+
+                        var tab = tabs[k];
+                        var tId = tab.dataset.tab;
+
+                        if(tabId.localeCompare(tId) == 0)
+                            tab.className = 'tab active';
+                        else
+                            tab.className = 'tab';
+                    }
+
+                    for (var j = 0; j < tabContents.length; ++j) {
+
+                        var tabContent = tabContents[j];
+                        var contentId = tabContent.dataset.tabcontent;
+
+                        if(contentId.localeCompare(tabId) == 0)
+                            tabContent.setAttribute('aria-hidden', '');
+                        else
+                            tabContent.setAttribute('aria-hidden', 'true');
+                    }
+                });
+            }
+
+            document.querySelector('span[data-raw]').addEventListener('click', function() {
+
+                window.open(document.querySelector('.pretty-paste[aria-hidden=""]').dataset.rawurl, '_blank');
+            });
+
+            document.querySelector('span[data-copy]').addEventListener('click', function() {
+
+                var paste= document.querySelector('.pretty-paste[aria-hidden=""]');
+                var hasMarkdown = (paste.className.indexOf('markdown-language') > 0);
+                var code = '';
+
+                if(hasMarkdown)
+                    code = paste.innerText;
+                else
+                    code = document.querySelector('.pretty-paste[aria-hidden=""] .code pre').innerText;
+
+                var copyElement = this;
+
+                copyElement.innerText = (copyTextToClipboard(code) ? 'Copied!' : 'Error :(');
+
+                setTimeout(function() { copyElement.innerText = 'Copy'; }, 1000);
+            });
+
+            {% if host %}
             var height = document.getElementById('paste-embed').offsetHeight;
 
             window.parent.postMessage({ 'height': height,
                                         'paste-id': '{{ paste.id }}'
                                     }, '{{ host }}');
+
+            {% endif %}
 
         }, false);
         </script>

@@ -109,6 +109,10 @@ h1, h2, h3, h4, h5, h6 {
     color: #333;
     text-decoration: underline;
 }
+.pretty-paste[aria-hidden="true"] {
+    visibility: hidden;
+    display: none;
+}
 footer {
     background-color: #FFFBEC;
     color: #737373;
@@ -117,10 +121,30 @@ footer {
     font-size: 12px;
     position: relative;
 }
+footer .copy,
+footer .raw,
 footer a {
     color: #737373;
     font-weight: bold;
     text-decoration: none;
+    cursor: pointer;
+}
+footer .tab {
+    position: relative;
+    left: -7px;
+    padding: 7px;
+    color: #737373;
+    font-weight: bold;
+    text-decoration: none;
+}
+footer .tab:not(.active):hover {
+    background: rgba(204, 27, 27, 0.5);
+    color: #fff;
+    cursor: pointer;
+}
+footer .active {
+    background: #CC1B1B;
+    color: #fff;
 }
 footer a:hover {
     text-decoration: underline;
@@ -128,12 +152,19 @@ footer a:hover {
 footer a.website {
     color: #CC1B1B;
 }
+footer .copy {
+    position: absolute;
+    right: 45px;
+    padding: 7px;
+    top: 0;
+}
 footer .raw {
     position: absolute;
     right: 0;
     top: 0;
     padding: 7px;
 }
+footer .copy:hover,
 footer .raw:hover {
     background-color: #CC1B1B;
     color: #fff;
