@@ -266,6 +266,8 @@ var TabbedPastes = (function() {
 
   init = function() {
 
+    this.applyActivePaste();
+
     this.tabs = $('[data-tab]');
 
     if(this.tabs.length == 0)
@@ -283,8 +285,6 @@ var TabbedPastes = (function() {
 
         self.selectPasteWithId(pasteId);
     });
-
-    this.applyActivePaste();
   },
 
   selectPasteWithId = function(pasteId) {
