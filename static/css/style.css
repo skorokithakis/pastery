@@ -230,20 +230,21 @@ select:focus {
 .paste header h1.tabs {
     margin-left: 12px;
     font-size: 17px;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+    overflow-x: scroll;
+    margin-bottom: 0;
+    top: 20px
 }
 .paste header h1.tabs .tab {
     padding: 7px 10px 10px;
-    position: relative;
-    top: 23px;
     font-weight: bold;
     cursor: pointer;
     background: rgba(204, 27, 27, 0.1);
     transition: .25s background;
     display: inline-block;
-    max-width: 100px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
 }
 .paste header h1.tabs .tab:not(.active):not(.not-found):hover {
     background: rgba(204, 27, 27, 0.25);
@@ -261,6 +262,7 @@ select:focus {
     position: absolute;
     bottom: 0;
     right: 0;
+    z-index: 3;
 }
 .paste .button-container .dropdown-toggle:focus,
 .paste .button-container .dropdown-toggle:hover,
@@ -555,13 +557,6 @@ select:focus {
     width: 100px;
 }
 
-@media (max-width: 730px) {
-
-    .paste header h1.tabs .tab {
-        max-width: 54px;
-    }
-}
-
 @media (max-width: 550px) {
 
     .alert {
@@ -613,11 +608,7 @@ select:focus {
     }
     .paste header h1.tabs {
         margin-left: 0;
-        margin-bottom: 0;
-    }
-    .paste header h1.tabs .tab {
-        top: 3px;
-        max-width: 70px;
+        top: 0;
     }
     .paste .button-container {
         text-align: right;

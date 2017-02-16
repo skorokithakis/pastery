@@ -266,6 +266,8 @@ var TabbedPastes = (function() {
 
   init = function() {
 
+    this.applyActivePaste();
+
     this.tabs = $('[data-tab]');
 
     if(this.tabs.length == 0)
@@ -283,8 +285,6 @@ var TabbedPastes = (function() {
 
         self.selectPasteWithId(pasteId);
     });
-
-    this.applyActivePaste();
   },
 
   selectPasteWithId = function(pasteId) {
@@ -331,28 +331,32 @@ var TabbedPastes = (function() {
     var notFound = $(paste).hasClass('not-found');
 
     if(notFound)
-        $('.copy-clipboard').addClass('disabled');
+      $('.copy-clipboard').addClass('disabled');
     else
-        $('.copy-clipboard').removeClass('disabled');
+      $('.copy-clipboard').removeClass('disabled');
 
     $('[data-container-language]')[0].innerText = language;
     $('[data-container-expiration]')[0].innerText = expires;
 
     if(!notFound) {
 
-        $('#report-paste button')[0].disabled = '';
-        $('[data-container-report]')[0].action = reporturl;
+      $('.meta-footer')[0].style.display = 'block';
+      $('#report-paste button')[0].disabled = '';
+      $('[data-container-report]')[0].action = reporturl;
     }
-    else
-        $('#report-paste button')[0].disabled = 'disabled';
+    else {
+
+      $('.meta-footer')[0].style.display = 'none';
+      $('#report-paste button')[0].disabled = 'disabled';
+    }
 
     if(!notFound) {
 
-        $('[data-container-raw]')[0].value = rawurl;
-        $('[data-raw]')[0].disabled = '';
+      $('[data-container-raw]')[0].value = rawurl;
+      $('[data-raw]')[0].disabled = '';
     }
     else
-        $('[data-raw]')[0].disabled = 'disabled';
+      $('[data-raw]')[0].disabled = 'disabled';
 
     $(this).attr('aria-hidden', '');
   }
@@ -374,6 +378,15 @@ var CopyToClipboard = (function() {
   init = function() {
 
     var self = this;
+
+    var support = !!document.queryCommandSupported;
+    support = support && !!document.queryCommandSupported('copy');
+
+    if(!support) {
+
+      $('.copy-clipboard').each(function() { this.parentElement.style.display = 'none'; })
+      return;
+    }
 
     $('.copy-clipboard').on('click', function() {
 
