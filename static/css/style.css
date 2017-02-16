@@ -238,18 +238,6 @@ select:focus {
     margin-bottom: 0;
     top: 20px
 }
-/*
-.paste header h1.tabs:after {
-    content: '';
-    position: absolute;
-    background: red;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    box-shadow: inset 0 0 -100px 100px blue;
-}
-*/
 .paste header h1.tabs .tab {
     padding: 7px 10px 10px;
     font-weight: bold;
