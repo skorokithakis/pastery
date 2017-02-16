@@ -227,16 +227,37 @@ select:focus {
     margin: 0;
     padding-right: 220px;
 }
+.paste header .tab-arrow {
+    position: absolute;
+    top: 30px;
+    display: none;
+    color: rgba(204, 27, 27, 0.5);
+    transition: .25s color ease-in;
+    cursor: pointer;
+}
+.paste header .tab-arrow:hover {
+    color: rgba(204, 27, 27, 1.0);
+}
+.paste header.enabled .tab-arrow {
+    display: block;
+}
+.paste header .tab-arrow.right {
+    right: 178px;
+}
+.paste header .tab-arrow.left {
+    left: -8px;
+}
 .paste header h1.tabs {
-    margin-left: 12px;
     font-size: 17px;
     padding: 0;
     position: relative;
     z-index: 1;
     white-space: nowrap;
     overflow-x: scroll;
-    margin-bottom: 0;
-    top: 20px
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    top: 20px;
+    margin: 0 200px 0 12px;
 }
 .paste header h1.tabs .tab {
     padding: 7px 10px 10px;
@@ -559,6 +580,24 @@ select:focus {
 
 @media (max-width: 550px) {
 
+    .paste header .tab-arrow.left {
+        left: 7px;
+    }
+    .paste header .tab-arrow.right {
+        right: 7px;
+    }
+    .paste header .tab-arrow {
+        top: auto;
+        bottom: 12px;
+    }
+    .paste header h1.tabs {
+        margin: 0;
+        top: 0;
+    }
+    .paste header.enabled h1.tabs {
+        margin: 0 17px;
+    }
+
     .alert {
         margin: 0 15px 20px;
     }
@@ -606,10 +645,6 @@ select:focus {
         padding-right: 0;
         font-size: 22px;
     }
-    .paste header h1.tabs {
-        margin-left: 0;
-        top: 0;
-    }
     .paste .button-container {
         text-align: right;
         position: static;
@@ -651,6 +686,7 @@ select:focus {
         top: 1px;
         cursor: default;
         left: 1px;
+        display: block;
     }
     .paste .button-container .dropdown-toggle:hover,
     .paste .button-container .open .dropdown-toggle:focus,
@@ -676,6 +712,9 @@ select:focus {
         border-radius: 0;
         border: none;
         margin: 0;
+    }
+    .paste .button-container .pseudo-dropdown {
+        height: 34px;
     }
     .paste .button-container .pseudo-dropdown,
     .paste .button-container input {

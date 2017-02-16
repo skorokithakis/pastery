@@ -273,6 +273,9 @@ var TabbedPastes = (function() {
     if(this.tabs.length == 0)
       return;
 
+    this.tabsParent = $('h1.tabs')[0];
+    this.tabArrows = $('[data-arrow]');
+
     this.hasTabs = true;
     this.pastes = $('[data-pasteid]');
     this.activePasteId = $('.active[data-tab]')[0].dataset.tab;
@@ -285,6 +288,43 @@ var TabbedPastes = (function() {
 
         self.selectPasteWithId(pasteId);
     });
+
+    $.each(this.tabArrows, function() {
+
+        $(this).on('click', function() {
+
+            var data = parseInt($(this).data('arrow'));
+
+            if(data == -1)
+                self.tabsParent.scrollLeft = 0;
+            else
+                self.tabsParent.scrollLeft = self.tabsParent.scrollWidth - self.tabsParent.clientWidth;
+        });
+    });
+
+    window.addEventListener('resize', this.resized.bind(this));
+
+    this.resized();
+  },
+
+  resized = function() {
+
+    var tabsWidth = 0;
+
+    $.each(this.tabs, function() {
+        tabsWidth += this.clientWidth;
+    });
+
+    var hasArrows = $(this.tabsParent.parentElement).hasClass('enabled');
+    var shouldShowArrows = (this.tabsParent.clientWidth <= tabsWidth);
+
+    if(hasArrows == shouldShowArrows)
+        return;
+
+    if(shouldShowArrows)
+        $(this.tabsParent.parentElement).addClass('enabled');
+    else
+        $(this.tabsParent.parentElement).removeClass('enabled');
   },
 
   selectPasteWithId = function(pasteId) {
@@ -365,6 +405,7 @@ var TabbedPastes = (function() {
       'initialize': init,
       'selectPasteWithId': selectPasteWithId,
       'applyActivePaste': applyActivePaste,
+      'resized': resized,
       'tabs': [],
       'pastes': [],
       'hasTabs': false,
@@ -375,64 +416,119 @@ var TabbedPastes = (function() {
 
 var CopyToClipboard = (function() {
 
-  init = function() {
+    init = function() {
 
-    var self = this;
+        var self = this;
 
-    var support = !!document.queryCommandSupported;
-    support = support && !!document.queryCommandSupported('copy');
+        var support = !!document.queryCommandSupported;
+        support = support && !!document.queryCommandSupported('copy');
 
-    if(!support) {
+        if(!support) {
 
-      $('.copy-clipboard').each(function() { this.parentElement.style.display = 'none'; })
-      return;
+          $('.copy-clipboard').each(function() { this.parentElement.style.display = 'none'; })
+          return;
+        }
+
+        $('.copy-clipboard').on('click', function() {
+
+            var element = $(this);
+
+            var paste= document.querySelector('.pretty-paste[aria-hidden=""]');
+            var hasMarkdown = (paste.className.indexOf('markdown-language') > 0);
+            var code = '';
+
+            if(hasMarkdown)
+                code = paste.innerText;
+            else {
+
+                var preElement = document.querySelector('.pretty-paste[aria-hidden=""] .code pre');
+
+                if(!preElement)
+                    return;
+
+                code = preElement.innerText;
+            }
+
+            var copied = self.copyTextToClipboard(code);
+
+            if(copied) {
+
+                $(element).tooltip({title: 'Copied!'});
+                $(element).tooltip('show');
+
+                setTimeout(function() {
+
+                  $(element).tooltip('destroy');
+
+                }, 1000);
+            }
+        });
+    },
+
+    removeFake = function() {
+
+        if (this.fakeHandler) {
+
+            document.body.removeEventListener('click', this.fakeHandlerCallback);
+            this.fakeHandler = null;
+            this.fakeHandlerCallback = null;
+        }
+
+        if (this.fakeElem) {
+            document.body.removeChild(this.fakeElem);
+            this.fakeElem = null;
+        }
+    },
+
+    copyTextFromElement = function(element) {
+
+        element.select();
+        element.setSelectionRange(0, element.value.length);
+
+        var succeeded = false;
+
+        try {
+            succeeded = document.execCommand('copy');
+        }
+        catch (err) {
+            succeeded = false;
+        }
+
+        return succeeded;
+    },
+
+    copyTextToClipboard = function(text){
+
+        this.removeFake();
+
+        var self = this;
+
+        this.fakeHandlerCallback = function() { self.removeFake(); };
+
+        this.fakeHandler = document.body.addEventListener('click', this.fakeHandlerCallback) || true;
+
+        this.fakeElem = document.createElement('textarea');
+        this.fakeElem.style.fontSize = '12pt';
+        this.fakeElem.style.border = '0';
+        this.fakeElem.style.padding = '0';
+        this.fakeElem.style.margin = '0';
+        this.fakeElem.style.position = 'absolute';
+        this.fakeElem.style[ document.documentElement.getAttribute('dir') == 'rtl' ? 'right' : 'left' ] = '-9999px';
+        this.fakeElem.style.top = (window.pageYOffset || document.documentElement.scrollTop) + 'px';
+        this.fakeElem.setAttribute('readonly', '');
+        this.fakeElem.value = text;
+
+        document.body.appendChild(this.fakeElem);
+
+        return this.copyTextFromElement(this.fakeElem);
     }
 
-    $('.copy-clipboard').on('click', function() {
-
-        var element = $(this);
-
-        var paste= document.querySelector('.pretty-paste[aria-hidden=""]');
-        var hasMarkdown = (paste.className.indexOf('markdown-language') > 0);
-        var code = '';
-
-        if(hasMarkdown)
-            code = paste.innerText;
-        else {
-
-            var preElement = document.querySelector('.pretty-paste[aria-hidden=""] .code pre');
-
-            if(!preElement)
-                return;
-
-            code = preElement.innerText;
-        }
-
-        var copied = self.copyTextToClipboard(code);
-
-        if(copied) {
-
-            $(element).tooltip({title: 'Copied!'});
-            $(element).tooltip('show');
-
-            setTimeout(function() {
-
-              $(element).tooltip('destroy');
-
-            }, 1000);
-        }
-
-    });
-  },
-
-  copyTextToClipboard = function(a){
-    var b=document.createElement("textarea");b.style.position="fixed",b.style.top=0,b.style.left=0,b.style.width="2em",b.style.height="2em",b.style.padding=0,b.style.border="none",b.style.outline="none",b.style.boxShadow="none",b.style.background="transparent",b.value=a,document.body.appendChild(b),b.select();var c=!1;try{c=document.execCommand("copy")}catch(a){}return document.body.removeChild(b),c
-  }
-
-  return {
-      'initialize': init,
-      'copyTextToClipboard': copyTextToClipboard
-  }
+    return {
+        'initialize': init,
+        'copyTextToClipboard': copyTextToClipboard,
+        'copyTextFromElement': copyTextFromElement,
+        'removeFake': removeFake
+    }
 })();
 
 $(document).ready(function() {

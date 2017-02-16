@@ -132,6 +132,8 @@ Multiple pastes
                 <span class="tab{% if forloop.first %} active{% endif %}{% if not paste %} not-found{% endif %}" data-tab="{{ paste.id }}" href="javascript:void(0);">{% if paste %}{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}{% else %}Unknown{% endif %}</span>
                 {% endfor %}
             </h1>
+            <span class="tab-arrow left glyphicon glyphicon-arrow-left" aria-hidden="true" data-arrow="-1"></span>
+            <span class="tab-arrow right glyphicon glyphicon-arrow-right" aria-hidden="true" data-arrow="1"></span>
             {% elif paste.title %}
             <h1>{{ paste }}</h1>
             {% endif %}
