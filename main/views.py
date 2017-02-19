@@ -170,11 +170,16 @@ def paste(request, paste_id):
     if pastes == [None]:
         raise Http404
 
+    has_multiple = len(pastes) > 1
+
+    show_full = (has_multiple or (pastes[0].language != 'markdown' and pastes[0].language != 'textile'))
+
     return render(request, "paste.html", {
         "pastes": pastes,
         "paste": pastes[0],
         "paste_id": paste_id,
-        "has_multiple": len(pastes) > 1
+        "has_multiple": has_multiple,
+        "show_full": show_full,
     })
 
 
