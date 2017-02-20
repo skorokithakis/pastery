@@ -126,6 +126,8 @@ var UserStyleSelector = (function() {
 
         self.changeStyle();
       }
+      else
+        self.changeStyle();
     });
 
     $('.account-form select').on('change', function() {
@@ -266,6 +268,9 @@ var TabbedPastes = (function() {
 
   init = function() {
 
+    if($('.page-paste').length == 0)
+        return;
+
     this.applyActivePaste();
 
     this.tabs = $('[data-tab]');
@@ -370,10 +375,14 @@ var TabbedPastes = (function() {
 
     var notFound = $(paste).hasClass('not-found');
 
-    if(notFound)
+    if(notFound) {
       $('.copy-clipboard').addClass('disabled');
-    else
+      $('.copy-clipboard+.pseudo-dropdown .btn-group')[0].innerText = 'Not available';
+    }
+    else {
       $('.copy-clipboard').removeClass('disabled');
+      $('.copy-clipboard+.pseudo-dropdown .btn-group')[0].innerText = 'Copy to clipboard';
+    }
 
     $('[data-container-language]')[0].innerText = language;
     $('[data-container-expiration]')[0].innerText = expires;
@@ -395,8 +404,11 @@ var TabbedPastes = (function() {
       $('[data-container-raw]')[0].value = rawurl;
       $('[data-raw]')[0].disabled = '';
     }
-    else
+    else {
+
+      $('[data-container-raw]')[0].value = 'Not available';
       $('[data-raw]')[0].disabled = 'disabled';
+    }
 
     $(this).attr('aria-hidden', '');
   }

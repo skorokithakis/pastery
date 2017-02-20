@@ -349,16 +349,20 @@ select:focus {
     border-radius: 0;
 }
 
-.page-paste .top-header .container {
+.paste-full .top-header .container {
     max-width: 100%;
     width: 100%;
     padding: 0;
 }
-.page-paste .paste .container {
+.paste-full .paste .container {
     width: 100%;
     max-width: 100%;
 }
-.page-paste .top-header .persona {
+/*.page-paste .paste .container {
+    width: 100%;
+    max-width: 100%;
+}
+*/.page-paste .top-header .persona {
     right: 0;
 }
 
@@ -455,6 +459,12 @@ select:focus {
     padding: 10px 15px 0;
     background: #E6E2D4;
     color: #333;
+    max-width: 950px;
+    margin: 0 auto;
+}
+.paste-full .pretty-paste.markdown-language {
+    max-width: 100%;
+    margin: 0;
 }
 .pretty-paste.markdown-language h1,
 .pretty-paste.markdown-language h2,

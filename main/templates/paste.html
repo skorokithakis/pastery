@@ -27,7 +27,7 @@ Multiple pastes
 <meta property="og:image" content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% static "images/icons/favicon-32x32.png" %}"/>
 {% endblock %}
 
-{% block pageclass %}page-paste{% endblock %}
+{% block pageclass %}page-paste{% if show_full %} paste-full{% endif %}{% endblock %}
 
 {% block extrahead %}
 {% if not has_multiple %}
