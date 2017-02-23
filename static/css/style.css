@@ -279,6 +279,10 @@ select:focus {
     background-color: #ddd;
     color: #666;
 }
+.paste header h1.tabs .not-found.active {
+    background-color: #666;
+    color: #ddd;
+}
 .paste .button-container {
     position: absolute;
     bottom: 0;

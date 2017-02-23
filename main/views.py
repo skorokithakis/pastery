@@ -140,11 +140,16 @@ def home(request):
 def embed_paste(request, paste_id):
     paste_ids = paste_id.split('+')[:settings.MAX_COMBINED_PASTES]
 
-    pastes = Paste.active.filter(pk__in=paste_ids)
-    if not pastes:
+    # Create a dictionary out of the pastes so we can order them.
+    db_pastes = {paste.id: paste for paste in Paste.active.filter(pk__in=paste_ids)}
+    for paste in db_pastes.values():
+        paste.increment_views()
+
+    pastes = [db_pastes.get(pasteid) for pasteid in paste_ids]
+
+    # If there's only one paste id and it wasn't found, raise a 404.
+    if pastes == [None]:
         status = 404
-        # Show a specific paste.
-        pastes = [Paste.active.get(pk="embed404")]
     else:
         status = 200
 
@@ -164,7 +169,7 @@ def paste(request, paste_id):
     for paste in db_pastes.values():
         paste.increment_views()
 
-    pastes = [db_pastes.get(paste_id) for paste_id in paste_ids]
+    pastes = [db_pastes.get(pasteid) for pasteid in paste_ids]
 
     # If there's only one paste id and it wasn't found, raise a 404.
     if pastes == [None]:
