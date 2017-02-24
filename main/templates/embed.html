@@ -14,15 +14,19 @@
         <article class="paste" id="paste-embed">
 
             {% for paste in pastes %}
-                <div data-tabcontent="{{ paste.id }}" aria-hidden="{% if forloop.counter0 > 0 %}true{% endif %}" data-rawurl="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}" class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}">
+                <div data-tabcontent="{{ paste.id }}" aria-hidden="{% if forloop.counter0 > 0 %}true{% endif %}" {% if paste %}data-rawurl="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}"{% endif %} class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}">
+                {% if paste %}
                 {{ paste.rendered_body|safe }}
+                {% else %}
+                {% include "404_body.html" %}
+                {% endif %}
                 </div>
             {% endfor %}
 
             <footer>
                 {% if pastes|length > 1 %}
                 {% for paste in pastes %}
-                <span class="tab{% if forloop.counter0 == 0 %} active{% endif %}" data-tab="{{ paste.id }}" href="javascript:void(0);">{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}</span>
+                <span class="tab{% if forloop.counter0 == 0 %} active{% endif %}" data-tab="{{ paste.id }}" href="javascript:void(0);">{% if paste %}{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}{% else %}Unknown{% endif %}</span>
                 {% endfor %}
                 {% else %}
                 <a target="_blank" href="{{ paste.get_full_url }}">{% if paste.title %}{{ paste }}{% else %}{% trans "Paste" %}{% endif %}</a>
@@ -34,11 +38,12 @@
             </footer>
         </article>
         <script>
-        function copyTextToClipboard(a){var b=document.createElement("textarea");b.style.position="fixed",b.style.top=0,b.style.left=0,b.style.width="2em",b.style.height="2em",b.style.padding=0,b.style.border="none",b.style.outline="none",b.style.boxShadow="none",b.style.background="transparent",b.value=a,document.body.appendChild(b),b.select();var c=!1;try{c=document.execCommand("copy")}catch(a){}return document.body.removeChild(b),c}
+        function copyTextToClipboard(a){var b=document.createElement("textarea");b.style.position="fixed",b.style.top=0,b.style.left=0,b.style.width="2em",b.style.height="2em",b.style.padding=0,b.style.border="none",b.style.outline="none",b.style.boxShadow="none",b.style.background="transparent",b.value=a,document.body.appendChild(b),b.select();b.setSelectionRange(0, b.value.length);var c=!1;try{c=document.execCommand("copy")}catch(a){}return document.body.removeChild(b),c}
 
         window.addEventListener('DOMContentLoaded', function() {
 
             var tabs = document.querySelectorAll('[data-tab]');
+            var activePasteId = document.querySelector('.active[data-tab]').dataset.tab;
 
             for (var i = 0; i < tabs.length; ++i) {
 
@@ -48,24 +53,45 @@
 
                     var tabId = this.dataset.tab;
 
+                    if(activePasteId.localeCompare(tabId) == 0)
+                        return;
+
+                    activePasteId = tabId;
+
+                    var hasActivated = false;
+
                     for (var k = 0; k < tabs.length; ++k) {
 
                         var tab = tabs[k];
                         var tId = tab.dataset.tab;
 
-                        if(tabId.localeCompare(tId) == 0)
-                            tab.className = 'tab active';
+                        if(tabId.localeCompare(tId) == 0) {
+
+                            if(!hasActivated) {
+
+                                tab.className = 'tab active';
+                                hasActivated = true;
+                            }
+                        }
                         else
                             tab.className = 'tab';
                     }
+
+                    hasActivated = false;
 
                     for (var j = 0; j < tabContents.length; ++j) {
 
                         var tabContent = tabContents[j];
                         var contentId = tabContent.dataset.tabcontent;
 
-                        if(contentId.localeCompare(tabId) == 0)
-                            tabContent.setAttribute('aria-hidden', '');
+                        if(contentId.localeCompare(tabId) == 0) {
+
+                            if(!hasActivated) {
+
+                                tabContent.setAttribute('aria-hidden', '');
+                                hasActivated = true;
+                            }
+                        }
                         else
                             tabContent.setAttribute('aria-hidden', 'true');
                     }
@@ -74,7 +100,12 @@
 
             document.querySelector('span[data-raw]').addEventListener('click', function() {
 
-                window.open(document.querySelector('.pretty-paste[aria-hidden=""]').dataset.rawurl, '_blank');
+                var rawurl = document.querySelector('.pretty-paste[aria-hidden=""]').dataset.rawurl;
+
+                if(typeof rawurl == 'undefined')
+                    return;
+
+                window.open(rawurl, '_blank');
             });
 
             document.querySelector('span[data-copy]').addEventListener('click', function() {

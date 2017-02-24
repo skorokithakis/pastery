@@ -339,15 +339,25 @@ var TabbedPastes = (function() {
 
     this.activePasteId = pasteId;
 
+    var hasActivated = false;
+
     $.each(this.tabs, function() {
 
         var tId = $(this).data('tab');
 
-        if(tId.localeCompare(pasteId) == 0)
-            $(this).addClass('active');
+        if(tId.localeCompare(pasteId) == 0) {
+
+            if(!hasActivated) {
+
+                $(this).addClass('active');
+                hasActivated = true;
+            }
+        }
         else
             $(this).removeClass('active');
     });
+
+    hasActivated = false;
 
     $.each(this.pastes, function() {
 
@@ -355,7 +365,11 @@ var TabbedPastes = (function() {
 
         if(cId.localeCompare(pasteId) == 0) {
 
-            $(this).attr('aria-hidden', '');
+            if(!hasActivated) {
+
+                $(this).attr('aria-hidden', '');
+                hasActivated = true;
+            }
         }
         else
             $(this).attr('aria-hidden', 'true');
