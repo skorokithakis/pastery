@@ -51,8 +51,8 @@ class PasteForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        if cleaned_data.get("work", ""):
-            raise forms.ValidationError(_("Please stop being a bot and try pasting again."))
+        if cleaned_data.get("work", "") != "I'm not a bot, promise":
+            raise forms.ValidationError(_("Please enable Javascript and try pasting again."))
         return cleaned_data
 
     class Meta:

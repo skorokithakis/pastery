@@ -34,12 +34,8 @@
             </div>
             {% endif %}
 
-            <div style="display: none">
-                {{ form.work.errors }}
-                {{ form.work }}
-            </div>
-
             {% buttons %}
+            {{ form.work.as_hidden }}
             <button type="submit" tabindex="3" class="btn btn-primary">{% trans "Create" %}</button>
             {% endbuttons %}
         </form>
