@@ -12,6 +12,7 @@ TITLE_TERMS = {
     "watch ",
     "stream",
     "episode",
+    "bank",
 }
 
 BODY_TERMS = {
@@ -114,6 +115,7 @@ def calculate_link_ratio(text):
 
 
 def ban_ip(ip):
+    print("Banning %s..." % ip)
     url = "https://api.cloudflare.com/client/v4/zones/f1928f8f37c9e76fc7c99a7cc9455702/firewall/access_rules/rules"
     r = requests.post(
         url,
@@ -140,25 +142,13 @@ class Command(BaseCommand):
         counter = 0
         for term in BODY_TERMS:
             pastes = Paste.objects.filter(body__contains=term, user=None)
-            for paste in pastes:
-                print("Banning %s..." % paste.user_address)
-                ban_ip(paste.user_address)
             deleted = pastes.delete()
             counter += deleted[0]
 
         for term in TITLE_TERMS:
             pastes = Paste.objects.filter(title__icontains=term, user=None)
-            for paste in pastes:
-                print("Banning %s..." % paste.user_address)
-                ban_ip(paste.user_address)
             deleted = pastes.delete()
             counter += deleted[0]
-
-        for paste in Paste.objects.filter(user=None):
-            ratio = calculate_link_ratio(paste.body)
-            if ratio > 0.2:
-                paste.delete()
-                counter += 1
 
         # Make all userless, non-expiring pastes last a month.
         Paste.objects \
