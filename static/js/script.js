@@ -559,12 +559,15 @@ var CopyToClipboard = (function() {
 
 $(document).ready(function() {
 
-  autosize($('textarea'));
+    if($('#id_work').length == 1)
+        $('#id_work')[0].value = 'I\'m not a bot, promise';
 
-  CopyToClipboard.initialize();
-  TabbedPastes.initialize();
-  LineSelector.initialize();
-  ConfirmAction.initialize();
-  UserStyleSelector.initialize();
-  ShareSelector.initialize();
+    autosize($('textarea'));
+
+    CopyToClipboard.initialize();
+    TabbedPastes.initialize();
+    LineSelector.initialize();
+    ConfirmAction.initialize();
+    UserStyleSelector.initialize();
+    ShareSelector.initialize();
 });
