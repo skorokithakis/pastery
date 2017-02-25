@@ -20,6 +20,8 @@ BODY_TERMS = {
     "/mightyscenery44",
     "/jbrown316",
     "/genglobal.org",
+    "baltec.com/",
+    "baltecorporation.com/",
     "h.hatena.ne.jp",
     "-putlocker-",
     "aaaukce.cz",
@@ -142,11 +144,15 @@ class Command(BaseCommand):
         counter = 0
         for term in BODY_TERMS:
             pastes = Paste.objects.filter(body__contains=term, user=None)
+            for paste in pastes:
+                ban_ip(paste.user_address)
             deleted = pastes.delete()
             counter += deleted[0]
 
         for term in TITLE_TERMS:
             pastes = Paste.objects.filter(title__icontains=term, user=None)
+            for paste in pastes:
+                ban_ip(paste.user_address)
             deleted = pastes.delete()
             counter += deleted[0]
 
