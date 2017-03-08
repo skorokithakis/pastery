@@ -49,6 +49,7 @@ class SmokeTests(TestCase):
         form = response.context["form"]
         data = form.initial
         data["body"] = "hello!"
+        data["work"] = "I'm not a bot, promise"
 
         response = self.client.post(reverse("main:home"), data, follow=True)
         paste_id = response.context["paste"].id
@@ -98,6 +99,7 @@ class SmokeTests(TestCase):
         form = response.context["form"]
         data = form.initial
         data["body"] = "hello!"
+        data["work"] = "I'm not a bot, promise"
 
         response = self.client.post(reverse("main:home"), data, follow=True)
         paste_id = response.context["paste"].id
@@ -140,6 +142,7 @@ class SmokeTests(TestCase):
         form = response.context["form"]
         data = form.initial
         data["body"] = "hello!"
+        data["work"] = "I'm not a bot, promise"
         data["expires"] = 10
 
         response = self.client.post(reverse("main:home"), data, follow=True)
@@ -156,6 +159,7 @@ class SmokeTests(TestCase):
         form = response.context["form"]
         data = form.initial
         data["body"] = "hello!"
+        data["work"] = "I'm not a bot, promise"
         data["expires"] = 10
 
         response = self.client.post(reverse("main:home"), data, follow=True)
