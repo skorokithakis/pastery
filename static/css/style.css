@@ -362,11 +362,7 @@ select:focus {
     width: 100%;
     max-width: 100%;
 }
-/*.page-paste .paste .container {
-    width: 100%;
-    max-width: 100%;
-}
-*/.page-paste .top-header .persona {
+.paste-full .top-header .persona {
     right: 0;
 }
 

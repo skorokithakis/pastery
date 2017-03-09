@@ -562,7 +562,16 @@ $(document).ready(function() {
     if($('#id_work').length == 1)
         $('#id_work')[0].value = 'I\'m not a bot, promise';
 
-    autosize($('textarea'));
+    if($('textarea').length == 1) {
+
+        autosize($('textarea'));
+
+        $('textarea')[0].addEventListener('keydown', function(e) {
+
+            if(e.keyCode == 13 && e.metaKey && this.value.trim() != '')
+                this.form.submit();
+        });
+    }
 
     CopyToClipboard.initialize();
     TabbedPastes.initialize();
