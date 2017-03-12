@@ -33,31 +33,35 @@ User = get_user_model()
 LANGUAGE_NAMES = LANGUAGE_DICT.keys()
 
 
-class PasteForm(forms.ModelForm):
-    "The form for a new paste."
-    EXPIRATION = [
-        [10, _("ten minutes")],
-        [60, _("an hour")],
-        [24 * 60, _("a day")],
-        [7 * 24 * 60, _("a week")],
-        [14 * 24 * 60, _("two weeks")],
-        [30 * 24 * 60, _("a month")],
-        [None, _("never")],
-    ]
-    expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60, label=_("Expires in"), required=False)
-    work = forms.CharField(required=False)
-    if settings.ENABLE_CAPTCHA:
-        captcha = ReCaptchaField()
+def pasteform_factory(user):
+    class PasteForm(forms.ModelForm):
+        "The form for a new paste."
+        EXPIRATION = [
+            [10, _("ten minutes")],
+            [60, _("an hour")],
+            [24 * 60, _("a day")],
+            [7 * 24 * 60, _("a week")],
+            [14 * 24 * 60, _("two weeks")],
+            [30 * 24 * 60, _("a month")],
+        ]
+        if user.is_authenticated():
+            EXPIRATION.append([None, _("never")])
 
-    def clean(self):
-        cleaned_data = super().clean()
-        if cleaned_data.get("work", "") != "I'm not a bot, promise":
-            raise forms.ValidationError(_("Please enable Javascript and try pasting again."))
-        return cleaned_data
+        expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60, label=_("Expires in"), required=False)
+        work = forms.CharField(required=False)
+        if settings.ENABLE_CAPTCHA:
+            captcha = ReCaptchaField()
 
-    class Meta:
-        model = Paste
-        fields = ["title", "body", "raw_language"]
+        def clean(self):
+            cleaned_data = super().clean()
+            if cleaned_data.get("work", "") != "I'm not a bot, promise":
+                raise forms.ValidationError(_("Please enable Javascript and try pasting again."))
+            return cleaned_data
+
+        class Meta:
+            model = Paste
+            fields = ["title", "body", "raw_language"]
+    return PasteForm
 
 
 class EmailForm(forms.Form):
@@ -93,7 +97,7 @@ def home(request):
         return redirect("main:home")
 
     if request.method == 'POST':
-        form = PasteForm(request.POST)
+        form = pasteform_factory(request.user)(request.POST)
         if form.is_valid():
             clean = form.cleaned_data
             data = {}
@@ -132,7 +136,7 @@ def home(request):
                     "raw_language": paste.language,
                 }
 
-        form = PasteForm(initial=initial)
+        form = pasteform_factory(request.user)(initial=initial)
     return {"form": form}
 
 

@@ -1,3 +1,4 @@
+import datetime
 import hashlib
 from typing import Dict, List
 
@@ -226,6 +227,12 @@ class PasteManager(models.Manager):
                 break
         else:
             raise IntegrityError("Could not find a paste ID after %s tries." % tries)
+
+        if not paste.user:
+            # Anonymous users only get month-long pastes.
+            max_expiration = timezone.now() + datetime.timedelta(minutes=30 * 24 * 60)
+            paste.expiration = max_expiration if paste.expiration is None else min(paste.expiration, max_expiration)
+            paste.save()
 
         if kwargs.get("user"):
             user_id = kwargs["user"].username
