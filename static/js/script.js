@@ -568,7 +568,10 @@ $(document).ready(function() {
 
         $('textarea')[0].addEventListener('keydown', function(e) {
 
-            if(e.keyCode == 13 && e.metaKey && this.value.trim() != '')
+            if(this.value.trim() == '')
+                return;
+
+            if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10))
                 this.form.submit();
         });
     }
