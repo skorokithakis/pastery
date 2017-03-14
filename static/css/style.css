@@ -253,12 +253,21 @@ select:focus {
     position: relative;
     z-index: 1;
     white-space: nowrap;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     top: 20px;
     margin: 0 200px 0 12px;
 }
+
+.paste header h1.tabs::-webkit-scrollbar {
+    height: 5px;
+    background-color: #eee8d5;
+}
+.paste header h1.tabs::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, .25);
+}
+
 .paste header h1.tabs .tab {
     padding: 7px 10px 10px;
     font-weight: bold;
