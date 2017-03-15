@@ -47,14 +47,16 @@ select:focus {
 /* Header */
 .top-header {
     margin: 0 0 20px;
-    padding: 10px 15px;
     background: #CC1B1B;
     max-height: 50px;
     min-height: 30px;
 }
 .top-header .container {
     position: relative;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
+
 .top-header a.home {
     position: absolute;
     width: 30px;
@@ -65,11 +67,9 @@ select:focus {
     outline: none;
 }
 
-
-
 .top-header .persona {
     position: absolute;
-    top: -3px;
+    top: 7px;
     right: 15px;
     color: #888;
 }
@@ -365,14 +365,10 @@ select:focus {
 .paste-full .top-header .container {
     max-width: 100%;
     width: 100%;
-    padding: 0;
 }
 .paste-full .paste .container {
     width: 100%;
     max-width: 100%;
-}
-.paste-full .top-header .persona {
-    right: 0;
 }
 
 .paste .meta-footer {
@@ -631,26 +627,13 @@ select:focus {
         max-height: 300px !important;
     }
 
-    .top-header {
-        padding: 5px 0;
-        margin: 0 0 20px;
-    }
     .top-header .container {
-        min-height: 36px;
+        padding-left: 15px;
+        padding-right: 15px;
     }
-    .top-header .persona {
-        top: 3px;
-        right: 15px;
-    }
+
     .page-paste .top-header .persona {
         right: 10px;
-    }
-    .top-header h1 {
-        margin: 5px 0 0 15px;
-        float: left;
-    }
-    .page-paste .top-header h1 {
-        margin-left: 10px;
     }
 
     .paste header {
