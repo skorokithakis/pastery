@@ -87,8 +87,8 @@ class UserForm(forms.ModelForm):
         fields = ["_style_name"]
 
 
-@ratelimit(method=["POST"], rate="1000/d")
-@ratelimit(method=["POST"], rate="500/h")
+@ratelimit(method=["POST"], rate="200/d")
+@ratelimit(method=["POST"], rate="100/h")
 @ratelimit(method=["POST"], rate="20/m")
 @render_to("home.html")
 def home(request):
