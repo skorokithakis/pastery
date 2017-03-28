@@ -18,6 +18,7 @@ from django.core.signing import Signer
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -49,6 +50,7 @@ def pasteform_factory(user):
 
         expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60, label=_("Expires in"), required=False)
         work = forms.CharField(required=False)
+        other_pastes = forms.CharField(required=False)
         if settings.ENABLE_CAPTCHA:
             captcha = ReCaptchaField()
 
@@ -114,7 +116,17 @@ def home(request):
                 data["user"] = request.user
 
             paste = Paste.objects.create(**data)
-            return redirect(paste)
+
+            if clean["other_pastes"]:
+                paste_list = re.split("\W+", clean["other_pastes"])[-settings.MAX_COMBINED_PASTES + 1:]
+                paste_list.append(paste.id)
+
+                redir_url = reverse("main:paste", args=["+".join(paste_list)])
+                redir_url += "#" + paste.id
+            else:
+                redir_url = reverse("main:paste", args=[paste.id])
+
+            return redirect(redir_url)
     else:
         # See if the user wants to clone a paste.
         initial = {

@@ -217,8 +217,18 @@ var LineSelector = (function() {
 
     var hash = location.hash;
 
-    if(hash.indexOf('#l-') < 0)
-      return;
+    if(hash.indexOf('#l-') < 0) {
+
+        if(hash.indexOf('#') == 0) {
+
+            var pasteId = hash.split('#')[1];
+
+            if(pasteId && pasteId.length > 0)
+                TabbedPastes.selectPasteWithId(pasteId);
+        }
+
+        return;
+    }
 
     if(this.lastSelectedLineNumber != '') {
 
@@ -283,13 +293,33 @@ var TabbedPastes = (function() {
 
     this.hasTabs = true;
     this.pastes = $('[data-pasteid]');
-    this.activePasteId = $('.active[data-tab]')[0].dataset.tab;
+    this.activePasteId = this.tabs[0].dataset.tab;
+
+    this.hasPlus = (document.querySelector('.plus') != null);
+
+    this.pasteIds = [];
+
+    for(var i = 0; i < this.pastes.length; i++)
+      this.pasteIds.push(this.pastes[i].dataset.pasteid);
 
     var self = this;
+
+    if(this.hasPlus) {
+
+        document.querySelector('.plus').addEventListener('click', function() {
+
+            localStorage.otherPastes = self.pasteIds.join(',');
+            location.href = '/';
+        });
+    }
 
     this.tabs.on('click', function() {
 
         var pasteId = $(this).data('tab');
+
+        var url = '#' + pasteId;
+
+        history.pushState(null, null, url);
 
         self.selectPasteWithId(pasteId);
     });
@@ -317,8 +347,12 @@ var TabbedPastes = (function() {
     var tabsWidth = 0;
 
     $.each(this.tabs, function() {
-        tabsWidth += this.clientWidth;
+
+        tabsWidth += this.clientWidth + 4;
     });
+
+    if(this.hasPlus)
+        tabsWidth += 35;
 
     var hasArrows = $(this.tabsParent.parentElement).hasClass('enabled');
     var shouldShowArrows = (this.tabsParent.clientWidth <= tabsWidth);
@@ -337,7 +371,8 @@ var TabbedPastes = (function() {
     if(this.activePasteId.localeCompare(pasteId) == 0)
         return;
 
-    this.activePasteId = pasteId;
+    if(this.pasteIds.indexOf(pasteId) < 0)
+        return;
 
     var hasActivated = false;
 
@@ -356,6 +391,11 @@ var TabbedPastes = (function() {
         else
             $(this).removeClass('active');
     });
+
+    if(!hasActivated)
+        return;
+
+    this.activePasteId = pasteId;
 
     hasActivated = false;
 
@@ -380,7 +420,7 @@ var TabbedPastes = (function() {
 
   applyActivePaste = function() {
 
-    var paste= document.querySelector('.pretty-paste[aria-hidden=""]');
+    var paste = document.querySelector('.pretty-paste[aria-hidden=""]');
 
     var language = $(paste).data('language');
     var expires = $(paste).data('expires');
@@ -442,141 +482,185 @@ var TabbedPastes = (function() {
 
 var CopyToClipboard = (function() {
 
-    init = function() {
+  init = function() {
 
-        var self = this;
+    var self = this;
 
-        var support = !!document.queryCommandSupported;
-        support = support && !!document.queryCommandSupported('copy');
+    var support = !!document.queryCommandSupported;
+    support = support && !!document.queryCommandSupported('copy');
 
-        if(!support) {
+    if(!support) {
 
-          $('.copy-clipboard').each(function() { this.parentElement.style.display = 'none'; })
+      $('.copy-clipboard').each(function() { this.parentElement.style.display = 'none'; })
+      return;
+    }
+
+    $('.copy-clipboard').on('click', function() {
+
+      var element = $(this);
+
+      var paste= document.querySelector('.pretty-paste[aria-hidden=""]');
+      var hasMarkdown = (paste.className.indexOf('markdown-language') > 0);
+      var code = '';
+
+      if(hasMarkdown)
+          code = paste.innerText;
+      else {
+
+        var preElement = document.querySelector('.pretty-paste[aria-hidden=""] .code pre');
+
+        if(!preElement)
           return;
-        }
 
-        $('.copy-clipboard').on('click', function() {
+        code = preElement.innerText;
+      }
 
-            var element = $(this);
+      var copied = self.copyTextToClipboard(code);
 
-            var paste= document.querySelector('.pretty-paste[aria-hidden=""]');
-            var hasMarkdown = (paste.className.indexOf('markdown-language') > 0);
-            var code = '';
+      if(copied) {
 
-            if(hasMarkdown)
-                code = paste.innerText;
-            else {
+        $(element).tooltip({title: 'Copied!'});
+        $(element).tooltip('show');
 
-                var preElement = document.querySelector('.pretty-paste[aria-hidden=""] .code pre');
+        setTimeout(function() {
 
-                if(!preElement)
-                    return;
+          $(element).tooltip('destroy');
 
-                code = preElement.innerText;
-            }
+        }, 1000);
+      }
+    });
+  },
 
-            var copied = self.copyTextToClipboard(code);
+  removeFake = function() {
 
-            if(copied) {
+    if (this.fakeHandler) {
 
-                $(element).tooltip({title: 'Copied!'});
-                $(element).tooltip('show');
-
-                setTimeout(function() {
-
-                  $(element).tooltip('destroy');
-
-                }, 1000);
-            }
-        });
-    },
-
-    removeFake = function() {
-
-        if (this.fakeHandler) {
-
-            document.body.removeEventListener('click', this.fakeHandlerCallback);
-            this.fakeHandler = null;
-            this.fakeHandlerCallback = null;
-        }
-
-        if (this.fakeElem) {
-            document.body.removeChild(this.fakeElem);
-            this.fakeElem = null;
-        }
-    },
-
-    copyTextFromElement = function(element) {
-
-        element.select();
-        element.setSelectionRange(0, element.value.length);
-
-        var succeeded = false;
-
-        try {
-            succeeded = document.execCommand('copy');
-        }
-        catch (err) {
-            succeeded = false;
-        }
-
-        return succeeded;
-    },
-
-    copyTextToClipboard = function(text){
-
-        this.removeFake();
-
-        var self = this;
-
-        this.fakeHandlerCallback = function() { self.removeFake(); };
-
-        this.fakeHandler = document.body.addEventListener('click', this.fakeHandlerCallback) || true;
-
-        this.fakeElem = document.createElement('textarea');
-        this.fakeElem.style.fontSize = '12pt';
-        this.fakeElem.style.border = '0';
-        this.fakeElem.style.padding = '0';
-        this.fakeElem.style.margin = '0';
-        this.fakeElem.style.position = 'absolute';
-        this.fakeElem.style[ document.documentElement.getAttribute('dir') == 'rtl' ? 'right' : 'left' ] = '-9999px';
-        this.fakeElem.style.top = (window.pageYOffset || document.documentElement.scrollTop) + 'px';
-        this.fakeElem.setAttribute('readonly', '');
-        this.fakeElem.value = text;
-
-        document.body.appendChild(this.fakeElem);
-
-        return this.copyTextFromElement(this.fakeElem);
+      document.body.removeEventListener('click', this.fakeHandlerCallback);
+      this.fakeHandler = null;
+      this.fakeHandlerCallback = null;
     }
 
-    return {
-        'initialize': init,
-        'copyTextToClipboard': copyTextToClipboard,
-        'copyTextFromElement': copyTextFromElement,
-        'removeFake': removeFake
+    if (this.fakeElem) {
+
+      document.body.removeChild(this.fakeElem);
+      this.fakeElem = null;
     }
+  },
+
+  copyTextFromElement = function(element) {
+
+    element.select();
+    element.setSelectionRange(0, element.value.length);
+
+    var succeeded = false;
+
+    try {
+      succeeded = document.execCommand('copy');
+    }
+    catch (err) {
+      succeeded = false;
+    }
+
+    return succeeded;
+  },
+
+  copyTextToClipboard = function(text){
+
+    this.removeFake();
+
+    var self = this;
+
+    this.fakeHandlerCallback = function() { self.removeFake(); };
+
+    this.fakeHandler = document.body.addEventListener('click', this.fakeHandlerCallback) || true;
+
+    this.fakeElem = document.createElement('textarea');
+    this.fakeElem.style.fontSize = '12pt';
+    this.fakeElem.style.border = '0';
+    this.fakeElem.style.padding = '0';
+    this.fakeElem.style.margin = '0';
+    this.fakeElem.style.position = 'absolute';
+    this.fakeElem.style[ document.documentElement.getAttribute('dir') == 'rtl' ? 'right' : 'left' ] = '-9999px';
+    this.fakeElem.style.top = (window.pageYOffset || document.documentElement.scrollTop) + 'px';
+    this.fakeElem.setAttribute('readonly', '');
+    this.fakeElem.value = text;
+
+    document.body.appendChild(this.fakeElem);
+
+    return this.copyTextFromElement(this.fakeElem);
+  }
+
+  return {
+    'initialize': init,
+    'copyTextToClipboard': copyTextToClipboard,
+    'copyTextFromElement': copyTextFromElement,
+    'removeFake': removeFake
+  }
+})();
+
+var PasteryForm = (function() {
+
+  initialize = function() {
+
+    this.formElement    = document.querySelector('.pastery-form');
+    this.idWorkElement  = document.querySelector('#id_work');
+    this.textareaElement= document.querySelector('#id_body');
+
+    if(!this.formElement)
+      return;
+
+    var self = this;
+
+    if(this.idWorkElement)
+      this.idWorkElement.value = 'I\'m not a bot, promise';
+
+    if(this.textareaElement) {
+
+      autosize(this.textareaElement);
+
+      this.textareaElement.addEventListener('keydown', function(e) {
+
+        if(this.value.trim() == '')
+          return;
+
+        if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10))
+          self.submitForm();
+      });
+    }
+
+    if(localStorage.otherPastes && localStorage.otherPastes != '') {
+
+      var otherPastesInput = document.createElement('input');
+      otherPastesInput.id = 'id_other_pastes';
+      otherPastesInput.name = 'other_pastes';
+      otherPastesInput.value = localStorage.otherPastes;
+      otherPastesInput.type = 'hidden';
+
+      localStorage.removeItem('otherPastes');
+
+      this.formElement.appendChild(otherPastesInput);
+    }
+
+    this.formElement.addEventListener('submit', function(event) {
+
+      event.preventDefault();
+
+      self.submitForm();
+    });
+  },
+
+  submitForm = function() { this.formElement.submit(); }
+
+  return {
+    'initialize': initialize,
+    'submitForm': submitForm
+  }
 })();
 
 $(document).ready(function() {
 
-    if($('#id_work').length == 1)
-        $('#id_work')[0].value = 'I\'m not a bot, promise';
-
-    if($('textarea').length == 1) {
-
-        autosize($('textarea'));
-
-        $('textarea')[0].addEventListener('keydown', function(e) {
-
-            if(this.value.trim() == '')
-                return;
-
-            if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10))
-                this.form.submit();
-        });
-    }
-
     CopyToClipboard.initialize();
+    PasteryForm.initialize();
     TabbedPastes.initialize();
     LineSelector.initialize();
     ConfirmAction.initialize();

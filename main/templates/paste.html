@@ -126,17 +126,16 @@ Multiple pastes
 
             </div>
 
-            {% if has_multiple %}
             <h1 class="tabs">
                 {% for paste in pastes %}
-                <span class="tab{% if forloop.first %} active{% endif %}{% if not paste %} not-found{% endif %}" data-tab="{{ paste.id }}" href="javascript:void(0);">{% if paste %}{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}{% else %}Unknown{% endif %}</span>
+                <span class="tab{% if forloop.first %} active{% endif %}{% if not paste %} not-found{% endif %}" data-tab="{{ paste.id }}">{% if paste %}{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}{% else %}Unknown{% endif %}</span>
                 {% endfor %}
+                {% if pastes|length < settings.MAX_COMBINED_PASTES %}
+                <span class="tab plus">+</span>
+                {% endif %}
             </h1>
             <span class="tab-arrow left glyphicon glyphicon-arrow-left" aria-hidden="true" data-arrow="-1"></span>
             <span class="tab-arrow right glyphicon glyphicon-arrow-right" aria-hidden="true" data-arrow="1"></span>
-            {% elif paste.title %}
-            <h1>{{ paste }}</h1>
-            {% endif %}
 
         </header>
     </div>
