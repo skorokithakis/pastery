@@ -622,7 +622,7 @@ select:focus {
     }
     .paste header .tab-arrow {
         top: auto;
-        bottom: 12px;
+        bottom: 0;
     }
     .paste header h1.tabs {
         margin: 0;
