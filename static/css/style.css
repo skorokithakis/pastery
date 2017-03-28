@@ -229,7 +229,9 @@ select:focus {
 }
 .paste header .tab-arrow {
     position: absolute;
-    top: 30px;
+    top: 20px;
+    height: 40px;
+    line-height: 40px;
     display: none;
     color: rgba(204, 27, 27, 0.5);
     transition: .25s color ease-in;
@@ -273,8 +275,18 @@ select:focus {
     font-weight: bold;
     cursor: pointer;
     background: rgba(204, 27, 27, 0.1);
-    transition: .25s background;
     display: inline-block;
+}
+.paste header h1.tabs .plus {
+    font-weight: bold;
+    color: #CC1B1B;
+    width: 35px;
+    text-align: center;
+}
+.paste header h1.tabs .plus:hover,
+.paste header h1.tabs .plus:active,
+.paste header h1.tabs .plus:focus {
+    text-decoration: none;
 }
 .paste header h1.tabs .tab:not(.active):not(.not-found):hover {
     background: rgba(204, 27, 27, 0.25);
