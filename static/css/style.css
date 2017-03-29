@@ -259,9 +259,11 @@ select:focus {
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     top: 20px;
-    margin: 0 200px 0 20px;
+    margin: 0 200px 0 12px;
 }
-
+:not(.paste-full) .paste header h1.tabs {
+    margin-left: 0;
+}
 .paste header h1.tabs::-webkit-scrollbar {
     height: 5px;
     background-color: #eee8d5;
@@ -272,6 +274,7 @@ select:focus {
 
 .paste header h1.tabs .tab {
     padding: 7px 10px 10px;
+    color: #CC1B1B;
     font-weight: bold;
     cursor: pointer;
     background: rgba(204, 27, 27, 0.1);
@@ -610,6 +613,25 @@ select:focus {
     display: block;
     margin: 0 auto;
     width: 100px;
+}
+
+@media (min-width: 768px) {
+
+    .page-paste:not(.paste-full) .pretty-paste.markdown-language {
+        width: 720px;
+    }
+}
+@media (min-width: 992px) {
+
+    .page-paste:not(.paste-full) .pretty-paste.markdown-language {
+        width: 940px;
+    }
+}
+@media (min-width: 1200px) {
+
+    .page-paste:not(.paste-full) .pretty-paste.markdown-language {
+        width: 950px;
+    }
 }
 
 @media (max-width: 550px) {
