@@ -183,6 +183,12 @@ var LineSelector = (function() {
 
   init = function() {
 
+    if($('.page-paste').length == 0)
+        return;
+
+    $('.linenos pre').attr('aria-hidden', 'true');
+    $.each($('.linenos pre a:not(:first-child)'), function() { this.setAttribute('tabindex', '-1'); });
+
     var self = this;
 
     $(window).on('hashchange', function() {
@@ -407,7 +413,7 @@ var TabbedPastes = (function() {
 
             if(!hasActivated) {
 
-                $(this).attr('aria-hidden', '');
+                $(this).attr('aria-hidden', 'false');
                 hasActivated = true;
             }
         }
@@ -420,7 +426,7 @@ var TabbedPastes = (function() {
 
   applyActivePaste = function() {
 
-    var paste = document.querySelector('.pretty-paste[aria-hidden=""]');
+    var paste = document.querySelector('.pretty-paste[aria-hidden="false"]');
 
     var language = $(paste).data('language');
     var expires = $(paste).data('expires');
@@ -464,7 +470,7 @@ var TabbedPastes = (function() {
       $('[data-raw]')[0].disabled = 'disabled';
     }
 
-    $(this).attr('aria-hidden', '');
+    $(this).attr('aria-hidden', 'false');
   }
 
   return {
@@ -499,7 +505,7 @@ var CopyToClipboard = (function() {
 
       var element = $(this);
 
-      var paste= document.querySelector('.pretty-paste[aria-hidden=""]');
+      var paste= document.querySelector('.pretty-paste[aria-hidden="false"]');
       var hasMarkdown = (paste.className.indexOf('markdown-language') > 0);
       var code = '';
 
@@ -507,7 +513,7 @@ var CopyToClipboard = (function() {
           code = paste.innerText;
       else {
 
-        var preElement = document.querySelector('.pretty-paste[aria-hidden=""] .code pre');
+        var preElement = document.querySelector('.pretty-paste[aria-hidden="false"] .code pre');
 
         if(!preElement)
           return;

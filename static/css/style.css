@@ -259,7 +259,7 @@ select:focus {
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     top: 20px;
-    margin: 0 200px 0 12px;
+    margin: 0 200px 0 20px;
 }
 
 .paste header h1.tabs::-webkit-scrollbar {
@@ -283,9 +283,9 @@ select:focus {
     width: 35px;
     text-align: center;
 }
-.paste header h1.tabs .plus:hover,
-.paste header h1.tabs .plus:active,
-.paste header h1.tabs .plus:focus {
+.paste header h1.tabs .tab:hover,
+.paste header h1.tabs .tab:active,
+.paste header h1.tabs .tab:focus {
     text-decoration: none;
 }
 .paste header h1.tabs .tab:not(.active):not(.not-found):hover {

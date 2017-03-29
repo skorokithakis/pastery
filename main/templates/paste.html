@@ -47,7 +47,7 @@ Multiple pastes
 
                 {% if not has_multiple %}
                 <div class="btn-group admin-parent dropdown-parent" role="group">
-                    <a type="button" data-toggle="tooltip" title="{% trans "Clone" %}" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'main:home' %}?clone={{ paste.id }}" type="button"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span></a>
+                    <a type="button" data-toggle="tooltip" aria-label="{% trans "Clone" %}" title="{% trans "Clone" %}" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'main:home' %}?clone={{ paste.id }}" type="button"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span></a>
                     <div class="dropdown-menu pseudo-dropdown">{% trans "Clone" %}</div>
                 </div>
                 {% endif %}
@@ -73,7 +73,7 @@ Multiple pastes
 
                 <!-- Copy to clipboard -->
                 <div class="btn-group dropdown-parent" role="group">
-                    <a type="button" class="btn btn-default btn-sm dropdown-toggle copy-clipboard" href="javascript:void(0);" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></a>
+                    <a type="button" aria-label="{% trans "Copy to clipboard" %}" title="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm dropdown-toggle copy-clipboard" href="javascript:void(0);" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></a>
                     <div class="dropdown-menu pseudo-dropdown">
                         <div class="btn-group">{% trans "Copy to clipboard" %}</div>
                     </div>
@@ -81,7 +81,7 @@ Multiple pastes
 
                 <!-- Raw -->
                 <div class="btn-group dropdown-parent" role="group">
-                    <button data-raw type="button" title="{% trans "Raw" %}" class="btn btn-default btn-sm dropdown-toggle" type="button" data-placement="tooltip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button data-raw type="button" aria-label="{% trans "Raw" %}" title="{% trans "Raw" %}" class="btn btn-default btn-sm dropdown-toggle" type="button" data-placement="tooltip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> <span class="caret"></span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
@@ -96,7 +96,7 @@ Multiple pastes
 
                 <!-- Embed -->
                 <div class="btn-group dropdown-parent" role="group">
-                    <button type="button" title="{% trans "Embed" %}" class="btn btn-default btn-sm dropdown-toggle" type="button" data-placement="tooltip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" aria-label="{% trans "Embed" %}" title="{% trans "Embed" %}" class="btn btn-default btn-sm dropdown-toggle" type="button" data-placement="tooltip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="glyphicon glyphicon-share" aria-hidden="true"></span> <span class="caret"></span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
@@ -111,7 +111,7 @@ Multiple pastes
 
                 <!-- Link -->
                 <div class="btn-group dropdown-parent" role="group">
-                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" title="{% trans "Link" %}" type="button" data-placement="tooltip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" aria-label="{% trans "Link" %}" title="{% trans "Link" %}" type="button" data-placement="tooltip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="glyphicon glyphicon-link" aria-hidden="true"></span> <span class="caret"></span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
@@ -128,10 +128,10 @@ Multiple pastes
 
             <h1 class="tabs">
                 {% for paste in pastes %}
-                <span class="tab{% if forloop.first %} active{% endif %}{% if not paste %} not-found{% endif %}" data-tab="{{ paste.id }}">{% if paste %}{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}{% else %}Unknown{% endif %}</span>
+                <a href="javascript:void(0);" aria-label="{% trans "Tab" %} {{ forloop.counter }} {{ paste.id }}" class="tab{% if forloop.first %} active{% endif %}{% if not paste %} not-found{% endif %}" data-tab="{{ paste.id }}">{% if paste %}{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}{% else %}Unknown{% endif %}</a>
                 {% endfor %}
                 {% if pastes|length < settings.MAX_COMBINED_PASTES %}
-                <span class="tab plus">+</span>
+                <a href="javascript:void(0);" aria-label="{% trans "Add one more tab" %}" class="tab plus">+</a>
                 {% endif %}
             </h1>
             <span class="tab-arrow left glyphicon glyphicon-arrow-left" aria-hidden="true" data-arrow="-1"></span>
@@ -148,7 +148,7 @@ Multiple pastes
                 data-reporturl="{% url "main:report-paste" paste.id %}"
                 data-rawurl="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}"
                 {% endif %}
-                aria-hidden="{% if not forloop.first %}true{% endif %}"
+                aria-hidden="{% if not forloop.first %}true{% else %}false{% endif %}"
                 class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}{% if not paste %} not-found{% endif %}">
         {% if paste %}
         {{ paste.rendered_body|safe }}
