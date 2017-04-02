@@ -43,59 +43,63 @@
         window.addEventListener('DOMContentLoaded', function() {
 
             var tabs = document.querySelectorAll('[data-tab]');
-            var activePasteId = document.querySelector('.active[data-tab]').dataset.tab;
 
-            for (var i = 0; i < tabs.length; ++i) {
+            if(tabs.length > 0) {
 
-                var tabContents = document.querySelectorAll('[data-tabcontent]');
+                var activePasteId = document.querySelector('.active[data-tab]').dataset.tab;
 
-                tabs[i].addEventListener('click', function() {
+                for (var i = 0; i < tabs.length; ++i) {
 
-                    var tabId = this.dataset.tab;
+                    var tabContents = document.querySelectorAll('[data-tabcontent]');
 
-                    if(activePasteId.localeCompare(tabId) == 0)
-                        return;
+                    tabs[i].addEventListener('click', function() {
 
-                    activePasteId = tabId;
+                        var tabId = this.dataset.tab;
 
-                    var hasActivated = false;
+                        if(activePasteId.localeCompare(tabId) == 0)
+                            return;
 
-                    for (var k = 0; k < tabs.length; ++k) {
+                        activePasteId = tabId;
 
-                        var tab = tabs[k];
-                        var tId = tab.dataset.tab;
+                        var hasActivated = false;
 
-                        if(tabId.localeCompare(tId) == 0) {
+                        for (var k = 0; k < tabs.length; ++k) {
 
-                            if(!hasActivated) {
+                            var tab = tabs[k];
+                            var tId = tab.dataset.tab;
 
-                                tab.className = 'tab active';
-                                hasActivated = true;
+                            if(tabId.localeCompare(tId) == 0) {
+
+                                if(!hasActivated) {
+
+                                    tab.className = 'tab active';
+                                    hasActivated = true;
+                                }
                             }
+                            else
+                                tab.className = 'tab';
                         }
-                        else
-                            tab.className = 'tab';
-                    }
 
-                    hasActivated = false;
+                        hasActivated = false;
 
-                    for (var j = 0; j < tabContents.length; ++j) {
+                        for (var j = 0; j < tabContents.length; ++j) {
 
-                        var tabContent = tabContents[j];
-                        var contentId = tabContent.dataset.tabcontent;
+                            var tabContent = tabContents[j];
+                            var contentId = tabContent.dataset.tabcontent;
 
-                        if(contentId.localeCompare(tabId) == 0) {
+                            if(contentId.localeCompare(tabId) == 0) {
 
-                            if(!hasActivated) {
+                                if(!hasActivated) {
 
-                                tabContent.setAttribute('aria-hidden', '');
-                                hasActivated = true;
+                                    tabContent.setAttribute('aria-hidden', '');
+                                    hasActivated = true;
+                                }
                             }
+                            else
+                                tabContent.setAttribute('aria-hidden', 'true');
                         }
-                        else
-                            tabContent.setAttribute('aria-hidden', 'true');
-                    }
-                });
+                    });
+                }
             }
 
             document.querySelector('span[data-raw]').addEventListener('click', function() {
