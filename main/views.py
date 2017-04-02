@@ -171,6 +171,7 @@ def embed_paste(request, paste_id):
 
     data = {
         "pastes": pastes,
+        "paste_id": paste_id,
         "host": request.GET.get("host", "")
     }
     response = render(request, "embed.html", data, status=status)

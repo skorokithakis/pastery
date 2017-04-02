@@ -14,7 +14,7 @@
         <article class="paste" id="paste-embed">
 
             {% for paste in pastes %}
-                <div data-tabcontent="{{ paste.id }}" aria-hidden="{% if forloop.counter0 > 0 %}true{% endif %}" {% if paste %}data-rawurl="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}"{% endif %} class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}">
+                <div data-tabcontent="{{ paste.id }}" aria-hidden="{% if forloop.counter0 > 0 %}true{% else %}false{% endif %}" {% if paste %}data-rawurl="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}"{% endif %} class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}">
                 {% if paste %}
                 {{ paste.rendered_body|safe }}
                 {% else %}
@@ -41,6 +41,18 @@
         function copyTextToClipboard(a){var b=document.createElement("textarea");b.style.position="fixed",b.style.top=0,b.style.left=0,b.style.width="2em",b.style.height="2em",b.style.padding=0,b.style.border="none",b.style.outline="none",b.style.boxShadow="none",b.style.background="transparent",b.value=a,document.body.appendChild(b),b.select();b.setSelectionRange(0, b.value.length);var c=!1;try{c=document.execCommand("copy")}catch(a){}return document.body.removeChild(b),c}
 
         window.addEventListener('DOMContentLoaded', function() {
+
+            var changedHeight = function() {
+
+                {% if host %}
+                var height = document.getElementById('paste-embed').offsetHeight;
+
+                window.parent.postMessage({ 'height': height,
+                                            'paste-id': '{{ paste_id }}'
+                                        }, '{{ host }}');
+
+                {% endif %}
+            };
 
             var tabs = document.querySelectorAll('[data-tab]');
 
@@ -80,6 +92,9 @@
                                 tab.className = 'tab';
                         }
 
+                        if(!hasActivated)
+                            return;
+
                         hasActivated = false;
 
                         for (var j = 0; j < tabContents.length; ++j) {
@@ -91,20 +106,22 @@
 
                                 if(!hasActivated) {
 
-                                    tabContent.setAttribute('aria-hidden', '');
+                                    tabContent.setAttribute('aria-hidden', 'false');
                                     hasActivated = true;
                                 }
                             }
                             else
                                 tabContent.setAttribute('aria-hidden', 'true');
                         }
+
+                        changedHeight();
                     });
                 }
             }
 
             document.querySelector('span[data-raw]').addEventListener('click', function() {
 
-                var rawurl = document.querySelector('.pretty-paste[aria-hidden=""]').dataset.rawurl;
+                var rawurl = document.querySelector('.pretty-paste[aria-hidden="false"]').dataset.rawurl;
 
                 if(typeof rawurl == 'undefined')
                     return;
@@ -114,14 +131,14 @@
 
             document.querySelector('span[data-copy]').addEventListener('click', function() {
 
-                var paste= document.querySelector('.pretty-paste[aria-hidden=""]');
+                var paste= document.querySelector('.pretty-paste[aria-hidden="false"]');
                 var hasMarkdown = (paste.className.indexOf('markdown-language') > 0);
                 var code = '';
 
                 if(hasMarkdown)
                     code = paste.innerText;
                 else
-                    code = document.querySelector('.pretty-paste[aria-hidden=""] .code pre').innerText;
+                    code = document.querySelector('.pretty-paste[aria-hidden="false"] .code pre').innerText;
 
                 var copyElement = this;
 
@@ -130,14 +147,7 @@
                 setTimeout(function() { copyElement.innerText = 'Copy'; }, 1000);
             });
 
-            {% if host %}
-            var height = document.getElementById('paste-embed').offsetHeight;
-
-            window.parent.postMessage({ 'height': height,
-                                        'paste-id': '{{ paste.id }}'
-                                    }, '{{ host }}');
-
-            {% endif %}
+            changedHeight();
 
         }, false);
         </script>

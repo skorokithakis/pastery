@@ -16,7 +16,7 @@
                 var iframeId = message.data['paste-id'];
                 var iframeHeight = message.data['height'];
 
-                document.getElementById('pasteid-' + iframeId).style.height = iframeHeight + 'px';
+                document.getElementById('pasteid-' + iframeId) && document.getElementById('pasteid-' + iframeId).style.height = iframeHeight + 'px';
 
             }, false);
 
