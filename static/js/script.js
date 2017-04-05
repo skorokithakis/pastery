@@ -323,6 +323,9 @@ var TabbedPastes = (function() {
 
         var pasteId = $(this).data('tab');
 
+        if(!pasteId || pasteId == '')
+            return;
+
         var url = '#' + pasteId;
 
         history.pushState(null, null, url);

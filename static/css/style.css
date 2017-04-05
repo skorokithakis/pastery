@@ -243,6 +243,9 @@ select:focus {
 .paste header.enabled .tab-arrow {
     display: block;
 }
+.paste header.enabled h1.tabs {
+    margin-left: 17px;
+}
 .paste header .tab-arrow.right {
     right: 178px;
 }
@@ -261,7 +264,7 @@ select:focus {
     top: 20px;
     margin: 0 200px 0 12px;
 }
-:not(.paste-full) .paste header h1.tabs {
+:not(.paste-full) .paste header:not(.enabled) h1.tabs {
     margin-left: 0;
 }
 .paste header h1.tabs::-webkit-scrollbar {
