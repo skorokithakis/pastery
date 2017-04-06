@@ -131,7 +131,7 @@ Multiple pastes
                 <a href="javascript:void(0);" aria-label="{% trans "Tab" %} {{ forloop.counter }} {{ paste.id }}" class="tab{% if forloop.first %} active{% endif %}{% if not paste %} not-found{% endif %}" data-tab="{{ paste.id }}">{% if paste %}{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}{% else %}Unknown{% endif %}</a>
                 {% endfor %}
                 {% if pastes|length < settings.MAX_COMBINED_PASTES %}
-                <a href="javascript:void(0);" aria-label="{% trans "Add one more tab" %}" class="tab plus">+</a>
+                <a href="javascript:void(0);" aria-label="{% trans "Add another paste" %}" title="{% trans "Add another paste" %}" class="tab plus">+</a>
                 {% endif %}
             </h1>
             <span class="tab-arrow left glyphicon glyphicon-arrow-left" aria-hidden="true" data-arrow="-1"></span>
