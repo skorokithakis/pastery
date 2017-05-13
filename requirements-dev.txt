@@ -4,7 +4,6 @@
 #
 #    pip-compile --output-file requirements-dev.txt requirements-dev.in
 #
-appdirs==1.4.0            # via setuptools
 blessings==1.6            # via curtsies
 bpython==0.16
 curtsies==0.2.11          # via bpython
