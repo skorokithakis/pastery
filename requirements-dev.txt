@@ -8,29 +8,25 @@ blessings==1.6            # via curtsies
 bpython==0.16
 curtsies==0.2.11          # via bpython
 decorator==4.0.11         # via ipython, traitlets
-flake8-import-order==0.11
-flake8-tidy-imports==1.0.5
+flake8-import-order==0.12
+flake8-tidy-imports==1.0.6
 flake8==3.3.0
 greenlet==0.4.12          # via bpython
-ipython-genutils==0.1.0   # via traitlets
-ipython==5.2.2
+ipython-genutils==0.2.0   # via traitlets
+ipython==6.0.0
+jedi==0.10.2              # via ipython
 mccabe==0.6.1             # via flake8
 mypy-lang==0.4.6
-packaging==16.8           # via setuptools
 pep8-naming==0.4.1
 pexpect==4.2.1            # via ipython
 pickleshare==0.7.4        # via ipython
-prompt-toolkit==1.0.13    # via ipython
+prompt-toolkit==1.0.14    # via ipython
 ptyprocess==0.5.1         # via pexpect
 pycodestyle==2.3.1        # via flake8, flake8-import-order
 pyflakes==1.5.0           # via flake8
 pygments==2.2.0           # via bpython, ipython
-pyparsing==2.1.10         # via packaging
-requests==2.13.0          # via bpython
+requests==2.14.2          # via bpython
 simplegeneric==0.8.1      # via ipython
-six==1.10.0               # via bpython, packaging, prompt-toolkit, setuptools, traitlets
-traitlets==4.3.1          # via ipython
+six==1.10.0               # via bpython, prompt-toolkit, traitlets
+traitlets==4.3.2          # via ipython
 wcwidth==0.1.7            # via curtsies, prompt-toolkit
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools                # via ipython
