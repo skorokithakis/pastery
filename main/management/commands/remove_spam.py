@@ -117,6 +117,7 @@ def calculate_link_ratio(text):
 
 
 def ban_ip(ip):
+    return True
     print("Banning %s..." % ip)
     url = "https://api.cloudflare.com/client/v4/zones/f1928f8f37c9e76fc7c99a7cc9455702/firewall/access_rules/rules"
     r = requests.post(
