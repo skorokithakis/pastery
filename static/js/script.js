@@ -157,6 +157,25 @@ var UserStyleSelector = (function() {
   }
 })();
 
+var BurgerButton = (function() {
+
+  init = function() {
+
+    if($('.burger-button').length == 0)
+      return;
+
+    $('.burger-button').on('click', function() {
+
+        $(this).toggleClass('open');
+        $('.paste .button-container').toggle();
+    });
+  }
+
+  return {
+      'initialize': init
+  }
+})();
+
 var ConfirmAction = (function() {
 
   init = function() {
@@ -668,6 +687,7 @@ var PasteryForm = (function() {
 
 $(document).ready(function() {
 
+    BurgerButton.initialize();
     CopyToClipboard.initialize();
     PasteryForm.initialize();
     TabbedPastes.initialize();
