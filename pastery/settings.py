@@ -51,8 +51,9 @@ INSTALLED_APPS = [
     "django_nose",
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'pastery.stats_middleware.StatsMiddleware',
+    'pastery.push_middleware.push_middleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
