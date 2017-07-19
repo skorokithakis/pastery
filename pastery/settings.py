@@ -54,7 +54,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'pastery.stats_middleware.StatsMiddleware',
-    'pastery.push_middleware.push_middleware',
+    #'pastery.push_middleware.push_middleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
