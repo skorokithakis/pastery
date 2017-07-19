@@ -1,5 +1,5 @@
 ansible
-bleach~=1.4.2
+bleach
 brotlipy
 coverage
 Django~=1.11.0

@@ -28,7 +28,7 @@ DEFAULT_FROM_EMAIL = "noreply@pastery.net"
 SECRET_KEY = os.getenv("SECRET_KEY", '#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*a-%&$r&n')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True if os.environ.get("NODEBUG") is None else False
+DEBUG = os.environ.get("NODEBUG") is None
 
 ALLOWED_HOSTS = ["localhost", "web"] if os.environ.get("NODEBUG") is None else [".pastery.net", "pastery.vms.stavros.io"]
 
@@ -70,13 +70,8 @@ MIDDLEWARE = [
 
 AUTH_USER_MODEL = "main.User"
 
-
-SESSION_CACHE_ALIAS = "default"
-SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
-SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
-
-SESSION_COOKIE_SECURE = os.environ.get("NODEBUG") is None
-CSRF_COOKIE_SECURE = os.environ.get("NODEBUG") is None
+SESSION_COOKIE_SECURE = not os.environ.get("NODEBUG") is None
+CSRF_COOKIE_SECURE = not os.environ.get("NODEBUG") is None
 
 AUTHENTICATION_BACKENDS = (
    'pastery.auth_backends.EmailTokenBackend',
@@ -170,6 +165,10 @@ elif os.environ.get("DATABASE_URL"):
             }
         }
     }
+
+    SESSION_CACHE_ALIAS = "default"
+    SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+    SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
 else:
     DATABASES = {
         'default': {
