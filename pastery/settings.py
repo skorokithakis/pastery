@@ -24,12 +24,12 @@ DEFAULT_FROM_EMAIL = "noreply@pastery.net"
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*a-%&$r&n'
+SECRET_KEY = os.getenv("SECRET_KEY", '#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*a-%&$r&n')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True if os.environ.get("NODEBUG") is None else False
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = ["localhost", "web"] if os.environ.get("NODEBUG") is None else [".pastery.net"]
 
 # Application definition
 
@@ -68,8 +68,13 @@ MIDDLEWARE = [
 
 AUTH_USER_MODEL = "main.User"
 
+
+SESSION_CACHE_ALIAS = "default"
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
+
+SESSION_COOKIE_SECURE = os.environ.get("NODEBUG") is None
+CSRF_COOKIE_SECURE = os.environ.get("NODEBUG") is None
 
 AUTHENTICATION_BACKENDS = (
    'pastery.auth_backends.EmailTokenBackend',
@@ -137,6 +142,32 @@ if os.environ.get("IN_DOCKER"):
             'PORT': 5432,                      # Set to empty string for default. Not used with sqlite3.
         }
     }
+elif os.environ.get("DATABASE_URL"):
+    # Stuff for when running in Dokku.
+
+    # Parse the DATABASE_URL env var.
+    USER, PASSWORD, HOST, PORT, NAME = re.match("^postgres://(?P<username>.*?)\:(?P<password>.*?)\@(?P<host>.*?)\:(?P<port>\d+)\/(?P<db>.*?)$", os.environ.get("DATABASE_URL", "")).groups()
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': NAME,
+            'USER': USER,
+            'PASSWORD': PASSWORD,
+            'HOST': HOST,
+            'PORT': int(PORT),
+        }
+    }
+
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": os.getenv("REDIS_URL", "") + "/1",
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            }
+        }
+    }
 else:
     DATABASES = {
         'default': {
@@ -165,9 +196,17 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_HOST_USER = 'postmaster@pastery.net'
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", 'addme')
+EMAIL_PORT = 587
 
 RATELIMIT_STATUS_CODE = 429
+
+MIXPANEL_TOKEN = os.getenv("MIXPANEL_TOKEN", "addme")
 
 try:
     COMMIT_HASH = check_output(['git', 'rev-parse', '--short', 'HEAD'])
@@ -191,17 +230,17 @@ USE_L10N = True
 
 USE_TZ = True
 
-RAVEN_CONFIG = {"dsn": None}  # type: Dict[str, Union[None, str]]
+RAVEN_CONFIG = {"dsn": os.getenv("RAVEN_DSN", None)}  # type: Dict[str, Union[None, str]]
 
 CACHING_TIME = 24 * 3600
 
 RECAPTCHA_PUBLIC_KEY = '6LfkpBITAAAAACCMrowwJj4dcUmcjKrZs7CfTqiu'
-RECAPTCHA_PRIVATE_KEY = 'override me'
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY", 'override me')
 RECAPTCHA_USE_SSL = True
 NOCAPTCHA = True  # Use the new-style NoCAPTCHA.
 
-CLOUDFLARE_EMAIL = "example@example.com"
-CLOUDFLARE_API_KEY = "example"
+CLOUDFLARE_EMAIL = os.getenv("CLOUDFLARE_EMAIL", "example@example.com")
+CLOUDFLARE_API_KEY = os.getenv("CLOUDFLARE_API_KEY", "example")
 
 ENABLE_CAPTCHA = False
 
