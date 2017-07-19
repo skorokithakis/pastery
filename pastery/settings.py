@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'pastery.stats_middleware.StatsMiddleware',
     'pastery.push_middleware.push_middleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -251,7 +252,7 @@ MAX_COMBINED_PASTES = 5
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "_static")
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),

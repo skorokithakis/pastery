@@ -7,8 +7,10 @@
 ansible==2.3.0.0
 asn1crypto==0.22.0        # via cryptography
 bleach==1.4.3
+brotlipy==0.7.0
 captainwebhook==0.2.0
-cffi==1.10.0              # via cryptography
+cffi==1.10.0              # via brotlipy, cryptography
+contextlib2==0.5.5        # via raven
 coverage==4.4
 cryptography==1.8.1       # via paramiko
 django-annoying==0.10.3
@@ -20,7 +22,7 @@ django-ipware==1.1.6
 django-nose==1.4.4
 django-recaptcha==1.0.6
 django-redis==4.3.0
-django==1.10.7            # via django-brake, django-debug-toolbar, django-recaptcha
+django==1.11.3
 docutils==0.13.1
 fake-factory==0.5.11
 html5lib==0.9999999
@@ -43,7 +45,7 @@ pyparsing==2.2.0          # via packaging
 python-dateutil==2.6.0    # via fake-factory
 pytz==2017.2
 pyyaml==3.12              # via ansible
-raven==5.8.1
+raven==6.1.0
 redis==2.10.5             # via django-redis
 requests==2.11.1
 schema==0.4.0
@@ -53,3 +55,4 @@ sqlparse==0.2.3
 textile==2.2.2
 uwsgi==2.0.15
 werkzeug==0.11.15
+whitenoise==3.3.0

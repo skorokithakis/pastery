@@ -1,7 +1,8 @@
 ansible
 bleach~=1.4.2
+brotlipy
 coverage
-Django~=1.10.0
+Django~=1.11.0
 django-annoying
 django-bootstrap3~=6.2.2
 django-brake~=1.3.1
@@ -20,7 +21,7 @@ mixpanel-py-async
 pygments
 psycopg2~=2.6.1
 pytz
-raven~=5.8.1
+raven
 requests~=2.11.1
 shortuuid~=0.4.2
 schema~=0.4.0
@@ -28,6 +29,7 @@ sqlparse~=0.2.0
 Textile~=2.2.2
 uwsgi~=2.0.11
 Werkzeug~=0.11.2
+whitenoise
 html5lib
 
 captainwebhook
