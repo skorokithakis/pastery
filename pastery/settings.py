@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import re
 import random
 from typing import Union, List  # noqa
 from subprocess import check_output
