@@ -231,6 +231,22 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}
+
 RAVEN_CONFIG = {"dsn": os.getenv("RAVEN_DSN", None)}  # type: Dict[str, Union[None, str]]
 
 CACHING_TIME = 24 * 3600
