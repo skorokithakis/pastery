@@ -5,7 +5,7 @@ coverage
 Django~=1.11.0
 django-annoying
 django-bootstrap3
-django-brake~=1.3.1
+django-brake
 django-debug-toolbar~=1.4
 django-extensions
 django-ipware~=1.1.2

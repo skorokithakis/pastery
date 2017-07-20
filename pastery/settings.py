@@ -206,6 +206,7 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", 'addme')
 EMAIL_PORT = 587
 
 RATELIMIT_STATUS_CODE = 429
+RATELIMIT_CACHE_BACKEND = 'pastery.brake_backend.MyBrake'
 
 MIXPANEL_TOKEN = os.getenv("MIXPANEL_TOKEN", "addme")
 
