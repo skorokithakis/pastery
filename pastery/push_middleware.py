@@ -40,7 +40,7 @@ def push_middleware(get_response):
         collector = FileCollector()
         storage.staticfiles_storage = staticfiles.staticfiles_storage = storage_factory(collector)()
         response = get_response(request)
-        urls = set([storage.staticfiles_storage.url(f) for f in collector.collection.copy()])
+        urls = list(set([storage.staticfiles_storage.url(f) for f in collector.collection.copy()]))
         response["Link"] = ", ".join(["<%s>; rel=preload" % url for url in urls[:10]])
         return response
     return middleware
