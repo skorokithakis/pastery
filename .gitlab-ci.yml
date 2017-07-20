@@ -30,8 +30,10 @@ test:
   stage: test
 
 deploy to production:
+  image: ilyasemenov/gitlab-ci-git-push
   stage: deploy
-  script: curl https://www.pastery.net/webhook/${PRODUCTION_DEPLOY_KEY}/
+  script:
+    - git-push dokku@all.vms.stavros.io:timetaco
   environment: production
   only:
     - master
