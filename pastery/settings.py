@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", '#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("NODEBUG") is None
 
-ALLOWED_HOSTS = ["localhost", "web"] if os.environ.get("NODEBUG") is None else [".pastery.net", "pastery.vms.stavros.io"]
+ALLOWED_HOSTS = ["localhost", "web"] if os.environ.get("NODEBUG") is None else [".pastery.net"]
 
 # Application definition
 
