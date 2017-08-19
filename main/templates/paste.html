@@ -145,7 +145,6 @@ Multiple pastes
                 data-language="{{ paste.get_language_display }}"
                 data-expires="{% if paste.expiration %}{% blocktrans with paste.expiration|timeuntil as until %}Expires in {{ until }}{% endblocktrans %}{% else %}{% trans "Never expires" %}{% endif %}"
                 {% if paste %}
-                data-reporturl="{% url "main:report-paste" paste.id %}"
                 data-rawurl="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}"
                 {% endif %}
                 aria-hidden="{% if not forloop.first %}true{% else %}false{% endif %}"
