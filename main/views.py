@@ -215,7 +215,7 @@ def download_paste(request, paste_id):
 
 def raw_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id)
-    response = HttpResponse(paste.body, content_type="text/plain")
+    response = HttpResponse(paste.body, content_type="text/plain; charset=utf-8")
     paste.increment_views()
     return response
 
