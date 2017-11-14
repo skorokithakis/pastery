@@ -212,7 +212,7 @@ MIXPANEL_TOKEN = os.getenv("MIXPANEL_TOKEN", "addme")
 
 try:
     COMMIT_HASH = check_output(['git', 'rev-parse', '--short', 'HEAD'])
-except:
+except:  # noqa
     COMMIT_HASH = "Not a git repo"
 
 # Internationalization

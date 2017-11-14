@@ -19,7 +19,7 @@ class EmailTokenBackend:
         "Authenticate a user given a signed token."
         try:
             data = Signer().unsign(token)
-        except:
+        except:  # noqa
             return
 
         data = json.loads(base64.b64decode(data).decode("utf8"))
