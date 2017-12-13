@@ -45,7 +45,7 @@ def pasteform_factory(user):
             [14 * 24 * 60, _("two weeks")],
             [30 * 24 * 60, _("a month")],
         ]
-        if user.is_authenticated():
+        if user.is_authenticated:
             EXPIRATION.append([None, _("never")])
 
         expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60, label=_("Expires in"), required=False)
@@ -112,7 +112,7 @@ def home(request):
             if clean["expires"]:
                 data["expiration"] = timezone.now() + datetime.timedelta(minutes=int(clean["expires"]))
 
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 data["user"] = request.user
 
             paste = Paste.objects.create(**data)
@@ -230,7 +230,7 @@ def report_paste(request, paste_id):
         messages.error(request, _("You're reporting too many pastes. If there's something widespread going on, please contact us directly."))
         return redirect(paste)
 
-    reporter = request.user.username if request.user.is_authenticated() else get_ip(request)
+    reporter = request.user.username if request.user.is_authenticated else get_ip(request)
     client.captureMessage("A paste was reported by %s: %s" % (reporter, paste.get_full_url()))
     send_event(reporter, "report_paste", {
         "id": paste.id,
@@ -303,7 +303,7 @@ def account(request):
 
 @render_to("login.html")
 def login(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         messages.error(request, _("You are already logged in."))
         return redirect("main:home")
 
@@ -326,7 +326,7 @@ def login(request):
             # Create the signed structrure containing the time and email address.
             email = form.cleaned_data["email"].lower().strip()
             data = {"t": int(time.time()), "e": email}
-            data = Signer().sign(base64.b64encode(json.dumps(data).encode("utf8")))
+            data = Signer().sign(base64.b64encode(json.dumps(data).encode("utf8")).decode("utf8"))
 
             # Send the link by email.
             send_mail(

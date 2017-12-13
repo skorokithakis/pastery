@@ -7,22 +7,20 @@ import markdown
 import pygments
 import shortuuid
 import textile
-
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.sites.models import Site
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import F, Q
 from django.db.models.signals import post_save
 from django.db.utils import IntegrityError
 from django.dispatch import receiver
 from django.http import Http404
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_all_lexers, get_lexer_by_name, guess_lexer
@@ -33,15 +31,14 @@ from utils.md_nofollow import NofollowExtension
 
 def clean(text: str) -> str:
     """Convenience method to bleach.clean()."""
-    allowed_tags = ['a', 'abbr', 'acronym', 'address', 'area', 'b', 'bdo',
-        'big', 'blockquote', 'br', 'button', 'caption', 'center', 'cite',
-        'code', 'col', 'colgroup', 'dd', 'del', 'dfn', 'dir', 'div', 'dl', 'dt',
-        'em', 'fieldset', 'font', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-        'hr', 'i', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'map',
-        'menu', 'ol', 'optgroup', 'option', 'p', 'pre', 'q', 's', 'samp',
-        'select', 'small', 'span', 'strike', 'strong', 'sub', 'sup', 'table',
-        'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'u', 'tr', 'tt', 'u',
-        'ul', 'var']
+    allowed_tags = [
+        'a', 'abbr', 'acronym', 'address', 'area', 'b', 'bdo', 'big', 'blockquote', 'br', 'button', 'caption', 'center',
+        'cite', 'code', 'col', 'colgroup', 'dd', 'del', 'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'fieldset', 'font',
+        'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li',
+        'map', 'menu', 'ol', 'optgroup', 'option', 'p', 'pre', 'q', 's', 'samp', 'select', 'small', 'span', 'strike',
+        'strong', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'u', 'tr', 'tt', 'u', 'ul',
+        'var'
+    ]
     allowed_attributes = {
         'a': ['href', 'title', 'rel', 'name', 'alt'],
         'abbr': ['title'],
@@ -50,12 +47,7 @@ def clean(text: str) -> str:
     }
     allowed_styles = ["font-weight", "text-align", "text-transform"]
 
-    return bleach.clean(
-            text,
-            tags=allowed_tags,
-            attributes=allowed_attributes,
-            styles=allowed_styles
-            )
+    return bleach.clean(text, tags=allowed_tags, attributes=allowed_attributes, styles=allowed_styles)
 
 
 def get_languages() -> List:
@@ -71,17 +63,19 @@ def get_languages() -> List:
     banned_lexers = ["md"]
     # Create a tuple of (first_alias, friendly_name) for each lexer.
     lexers = [[lexer[1][0], lexer[0]] for lexer in get_all_lexers() if lexer[1][0] not in banned_lexers]
-    lexers += [["markdown", "Markdown"], ["textile", "Textile"], ]
+    lexers += [
+        ["markdown", "Markdown"],
+        ["textile", "Textile"],
+    ]
     sorted_lexers = sorted(lexers, key=lambda x: x[0].lower())
 
     top = [
-        "bash", "c", "csharp", "cpp", "css", "html", "java", "js", "json",
-        "markdown", "lua", "text", "objective-c", "perl", "php", "python",
-        "ruby", "swift"
+        "bash", "c", "csharp", "cpp", "css", "html", "java", "js", "json", "markdown", "lua", "text", "objective-c",
+        "perl", "php", "python", "ruby", "swift"
     ]
 
     top_languages = [["autodetect", _("Autodetect")]]
-    bottom_languages = [["autodetect", "--------"]]
+    bottom_languages = [["autodetect1", "--------"]]
     for language in sorted_lexers:
         if language[0] in top:
             top_languages.append(language)
@@ -99,10 +93,7 @@ def get_aliases() -> Dict[str, str]:
     the lexer's first alias. This way, any language that comes in can be mapped
     to the alias that Pygments supports for that language.
     """
-    alias_dict = {
-            "markdown": "markdown",
-            "textile": "textile"
-            }
+    alias_dict = {"markdown": "markdown", "textile": "textile"}
     for name, aliases, filetypes, mimetypes in get_all_lexers():
         for alias in aliases:
             alias_dict[alias] = aliases[0]
@@ -181,25 +172,26 @@ class User(AbstractUser):
     last_name = None  # type: None
     email = models.EmailField(_('email address'), unique=True)
     api_key = models.CharField(
-            verbose_name=_("API key"),
-            max_length=64,
-            help_text=_("Your API key."),
-            default=generate_api_key,
-            unique=True,
-            )
+        verbose_name=_("API key"),
+        max_length=64,
+        help_text=_("Your API key."),
+        default=generate_api_key,
+        unique=True,
+    )
     _style_name = models.CharField(
-            verbose_name=_("Style name"),
-            choices=[["", _("Default")]] + STYLES,
-            max_length=50,
-            blank=True,
-            help_text=_("Pick the color style you prefer for all pastes on the site."),
-            )
+        verbose_name=_("Style name"),
+        choices=[["", _("Default")]] + STYLES,
+        max_length=50,
+        blank=True,
+        help_text=_("Pick the color style you prefer for all pastes on the site."),
+    )
 
     class Meta:
         db_table = "auth_user"
 
     def get_full_name(self):
         return self.email
+
     get_short_name = get_full_name
 
     @property
@@ -239,17 +231,20 @@ class PasteManager(models.Manager):
         else:
             user_id = hashlib.sha256(kwargs.get("user_address", "").encode("utf8")).hexdigest()[:16]
 
-        send_event(user_id, "new_paste", {
-            "raw_language": kwargs["raw_language"],
-            "id": paste.id,
-            "url": paste.get_full_url(),
-            })
+        send_event(
+            user_id, "new_paste", {
+                "raw_language": kwargs["raw_language"],
+                "id": paste.id,
+                "url": paste.get_full_url(),
+            }
+        )
 
         return paste
 
 
 class ActivePasteManager(models.Manager):
     """A manager that ignores expired pastes."""
+
     def get_queryset(self):
         qs = super().get_queryset()
         # Exclude pastes that are over time or over views.
@@ -258,28 +253,13 @@ class ActivePasteManager(models.Manager):
 
 
 class Paste(models.Model):
-    id = models.CharField(
-        max_length=100,
-        primary_key=True,
-        db_index=True,
-        default=generate_paste_uuid,
-        editable=False
-    )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
-    title = models.CharField(
-        max_length=500,
-        blank=True,
-        help_text=_("The title of the paste.")
-    )
+    id = models.CharField(max_length=100, primary_key=True, db_index=True, default=generate_paste_uuid, editable=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE)
+    title = models.CharField(max_length=500, blank=True, help_text=_("The title of the paste."))
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     expiration = models.DateTimeField(blank=True, null=True)
-    raw_language = models.CharField(
-        verbose_name=_("Language"),
-        max_length=100,
-        choices=LANGUAGES,
-        default="autodetect"
-    )
+    raw_language = models.CharField(verbose_name=_("Language"), max_length=100, choices=LANGUAGES, default="autodetect")
     user_address = models.CharField(max_length=1000, blank=True)
     views = models.IntegerField(default=0, blank=False)
     max_views = models.IntegerField(default=0, blank=False)
@@ -290,7 +270,7 @@ class Paste(models.Model):
     def __str__(self) -> str:
         return self.title if self.title else self.id
 
-    def as_dict(self, include_body: bool=False) -> Dict:
+    def as_dict(self, include_body: bool = False) -> Dict:
         """Represent the object as a dictionary."""
         r = {
             "id": self.id,
@@ -322,9 +302,9 @@ class Paste(models.Model):
         return reverse("main:paste", args=[self.id])
 
     def has_expired(self) -> bool:
-        return ((self.expiration and
-                 self.expiration < timezone.now()) or
-                (self.max_views and self.views >= self.max_views))
+        return ((self.expiration and self.expiration < timezone.now())
+                or (self.max_views and self.views >= self.max_views))
+
     has_expired.boolean = True  # type: ignore
 
     def get_language_display(self) -> bool:
@@ -370,7 +350,7 @@ class Paste(models.Model):
         if value:
             return value
 
-        if self.raw_language == "autodetect":
+        if "autodetect" in self.raw_language:
             try:
                 language = guess_lexer(self.body).aliases[0]
             except pygments.util.ClassNotFound:
@@ -394,11 +374,10 @@ class Paste(models.Model):
         elif language == "textile":
             rendered = clean(textile.textile_restricted(self.body))
         else:
-            formatter = HtmlFormatter(linenos="table", linespans="line", anchorlinenos=True, lineanchors="l", cssclass="paste")
-            rendered = highlight(
-                self.body, pygments.lexers.get_lexer_by_name(language),
-                formatter
+            formatter = HtmlFormatter(
+                linenos="table", linespans="line", anchorlinenos=True, lineanchors="l", cssclass="paste"
             )
+            rendered = highlight(self.body, pygments.lexers.get_lexer_by_name(language), formatter)
         cache.set(key, rendered, settings.CACHING_TIME)
         return rendered
 

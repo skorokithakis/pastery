@@ -22,6 +22,6 @@ from main import urls as main_urls  # noqa
 
 urlpatterns = [
     url(r'^narnia/', admin.site.urls),
-    url(r'^api/', include(api_urls, namespace="api", app_name="api")),
-    url(r'^', include(main_urls, namespace="main", app_name="main")),
+    url(r'^api/', include(api_urls)),
+    url(r'^', include(main_urls)),
 ]
