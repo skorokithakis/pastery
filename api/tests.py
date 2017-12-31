@@ -1,5 +1,5 @@
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 
 from main.tests import PasteFactory, UserFactory
 
@@ -39,7 +39,11 @@ class SmokeTests(TestCase):
         self.assertEqual(response.json()["pastes"][0]["id"], paste_id)
 
     def test_authenticated_posting(self):
-        response = self.client.post(reverse("api:paste") + "?api_key=" + self.user1.api_key, "stuff", content_type='application/x-www-form-urlencoded')
+        response = self.client.post(
+            reverse("api:paste") + "?api_key=" + self.user1.api_key,
+            "stuff",
+            content_type='application/x-www-form-urlencoded'
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["language"], "text")
 

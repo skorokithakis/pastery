@@ -2,8 +2,8 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 from hypothesis import strategies as st
 from hypothesis.extra.django.models import default_value, models
@@ -13,19 +13,19 @@ from .models import Paste
 User = get_user_model()
 
 UserFactory = models(
-        User,
-        password=st.just("pass"),
-        _style_name=st.just(""),
-        api_key=st.just("apikey"),
-    )
+    User,
+    password=st.just("pass"),
+    _style_name=st.just(""),
+    api_key=st.just("apikey"),
+)
 PasteFactory = models(
-        Paste,
-        id=default_value,
-        expiration=st.integers(min_value=0, max_value=100).map(lambda x: timezone.now() + timedelta(minutes=x)),
-        raw_language=default_value,
-        views=default_value,
-        max_views=default_value,
-    )
+    Paste,
+    id=default_value,
+    expiration=st.integers(min_value=0, max_value=100).map(lambda x: timezone.now() + timedelta(minutes=x)),
+    raw_language=default_value,
+    views=default_value,
+    max_views=default_value,
+)
 
 
 class SmokeTests(TestCase):

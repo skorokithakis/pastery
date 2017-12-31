@@ -302,8 +302,8 @@ class Paste(models.Model):
         return reverse("main:paste", args=[self.id])
 
     def has_expired(self) -> bool:
-        return ((self.expiration and self.expiration < timezone.now())
-                or (self.max_views and self.views >= self.max_views))
+        return ((self.expiration and self.expiration < timezone.now()) or
+                (self.max_views and self.views >= self.max_views))
 
     has_expired.boolean = True  # type: ignore
 
