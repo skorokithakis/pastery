@@ -5,7 +5,7 @@
 #    pip-compile --output-file requirements.txt requirements.in
 #
 ansible==2.4.2.0
-asn1crypto==0.23.0        # via cryptography
+asn1crypto==0.24.0        # via cryptography
 bcrypt==3.1.4             # via paramiko
 bleach==2.1.2
 brotlipy==0.7.0
@@ -22,7 +22,8 @@ django-ipware==1.1.6
 django-nose==1.4.5
 django-recaptcha==1.0.6
 django-redis==4.3.0
-django==2.0
+django-sendgrid-v5==0.6.85
+django==2.0               # via django-annoying, django-brake, django-debug-toolbar, django-recaptcha, django-sendgrid-v5
 docutils==0.14
 fake-factory==0.5.11
 html5lib==1.0.1
@@ -41,12 +42,14 @@ pycparser==2.18           # via cffi
 pygments==2.2.0
 pynacl==1.2.1             # via paramiko
 python-dateutil==2.6.1    # via fake-factory
+python-http-client==3.0.0  # via django-sendgrid-v5, sendgrid
 pytz==2017.3
 pyyaml==3.12              # via ansible
 raven==6.4.0
 redis==2.10.6             # via django-redis
 requests==2.11.1
 schema==0.4.0
+sendgrid==5.3.0           # via django-sendgrid-v5
 shortuuid==0.4.3
 six==1.11.0               # via bcrypt, bleach, cryptography, django-extensions, fake-factory, html5lib, mixpanel, pynacl, python-dateutil
 sqlparse==0.2.4

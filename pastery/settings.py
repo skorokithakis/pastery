@@ -19,10 +19,9 @@ from subprocess import check_output
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-DEFAULT_FROM_EMAIL = "noreply@pastery.net"
+DEFAULT_FROM_EMAIL = "Pastery <noreply@pastery.net>"
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY", '#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*a-%&$r&n')
@@ -165,9 +164,14 @@ elif os.environ.get("DATABASE_URL"):
         }
     }
 
+    SESSION_ENGINE = "django.contrib.sessions.backends.cache"
     SESSION_CACHE_ALIAS = "default"
-    SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
     SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
+
+    EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+
+    SENDGRID_API_KEY = os.getenv("EMAIL_HOST_PASSWORD", "pass")
+    SENDGRID_SANDBOX_MODE_IN_DEBUG = DEBUG
 else:
     DATABASES = {
         'default': {
@@ -195,14 +199,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_HOST_USER = 'postmaster@pastery.net'
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", 'addme')
-EMAIL_PORT = 587
 
 RATELIMIT_STATUS_CODE = 429
 RATELIMIT_CACHE_BACKEND = 'pastery.brake_backend.MyBrake'
