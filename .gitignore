@@ -13,3 +13,5 @@ secret_keys.py
 _static/
 htmlcov/
 .mypy_cache/
+terraform.tfvars
+.terraform/
