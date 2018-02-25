@@ -33,7 +33,7 @@ deploy to production:
   image: ilyasemenov/gitlab-ci-git-push
   stage: deploy
   script:
-    - git-push ssh://dokku@vms.stavros.io:16022/pastery
+    - git-push ssh://dokku@projects.stavros.io:16022/pastery
   environment: production
   only:
     - master
