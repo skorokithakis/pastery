@@ -76,7 +76,7 @@ resource "cloudflare_record" "mx10" {
   type="MX"
   name="@"
   priority="10"
-  value="mxa.mailgun.com"
+  value="mxa.mailgun.org"
 }
 
 resource "cloudflare_record" "mx20" {
@@ -84,7 +84,7 @@ resource "cloudflare_record" "mx20" {
   type="MX"
   name="@"
   priority="20"
-  value="mxb.mailgun.com"
+  value="mxb.mailgun.org"
 }
 
 resource "cloudflare_record" "domainkey" {
