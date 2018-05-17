@@ -61,7 +61,7 @@
                         <li><a class="account" href="{% url 'admin:index' %}">{% trans "Admin" %}</a></li>
                         {% endif %}
                         <li role="separator" class="divider"></li>
-                        <li><a data-next="{{ request.get_full_path }}" href="{% url "main:logout" %}" >{% trans "Logout" %}</a></li>
+                        <li><a data-next="{{ request.get_full_path }}" href="{% url "tokenauth:logout" %}" >{% trans "Logout" %}</a></li>
                     </ul>
                 </div>
                 {% else %}

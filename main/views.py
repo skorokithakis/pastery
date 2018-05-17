@@ -1,8 +1,5 @@
-import base64
 import datetime
-import json
 import re
-import time
 
 from annoying.decorators import ajax_request, render_to
 from brake.decorators import ratelimit
@@ -10,11 +7,9 @@ from captcha.fields import ReCaptchaField
 from django import forms
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, get_user_model, login as djlogin, logout as djlogout
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
-from django.core.mail import send_mail
-from django.core.signing import Signer
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -26,9 +21,9 @@ from django.views.decorators.http import require_POST
 from ipware.ip import get_ip
 from raven.contrib.django.raven_compat.models import client
 
-
-from .models import LANGUAGE_DICT, Paste, STYLES
 from utils import send_event  # noqa
+
+from .models import LANGUAGE_DICT, STYLES, Paste
 
 User = get_user_model()
 LANGUAGE_NAMES = LANGUAGE_DICT.keys()
@@ -63,6 +58,7 @@ def pasteform_factory(user):
         class Meta:
             model = Paste
             fields = ["title", "body", "raw_language"]
+
     return PasteForm
 
 
@@ -84,6 +80,7 @@ class EmailChangeForm(forms.Form):
 
 class UserForm(forms.ModelForm):
     "The user preferences form for the account page."
+
     class Meta:
         model = User
         fields = ["_style_name"]
@@ -169,11 +166,7 @@ def embed_paste(request, paste_id):
     else:
         status = 200
 
-    data = {
-        "pastes": pastes,
-        "paste_id": paste_id,
-        "host": request.GET.get("host", "")
-    }
+    data = {"pastes": pastes, "paste_id": paste_id, "host": request.GET.get("host", "")}
     response = render(request, "embed.html", data, status=status)
     return response
 
@@ -196,13 +189,15 @@ def paste(request, paste_id):
 
     show_full = (has_multiple or (pastes[0].language != 'markdown' and pastes[0].language != 'textile'))
 
-    return render(request, "paste.html", {
-        "pastes": pastes,
-        "paste": pastes[0],
-        "paste_id": paste_id,
-        "has_multiple": has_multiple,
-        "show_full": show_full,
-    })
+    return render(
+        request, "paste.html", {
+            "pastes": pastes,
+            "paste": pastes[0],
+            "paste_id": paste_id,
+            "has_multiple": has_multiple,
+            "show_full": show_full,
+        }
+    )
 
 
 def download_paste(request, paste_id):
@@ -227,7 +222,12 @@ def report_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id)
 
     if getattr(request, 'limited', False):
-        messages.error(request, _("You're reporting too many pastes. If there's something widespread going on, please contact us directly."))
+        messages.error(
+            request,
+            _(
+                "You're reporting too many pastes. If there's something widespread going on, please contact us directly."
+            )
+        )
         return redirect(paste)
 
     reporter = request.user.username if request.user.is_authenticated else get_ip(request)
@@ -277,9 +277,14 @@ def account(request):
         elif request.POST.get("form") == "email" and email_form.is_valid():
             email = email_form.cleaned_data["email"].lower().strip()
             if User.objects.filter(email=email).count():
-                messages.error(request, _("That email address is already associated with another user. "
-                    "Try logging in with it and changing it from the other account if you want to use it"
-                    " with this one."))
+                messages.error(
+                    request,
+                    _(
+                        "That email address is already associated with another user. "
+                        "Try logging in with it and changing it from the other account if you want to use it"
+                        " with this one."
+                    )
+                )
                 return redirect("main:account")
             else:
                 request.user.email = email
@@ -290,15 +295,8 @@ def account(request):
     else:
         pref_form = UserForm(instance=request.user)
         email_form = EmailChangeForm(initial={"email": request.user.email})
-        pastes = Paste.active.filter(
-                user=request.user
-            ).order_by('-created')
-    return {
-        "email_form": email_form,
-        "pref_form": pref_form,
-        "languages": STYLES,
-        "pastes": pastes
-    }
+        pastes = Paste.active.filter(user=request.user).order_by('-created')
+    return {"email_form": email_form, "pref_form": pref_form, "languages": STYLES, "pastes": pastes}
 
 
 @render_to("login.html")
@@ -307,46 +305,7 @@ def login(request):
         messages.error(request, _("You are already logged in."))
         return redirect("main:home")
 
-    # The user has clicked a login link.
-    if request.GET.get("d"):
-        user = authenticate(token=request.GET["d"])
-        if user is not None:
-            djlogin(request, user)
-            messages.success(request, _("Login successful."))
-            return redirect("main:home")
-        messages.error(request, _("The login link was invalid or has expired. Please try to log in again."))
-
-    # The user has submitted the email form.
-    if request.method == "POST":
-        form = EmailForm(request.POST)
-        if form.is_valid():
-            messages.success(request, _("Login email sent! Please check your"
-                " inbox and click on the link to be logged in."))
-
-            # Create the signed structrure containing the time and email address.
-            email = form.cleaned_data["email"].lower().strip()
-            data = {"t": int(time.time()), "e": email}
-            data = Signer().sign(base64.b64encode(json.dumps(data).encode("utf8")).decode("utf8"))
-
-            # Send the link by email.
-            send_mail(
-                    _('Your Pastery login link'),
-                    render_to_string("login_email.txt", {"data": data}, request=request),
-                    settings.DEFAULT_FROM_EMAIL,
-                    [email],
-                    fail_silently=False
-                    )
-            return redirect("main:home")
-    else:
-        form = EmailForm()
-    return {"form": form}
-
-
-@login_required
-def logout(request):
-    djlogout(request)
-    messages.success(request, _("You have been logged out."))
-    return redirect(request.META.get("HTTP_REFERER", "main:home"))
+    return {}
 
 
 @ajax_request

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'raven.contrib.django.raven_compat',
     'django_extensions',
     'debug_toolbar',
+    'tokenauth',
     'bootstrap3',
     'captcha',
     'main',
@@ -72,8 +73,8 @@ SESSION_COOKIE_SECURE = not os.environ.get("NODEBUG") is None
 CSRF_COOKIE_SECURE = not os.environ.get("NODEBUG") is None
 
 AUTHENTICATION_BACKENDS = (
-   'pastery.auth_backends.EmailTokenBackend',
-   'django.contrib.auth.backends.ModelBackend',
+    'tokenauth.auth_backends.EmailTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 DEFAULT_STYLE = random.choice([

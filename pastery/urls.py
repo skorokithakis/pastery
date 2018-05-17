@@ -23,5 +23,6 @@ from main import urls as main_urls  # noqa
 urlpatterns = [
     url(r'^narnia/', admin.site.urls),
     url(r'^api/', include(api_urls)),
+    url(r'^auth/', include('tokenauth.urls', namespace="tokenauth")),
     url(r'^', include(main_urls)),
 ]

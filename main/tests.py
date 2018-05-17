@@ -60,10 +60,6 @@ class SmokeTests(TestCase):
         response = self.client.get(reverse("main:paste", args=[paste_id]))
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.post(reverse("main:reset-key"), follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertRedirects(response, reverse("main:login") + "?next=/account/reset-key/")
-
         response = self.client.get(reverse("main:embed-paste", args=[paste_id]))
         self.assertEqual(response.status_code, 200)
 
@@ -81,10 +77,6 @@ class SmokeTests(TestCase):
 
         response = self.client.post(reverse("main:download-paste", args=[paste_id]))
         self.assertEqual(response.status_code, 200)
-
-        response = self.client.post(reverse("main:account"), follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertRedirects(response, reverse("main:login") + "?next=/account/")
 
         response = self.client.post(reverse("main:oembed") + "?url=https://hi/" + paste_id)
         self.assertEqual(response.status_code, 200)

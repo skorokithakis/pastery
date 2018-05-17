@@ -44,11 +44,11 @@ django-tokenauth = "*"
 [dev-packages]
 mypy-lang = "*"
 "flake8" = "*"
-"flake8-import-order" = "*"
-"flake8-tidy-imports" = "*"
 "pep8-naming" = "*"
 ipython = "*"
 bpython = "*"
+yapf = "*"
+isort = "*"
 
 [requires]
 python_version = "3.6"

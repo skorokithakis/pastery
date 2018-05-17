@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from main import views
+from .main import views
 
 app_name = "main"
 urlpatterns = [
@@ -8,7 +8,6 @@ urlpatterns = [
     url(r'^account/$', views.account, name="account"),
     url(r'^account/reset-key/$', views.reset_key, name="reset-key"),
     url(r'^login/$', views.login, name="login"),
-    url(r'^logout/$', views.logout, name="logout"),
     url(r'^oembed/$', views.oembed, name="oembed"),
     url(r'^(?P<paste_id>[^/]+)/delete/$', views.delete_paste, name="delete-paste"),
     url(r'^(?P<paste_id>[^/]+)/report/$', views.report_paste, name="report-paste"),
