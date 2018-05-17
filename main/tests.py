@@ -124,7 +124,7 @@ class SmokeTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, reverse("main:account"))
 
-        response = self.client.get(reverse("main:logout"), follow=True)
+        response = self.client.get(reverse("tokenauth:logout"), follow=True)
         self.assertRedirects(response, reverse("main:home"))
 
     def test_submitting(self):
