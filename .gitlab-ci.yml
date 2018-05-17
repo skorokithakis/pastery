@@ -22,7 +22,8 @@ typecheck:
 
 test:
   before_script:
-    - pip install -Ur requirements.txt
+    - pip install pipenv
+    - pipenv install --system
     - python manage.py migrate
     - python manage.py collectstatic --noinput
   script:
