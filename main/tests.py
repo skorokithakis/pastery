@@ -12,12 +12,7 @@ from .models import Paste
 
 User = get_user_model()
 
-UserFactory = models(
-    User,
-    password=st.just("pass"),
-    _style_name=st.just(""),
-    api_key=st.just("apikey"),
-)
+UserFactory = models(User, password=st.just("pass"), _style_name=st.just(""), api_key=st.just("apikey"))
 PasteFactory = models(
     Paste,
     id=default_value,

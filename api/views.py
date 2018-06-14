@@ -10,9 +10,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 from ipware.ip import get_ip
-from schema import And, Optional, Schema, SchemaError, Use
-
 from main.models import ALIAS_DICT, Paste  # noqa
+from schema import And, Optional, Schema, SchemaError, Use
 
 User = get_user_model()
 
@@ -38,18 +37,14 @@ class PasteView(View):
             del data["status_code"]
 
         data_str = json.dumps(data)
-        response = HttpResponse(
-            data_str,
-            content_type="application/json",
-            status=status_code
-        )
-        response['content-length'] = len(data_str)
+        response = HttpResponse(data_str, content_type="application/json", status=status_code)
+        response["content-length"] = len(data_str)
         return response
 
     def get(self, request, paste_id=None):
-        schema = Schema({
-                "api_key": Use(lambda x: User.objects.get(api_key=x[0]), error="\"api_key\" must be a valid API key."),
-                })
+        schema = Schema(
+            {"api_key": Use(lambda x: User.objects.get(api_key=x[0]), error='"api_key" must be a valid API key.')}
+        )
 
         try:
             data = schema.validate(dict(request.GET))
@@ -61,25 +56,46 @@ class PasteView(View):
         else:
             qs = Paste.active.filter(user=data["api_key"]).order_by("-created")
 
-        return {
-                "pastes": [paste.as_dict(include_body=paste_id is not None) for paste in qs],
-               }
+        return {"pastes": [paste.as_dict(include_body=paste_id is not None) for paste in qs]}
 
     def post(self, request, paste_id=None):
-        if getattr(request, 'limited', False):
+        if getattr(request, "limited", False):
             return {"result": "error", "error_msg": "You're pasting too much, please slow down.", "status_code": 429}
 
         schema = Schema(
-            And({
-                Optional("title", default=""): And([str], Use(lambda x: x[0]), lambda x: len(x) < 200, error="\"title\" should be a string less than 200 characters long."),
-                Optional("language", default="autodetect"): And([str], Use(lambda x: x[0]), Use(lambda x: ALIAS_DICT.get(x, "autodetect")), error="\"language\" should be the name of a supported language."),
-                Optional("duration", default=24 * 60): And([str], Use(lambda x: int(x[0])), lambda x: 0 < x <= 50 * 365 * 24 * 60, error="\"duration\" should be a positive integer number of minutes before the paste is deleted."),
-                Optional("api_key", default=None): Use(lambda x: User.objects.get(api_key=x[0]), error="\"api_key\" must be a valid API key."),
-                Optional("max_views", default=0): And([str], Use(lambda x: int(x[0])), lambda x: x >= 0, error="\"max_views\" should be a non-negative integer number of views before the paste is deleted."),
+            And(
+                {
+                    Optional("title", default=""): And(
+                        [str],
+                        Use(lambda x: x[0]),
+                        lambda x: len(x) < 200,
+                        error='"title" should be a string less than 200 characters long.',
+                    ),
+                    Optional("language", default="autodetect"): And(
+                        [str],
+                        Use(lambda x: x[0]),
+                        Use(lambda x: ALIAS_DICT.get(x, "autodetect")),
+                        error='"language" should be the name of a supported language.',
+                    ),
+                    Optional("duration", default=24 * 60): And(
+                        [str],
+                        Use(lambda x: int(x[0])),
+                        lambda x: 0 < x <= 50 * 365 * 24 * 60,
+                        error='"duration" should be a positive integer number of minutes before the paste is deleted.',
+                    ),
+                    Optional("api_key", default=None): Use(
+                        lambda x: User.objects.get(api_key=x[0]), error='"api_key" must be a valid API key.'
+                    ),
+                    Optional("max_views", default=0): And(
+                        [str],
+                        Use(lambda x: int(x[0])),
+                        lambda x: x >= 0,
+                        error='"max_views" should be a non-negative integer number of views before the paste is deleted.',
+                    ),
                 },
                 # Make a named tuple out of the result.
-                Use(lambda x: namedtuple('GenericDict', x.keys())(**x))
-                )
+                Use(lambda x: namedtuple("GenericDict", x.keys())(**x)),
+            )
         )
 
         try:
@@ -112,9 +128,9 @@ class PasteView(View):
         return paste.as_dict()
 
     def delete(self, request, paste_id=None):
-        schema = Schema({
-                "api_key": Use(lambda x: User.objects.get(api_key=x[0]), error="\"api_key\" must be a valid API key."),
-                })
+        schema = Schema(
+            {"api_key": Use(lambda x: User.objects.get(api_key=x[0]), error='"api_key" must be a valid API key.')}
+        )
 
         try:
             data = schema.validate(dict(request.GET))

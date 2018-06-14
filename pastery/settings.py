@@ -13,18 +13,18 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 import random
 import re
-from typing import Dict, List, Union  # noqa
 from subprocess import check_output
+from typing import Dict, List, Union  # noqa
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEFAULT_FROM_EMAIL = "Pastery <noreply@pastery.net>"
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", '#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*a-%&$r&n')
+SECRET_KEY = os.getenv("SECRET_KEY", "#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*a-%&$r&n")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("NODEBUG") is None
@@ -34,37 +34,37 @@ ALLOWED_HOSTS = ["localhost", "web"] if os.environ.get("NODEBUG") is None else [
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.sites',
-    'raven.contrib.django.raven_compat',
-    'django_extensions',
-    'debug_toolbar',
-    'tokenauth',
-    'bootstrap3',
-    'captcha',
-    'main',
-    'api',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "django.contrib.sites",
+    "raven.contrib.django.raven_compat",
+    "django_extensions",
+    "debug_toolbar",
+    "tokenauth",
+    "bootstrap3",
+    "captcha",
+    "main",
+    "api",
     "django_nose",
 ]
 
 MIDDLEWARE = [
-    'pastery.stats_middleware.StatsMiddleware',
-    'pastery.push_middleware.push_middleware',
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    "pastery.stats_middleware.StatsMiddleware",
+    "pastery.push_middleware.push_middleware",
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 AUTH_USER_MODEL = "main.User"
@@ -72,55 +72,54 @@ AUTH_USER_MODEL = "main.User"
 SESSION_COOKIE_SECURE = not os.environ.get("NODEBUG") is None
 CSRF_COOKIE_SECURE = not os.environ.get("NODEBUG") is None
 
-AUTHENTICATION_BACKENDS = (
-    'tokenauth.auth_backends.EmailTokenBackend',
-    'django.contrib.auth.backends.ModelBackend',
-)
+AUTHENTICATION_BACKENDS = ("tokenauth.auth_backends.EmailTokenBackend", "django.contrib.auth.backends.ModelBackend")
 
-DEFAULT_STYLE = random.choice([
-    "monokai",
-    "solarized",
-    "solarized_dark",
-    "paraiso-dark",
-    "native",
-])
+DEFAULT_STYLE = random.choice(["monokai", "solarized", "solarized_dark", "paraiso-dark", "native"])
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
 
 NOSE_ARGS = ["--nocapture", "--nologcapture", "--stop"]
-NOSE_ARGS += ["--cover-package=pastery", "--cover-package=main", "--cover-package=api", "--cover-erase", "--cover-html", "--cover-html-dir=htmlcov"]
+NOSE_ARGS += [
+    "--cover-package=pastery",
+    "--cover-package=main",
+    "--cover-package=api",
+    "--cover-erase",
+    "--cover-html",
+    "--cover-html-dir=htmlcov",
+]
 NOSE_ARGS += ["--with-coverage"]
 
-ROOT_URLCONF = 'pastery.urls'
+ROOT_URLCONF = "pastery.urls"
 
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/login/"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
                 "pastery.context_processors.current_site",
                 "pastery.context_processors.settings",
-            ],
+            ]
         },
-    },
+    }
 ]
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = True
 
 DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": lambda request: False and ((not request.is_ajax()) and request.user.is_authenticated and request.user.is_superuser),
+    "SHOW_TOOLBAR_CALLBACK": lambda request: False
+    and ((not request.is_ajax()) and request.user.is_authenticated and request.user.is_superuser)
 }
 
-WSGI_APPLICATION = 'pastery.wsgi.application'
+WSGI_APPLICATION = "pastery.wsgi.application"
 
 SITE_ID = 1
 
@@ -129,29 +128,32 @@ SITE_ID = 1
 
 if os.environ.get("IN_DOCKER"):
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': "postgres",  # Or path to database file if using sqlite3.
-            'USER': 'postgres',                      # Not used with sqlite3.
-            'PASSWORD': 'password',                      # Not used with sqlite3.
-            'HOST': "db",                      # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': 5432,                      # Set to empty string for default. Not used with sqlite3.
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            "NAME": "postgres",  # Or path to database file if using sqlite3.
+            "USER": "postgres",  # Not used with sqlite3.
+            "PASSWORD": "password",  # Not used with sqlite3.
+            "HOST": "db",  # Set to empty string for localhost. Not used with sqlite3.
+            "PORT": 5432,  # Set to empty string for default. Not used with sqlite3.
         }
     }
 elif os.environ.get("DATABASE_URL"):
     # Stuff for when running in Dokku.
 
     # Parse the DATABASE_URL env var.
-    USER, PASSWORD, HOST, PORT, NAME = re.match("^postgres://(?P<username>.*?)\:(?P<password>.*?)\@(?P<host>.*?)\:(?P<port>\d+)\/(?P<db>.*?)$", os.environ.get("DATABASE_URL", "")).groups()
+    USER, PASSWORD, HOST, PORT, NAME = re.match(
+        "^postgres://(?P<username>.*?)\:(?P<password>.*?)\@(?P<host>.*?)\:(?P<port>\d+)\/(?P<db>.*?)$",
+        os.environ.get("DATABASE_URL", ""),
+    ).groups()
 
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': NAME,
-            'USER': USER,
-            'PASSWORD': PASSWORD,
-            'HOST': HOST,
-            'PORT': int(PORT),
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": NAME,
+            "USER": USER,
+            "PASSWORD": PASSWORD,
+            "HOST": HOST,
+            "PORT": int(PORT),
         }
     }
 
@@ -159,9 +161,7 @@ elif os.environ.get("DATABASE_URL"):
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
             "LOCATION": os.getenv("REDIS_URL", "") + "/1",
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            }
+            "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
         }
     }
 
@@ -169,58 +169,43 @@ elif os.environ.get("DATABASE_URL"):
     SESSION_CACHE_ALIAS = "default"
     SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
 
-    EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+    EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 
     SENDGRID_API_KEY = os.getenv("EMAIL_HOST_PASSWORD", "pass")
     SENDGRID_SANDBOX_MODE_IN_DEBUG = DEBUG
 else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
+    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": os.path.join(BASE_DIR, "db.sqlite3")}}
 
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 
 RATELIMIT_STATUS_CODE = 429
-RATELIMIT_CACHE_BACKEND = 'pastery.brake_backend.MyBrake'
+RATELIMIT_CACHE_BACKEND = "pastery.brake_backend.MyBrake"
 
 MIXPANEL_TOKEN = os.getenv("MIXPANEL_TOKEN", "addme")
 
 try:
-    COMMIT_HASH = check_output(['git', 'rev-parse', '--short', 'HEAD'])
+    COMMIT_HASH = check_output(["git", "rev-parse", "--short", "HEAD"])
 except:  # noqa
     COMMIT_HASH = "Not a git repo"
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-LOCALE_PATHS = [
-    os.path.join(BASE_DIR, "locale"),
-]
+LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -229,27 +214,18 @@ USE_L10N = True
 USE_TZ = True
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
-        },
-    },
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {"django": {"handlers": ["console"], "level": os.getenv("DJANGO_LOG_LEVEL", "INFO")}},
 }
 
 RAVEN_CONFIG = {"dsn": os.getenv("RAVEN_DSN", None)}  # type: Dict[str, Union[None, str]]
 
 CACHING_TIME = 24 * 3600
 
-RECAPTCHA_PUBLIC_KEY = '6LfkpBITAAAAACCMrowwJj4dcUmcjKrZs7CfTqiu'
-RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY", 'override me')
+RECAPTCHA_PUBLIC_KEY = "6LfkpBITAAAAACCMrowwJj4dcUmcjKrZs7CfTqiu"
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY", "override me")
 RECAPTCHA_USE_SSL = True
 NOCAPTCHA = True  # Use the new-style NoCAPTCHA.
 
@@ -263,13 +239,11 @@ MAX_COMBINED_PASTES = 5
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "_static")
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 try:
     from .local_settings import *  # noqa

@@ -27,7 +27,4 @@ def identify_user(user):
     else:
         username = user.username
 
-    mp.people_set(username, {
-        "$email": user.email,
-        "style": user._style_name
-    })
+    mp.people_set(username, {"$email": user.email, "style": user._style_name})

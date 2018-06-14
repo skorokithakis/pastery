@@ -20,7 +20,6 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_POST
 from ipware.ip import get_ip
 from raven.contrib.django.raven_compat.models import client
-
 from utils import send_event  # noqa
 
 from .models import LANGUAGE_DICT, STYLES, Paste
@@ -91,11 +90,11 @@ class UserForm(forms.ModelForm):
 @ratelimit(method=["POST"], rate="20/m")
 @render_to("home.html")
 def home(request):
-    if getattr(request, 'limited', False):
+    if getattr(request, "limited", False):
         messages.error(request, _("You're pasting too much, please slow down."))
         return redirect("main:home")
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = pasteform_factory(request.user)(request.POST)
         if form.is_valid():
             clean = form.cleaned_data
@@ -115,7 +114,7 @@ def home(request):
             paste = Paste.objects.create(**data)
 
             if clean["other_pastes"]:
-                paste_list = re.split("\W+", clean["other_pastes"])[-settings.MAX_COMBINED_PASTES + 1:]
+                paste_list = re.split("\W+", clean["other_pastes"])[-settings.MAX_COMBINED_PASTES + 1 :]
                 paste_list.append(paste.id)
 
                 redir_url = reverse("main:paste", args=["+".join(paste_list)])
@@ -139,11 +138,7 @@ def home(request):
         if clone:
             paste = Paste.active.filter(pk=clone).first()
             if paste:
-                initial = {
-                    "title": paste.title,
-                    "body": paste.body,
-                    "raw_language": paste.language,
-                }
+                initial = {"title": paste.title, "body": paste.body, "raw_language": paste.language}
 
         form = pasteform_factory(request.user)(initial=initial)
     return {"form": form}
@@ -151,7 +146,7 @@ def home(request):
 
 @xframe_options_exempt
 def embed_paste(request, paste_id):
-    paste_ids = paste_id.split('+')[:settings.MAX_COMBINED_PASTES]
+    paste_ids = paste_id.split("+")[: settings.MAX_COMBINED_PASTES]
 
     # Create a dictionary out of the pastes so we can order them.
     db_pastes = {paste.id: paste for paste in Paste.active.filter(pk__in=paste_ids)}
@@ -172,7 +167,7 @@ def embed_paste(request, paste_id):
 
 
 def paste(request, paste_id):
-    paste_ids = paste_id.strip("+").split('+')[:settings.MAX_COMBINED_PASTES]
+    paste_ids = paste_id.strip("+").split("+")[: settings.MAX_COMBINED_PASTES]
 
     # Create a dictionary out of the pastes so we can order them.
     db_pastes = {paste.id: paste for paste in Paste.active.filter(pk__in=paste_ids)}
@@ -187,16 +182,18 @@ def paste(request, paste_id):
 
     has_multiple = len(pastes) > 1
 
-    show_full = (has_multiple or (pastes[0].language != 'markdown' and pastes[0].language != 'textile'))
+    show_full = has_multiple or (pastes[0].language != "markdown" and pastes[0].language != "textile")
 
     return render(
-        request, "paste.html", {
+        request,
+        "paste.html",
+        {
             "pastes": pastes,
             "paste": pastes[0],
             "paste_id": paste_id,
             "has_multiple": has_multiple,
             "show_full": show_full,
-        }
+        },
     )
 
 
@@ -221,21 +218,18 @@ def raw_paste(request, paste_id):
 def report_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id)
 
-    if getattr(request, 'limited', False):
+    if getattr(request, "limited", False):
         messages.error(
             request,
             _(
                 "You're reporting too many pastes. If there's something widespread going on, please contact us directly."
-            )
+            ),
         )
         return redirect(paste)
 
     reporter = request.user.username if request.user.is_authenticated else get_ip(request)
     client.captureMessage("A paste was reported by %s: %s" % (reporter, paste.get_full_url()))
-    send_event(reporter, "report_paste", {
-        "id": paste.id,
-        "url": paste.get_full_url(),
-    })
+    send_event(reporter, "report_paste", {"id": paste.id, "url": paste.get_full_url()})
     messages.success(request, _("Thank you for your report. We will investigate as soon as possible."))
     return redirect("main:home")
 
@@ -254,10 +248,7 @@ def delete_paste(request, paste_id):
     if request.user != paste.user:
         messages.error(request, _("That's not your paste, you naughty girl."))
     else:
-        send_event(request.user.username, "delete_paste", {
-            "id": paste.id,
-            "url": paste.get_full_url(),
-        })
+        send_event(request.user.username, "delete_paste", {"id": paste.id, "url": paste.get_full_url()})
         paste.delete()
         messages.success(request, _("Your paste has been deleted."))
     return redirect("main:home")
@@ -267,7 +258,7 @@ def delete_paste(request, paste_id):
 @render_to("account.html")
 def account(request):
     pastes = []
-    if request.method == 'POST':
+    if request.method == "POST":
         pref_form = UserForm(request.POST, instance=request.user)
         email_form = EmailChangeForm(request.POST)
         if request.POST.get("form") == "preferences" and pref_form.is_valid():
@@ -283,7 +274,7 @@ def account(request):
                         "That email address is already associated with another user. "
                         "Try logging in with it and changing it from the other account if you want to use it"
                         " with this one."
-                    )
+                    ),
                 )
                 return redirect("main:account")
             else:
@@ -295,7 +286,7 @@ def account(request):
     else:
         pref_form = UserForm(instance=request.user)
         email_form = EmailChangeForm(initial={"email": request.user.email})
-        pastes = Paste.active.filter(user=request.user).order_by('-created')
+        pastes = Paste.active.filter(user=request.user).order_by("-created")
     return {"email_form": email_form, "pref_form": pref_form, "languages": STYLES, "pastes": pastes}
 
 
@@ -331,13 +322,15 @@ def oembed(request):
     else:
         template_name = "embed_code.html"
 
-    data.update({
-        "version": "1.0",
-        "type": "rich",
-        "html": render_to_string(template_name, {"paste": paste}, request=request),
-        "provider_name": site.name,
-        "provider_url": "https://%s/" % site.domain,
-    })
+    data.update(
+        {
+            "version": "1.0",
+            "type": "rich",
+            "html": render_to_string(template_name, {"paste": paste}, request=request),
+            "provider_name": site.name,
+            "provider_url": "https://%s/" % site.domain,
+        }
+    )
 
     if paste.title:
         data["title"] = paste.title

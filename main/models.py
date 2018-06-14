@@ -24,7 +24,6 @@ from django.utils.translation import ugettext_lazy as _
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import get_all_lexers, get_lexer_by_name, guess_lexer
-
 from utils import identify_user, send_event
 from utils.md_nofollow import NofollowExtension
 
@@ -32,18 +31,85 @@ from utils.md_nofollow import NofollowExtension
 def clean(text: str) -> str:
     """Convenience method to bleach.clean()."""
     allowed_tags = [
-        'a', 'abbr', 'acronym', 'address', 'area', 'b', 'bdo', 'big', 'blockquote', 'br', 'button', 'caption', 'center',
-        'cite', 'code', 'col', 'colgroup', 'dd', 'del', 'dfn', 'dir', 'div', 'dl', 'dt', 'em', 'fieldset', 'font',
-        'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li',
-        'map', 'menu', 'ol', 'optgroup', 'option', 'p', 'pre', 'q', 's', 'samp', 'select', 'small', 'span', 'strike',
-        'strong', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'u', 'tr', 'tt', 'u', 'ul',
-        'var'
+        "a",
+        "abbr",
+        "acronym",
+        "address",
+        "area",
+        "b",
+        "bdo",
+        "big",
+        "blockquote",
+        "br",
+        "button",
+        "caption",
+        "center",
+        "cite",
+        "code",
+        "col",
+        "colgroup",
+        "dd",
+        "del",
+        "dfn",
+        "dir",
+        "div",
+        "dl",
+        "dt",
+        "em",
+        "fieldset",
+        "font",
+        "form",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "hr",
+        "i",
+        "img",
+        "input",
+        "ins",
+        "kbd",
+        "label",
+        "legend",
+        "li",
+        "map",
+        "menu",
+        "ol",
+        "optgroup",
+        "option",
+        "p",
+        "pre",
+        "q",
+        "s",
+        "samp",
+        "select",
+        "small",
+        "span",
+        "strike",
+        "strong",
+        "sub",
+        "sup",
+        "table",
+        "tbody",
+        "td",
+        "textarea",
+        "tfoot",
+        "th",
+        "thead",
+        "u",
+        "tr",
+        "tt",
+        "u",
+        "ul",
+        "var",
     ]
     allowed_attributes = {
-        'a': ['href', 'title', 'rel', 'name', 'alt'],
-        'abbr': ['title'],
-        'acronym': ['title'],
-        'img': ['src', 'title', 'alt', 'width', 'height'],
+        "a": ["href", "title", "rel", "name", "alt"],
+        "abbr": ["title"],
+        "acronym": ["title"],
+        "img": ["src", "title", "alt", "width", "height"],
     }
     allowed_styles = ["font-weight", "text-align", "text-transform"]
 
@@ -63,15 +129,28 @@ def get_languages() -> List:
     banned_lexers = ["md"]
     # Create a tuple of (first_alias, friendly_name) for each lexer.
     lexers = [[lexer[1][0], lexer[0]] for lexer in get_all_lexers() if lexer[1][0] not in banned_lexers]
-    lexers += [
-        ["markdown", "Markdown"],
-        ["textile", "Textile"],
-    ]
+    lexers += [["markdown", "Markdown"], ["textile", "Textile"]]
     sorted_lexers = sorted(lexers, key=lambda x: x[0].lower())
 
     top = [
-        "bash", "c", "csharp", "cpp", "css", "html", "java", "js", "json", "markdown", "lua", "text", "objective-c",
-        "perl", "php", "python", "ruby", "swift"
+        "bash",
+        "c",
+        "csharp",
+        "cpp",
+        "css",
+        "html",
+        "java",
+        "js",
+        "json",
+        "markdown",
+        "lua",
+        "text",
+        "objective-c",
+        "perl",
+        "php",
+        "python",
+        "ruby",
+        "swift",
     ]
 
     top_languages = [["autodetect", _("Autodetect")]]
@@ -103,36 +182,36 @@ def get_aliases() -> Dict[str, str]:
 def get_styles() -> List:
     """Return all available highlighters and their names."""
     highlighters = [
-        ['default', 'Plain'],
-        ['algol', 'Algol'],
-        ['algol_nu', 'Algol_Nu'],
-        ['arduino', 'Arduino'],
-        ['autumn', 'Autumn'],
-        ['borland', 'Borland'],
-        ['bw', 'Bw'],
-        ['colorful', 'Colorful'],
-        ['emacs', 'Emacs'],
-        ['friendly', 'Friendly'],
-        ['fruity', 'Fruity'],
-        ['igor', 'Igor'],
-        ['lovelace', 'Lovelace'],
-        ['manni', 'Manni'],
-        ['monokai', 'Monokai'],
-        ['murphy', 'Murphy'],
-        ['native', 'Native'],
-        ['paraiso-dark', 'Paraiso-Dark'],
-        ['paraiso-light', 'Paraiso-Light'],
-        ['pastie', 'Pastie'],
-        ['perldoc', 'Perldoc'],
-        ['rrt', 'Rrt'],
-        ['solarized', 'Solarized'],
-        ['solarized_dark', 'Solarized_Dark'],
-        ['solarized_dark256', 'Solarized_Dark256'],
-        ['tango', 'Tango'],
-        ['trac', 'Trac'],
-        ['vim', 'Vim'],
-        ['vs', 'Vs'],
-        ['xcode', 'Xcode'],
+        ["default", "Plain"],
+        ["algol", "Algol"],
+        ["algol_nu", "Algol_Nu"],
+        ["arduino", "Arduino"],
+        ["autumn", "Autumn"],
+        ["borland", "Borland"],
+        ["bw", "Bw"],
+        ["colorful", "Colorful"],
+        ["emacs", "Emacs"],
+        ["friendly", "Friendly"],
+        ["fruity", "Fruity"],
+        ["igor", "Igor"],
+        ["lovelace", "Lovelace"],
+        ["manni", "Manni"],
+        ["monokai", "Monokai"],
+        ["murphy", "Murphy"],
+        ["native", "Native"],
+        ["paraiso-dark", "Paraiso-Dark"],
+        ["paraiso-light", "Paraiso-Light"],
+        ["pastie", "Pastie"],
+        ["perldoc", "Perldoc"],
+        ["rrt", "Rrt"],
+        ["solarized", "Solarized"],
+        ["solarized_dark", "Solarized_Dark"],
+        ["solarized_dark256", "Solarized_Dark256"],
+        ["tango", "Tango"],
+        ["trac", "Trac"],
+        ["vim", "Vim"],
+        ["vs", "Vs"],
+        ["xcode", "Xcode"],
     ]
     return highlighters
 
@@ -157,26 +236,21 @@ def generate_paste_uuid() -> str:
 
 class User(AbstractUser):
     """A proxy for the User model, to add various methods."""
+
     username = models.CharField(
-        _('username'),
+        _("username"),
         max_length=150,
         default=generate_api_key,
         unique=True,
-        help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        help_text=_("Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."),
         validators=[UnicodeUsernameValidator()],
-        error_messages={
-            'unique': _("A user with that username already exists."),
-        },
+        error_messages={"unique": _("A user with that username already exists.")},
     )
     first_name = None  # type: None
     last_name = None  # type: None
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField(_("email address"), unique=True)
     api_key = models.CharField(
-        verbose_name=_("API key"),
-        max_length=64,
-        help_text=_("Your API key."),
-        default=generate_api_key,
-        unique=True,
+        verbose_name=_("API key"), max_length=64, help_text=_("Your API key."), default=generate_api_key, unique=True
     )
     _style_name = models.CharField(
         verbose_name=_("Style name"),
@@ -232,11 +306,7 @@ class PasteManager(models.Manager):
             user_id = hashlib.sha256(kwargs.get("user_address", "").encode("utf8")).hexdigest()[:16]
 
         send_event(
-            user_id, "new_paste", {
-                "raw_language": kwargs["raw_language"],
-                "id": paste.id,
-                "url": paste.get_full_url(),
-            }
+            user_id, "new_paste", {"raw_language": kwargs["raw_language"], "id": paste.id, "url": paste.get_full_url()}
         )
 
         return paste
@@ -302,8 +372,9 @@ class Paste(models.Model):
         return reverse("main:paste", args=[self.id])
 
     def has_expired(self) -> bool:
-        return ((self.expiration and self.expiration < timezone.now()) or
-                (self.max_views and self.views >= self.max_views))
+        return (self.expiration and self.expiration < timezone.now()) or (
+            self.max_views and self.views >= self.max_views
+        )
 
     has_expired.boolean = True  # type: ignore
 
@@ -400,7 +471,4 @@ def clear_cache(sender, instance, created, **kwargs):
         # Reset attribute, just in case.
         instance._skip_invalidation = False
         return
-    cache.delete_many([
-        "pastery:paste_%s_language" % instance.id,
-        "pastery:paste_%s_rendered_body" % instance.id,
-    ])
+    cache.delete_many(["pastery:paste_%s_language" % instance.id, "pastery:paste_%s_rendered_body" % instance.id])

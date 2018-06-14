@@ -7,17 +7,9 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('main', '0010_auto_20161013_0045'),
-    ]
+    dependencies = [("main", "0010_auto_20161013_0045")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='user',
-            name='first_name',
-        ),
-        migrations.RemoveField(
-            model_name='user',
-            name='last_name',
-        ),
+        migrations.RemoveField(model_name="user", name="first_name"),
+        migrations.RemoveField(model_name="user", name="last_name"),
     ]

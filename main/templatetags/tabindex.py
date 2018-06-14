@@ -8,5 +8,5 @@ def tabindex(value, index):
     """
     Add a tabindex attribute to the widget for a bound field.
     """
-    value.field.widget.attrs['tabindex'] = index
+    value.field.widget.attrs["tabindex"] = index
     return value

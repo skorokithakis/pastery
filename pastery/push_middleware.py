@@ -12,7 +12,7 @@ class FileCollector(object):
         self.collection = []
 
     def collect(self, path):
-        if not path.endswith('/'):
+        if not path.endswith("/"):
             self.collection.append(path)
 
 
@@ -22,7 +22,6 @@ def storage_factory(collector):
             configured_storage_cls = get_storage_class(settings.STATICFILES_STORAGE)
 
             class DebugStaticFilesStorage(configured_storage_cls):
-
                 def __init__(self, collector, *args, **kwargs):
                     super(DebugStaticFilesStorage, self).__init__(*args, **kwargs)
                     self.collector = collector
@@ -32,6 +31,7 @@ def storage_factory(collector):
                     return super(DebugStaticFilesStorage, self).url(path)
 
             self._wrapped = DebugStaticFilesStorage(collector)
+
     return DebugConfiguredStorage
 
 
@@ -43,4 +43,5 @@ def push_middleware(get_response):
         urls = list(set([storage.staticfiles_storage.url(f) for f in collector.collection.copy()]))
         response["Link"] = ", ".join(["<%s>; rel=preload" % url for url in urls[:10]])
         return response
+
     return middleware

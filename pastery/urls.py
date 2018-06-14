@@ -14,15 +14,14 @@ Including another URLconf
     2. Import the include() function: from django.conf.urls import url, include
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
+from api import urls as api_urls  # noqa
 from django.conf.urls import include, url
 from django.contrib import admin
-
-from api import urls as api_urls  # noqa
 from main import urls as main_urls  # noqa
 
 urlpatterns = [
-    url(r'^narnia/', admin.site.urls),
-    url(r'^api/', include(api_urls)),
-    url(r'^auth/', include('tokenauth.urls', namespace="tokenauth")),
-    url(r'^', include(main_urls)),
+    url(r"^narnia/", admin.site.urls),
+    url(r"^api/", include(api_urls)),
+    url(r"^auth/", include("tokenauth.urls", namespace="tokenauth")),
+    url(r"^", include(main_urls)),
 ]

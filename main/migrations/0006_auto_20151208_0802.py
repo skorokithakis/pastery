@@ -8,14 +8,18 @@ import main.models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('main', '0005_auto_20151208_0754'),
-    ]
+    dependencies = [("main", "0005_auto_20151208_0754")]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='api_key',
-            field=models.CharField(default=main.models.generate_api_key, help_text='Your API key.', max_length=64, unique=True, verbose_name='API key'),
-        ),
+            model_name="user",
+            name="api_key",
+            field=models.CharField(
+                default=main.models.generate_api_key,
+                help_text="Your API key.",
+                max_length=64,
+                unique=True,
+                verbose_name="API key",
+            ),
+        )
     ]

@@ -7,14 +7,8 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('main', '0002_auto_20151206_0216'),
-    ]
+    dependencies = [("main", "0002_auto_20151206_0216")]
 
     operations = [
-        migrations.AlterField(
-            model_name='paste',
-            name='expiration',
-            field=models.DateTimeField(blank=True, null=True),
-        ),
+        migrations.AlterField(model_name="paste", name="expiration", field=models.DateTimeField(blank=True, null=True))
     ]

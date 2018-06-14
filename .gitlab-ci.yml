@@ -1,24 +1,17 @@
-image: python:latest
+image: python:3.6
 
 stages:
   - staticcheck
-  - typecheck
   - test
   - deploy
 
 staticcheck:
   before_script:
-    - pip install -U flake8
-  script:
-    - flake8 .
-  stage: staticcheck
-
-typecheck:
-  before_script:
     - pip install -Ur requirements-dev.txt
+    - pip install -U pre-commit
   script:
-    - mypy -s .
-  stage: typecheck
+    - pre-commit run -a
+  stage: staticcheck
 
 test:
   before_script:
