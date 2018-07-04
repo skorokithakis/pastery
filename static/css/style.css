@@ -210,7 +210,8 @@ select:focus {
     border-radius: 0;
 }
 .pastery-form textarea {
-    max-height: 700px !important;
+    min-height: 214px;
+    max-height: calc(100vh - 350px) !important;
     overflow: auto !important;
     resize: vertical;
 }
