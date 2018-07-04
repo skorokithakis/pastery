@@ -80,6 +80,7 @@
     <thead>
         <tr>
             <th></th>
+            <th>{% trans "Created" %}</th>
             <th class="expires">{% trans "Expires in" %}</th>
         </tr>
     </thead>
@@ -87,6 +88,9 @@
     {% for paste in pastes %}
     <tr>
         <td><a href="{{ paste.get_absolute_url }}">{{ paste }}</a></td>
+        <td>
+            {{ paste.created }}
+        </td>
         <td class="expires">
             {% if paste.expiration %}
             {% blocktrans with paste.expiration|timeuntil as until %}
