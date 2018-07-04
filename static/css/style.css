@@ -214,6 +214,7 @@ select:focus {
     max-height: calc(100vh - 350px) !important;
     overflow: auto !important;
     resize: vertical;
+    font-family: monospace;
 }
 .pastery-form input:focus,
 .pastery-form textarea:focus {
