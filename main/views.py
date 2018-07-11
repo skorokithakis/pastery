@@ -15,6 +15,7 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.text import get_valid_filename
 from django.utils.translation import ugettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_POST
@@ -208,6 +209,9 @@ def download_paste(request, paste_id):
 def raw_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id)
     response = HttpResponse(paste.body, content_type="text/plain; charset=utf-8")
+    if paste.title:
+        filename = get_valid_filename(paste.title)[:40]
+        response["Content-Disposition"] = f'inline; filename="{filename}"'
     paste.increment_views()
     return response
 
