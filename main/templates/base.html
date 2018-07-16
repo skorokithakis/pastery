@@ -43,7 +43,7 @@
         <div class="container">
             <h1><a tabindex="-1" href="{% url 'main:home' %}" title="{{ current_site.name }}">{{ current_site.name }}</a></h1>
             <div class="persona">
-                {% if paste %}
+                {% if paste or has_multiple %}
                 <a class="burger-button{% if user.is_authenticated %} authenticated{% endif %}" id="burger" href="javascript:void(0);" title="Toggle toolbar">
                     <span></span>
                     <span></span>

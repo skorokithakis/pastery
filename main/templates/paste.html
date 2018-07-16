@@ -45,12 +45,10 @@ Multiple pastes
 
             <div class="btn-group button-container" id="copy-code">
 
-                {% if not has_multiple %}
                 <div class="btn-group admin-parent dropdown-parent" role="group">
-                    <a type="button" data-toggle="tooltip" aria-label="{% trans "Clone" %}" title="{% trans "Clone" %}" class="btn btn-default btn-sm dropdown-toggle admin-button" href="{% url 'main:home' %}?clone={{ paste.id }}" type="button"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span></a>
+                    <a type="button" data-toggle="tooltip" aria-label="{% trans "Clone" %}" title="{% trans "Clone" %}" class="btn btn-default btn-sm dropdown-toggle admin-button clone" href="javascript:void(0);" type="button"><span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span></a>
                     <div class="dropdown-menu pseudo-dropdown">{% trans "Clone" %}</div>
                 </div>
-                {% endif %}
 
                 {% if not has_multiple and paste.user == request.user %}
                 <div class="btn-group admin-parent dropdown-parent" role="group">
@@ -73,7 +71,7 @@ Multiple pastes
 
                 <!-- Copy to clipboard -->
                 <div class="btn-group dropdown-parent" role="group">
-                    <a type="button" aria-label="{% trans "Copy to clipboard" %}" title="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm dropdown-toggle copy-clipboard" href="javascript:void(0);" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></a>
+                    <a type="button" data-placement="tooltip" aria-label="{% trans "Copy to clipboard" %}" title="{% trans "Copy to clipboard" %}" class="btn btn-default btn-sm dropdown-toggle copy-clipboard" href="javascript:void(0);" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></a>
                     <div class="dropdown-menu pseudo-dropdown">
                         <div class="btn-group">{% trans "Copy to clipboard" %}</div>
                     </div>
@@ -145,7 +143,7 @@ Multiple pastes
                 data-language="{{ paste.get_language_display }}"
                 data-expires="{% if paste.expiration %}{% blocktrans with paste.expiration|timeuntil as until %}Expires in {{ until }}{% endblocktrans %}{% else %}{% trans "Never expires" %}{% endif %}"
                 {% if paste %}
-                data-rawurl="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}"
+                data-rawurl="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}" data-cloneurl="{% url 'main:home' %}?clone={{ paste.id }}"
                 {% endif %}
                 aria-hidden="{% if not forloop.first %}true{% else %}false{% endif %}"
                 class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}{% if not paste %} not-found{% endif %}">

@@ -167,7 +167,7 @@ var BurgerButton = (function() {
     $('.burger-button').on('click', function() {
 
         $(this).toggleClass('open');
-        $('.paste .button-container').toggle();
+        $('.paste .button-container').toggleClass('open');
     });
   }
 
@@ -454,6 +454,7 @@ var TabbedPastes = (function() {
     var expires = $(paste).data('expires');
     var reporturl = $(paste).data('reporturl');
     var rawurl = $(paste).data('rawurl');
+    var cloneurl = $(paste).data('cloneurl');
 
     var notFound = $(paste).hasClass('not-found');
 
@@ -490,6 +491,19 @@ var TabbedPastes = (function() {
 
       $('[data-container-raw]')[0].value = 'Not available';
       $('[data-raw]')[0].disabled = 'disabled';
+    }
+
+    if(!notFound) {
+
+      $('.clone').removeClass('disabled');
+      $('.clone')[0].href = cloneurl;
+      $('.clone+.pseudo-dropdown')[0].innerText = 'Clone';
+    }
+    else {
+
+      $('.clone').addClass('disabled');
+      $('.clone')[0].href = 'javascript:void(0);';
+      $('.clone+.pseudo-dropdown')[0].innerText = 'Not available';
     }
 
     $(this).attr('aria-hidden', 'false');
