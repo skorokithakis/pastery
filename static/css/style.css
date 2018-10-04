@@ -888,4 +888,7 @@ select:focus {
         display: block;
         background-position: left center;
     }
+    .pastetable pre {
+        font-size: 11px;
+    }
 }
