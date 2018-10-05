@@ -882,7 +882,13 @@ select:focus {
         width: auto;
     }
 }
-@media (max-width: 320px) {
+/*
+414px matches the maximum width
+of a smartphone (excluding
+Lumia and Blackberry) device from
+https://www.mydevice.io/
+*/
+@media (max-width: 414px) {
     .top-header h1 a {
         text-indent: -99999px;
         display: block;
