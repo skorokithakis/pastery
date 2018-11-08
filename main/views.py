@@ -115,7 +115,7 @@ def home(request):
             paste = Paste.objects.create(**data)
 
             if clean["other_pastes"]:
-                paste_list = re.split("\W+", clean["other_pastes"])[-settings.MAX_COMBINED_PASTES + 1 :]
+                paste_list = re.split(r"\W+", clean["other_pastes"])[-settings.MAX_COMBINED_PASTES + 1 :]
                 paste_list.append(paste.id)
 
                 redir_url = reverse("main:paste", args=["+".join(paste_list)])
