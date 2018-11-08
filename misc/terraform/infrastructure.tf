@@ -107,3 +107,10 @@ resource "cloudflare_record" "googlesite2" {
   name="@"
   value="google-site-verification=lM1Ik9f3lH9BUWpPLNNa7AQHSUGqo-sD-r-oBd1moJU"
 }
+
+resource "cloudflare_record" "brave_verification" {
+  domain="${var.domain}"
+  type="TXT"
+  name="@"
+  value="brave-ledger-verification=46645759d1b66f771d031329b11c976a41830103bbfc3f07d53d447a7305c22b"
+}
