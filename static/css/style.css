@@ -38,11 +38,6 @@ footer a:hover {
 .btn:hover {
     background-color: #EB1717;
 }
-select:focus {
-    border-color: #9DA668 !important;
-    box-shadow: none !important;
-    outline: none;
-}
 
 /* burger button */
 
@@ -223,32 +218,23 @@ select:focus {
 }
 .pastery-form .fieldWrapper {
     margin-bottom: 20px;
-    position: relative;
 }
-.pastery-form .language {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    z-index: 1;
+.pastery-form .paste-meta {
+    display: flex;
+    justify-content: space-between;
 }
-.pastery-form .language select {
-    border-color: rgba(0,0,0,.25);
-    max-width: 200px;
-    transition: opacity .2s ease-in;
+.pastery-form .expiresContainer,
+.pastery-form .languageContainer {
+    flex-shrink: 0;
 }
-.pastery-form .language select:focus {
-    border-color: #9DA668;
-    box-shadow: none;
-    outline: none;
+.pastery-form .languageContainer select {
+    max-width: 105px;
 }
 .pastery-form label {
     font-weight: normal;
     color: #666;
     font-size: 15px;
     margin-right: 5px;
-}
-.pastery-form #id_expires {
-    border-color: rgba(0,0,0,.25);
 }
 .pastery-form .form-group {
     text-align: center;
@@ -896,5 +882,23 @@ https://www.mydevice.io/
     }
     .pastetable pre {
         font-size: 11px;
+    }
+}
+
+@media (max-width: 410px) {
+    .pastery-form .languageContainer label {
+        display: none;
+    }
+}
+
+@media (max-width: 335px) {
+    .pastery-form .paste-meta {
+        display: block;
+    }
+    .pastery-form .expiresContainer {
+        margin-bottom: 10px;
+    }
+    .pastery-form .languageContainer label {
+        display: inline-block;
     }
 }

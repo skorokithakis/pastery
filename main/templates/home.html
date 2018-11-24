@@ -16,16 +16,18 @@
             <div class="fieldWrapper">
                 {{ form.body.errors }}
                 <textarea autofocus required tabindex="2" class="form-control" cols="40" id="id_body" name="body" rows="10" >{{ form.body.value }}</textarea>
-                <div class="language">
+            </div>
+            <div class="fieldWrapper paste-meta">
+                <div class="expiresContainer">
+                    {{ form.expires.errors }}
+                    <label for="{{ form.expires.id_for_label }}">{{ form.expires.label }}</label>
+                    {{ form.expires|tabindex:4 }}
+                </div>
+                <div class="languageContainer">
+                    <label for="{{ form.raw_language.id_for_label }}">{{ form.raw_language.label }}</label>
                     {{ form.raw_language|tabindex:5 }}
                 </div>
             </div>
-            <div class="fieldWrapper">
-                {{ form.expires.errors }}
-                <label for="{{ form.expires.id_for_label }}">{{ form.expires.label }}</label>
-                {{ form.expires|tabindex:4 }}
-            </div>
-
             {% if form.captcha %}
             <div class="fieldWrapper">
                 {{ form.captcha.errors }}
