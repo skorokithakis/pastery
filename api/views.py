@@ -77,7 +77,7 @@ class PasteView(View):
                         Use(lambda x: ALIAS_DICT.get(x, "autodetect")),
                         error='"language" should be the name of a supported language.',
                     ),
-                    Optional("duration", default=24 * 60): And(
+                    Optional("duration", default=30 * 24 * 60): And(
                         [str],
                         Use(lambda x: int(x[0])),
                         lambda x: 0 < x <= 50 * 365 * 24 * 60,
