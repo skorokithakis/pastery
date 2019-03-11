@@ -43,7 +43,7 @@ def pasteform_factory(user):
         if user.is_authenticated:
             EXPIRATION.append([None, _("never")])
 
-        expires = forms.ChoiceField(choices=EXPIRATION, initial=24 * 60, label=_("Expires in"), required=False)
+        expires = forms.ChoiceField(choices=EXPIRATION, initial=30 * 24 * 60, label=_("Expires in"), required=False)
         work = forms.CharField(required=False)
         other_pastes = forms.CharField(required=False)
         if settings.ENABLE_CAPTCHA:
