@@ -38,8 +38,21 @@ def ban_ip(ip):
 class Command(BaseCommand):
     help = "Delete all expired pastes."
 
+    def add_arguments(self, parser):
+        # Named (optional) arguments
+        parser.add_argument("--link-ratio", type=float, help="Delete all links with a link ratio higher than RATIO")
+
     def handle(self, *args, **options):
         term_setting = Setting.objects.filter(key="SPAM_TERMS").first()
+
+        ratio_threshold = options["link_ratio"]
+
+        if ratio_threshold:
+            for paste in Paste.objects.filter(user=None):
+                ratio = calculate_link_ratio(paste.body)
+                if ratio > ratio_threshold:
+                    print("Deleting %s (%s)..." % (paste, ratio))
+                    paste.delete()
 
         if not term_setting:
             print("No terms found, quitting...")
