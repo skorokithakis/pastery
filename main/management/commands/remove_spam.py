@@ -49,6 +49,9 @@ class Command(BaseCommand):
 
         if ratio_threshold:
             for paste in Paste.objects.filter(user=None):
+                if len(paste.body) < 50:
+                    continue
+
                 ratio = calculate_link_ratio(paste.body)
                 if ratio > ratio_threshold:
                     print("Deleting %s (%s)..." % (paste, ratio))
