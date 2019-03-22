@@ -2,7 +2,13 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Paste, User
+from .models import Paste, Setting, User
+
+
+@admin.register(Setting)
+class SettingAdmin(admin.ModelAdmin):
+    list_display = ["key"]
+    search_fields = ["key"]
 
 
 @admin.register(Paste)

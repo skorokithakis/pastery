@@ -1,107 +1,11 @@
 import datetime
+import json
 import re
 
 import requests
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from main.models import Paste
-
-TITLE_TERMS = {"watch ", "stream", "episode", "bank"}
-
-BODY_TERMS = {
-    "/successfulmotto",
-    "/mightyscenery44",
-    "/jbrown316",
-    "/genglobal.org",
-    "baltec.com/",
-    "baltecorporation.com/",
-    "h.hatena.ne.jp",
-    "-putlocker-",
-    "aaaukce.cz",
-    "www.victorialostpets.com/",
-    "lolita",
-    "game-livetvchannel.com/",
-    "britishopen2017.co/",
-    "grovjobbet.se/",
-    "liveonline-itv.com/",
-    "lesbenwelt.de/",
-    "hatenablog.com/",
-    "ghostsfund",
-    "undergroundfunds",
-    "soci.cf",
-    "watchhd-",
-    "fullhd-",
-    "moviehd-",
-    "-hdrip-",
-    "movie",
-    "hdrrip-",
-    "paypal",
-    "vodlocker",
-    "putlocker",
-    "/adfoc.us",
-    "/soci.ga",
-    "hatelabo.jp/",
-    "we are anonymous",
-    "transitionnetwork.org/",
-    "playbuzz.com/",
-    "donnael.com",
-    "suomiblog.com/",
-    "amoblog.com/",
-    "blogzet.com/",
-    "alltdesign.com/",
-    "bloggersdelight.dk/",
-    "indyarocks.com/",
-    "logdown.com/",
-    "minds.com/",
-    "mybjjblog.com/",
-    "blogolize.com/",
-    "sitepalace.com/",
-    "theknot.com/",
-    "soundation.com/",
-    "blogocial.com/",
-    "skyrock.com/",
-    "page.tl/",
-    "eklablog.com/",
-    "blogdon.net/",
-    "pointblog.net/",
-    "blogminds.com/",
-    "vyzon.net/",
-    "oximity.com/",
-    "vlurn.com/",
-    ".blogkoo.com/",
-    ".blogster.com/",
-    ".blogdigy.com/",
-    "animarathon.com/",
-    ".tvnet.lv/",
-    ".igrcs.com/",
-    "dwdstudios.com/",
-    ".total-blog.com/",
-    ".pitchero.com/",
-    ".gamebox.com/",
-    ".craftstylish.com/",
-    ".shepherdneame.co.uk/",
-    ".soclog.se/",
-    ".thezenweb.com/",
-    ".tblogz.com/",
-    ".shotblogs.com/",
-    ".canariblogs.com",
-    ".angelfire.com",
-    ".ampedpages.com/",
-    ".pages10.com/",
-    ".tinyblogging.com/",
-    ".full-design.com/",
-    ".endomondo.com/",
-    ".vietfun.com/",
-    ".goprofanatics.com/",
-    ".usgamesfootball.com/",
-    ".imperia5x.com/",
-    ".redharbinger.com/",
-    ".comunidades.net/",
-    ".sitepronews.com/",
-    ".bitlanders.com/",
-    ".openprinting.org/",
-    "isblog.net/",
-}
+from main.models import Paste, Setting
 
 
 def calculate_link_ratio(text):
@@ -135,15 +39,25 @@ class Command(BaseCommand):
     help = "Delete all expired pastes."
 
     def handle(self, *args, **options):
+        term_setting = Setting.objects.filter(key="SPAM_TERMS").first()
+
+        if not term_setting:
+            print("No terms found, quitting...")
+            return
+
+        terms = json.loads(term_setting.value)
+        body_terms = terms["body"]
+        title_terms = terms["title"]
+
         counter = 0
-        for term in BODY_TERMS:
+        for term in body_terms:
             pastes = Paste.objects.filter(body__contains=term, user=None)
             for paste in pastes:
                 ban_ip(paste.user_address)
             deleted = pastes.delete()
             counter += deleted[0]
 
-        for term in TITLE_TERMS:
+        for term in title_terms:
             pastes = Paste.objects.filter(title__icontains=term, user=None)
             for paste in pastes:
                 ban_ip(paste.user_address)

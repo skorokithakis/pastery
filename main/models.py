@@ -1,5 +1,6 @@
 import datetime
 import hashlib
+import json
 from typing import Dict, List
 
 import bleach
@@ -12,6 +13,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.sites.models import Site
 from django.core.cache import cache
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F, Q
 from django.db.models.signals import post_save
@@ -276,6 +278,25 @@ class User(AbstractUser):
         "Reset the user's API key."
         self.api_key = generate_api_key()
         self.save()
+
+
+class Setting(models.Model):
+    key = models.CharField(max_length=100, unique=True, null=False)
+    value = models.TextField()
+
+    def __str__(self) -> str:
+        return self.key
+
+    def save(self, *args, **kwargs):
+        # Pretty-print the JSON in the value.
+        self.value = json.dumps(json.loads(self.value), indent=2, sort_keys=True)
+        super().save(*args, **kwargs)
+
+    def clean(self):
+        try:
+            json.loads(self.value)
+        except json.JSONDecodeError:
+            raise ValidationError({"value": "Malformed JSON."})
 
 
 class PasteManager(models.Manager):
