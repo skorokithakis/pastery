@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
+from djangoql.admin import DjangoQLSearchMixin
 
 from .models import Paste, Setting, User
 
@@ -12,9 +13,8 @@ class SettingAdmin(admin.ModelAdmin):
 
 
 @admin.register(Paste)
-class PasteAdmin(admin.ModelAdmin):
+class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
     list_display = ["id", "user", "title", "created", "expiration", "views", "max_views", "has_expired"]
-    search_fields = ["user__username", "title"]
     list_filter = ("created", "expiration")
     ordering = ["-created"]
     actions = ["purge_user"]
@@ -36,7 +36,7 @@ class PasteAdmin(admin.ModelAdmin):
 
 
 @admin.register(User)
-class MyUserAdmin(UserAdmin):
+class MyUserAdmin(DjangoQLSearchMixin, UserAdmin):
     fieldsets = (
         (_("Credentials"), {"fields": ("username", "email", "password")}),
         (_("Permissions"), {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
@@ -44,4 +44,3 @@ class MyUserAdmin(UserAdmin):
         (_("Various"), {"fields": ("_style_name", "api_key")}),
     )
     list_display = ("username", "email", "is_staff")
-    search_fields = ("username", "email")

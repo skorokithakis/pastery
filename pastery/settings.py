@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "raven.contrib.django.raven_compat",
     "django_extensions",
     "debug_toolbar",
+    "djangoql",
     "tokenauth",
     "bootstrap3",
     "captcha",

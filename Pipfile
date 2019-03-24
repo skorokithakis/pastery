@@ -40,6 +40,7 @@ Pygments = "*"
 uWSGI = "~=2.0.11"
 Werkzeug = "~=0.11.2"
 django-tokenauth = "*"
+djangoql = "*"
 
 [dev-packages]
 mypy-lang = "*"
