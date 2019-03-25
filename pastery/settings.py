@@ -138,6 +138,18 @@ if os.environ.get("IN_DOCKER"):
             "PORT": 5432,  # Set to empty string for default. Not used with sqlite3.
         }
     }
+
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": "redis://redis:6379/1",
+            "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+        }
+    }
+
+    SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+    SESSION_CACHE_ALIAS = "default"
+    SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
 elif os.environ.get("DATABASE_URL"):
     # Stuff for when running in Dokku.
 
