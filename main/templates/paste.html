@@ -165,11 +165,7 @@ Multiple pastes
                 {% endblocktrans %}
                 {% else %}
                 {% trans "Never expires" %}
-                {% endif %}</span> |
-                <form data-container-report data-confirm="{% trans "Are you sure you want to report this paste?" %}" action="" id="report-paste" method="post">
-                    {% csrf_token %}
-                    <button type="submit">{% trans "Report abuse" %}</button>
-                </form>
+                {% endif %}</span>
             </div>
 
             <div data-container-language class="pull-right">

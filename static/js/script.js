@@ -452,7 +452,6 @@ var TabbedPastes = (function() {
 
     var language = $(paste).data('language');
     var expires = $(paste).data('expires');
-    var reporturl = $(paste).data('reporturl');
     var rawurl = $(paste).data('rawurl');
     var cloneurl = $(paste).data('cloneurl');
 
@@ -473,13 +472,10 @@ var TabbedPastes = (function() {
     if(!notFound) {
 
       $('.meta-footer')[0].style.display = 'block';
-      $('#report-paste button')[0].disabled = '';
-      $('[data-container-report]')[0].action = reporturl;
     }
     else {
 
       $('.meta-footer')[0].style.display = 'none';
-      $('#report-paste button')[0].disabled = 'disabled';
     }
 
     if(!notFound) {
