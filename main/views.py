@@ -187,6 +187,7 @@ def paste(request, paste_id):
 
     if pastes[0].language == "raw html":
         response = HttpResponse(pastes[0].body, content_type="text/html")
+        # Add the CSP header to allow scripts but disable `allow-same-origin` for the sandbox.
         response["Content-Security-Policy"] = "script-src 'unsafe-inline' https:; sandbox allow-scripts"
         return response
 
