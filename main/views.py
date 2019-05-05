@@ -187,7 +187,7 @@ def paste(request, paste_id):
 
     if pastes[0].language == "raw html":
         response = HttpResponse(pastes[0].body, content_type="text/html")
-        response["Content-Security-Policy"] = "default-src 'none'; script-src 'unsafe-inline'; sandbox allow-scripts"
+        response["Content-Security-Policy"] = "script-src 'unsafe-inline' https:; sandbox allow-scripts"
         return response
 
     return render(
