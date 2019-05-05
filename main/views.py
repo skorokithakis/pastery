@@ -185,6 +185,11 @@ def paste(request, paste_id):
 
     show_full = has_multiple or (pastes[0].language != "markdown" and pastes[0].language != "textile")
 
+    if pastes[0].language == "raw html":
+        response = HttpResponse(pastes[0].body, content_type="text/html")
+        response["Content-Security-Policy"] = "default-src 'none'; script-src 'unsafe-inline'; sandbox allow-scripts"
+        return response
+
     return render(
         request,
         "paste.html",

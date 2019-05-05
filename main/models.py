@@ -131,7 +131,7 @@ def get_languages() -> List:
     banned_lexers = ["md"]
     # Create a tuple of (first_alias, friendly_name) for each lexer.
     lexers = [[lexer[1][0], lexer[0]] for lexer in get_all_lexers() if lexer[1][0] not in banned_lexers]
-    lexers += [["markdown", "Markdown"], ["textile", "Textile"]]
+    lexers += [["markdown", "Markdown"], ["textile", "Textile"], ["raw html", "Raw HTML"]]
     sorted_lexers = sorted(lexers, key=lambda x: x[0].lower())
 
     top = [
@@ -151,6 +151,7 @@ def get_languages() -> List:
         "perl",
         "php",
         "python",
+        "raw html",
         "ruby",
         "swift",
     ]
