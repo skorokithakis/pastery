@@ -185,7 +185,7 @@ def paste(request, paste_id):
 
     show_full = has_multiple or (pastes[0].language != "markdown" and pastes[0].language != "textile")
 
-    if pastes[0].language == "raw html":
+    if pastes[0] and pastes[0].language == "raw html":
         response = HttpResponse(pastes[0].body, content_type="text/html")
         # Add the CSP header to allow scripts but disable `allow-same-origin` for the sandbox.
         response["Content-Security-Policy"] = "script-src 'unsafe-inline' https:; sandbox allow-scripts"
