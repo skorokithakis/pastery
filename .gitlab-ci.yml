@@ -1,4 +1,7 @@
-image: python:3.6
+image: python:3.7
+
+variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
 stages:
   - test
@@ -13,6 +16,9 @@ test:
   script:
     - python manage.py test
   stage: test
+  cache:
+    paths:
+      - .cache/pip
 
 deploy to production:
   image: ilyasemenov/gitlab-ci-git-push
