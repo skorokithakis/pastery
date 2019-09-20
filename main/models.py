@@ -25,9 +25,49 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
-from pygments.lexers import get_all_lexers, get_lexer_by_name, guess_lexer
+from pygments.lexers import _iter_lexerclasses, get_all_lexers, get_filetype_from_buffer, get_lexer_by_name
+from pygments.util import ClassNotFound, guess_decode, text_type
 from utils import identify_user, send_event
 from utils.md_nofollow import NofollowExtension
+
+
+def guess_lexer(_text, **options):
+    """
+    Guess a lexer by strong distinctions in the text (eg, shebang).
+
+    This is copied here from the Pygments source code because it was rather sloppily
+    implemented and doesn't have a confidence threshold, so it just returned very low
+    confidence guesses which were wrong.
+    """
+
+    if not isinstance(_text, text_type):
+        inencoding = options.get("inencoding", options.get("encoding"))
+        if inencoding:
+            _text = _text.decode(inencoding or "utf8")
+        else:
+            _text, _ = guess_decode(_text)
+
+    # try to get a vim modeline first
+    ft = get_filetype_from_buffer(_text)
+
+    if ft is not None:
+        try:
+            return get_lexer_by_name(ft, **options)
+        except ClassNotFound:
+            pass
+
+    best_lexer = [0.0, None]
+    for lexer in _iter_lexerclasses():
+        rv = lexer.analyse_text(_text)
+        if rv == 1.0:
+            return lexer(**options)
+        if rv > best_lexer[0]:
+            best_lexer[:] = (rv, lexer)
+
+    # Require at least 5% confidence.
+    if best_lexer[0] < 0.05 or best_lexer[1] is None:
+        raise ClassNotFound("no lexer matching the text found")
+    return best_lexer[1](**options)
 
 
 def clean(text: str) -> str:
