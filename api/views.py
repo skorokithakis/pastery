@@ -56,6 +56,9 @@ class PasteView(View):
         else:
             qs = Paste.active.filter(user=data["api_key"]).order_by("-created")
 
+        for paste in qs:
+            paste.increment_views()
+
         return {"pastes": [paste.as_dict(include_body=paste_id is not None) for paste in qs]}
 
     def post(self, request, paste_id=None):
