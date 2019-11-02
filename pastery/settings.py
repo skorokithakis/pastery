@@ -204,7 +204,7 @@ AUTH_PASSWORD_VALIDATORS = [
 RATELIMIT_STATUS_CODE = 429
 RATELIMIT_CACHE_BACKEND = "pastery.brake_backend.MyBrake"
 
-MIXPANEL_TOKEN = os.getenv("MIXPANEL_TOKEN", "addme")
+MIXPANEL_TOKEN = os.getenv("MIXPANEL_TOKEN")
 
 try:
     COMMIT_HASH = check_output(["git", "rev-parse", "--short", "HEAD"])
