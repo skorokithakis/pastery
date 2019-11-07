@@ -6,17 +6,22 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 from hypothesis import strategies as st
-from hypothesis.extra.django.models import default_value, models
+from hypothesis.extra.django.models import default_value
+from hypothesis.extra.django.models import models
 
 from .models import Paste
 
 User = get_user_model()
 
-UserFactory = models(User, password=st.just("pass"), _style_name=st.just(""), api_key=st.just("apikey"))
+UserFactory = models(
+    User, password=st.just("pass"), _style_name=st.just(""), api_key=st.just("apikey")
+)
 PasteFactory = models(
     Paste,
     id=default_value,
-    expiration=st.integers(min_value=0, max_value=100).map(lambda x: timezone.now() + timedelta(minutes=x)),
+    expiration=st.integers(min_value=0, max_value=100).map(
+        lambda x: timezone.now() + timedelta(minutes=x)
+    ),
     raw_language=default_value,
     views=default_value,
     max_views=default_value,
@@ -61,10 +66,14 @@ class SmokeTests(TestCase):
         response = self.client.get(reverse("main:embed-paste", args=["hi"]))
         self.assertEqual(response.status_code, 404)
 
-        response = self.client.post(reverse("main:delete-paste", args=[paste_id]), follow=True)
+        response = self.client.post(
+            reverse("main:delete-paste", args=[paste_id]), follow=True
+        )
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.post(reverse("main:report-paste", args=[paste_id]), follow=True)
+        response = self.client.post(
+            reverse("main:report-paste", args=[paste_id]), follow=True
+        )
         self.assertEqual(response.status_code, 200)
 
         response = self.client.post(reverse("main:raw-paste", args=[paste_id]))
@@ -73,10 +82,14 @@ class SmokeTests(TestCase):
         response = self.client.post(reverse("main:download-paste", args=[paste_id]))
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.post(reverse("main:oembed") + "?url=https://hi/" + paste_id)
+        response = self.client.post(
+            reverse("main:oembed") + "?url=https://hi/" + paste_id
+        )
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.post(reverse("main:oembed") + "?url=https://hi/" + self.paste1.id)
+        response = self.client.post(
+            reverse("main:oembed") + "?url=https://hi/" + self.paste1.id
+        )
         self.assertEqual(response.status_code, 200)
 
     def test_logged_in(self):
@@ -100,9 +113,13 @@ class SmokeTests(TestCase):
         response = self.client.post(reverse("main:reset-key"), follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, reverse("main:account"))
-        self.assertNotEqual(self.user1.api_key, User.objects.get(id=self.user1.id).api_key)
+        self.assertNotEqual(
+            self.user1.api_key, User.objects.get(id=self.user1.id).api_key
+        )
 
-        response = self.client.post(reverse("main:report-paste", args=[paste_id]), follow=True)
+        response = self.client.post(
+            reverse("main:report-paste", args=[paste_id]), follow=True
+        )
         self.assertEqual(response.status_code, 200)
 
         response = self.client.post(reverse("main:raw-paste", args=[paste_id]))
@@ -111,11 +128,15 @@ class SmokeTests(TestCase):
         response = self.client.post(reverse("main:download-paste", args=[paste_id]))
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.post(reverse("main:delete-paste", args=[paste_id]), follow=True)
+        response = self.client.post(
+            reverse("main:delete-paste", args=[paste_id]), follow=True
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Paste.objects.filter(id=paste_id).count(), 0)
 
-        response = self.client.post(reverse("main:account"), data={"form": "preferences"}, follow=True)
+        response = self.client.post(
+            reverse("main:account"), data={"form": "preferences"}, follow=True
+        )
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, reverse("main:account"))
 

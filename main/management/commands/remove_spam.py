@@ -5,7 +5,9 @@ import re
 import requests
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from main.models import Paste, Setting
+
+from main.models import Paste
+from main.models import Setting
 
 
 def calculate_link_ratio(text):
@@ -25,7 +27,10 @@ def ban_ip(ip):
     url = "https://api.cloudflare.com/client/v4/zones/f1928f8f37c9e76fc7c99a7cc9455702/firewall/access_rules/rules"
     r = requests.post(
         url,
-        headers={"X-Auth-Email": settings.CLOUDFLARE_EMAIL, "X-Auth-Key": settings.CLOUDFLARE_API_KEY},
+        headers={
+            "X-Auth-Email": settings.CLOUDFLARE_EMAIL,
+            "X-Auth-Key": settings.CLOUDFLARE_API_KEY,
+        },
         json={
             "mode": "challenge",
             "configuration": {"target": "ip", "value": ip},
@@ -40,7 +45,11 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         # Named (optional) arguments
-        parser.add_argument("--link-ratio", type=float, help="Delete all links with a link ratio higher than RATIO")
+        parser.add_argument(
+            "--link-ratio",
+            type=float,
+            help="Delete all links with a link ratio higher than RATIO",
+        )
 
     def handle(self, *args, **options):
         term_setting = Setting.objects.filter(key="SPAM_TERMS").first()

@@ -1,19 +1,28 @@
 image: python:3.7
 
-variables:
-    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-
 stages:
   - test
   - deploy
 
 test:
+  variables:
+    PRE_COMMIT_HOME: "$CI_PROJECT_DIR/.cache/pre-commit"
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  cache:
+    key: pre-commit
+    paths:
+      - .cache/pre-commit
   before_script:
-    - pip install pipenv
-    - pipenv install --dev --system
+    - pip install virtualenv poetry pre-commit
+    - virtualenv venv
+    - source venv/bin/activate
+    - poetry config settings.virtualenvs.create false
+    - poetry install  # add --no-root when poetry 1.0.0 is FINALLY out
+    - pip uninstall -y pastery
     - python manage.py migrate
     - python manage.py collectstatic --noinput
   script:
+    - pre-commit run -a
     - python manage.py test
   stage: test
   cache:

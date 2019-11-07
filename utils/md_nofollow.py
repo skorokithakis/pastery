@@ -5,26 +5,24 @@ Nofollow Extension for Python-Markdown
 Modify the behavior of Links in Python-Markdown by adding rel="nofollow"
 to all generated links.
 """
-
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import
+from __future__ import unicode_literals
 
 from markdown import Extension
-from markdown.inlinepatterns import (
-    AUTOLINK_RE,
-    AUTOMAIL_RE,
-    LINK_RE,
-    REFERENCE_RE,
-    SHORT_REF_RE,
-    AutolinkPattern,
-    AutomailPattern,
-    LinkPattern,
-    ReferencePattern,
-)
+from markdown.inlinepatterns import AUTOLINK_RE
+from markdown.inlinepatterns import AutolinkPattern
+from markdown.inlinepatterns import AUTOMAIL_RE
+from markdown.inlinepatterns import AutomailPattern
+from markdown.inlinepatterns import LINK_RE
+from markdown.inlinepatterns import LinkPattern
+from markdown.inlinepatterns import REFERENCE_RE
+from markdown.inlinepatterns import ReferencePattern
+from markdown.inlinepatterns import SHORT_REF_RE
 
 
 class NofollowMixin(object):
     def handleMatch(self, m):  # noqa
-        el = super(NofollowMixin, self).handleMatch(m)
+        el = super(NofollowMixin, self).handleMatch(m)  # type: ignore
         if el is not None:
             el.set("rel", "nofollow")
         return el
@@ -52,7 +50,9 @@ class NofollowExtension(Extension):
     def extendMarkdown(self, md, md_globals):  # noqa
         md.inlinePatterns["link"] = NofollowLinkPattern(LINK_RE, md)
         md.inlinePatterns["reference"] = NofollowReferencePattern(REFERENCE_RE, md)
-        md.inlinePatterns["short_reference"] = NofollowReferencePattern(SHORT_REF_RE, md)
+        md.inlinePatterns["short_reference"] = NofollowReferencePattern(
+            SHORT_REF_RE, md
+        )
         md.inlinePatterns["autolink"] = NofollowAutolinkPattern(AUTOLINK_RE, md)
         md.inlinePatterns["automail"] = NofollowAutomailPattern(AUTOMAIL_RE, md)
 

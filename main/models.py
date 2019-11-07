@@ -1,7 +1,8 @@
 import datetime
 import hashlib
 import json
-from typing import Dict, List
+from typing import Dict
+from typing import List
 
 import bleach
 import markdown
@@ -15,7 +16,8 @@ from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import F, Q
+from django.db.models import F
+from django.db.models import Q
 from django.db.models.signals import post_save
 from django.db.utils import IntegrityError
 from django.dispatch import receiver
@@ -25,9 +27,16 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
-from pygments.lexers import _iter_lexerclasses, get_all_lexers, get_filetype_from_buffer, get_lexer_by_name
-from pygments.util import ClassNotFound, guess_decode, text_type
-from utils import identify_user, send_event
+from pygments.lexers import _iter_lexerclasses
+from pygments.lexers import get_all_lexers
+from pygments.lexers import get_filetype_from_buffer
+from pygments.lexers import get_lexer_by_name
+from pygments.util import ClassNotFound
+from pygments.util import guess_decode
+from pygments.util import text_type
+
+from utils import identify_user
+from utils import send_event
 from utils.md_nofollow import NofollowExtension
 
 
@@ -155,7 +164,9 @@ def clean(text: str) -> str:
     }
     allowed_styles = ["font-weight", "text-align", "text-transform"]
 
-    return bleach.clean(text, tags=allowed_tags, attributes=allowed_attributes, styles=allowed_styles)
+    return bleach.clean(
+        text, tags=allowed_tags, attributes=allowed_attributes, styles=allowed_styles
+    )
 
 
 def get_languages() -> List:
@@ -170,8 +181,16 @@ def get_languages() -> List:
     """
     banned_lexers = ["md"]
     # Create a tuple of (first_alias, friendly_name) for each lexer.
-    lexers = [[lexer[1][0], lexer[0]] for lexer in get_all_lexers() if lexer[1][0] not in banned_lexers]
-    lexers += [["markdown", "Markdown"], ["textile", "Textile"], ["raw html", "Raw HTML"]]
+    lexers = [
+        [lexer[1][0], lexer[0]]
+        for lexer in get_all_lexers()
+        if lexer[1][0] not in banned_lexers
+    ]
+    lexers += [
+        ["markdown", "Markdown"],
+        ["textile", "Textile"],
+        ["raw html", "Raw HTML"],
+    ]
     sorted_lexers = sorted(lexers, key=lambda x: x[0].lower())
 
     top = [
@@ -285,7 +304,9 @@ class User(AbstractUser):
         max_length=150,
         default=generate_api_key,
         unique=True,
-        help_text=_("Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."),
+        help_text=_(
+            "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+        ),
         validators=[UnicodeUsernameValidator()],
         error_messages={"unique": _("A user with that username already exists.")},
     )
@@ -293,7 +314,11 @@ class User(AbstractUser):
     last_name = None  # type: None
     email = models.EmailField(_("email address"), unique=True)
     api_key = models.CharField(
-        verbose_name=_("API key"), max_length=64, help_text=_("Your API key."), default=generate_api_key, unique=True
+        verbose_name=_("API key"),
+        max_length=64,
+        help_text=_("Your API key."),
+        default=generate_api_key,
+        unique=True,
     )
     _style_name = models.CharField(
         verbose_name=_("Style name"),
@@ -359,16 +384,28 @@ class PasteManager(models.Manager):
         if not paste.user:
             # Anonymous users only get month-long pastes.
             max_expiration = timezone.now() + datetime.timedelta(minutes=30 * 24 * 60)
-            paste.expiration = max_expiration if paste.expiration is None else min(paste.expiration, max_expiration)
+            paste.expiration = (
+                max_expiration
+                if paste.expiration is None
+                else min(paste.expiration, max_expiration)
+            )
             paste.save()
 
         if kwargs.get("user"):
             user_id = kwargs["user"].username
         else:
-            user_id = hashlib.sha256(kwargs.get("user_address", "").encode("utf8")).hexdigest()[:16]
+            user_id = hashlib.sha256(
+                kwargs.get("user_address", "").encode("utf8")
+            ).hexdigest()[:16]
 
         send_event(
-            user_id, "new_paste", {"raw_language": kwargs["raw_language"], "id": paste.id, "url": paste.get_full_url()}
+            user_id,
+            "new_paste",
+            {
+                "raw_language": kwargs["raw_language"],
+                "id": paste.id,
+                "url": paste.get_full_url(),
+            },
         )
 
         return paste
@@ -380,18 +417,36 @@ class ActivePasteManager(models.Manager):
     def get_queryset(self):
         qs = super().get_queryset()
         # Exclude pastes that are over time or over views.
-        qs = qs.exclude(Q(expiration__lt=timezone.now()) | (Q(max_views__gt=0) & Q(views__gte=F("max_views"))))
+        qs = qs.exclude(
+            Q(expiration__lt=timezone.now())
+            | (Q(max_views__gt=0) & Q(views__gte=F("max_views")))
+        )
         return qs
 
 
 class Paste(models.Model):
-    id = models.CharField(max_length=100, primary_key=True, db_index=True, default=generate_paste_uuid, editable=False)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE)
-    title = models.CharField(max_length=500, blank=True, help_text=_("The title of the paste."))
+    id = models.CharField(
+        max_length=100,
+        primary_key=True,
+        db_index=True,
+        default=generate_paste_uuid,
+        editable=False,
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE
+    )
+    title = models.CharField(
+        max_length=500, blank=True, help_text=_("The title of the paste.")
+    )
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     expiration = models.DateTimeField(blank=True, null=True)
-    raw_language = models.CharField(verbose_name=_("Language"), max_length=100, choices=LANGUAGES, default="autodetect")
+    raw_language = models.CharField(
+        verbose_name=_("Language"),
+        max_length=100,
+        choices=LANGUAGES,
+        default="autodetect",
+    )
     user_address = models.CharField(max_length=1000, blank=True)
     views = models.IntegerField(default=0, blank=False)
     max_views = models.IntegerField(default=0, blank=False)
@@ -409,7 +464,9 @@ class Paste(models.Model):
             "title": self.title,
             "url": self.get_full_url(),
             "language": self.language,
-            "duration": int((self.expiration - timezone.now()).total_seconds() / 60) if self.expiration else None,
+            "duration": int((self.expiration - timezone.now()).total_seconds() / 60)
+            if self.expiration
+            else None,
         }
 
         if include_body:
@@ -428,7 +485,10 @@ class Paste(models.Model):
             return paste
 
     def get_full_url(self) -> str:
-        return "https://%s%s" % (Site.objects.get_current().domain, self.get_absolute_url())
+        return "https://%s%s" % (
+            Site.objects.get_current().domain,
+            self.get_absolute_url(),
+        )
 
     def get_absolute_url(self) -> str:
         return reverse("main:paste", args=[self.id])
@@ -444,7 +504,7 @@ class Paste(models.Model):
         """Return the human-readable language name."""
         return LANGUAGE_DICT[self.language]
 
-    def increment_views(self):
+    def increment_views(self) -> None:
         """Increment the view counter."""
         self.views += 1
         self._skip_invalidation = True
@@ -503,14 +563,24 @@ class Paste(models.Model):
 
         language = self.language
         if language == "markdown":
-            rendered = clean(markdown.markdown(self.body, ["markdown.extensions.extra", NofollowExtension()]))
+            rendered = clean(
+                markdown.markdown(
+                    self.body, ["markdown.extensions.extra", NofollowExtension()]
+                )
+            )
         elif language == "textile":
             rendered = clean(textile.textile_restricted(self.body))
         else:
             formatter = HtmlFormatter(
-                linenos="table", linespans="line", anchorlinenos=True, lineanchors="l", cssclass="paste"
+                linenos="table",
+                linespans="line",
+                anchorlinenos=True,
+                lineanchors="l",
+                cssclass="paste",
             )
-            rendered = highlight(self.body, pygments.lexers.get_lexer_by_name(language), formatter)
+            rendered = highlight(
+                self.body, pygments.lexers.get_lexer_by_name(language), formatter
+            )
         cache.set(key, rendered, settings.CACHING_TIME)
         return rendered
 
@@ -533,4 +603,9 @@ def clear_cache(sender, instance, created, **kwargs):
         # Reset attribute, just in case.
         instance._skip_invalidation = False
         return
-    cache.delete_many(["pastery:paste_%s_language" % instance.id, "pastery:paste_%s_rendered_body" % instance.id])
+    cache.delete_many(
+        [
+            "pastery:paste_%s_language" % instance.id,
+            "pastery:paste_%s_rendered_body" % instance.id,
+        ]
+    )

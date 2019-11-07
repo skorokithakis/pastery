@@ -9,12 +9,12 @@ https://docs.djangoproject.com/en/1.9/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
-
 import os
 import random
 import re
 from subprocess import check_output
-from typing import Dict, List, Union  # noqa
+from typing import Dict
+from typing import Union
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,12 +24,16 @@ DEFAULT_FROM_EMAIL = "Pastery <noreply@pastery.net>"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*a-%&$r&n")
+SECRET_KEY = os.getenv(
+    "SECRET_KEY", "#60=4-b_z(wv06&gdr%zk5+-%r=590zl+x=j4_t1!*a-%&$r&n"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("NODEBUG") is None
 
-ALLOWED_HOSTS = ["localhost", "web"] if os.environ.get("NODEBUG") is None else [".pastery.net"]
+ALLOWED_HOSTS = (
+    ["localhost", "web"] if os.environ.get("NODEBUG") is None else [".pastery.net"]
+)
 
 # Application definition
 
@@ -73,9 +77,14 @@ AUTH_USER_MODEL = "main.User"
 SESSION_COOKIE_SECURE = not os.environ.get("NODEBUG") is None
 CSRF_COOKIE_SECURE = not os.environ.get("NODEBUG") is None
 
-AUTHENTICATION_BACKENDS = ("tokenauth.auth_backends.EmailTokenBackend", "django.contrib.auth.backends.ModelBackend")
+AUTHENTICATION_BACKENDS = (
+    "tokenauth.auth_backends.EmailTokenBackend",
+    "django.contrib.auth.backends.ModelBackend",
+)
 
-DEFAULT_STYLE = random.choice(["monokai", "solarized", "solarized_dark", "paraiso-dark", "native"])
+DEFAULT_STYLE = random.choice(
+    ["monokai", "solarized", "solarized_dark", "paraiso-dark", "native"]
+)
 
 TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
 
@@ -117,7 +126,11 @@ DEBUG_TOOLBAR_PATCH_SETTINGS = True
 
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": lambda request: False
-    and ((not request.is_ajax()) and request.user.is_authenticated and request.user.is_superuser)
+    and (
+        (not request.is_ajax())  # type: ignore
+        and request.user.is_authenticated
+        and request.user.is_superuser
+    )
 }
 
 WSGI_APPLICATION = "pastery.wsgi.application"
@@ -187,14 +200,21 @@ elif os.environ.get("DATABASE_URL"):
     SENDGRID_API_KEY = os.getenv("EMAIL_HOST_PASSWORD", "pass")
     SENDGRID_SANDBOX_MODE_IN_DEBUG = DEBUG
 else:
-    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": os.path.join(BASE_DIR, "db.sqlite3")}}
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
+    }
 
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -209,7 +229,7 @@ MIXPANEL_TOKEN = os.getenv("MIXPANEL_TOKEN")
 try:
     COMMIT_HASH = check_output(["git", "rev-parse", "--short", "HEAD"])
 except:  # noqa
-    COMMIT_HASH = "Not a git repo"
+    COMMIT_HASH = b"Not a git repo"
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -230,10 +250,17 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "handlers": {"console": {"class": "logging.StreamHandler"}},
-    "loggers": {"django": {"handlers": ["console"], "level": os.getenv("DJANGO_LOG_LEVEL", "INFO")}},
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+        }
+    },
 }
 
-RAVEN_CONFIG = {"dsn": os.getenv("RAVEN_DSN", None)}  # type: Dict[str, Union[None, str]]
+RAVEN_CONFIG = {
+    "dsn": os.getenv("RAVEN_DSN", None)
+}  # type: Dict[str, Union[None, str]]
 
 CACHING_TIME = 24 * 3600
 

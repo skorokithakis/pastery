@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
-from main.tests import PasteFactory, UserFactory
+
+from main.tests import PasteFactory
+from main.tests import UserFactory
 
 
 class SmokeTests(TestCase):
@@ -15,24 +17,36 @@ class SmokeTests(TestCase):
         self.paste3.save()
 
     def test_retrieval(self):
-        response = self.client.get(reverse("api:paste") + "?api_key=" + self.user1.api_key)
+        response = self.client.get(
+            reverse("api:paste") + "?api_key=" + self.user1.api_key
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()["pastes"]), 1)
         self.assertNotIn("body", response.json()["pastes"][0])
 
-        response = self.client.get(reverse("api:paste-id", args=[self.paste3.id]) + "?api_key=" + self.user1.api_key)
+        response = self.client.get(
+            reverse("api:paste-id", args=[self.paste3.id])
+            + "?api_key="
+            + self.user1.api_key
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()["pastes"]), 1)
         self.assertIn("stuff", response.json()["pastes"][0].get("body", ""))
 
     def test_posting(self):
-        response = self.client.post(reverse("api:paste"), "stuff", content_type="application/x-www-form-urlencoded")
+        response = self.client.post(
+            reverse("api:paste"),
+            "stuff",
+            content_type="application/x-www-form-urlencoded",
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["language"], "text")
 
         paste_id = response.json()["id"]
 
-        response = self.client.get(reverse("api:paste-id", args=[paste_id]) + "?api_key=" + self.user1.api_key)
+        response = self.client.get(
+            reverse("api:paste-id", args=[paste_id]) + "?api_key=" + self.user1.api_key
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()["pastes"]), 1)
         self.assertEqual(response.json()["pastes"][0]["id"], paste_id)
@@ -47,7 +61,9 @@ class SmokeTests(TestCase):
         self.assertEqual(response.json()["language"], "text")
 
         paste_id = response.json()["id"]
-        response = self.client.get(reverse("api:paste") + "?api_key=" + self.user1.api_key)
+        response = self.client.get(
+            reverse("api:paste") + "?api_key=" + self.user1.api_key
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()["pastes"]), 2)
         self.assertEqual(response.json()["pastes"][0]["id"], paste_id)
@@ -56,11 +72,19 @@ class SmokeTests(TestCase):
         response = self.client.delete(reverse("api:paste-id", args=[self.paste1.id]))
         self.assertEqual(response.status_code, 422)
 
-        response = self.client.delete(reverse("api:paste-id", args=[self.paste1.id]) + "?api_key=" + self.user1.api_key)
+        response = self.client.delete(
+            reverse("api:paste-id", args=[self.paste1.id])
+            + "?api_key="
+            + self.user1.api_key
+        )
         self.assertEqual(response.status_code, 422)
 
         self.paste1.user = self.user1
         self.paste1.save()
 
-        response = self.client.delete(reverse("api:paste-id", args=[self.paste1.id]) + "?api_key=" + self.user1.api_key)
+        response = self.client.delete(
+            reverse("api:paste-id", args=[self.paste1.id])
+            + "?api_key="
+            + self.user1.api_key
+        )
         self.assertEqual(response.status_code, 200)

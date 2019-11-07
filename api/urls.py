@@ -1,5 +1,6 @@
-from api import views  # noqa
 from django.conf.urls import url
+
+from api import views  # noqa
 
 app_name = "api"
 urlpatterns = [

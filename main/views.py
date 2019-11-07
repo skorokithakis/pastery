@@ -1,7 +1,8 @@
 import datetime
 import re
 
-from annoying.decorators import ajax_request, render_to
+from annoying.decorators import ajax_request
+from annoying.decorators import render_to
 from brake.decorators import ratelimit
 from captcha.fields import ReCaptchaField
 from django import forms
@@ -10,8 +11,10 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
-from django.http import Http404, HttpResponse
-from django.shortcuts import redirect, render
+from django.http import Http404
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
@@ -21,9 +24,11 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_POST
 from ipware.ip import get_ip
 from raven.contrib.django.raven_compat.models import client
-from utils import send_event  # noqa
 
-from .models import LANGUAGE_DICT, STYLES, Paste
+from .models import LANGUAGE_DICT
+from .models import Paste
+from .models import STYLES
+from utils import send_event  # noqa
 
 User = get_user_model()
 LANGUAGE_NAMES = LANGUAGE_DICT.keys()
@@ -43,7 +48,12 @@ def pasteform_factory(user):
         if user.is_authenticated:
             EXPIRATION.append([None, _("never")])
 
-        expires = forms.ChoiceField(choices=EXPIRATION, initial=30 * 24 * 60, label=_("Expires in"), required=False)
+        expires = forms.ChoiceField(
+            choices=EXPIRATION,
+            initial=30 * 24 * 60,
+            label=_("Expires in"),
+            required=False,
+        )
         work = forms.CharField(required=False)
         other_pastes = forms.CharField(required=False)
         if settings.ENABLE_CAPTCHA:
@@ -52,7 +62,9 @@ def pasteform_factory(user):
         def clean(self):
             cleaned_data = super().clean()
             if cleaned_data.get("work", "") != "I'm not a bot, promise":
-                raise forms.ValidationError(_("Please enable Javascript and try pasting again."))
+                raise forms.ValidationError(
+                    _("Please enable Javascript and try pasting again.")
+                )
             return cleaned_data
 
         class Meta:
@@ -107,7 +119,9 @@ def home(request):
             data["views"] = -1
 
             if clean["expires"]:
-                data["expiration"] = timezone.now() + datetime.timedelta(minutes=int(clean["expires"]))
+                data["expiration"] = timezone.now() + datetime.timedelta(
+                    minutes=int(clean["expires"])
+                )
 
             if request.user.is_authenticated:
                 data["user"] = request.user
@@ -115,7 +129,9 @@ def home(request):
             paste = Paste.objects.create(**data)
 
             if clean["other_pastes"]:
-                paste_list = re.split(r"\W+", clean["other_pastes"])[-settings.MAX_COMBINED_PASTES + 1 :]
+                paste_list = re.split(r"\W+", clean["other_pastes"])[
+                    -settings.MAX_COMBINED_PASTES + 1 :
+                ]
                 paste_list.append(paste.id)
 
                 redir_url = reverse("main:paste", args=["+".join(paste_list)])
@@ -129,7 +145,9 @@ def home(request):
         initial = {
             "title": request.GET.get("title", ""),
             "body": "",
-            "raw_language": request.GET["lang"] if request.GET.get("lang") in LANGUAGE_NAMES else "autodetect",
+            "raw_language": request.GET["lang"]
+            if request.GET.get("lang") in LANGUAGE_NAMES
+            else "autodetect",
         }
 
         if "expires" in request.GET:
@@ -139,7 +157,11 @@ def home(request):
         if clone:
             paste = Paste.active.filter(pk=clone).first()
             if paste:
-                initial = {"title": paste.title, "body": paste.body, "raw_language": paste.language}
+                initial = {
+                    "title": paste.title,
+                    "body": paste.body,
+                    "raw_language": paste.language,
+                }
 
         form = pasteform_factory(request.user)(initial=initial)
     return {"form": form}
@@ -183,12 +205,16 @@ def paste(request, paste_id):
 
     has_multiple = len(pastes) > 1
 
-    show_full = has_multiple or (pastes[0].language != "markdown" and pastes[0].language != "textile")
+    show_full = has_multiple or (
+        pastes[0].language != "markdown" and pastes[0].language != "textile"
+    )
 
     if pastes[0] and pastes[0].language == "raw html":
         response = HttpResponse(pastes[0].body, content_type="text/html")
         # Add the CSP header to allow scripts but disable `allow-same-origin` for the sandbox.
-        response["Content-Security-Policy"] = "script-src 'unsafe-inline' https:; sandbox allow-scripts"
+        response[
+            "Content-Security-Policy"
+        ] = "script-src 'unsafe-inline' https:; sandbox allow-scripts"
         return response
 
     return render(
@@ -237,10 +263,17 @@ def report_paste(request, paste_id):
         )
         return redirect(paste)
 
-    reporter = request.user.username if request.user.is_authenticated else get_ip(request)
-    client.captureMessage("A paste was reported by %s: %s" % (reporter, paste.get_full_url()))
+    reporter = (
+        request.user.username if request.user.is_authenticated else get_ip(request)
+    )
+    client.captureMessage(
+        "A paste was reported by %s: %s" % (reporter, paste.get_full_url())
+    )
     send_event(reporter, "report_paste", {"id": paste.id, "url": paste.get_full_url()})
-    messages.success(request, _("Thank you for your report. We will investigate as soon as possible."))
+    messages.success(
+        request,
+        _("Thank you for your report. We will investigate as soon as possible."),
+    )
     return redirect("main:home")
 
 
@@ -258,7 +291,11 @@ def delete_paste(request, paste_id):
     if request.user != paste.user:
         messages.error(request, _("That's not your paste, you naughty girl."))
     else:
-        send_event(request.user.username, "delete_paste", {"id": paste.id, "url": paste.get_full_url()})
+        send_event(
+            request.user.username,
+            "delete_paste",
+            {"id": paste.id, "url": paste.get_full_url()},
+        )
         paste.delete()
         messages.success(request, _("Your paste has been deleted."))
     return redirect("main:home")
@@ -297,7 +334,12 @@ def account(request):
         pref_form = UserForm(instance=request.user)
         email_form = EmailChangeForm(initial={"email": request.user.email})
         pastes = Paste.active.filter(user=request.user).order_by("-created")
-    return {"email_form": email_form, "pref_form": pref_form, "languages": STYLES, "pastes": pastes}
+    return {
+        "email_form": email_form,
+        "pref_form": pref_form,
+        "languages": STYLES,
+        "pastes": pastes,
+    }
 
 
 @render_to("login.html")

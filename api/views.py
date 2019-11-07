@@ -10,8 +10,14 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 from ipware.ip import get_ip
-from main.models import ALIAS_DICT, Paste  # noqa
-from schema import And, Optional, Schema, SchemaError, Use
+from schema import And
+from schema import Optional
+from schema import Schema
+from schema import SchemaError
+from schema import Use
+
+from main.models import ALIAS_DICT
+from main.models import Paste
 
 User = get_user_model()
 
@@ -27,7 +33,7 @@ class PasteView(View):
         if isinstance(data, HttpResponse):
             return data
 
-        status_code = 200
+        status_code = 200  # type: ignore
 
         if data.get("result") == "error":
             status_code = 422
@@ -37,13 +43,20 @@ class PasteView(View):
             del data["status_code"]
 
         data_str = json.dumps(data)
-        response = HttpResponse(data_str, content_type="application/json", status=status_code)
+        response = HttpResponse(
+            data_str, content_type="application/json", status=status_code
+        )
         response["content-length"] = len(data_str)
         return response
 
     def get(self, request, paste_id=None):
         schema = Schema(
-            {"api_key": Use(lambda x: User.objects.get(api_key=x[0]), error='"api_key" must be a valid API key.')}
+            {
+                "api_key": Use(
+                    lambda x: User.objects.get(api_key=x[0]),
+                    error='"api_key" must be a valid API key.',
+                )
+            }
         )
 
         try:
@@ -59,11 +72,17 @@ class PasteView(View):
         for paste in qs:
             paste.increment_views()
 
-        return {"pastes": [paste.as_dict(include_body=paste_id is not None) for paste in qs]}
+        return {
+            "pastes": [paste.as_dict(include_body=paste_id is not None) for paste in qs]
+        }
 
     def post(self, request, paste_id=None):
         if getattr(request, "limited", False):
-            return {"result": "error", "error_msg": "You're pasting too much, please slow down.", "status_code": 429}
+            return {
+                "result": "error",
+                "error_msg": "You're pasting too much, please slow down.",
+                "status_code": 429,
+            }
 
         schema = Schema(
             And(
@@ -87,7 +106,8 @@ class PasteView(View):
                         error='"duration" should be a positive integer number of minutes before the paste is deleted.',
                     ),
                     Optional("api_key", default=None): Use(
-                        lambda x: User.objects.get(api_key=x[0]), error='"api_key" must be a valid API key.'
+                        lambda x: User.objects.get(api_key=x[0]),
+                        error='"api_key" must be a valid API key.',
                     ),
                     Optional("max_views", default=0): And(
                         [str],
@@ -116,7 +136,10 @@ class PasteView(View):
         try:
             body = body.decode("utf8")
         except UnicodeDecodeError:
-            return {"result": "error", "error_msg": "Your request body was not valid UTF-8."}
+            return {
+                "result": "error",
+                "error_msg": "Your request body was not valid UTF-8.",
+            }
 
         paste = Paste.objects.create(
             title=data.title,
@@ -132,7 +155,12 @@ class PasteView(View):
 
     def delete(self, request, paste_id=None):
         schema = Schema(
-            {"api_key": Use(lambda x: User.objects.get(api_key=x[0]), error='"api_key" must be a valid API key.')}
+            {
+                "api_key": Use(
+                    lambda x: User.objects.get(api_key=x[0]),
+                    error='"api_key" must be a valid API key.',
+                )
+            }
         )
 
         try:
@@ -145,4 +173,7 @@ class PasteView(View):
             paste.delete()
             return {"result": "success"}
         else:
-            return {"result": "error", "error_msg": "That paste does not belong to you."}
+            return {
+                "result": "error",
+                "error_msg": "That paste does not belong to you.",
+            }

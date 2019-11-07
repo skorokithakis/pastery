@@ -3,7 +3,9 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 from djangoql.admin import DjangoQLSearchMixin
 
-from .models import Paste, Setting, User
+from .models import Paste
+from .models import Setting
+from .models import User
 
 
 @admin.register(Setting)
@@ -14,7 +16,16 @@ class SettingAdmin(admin.ModelAdmin):
 
 @admin.register(Paste)
 class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
-    list_display = ["id", "user", "title", "created", "expiration", "views", "max_views", "has_expired"]
+    list_display = [
+        "id",
+        "user",
+        "title",
+        "created",
+        "expiration",
+        "views",
+        "max_views",
+        "has_expired",
+    ]
     list_filter = ("created", "expiration")
     ordering = ["-created"]
     actions = ["purge_user"]
@@ -30,16 +41,32 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
             else:
                 paste.delete()
                 paste_counter += 1
-            self.message_user(request, "%s users and %s pastes deleted." % (user_counter, paste_counter))
+            self.message_user(
+                request,
+                "%s users and %s pastes deleted." % (user_counter, paste_counter),
+            )
 
-    purge_user.short_description = "Delete selected pastes and their users"  # type: ignore
+    purge_user.short_description = (
+        "Delete selected pastes and their users"
+    )  # type: ignore
 
 
 @admin.register(User)
 class MyUserAdmin(DjangoQLSearchMixin, UserAdmin):
     fieldsets = (
         (_("Credentials"), {"fields": ("username", "email", "password")}),
-        (_("Permissions"), {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                )
+            },
+        ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
         (_("Various"), {"fields": ("_style_name", "api_key")}),
     )

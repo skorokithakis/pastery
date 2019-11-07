@@ -3,7 +3,9 @@
 from __future__ import unicode_literals
 
 import django.contrib.auth.validators
-from django.db import migrations, models
+from django.db import migrations
+from django.db import models
+
 import main.models
 
 
