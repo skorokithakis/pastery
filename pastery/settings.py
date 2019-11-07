@@ -104,6 +104,21 @@ ROOT_URLCONF = "pastery.urls"
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/login/"
 
+IPWARE_META_PRECEDENCE_ORDER = (
+    "HTTP_CF_CONNECTING_IP",
+    "HTTP_X_FORWARDED_FOR",
+    "X_FORWARDED_FOR",
+    "HTTP_CLIENT_IP",
+    "HTTP_X_REAL_IP",
+    "HTTP_X_FORWARDED",
+    "HTTP_X_CLUSTER_CLIENT_IP",
+    "HTTP_FORWARDED_FOR",
+    "HTTP_FORWARDED",
+    "HTTP_VIA",
+    "REMOTE_ADDR",
+)
+
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",

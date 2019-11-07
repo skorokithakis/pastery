@@ -217,7 +217,7 @@ description = "A Django utility application that returns client's real IP addres
 name = "django-ipware"
 optional = false
 python-versions = "*"
-version = "1.1.6"
+version = "2.1.0"
 
 [[package]]
 category = "main"
@@ -286,7 +286,7 @@ description = "An authentication backend that uses tokens sent over email to aut
 name = "django-tokenauth"
 optional = false
 python-versions = "*"
-version = "0.2.5"
+version = "0.3.0"
 
 [[package]]
 category = "main"
@@ -813,7 +813,7 @@ version = "4.1.4"
 brotli = ["brotli"]
 
 [metadata]
-content-hash = "fc244d232719d5fdcba502e0fdb01312a3ff6e9381a5dd0b6919dc1becc9a5f2"
+content-hash = "3414fb3856089ebcea7ad52600fd24b9cff58f4ef71f42f3b902aa26cdb2bf52"
 python-versions = ">=3.7"
 
 [metadata.hashes]
@@ -837,13 +837,13 @@ django-brake = ["1d8fdccdf9a73008367d93a135ab32c9cde49859f9ecd8466034e39e71b40a8
 django-cloudflare-push = ["4685f9f63cc4a22aecdb3478f5cfb860c26ae5c1b71e67ec82a95bec26a8b76c", "cbd4ddbdd82e65af8670f1b0572f3f0dc305136307dc9166930357a845d6f028"]
 django-debug-toolbar = ["89d75b60c65db363fb24688d977e5fbf0e73386c67acf562d278402a10fc3736", "c2b0134119a624f4ac9398b44f8e28a01c7686ac350a12a74793f3dd57a9eea0"]
 django-extensions = ["a9db7c56a556d244184f589f2437b4228de86ee45e5ebb837fb20c6d54e95ea5", "b58320d3fe3d6ae7d1d8e38959713fa92272f4921e662d689058d942a5b444f7"]
-django-ipware = ["93a90f9dd8caf2c633172aa8c8ba4e76e2b44f92a6942fa35e7624281e81ea03"]
+django-ipware = ["a7c7a8fd019dbdc9c357e6e582f65034e897572fc79a7e467674efa8aef9d00b"]
 django-nose = ["58934a06a6932696e54c9e8af3fab49bf67ca9e9c840ad668cb7f51219808a07", "f515d903cfaeda52c7a9198e0c8ed51563e82802b62a4e5fbd056fd830095318"]
 django-recaptcha = ["99123497a9e4023800eae874fe4f586a7416f5d6206de3b4826ebf91b40aef64", "9cde155d8a5a7226f899f99fb267007d601a485755e69b703b816d7d7664e32b"]
 django-redis = ["af0b393864e91228dd30d8c85b5c44d670b5524cb161b7f9e41acc98b6e5ace7", "f46115577063d00a890867c6964ba096057f07cb756e78e0503b89cd18e4e083"]
 django-sendgrid-v5 = ["e514084c340d17ce2c0f3822b00239d357766b90703cbbb88722f577949eeb7b", "f74ccb676cdaee79962ab426bf3d689e243e97ffb7d152459f4d1e26e5d91147"]
 django-stubs = ["c0515576de547bb33057e24d1b0294d10a68e55150ee32fc964f1082192ab012", "ca565958a66c0772a11bf95e415d0bcd476eb59919a7ed1a417cc93315d68809"]
-django-tokenauth = ["4bb110f71d950032ea36b6f4ea76ee062a6823c0ca2f2d0de9072a2e35f3ca07", "784b960b3e3c2139396be72aa6733129190cf92d8464628b5482879bc73b34d7"]
+django-tokenauth = ["45baf2e9cdf9584e5f46c704e22cc9192e401b4aa38ed63fd5bce0aee0e04a36", "86964e440af41392dd404c0c335a3175f5b451e723eeb9a598df11e769f61098"]
 djangoql = ["366293d7d4e416f9f7d6e2b98775c2129222fbb4dc660f3e6c7b9e35a3cf3fce"]
 docutils = ["6c4f696463b79f1fb8ba0c594b63840ebd41f059e92b31957c46b74a4599b6d0", "9e4d7ecfc600058e07ba661411a2b7de2fd0fafa17d1a7f7361cd47b1175c827", "a2aeea129088da402665e92e0b25b04b073c04b2dce4ab65caaa38b7ce2e1a99"]
 entrypoints = ["589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19", "c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"]

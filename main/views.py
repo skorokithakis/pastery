@@ -22,7 +22,7 @@ from django.utils.text import get_valid_filename
 from django.utils.translation import ugettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_POST
-from ipware.ip import get_ip
+from ipware import get_client_ip
 from raven.contrib.django.raven_compat.models import client
 
 from .models import LANGUAGE_DICT
@@ -115,7 +115,9 @@ def home(request):
             data["title"] = clean["title"]
             data["body"] = clean["body"]
             data["raw_language"] = clean["raw_language"]
-            data["user_address"] = get_ip(request) if get_ip(request) else ""
+            data["user_address"] = (
+                get_client_ip(request)[0] if get_client_ip(request)[0] else ""
+            )
             data["views"] = -1
 
             if clean["expires"]:
@@ -239,6 +241,7 @@ def download_paste(request, paste_id):
 
 
 def raw_paste(request, paste_id):
+    print(request.META)
     paste = Paste.get_by_id_or_404(paste_id)
     response = HttpResponse(paste.body, content_type="text/plain; charset=utf-8")
     if paste.title:
@@ -264,7 +267,9 @@ def report_paste(request, paste_id):
         return redirect(paste)
 
     reporter = (
-        request.user.username if request.user.is_authenticated else get_ip(request)
+        request.user.username
+        if request.user.is_authenticated
+        else get_client_ip(request)[0]
     )
     client.captureMessage(
         "A paste was reported by %s: %s" % (reporter, paste.get_full_url())
