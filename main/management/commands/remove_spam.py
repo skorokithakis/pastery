@@ -56,6 +56,7 @@ class Command(BaseCommand):
 
         ratio_threshold = options["link_ratio"]
 
+        counter = 0
         if ratio_threshold:
             for paste in Paste.objects.filter(user=None):
                 if len(paste.body) < 50:
@@ -65,6 +66,7 @@ class Command(BaseCommand):
                 if ratio > ratio_threshold:
                     print("Deleting %s (%s)..." % (paste, ratio))
                     paste.delete()
+                    counter += 1
 
         if not term_setting:
             print("No terms found, quitting...")
@@ -74,7 +76,6 @@ class Command(BaseCommand):
         body_terms = terms["body"]
         title_terms = terms["title"]
 
-        counter = 0
         for term in body_terms:
             pastes = Paste.objects.filter(body__contains=term, user=None)
             for paste in pastes:
