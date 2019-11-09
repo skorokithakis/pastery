@@ -13,12 +13,11 @@ test:
     paths:
       - .cache/pre-commit
   before_script:
-    - pip install virtualenv poetry pre-commit
+    - pip install virtualenv --pre poetry pre-commit
     - virtualenv venv
     - source venv/bin/activate
-    - poetry config settings.virtualenvs.create false
-    - poetry install  # add --no-root when poetry 1.0.0 is FINALLY out
-    - pip uninstall -y pastery
+    - poetry config virtualenvs.create false
+    - poetry install --no-root
     - python manage.py migrate
     - python manage.py collectstatic --noinput
   script:
