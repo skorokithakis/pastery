@@ -46,6 +46,9 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         # Named (optional) arguments
         parser.add_argument(
+            "--regex", type=str, help="Delete all links whose title matches REGEX"
+        )
+        parser.add_argument(
             "--link-ratio",
             type=float,
             help="Delete all links with a link ratio higher than RATIO",
@@ -53,10 +56,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         term_setting = Setting.objects.filter(key="SPAM_TERMS").first()
+        counter = 0
 
         ratio_threshold = options["link_ratio"]
 
-        counter = 0
         if ratio_threshold:
             for paste in Paste.objects.filter(user=None):
                 if len(paste.body) < 50:
@@ -68,31 +71,36 @@ class Command(BaseCommand):
                     paste.delete()
                     counter += 1
 
-        if not term_setting:
-            print("No terms found, quitting...")
-            return
+        regex = options["regex"]
+        if regex:
+            for paste in Paste.objects.filter(user=None, title__iregex=regex):
+                print("Deleting %s..." % paste)
+                paste.delete()
+                counter += 1
 
-        terms = json.loads(term_setting.value)
-        body_terms = terms["body"]
-        title_terms = terms["title"]
+        if term_setting:
+            print("No terms found.")
+            terms = json.loads(term_setting.value)
+            body_terms = terms["body"]
+            title_terms = terms["title"]
 
-        for term in body_terms:
-            pastes = Paste.objects.filter(body__contains=term, user=None)
-            for paste in pastes:
-                ban_ip(paste.user_address)
-            deleted = pastes.delete()
-            counter += deleted[0]
+            for term in body_terms:
+                pastes = Paste.objects.filter(body__contains=term, user=None)
+                for paste in pastes:
+                    ban_ip(paste.user_address)
+                deleted = pastes.delete()
+                counter += deleted[0]
 
-        for term in title_terms:
-            pastes = Paste.objects.filter(title__icontains=term, user=None)
-            for paste in pastes:
-                ban_ip(paste.user_address)
-            deleted = pastes.delete()
-            counter += deleted[0]
+            for term in title_terms:
+                pastes = Paste.objects.filter(title__icontains=term, user=None)
+                for paste in pastes:
+                    ban_ip(paste.user_address)
+                deleted = pastes.delete()
+                counter += deleted[0]
 
-        # Make all userless, non-expiring pastes last a month.
-        Paste.objects.filter(user=None).filter(expiration=None).update(
-            expiration=datetime.datetime.now() + datetime.timedelta(days=30)
-        )
+            # Make all userless, non-expiring pastes last a month.
+            Paste.objects.filter(user=None).filter(expiration=None).update(
+                expiration=datetime.datetime.now() + datetime.timedelta(days=30)
+            )
 
         print("Deleted %s pastes in total." % counter)
