@@ -18,7 +18,7 @@ def calculate_link_ratio(text):
 
     total_urls = regex.findall(text)
     url_length = len("".join(total_urls))
-    return url_length / len(text)
+    return url_length / len(re.findall(r"\S", text))
 
 
 def ban_ip(ip):
