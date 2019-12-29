@@ -592,6 +592,25 @@ footer a:hover {
     margin: 0 0 20px;
     font-weight: bold;
 }
+.account h1 .beta {
+    background: #ddd;
+    font-style: normal;
+    padding: 2px 5px;
+    font-size: 12px;
+    margin-left: 10px;
+    vertical-align: top;
+    border-radius: 5px;
+    color: #666;
+    text-transform: uppercase;
+}
+.account section > .help-block {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: #737373;
+    padding: 0;
+    margin: -10px 0 20px;
+}
 .account section a {
     color: #CC1B1B;
 }
@@ -647,28 +666,127 @@ footer a:hover {
 
 /* Login form */
 .login-container h1 {
-    margin: 0 0 20px;
-    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
 }
 .login-container p {
     color: #666;
 }
 .login-container .form-group {
-    width: 500px;
     margin: 20px auto;
     font-size: 30px;
     text-align: center;
 }
 .login-container .form-control {
     font-size: 25px;
-    text-align: center;
-    padding: 0 20px;
+    padding: 0 15px;
     height: auto;
+    margin: 0 auto;
+    max-width: 390px;
+    border-radius: 0;
+}
+.login-container .form-control:focus {
+    border-color: #D41616;
+    box-shadow: none;
 }
 .login-container .btn-primary {
     display: block;
     margin: 0 auto;
     min-width: 100px;
+}
+.login-container form {
+    padding: 20px;
+    background: rgba(204,27,27,.1);
+}
+.login-container form .form-group:last-child {
+    display: flex;
+    justify-content: space-evenly;
+}
+.login-container form a[data-action="back"] {
+    font-size: 15px;
+    color: #333;
+    padding: 6px 0;
+}
+
+/* Authentication Type */
+.authentication-methods h1 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+.authentication-type {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+.authentication-type button {
+    border: none;
+    padding: 30px;
+    background: rgba(204,27,27,.1);
+    flex: 1;
+    font-weight: bold;
+    font-size: 20px;
+    color: #cc1b1b;
+    align-items: center;
+    display: flex;
+    flex-direction: column;   
+}
+.authentication-type button:last-child {
+    margin-left: 1px;
+}
+.authentication-type button em {
+    font-size: 40px;
+    margin-bottom: 10px;
+    font-style: normal;
+    height: 60px;
+    line-height: 60px;
+}
+.authentication-type button img {
+    height: 60px;
+    fill: #fff;
+    margin-bottom: 10px;    
+}
+.authentication-type button:hover {
+    background: #cc1b1b;
+    color: #fff;
+}
+.authentication-type button:hover img {
+    filter: brightness(100);
+}
+
+.authentication-tips div {
+    padding: 10px;
+    margin: 0 auto;
+    min-height: 100px;    
+}
+.authentication-tips [data-caption="none"] {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+.authentication-tips [data-caption="none"] p {
+    margin: 0;
+    color: #999;
+}
+.authentication-tips [data-caption="email"] {
+    display: none;
+}
+.authentication-tips [data-caption="web-token"] {
+    display: none;
+}
+.authentication-tips a {
+    color: #333;
+    text-decoration: underline;
+}
+.login-container[data-section="email"] {
+    display: none;
+    margin: 0 auto;
+    text-align: left;
+}
+.authentication-type,
+.authentication-tips div,
+.login-container[data-section="email"] {
+    width: 60%;
 }
 
 @media (min-width: 768px) {
@@ -856,6 +974,9 @@ footer a:hover {
     .account section {
         padding: 0 15px;
     }
+    .account #copy-code {
+        display: block;
+    }
 
     .login-container {
         padding: 0 10px;
@@ -865,8 +986,12 @@ footer a:hover {
     }
     .login-container .form-control {
         display: inline-block;
-        width: auto;
     }
+    .authentication-type,
+    .authentication-tips div,
+    .login-container[data-section="email"] {
+        width: 100%;
+    }    
 }
 /*
 414px matches the maximum width
