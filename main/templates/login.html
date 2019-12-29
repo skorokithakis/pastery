@@ -16,6 +16,15 @@
 
             <button type="submit" class="btn btn-primary">{% trans "Log in" %}</button>
         </form>
+
+        <p style="margin-top: 20px">
+        If you have a hardware key registered on this site, you can log in with it here.
+        <br>
+        <br>
+            <button id="webauthin-login" class="btn btn-primary">{% trans "Log in with hardware key" %}</button>
+        </p>
     </article>
 </div>
+
+{% include "webauthin_login.html" %}
 {% endblock %}
