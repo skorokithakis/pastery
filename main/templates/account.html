@@ -74,8 +74,9 @@
 
 <section>
 
-<h1>{% trans "Your pastes" %}</h1>
+<h1>{% trans "Pastes" %}</h1>
 
+{% if pastes %}
 <table class="pastes table table-condensed">
     <thead>
         <tr>
@@ -101,19 +102,20 @@
             {% endif %}
         </td>
     </tr>
-    {% empty %}
-    <tr><td colspan=3>{% trans "You have no pastes." %}</td></tr>
     {% endfor %}
     </tbody>
 </table>
+{% else %}
+<p class="empty">{% trans "You have no pastes&hellip;yet!" %}</p>
+{% endif %}
 
 </section>
 
 <section>
 
-<h1>{% trans "Your email address" %}</h1>
+<h1>{% trans "Email address" %}</h1>
 
-<p>
+<p class="help-block">
 {% blocktrans %}
 Here you can change your email address. Make absolutely sure you enter a valid,
 working email address, otherwise you won't be able to log in again.
@@ -132,14 +134,17 @@ working email address, otherwise you won't be able to log in again.
 
 <section>
 
-<h1>{% trans "Your authentication keys" %}</h1>
+<h1>{% trans "Authentication keys" %}<em class="beta">beta</em></h1>
 
-<p>
+<p class="help-block">
+{% blocktrans %}
 If you have hardware authentication keys that support FIDO2/WebAuthn (Yubikey 5, Titan, etc) you can register it
 here and use it to log in.
+{% endblocktrans %}
 </p>
 
 <p>
+{% if keys %}
 <table class="pastes table table-condensed">
     <thead>
         <tr>
@@ -157,11 +162,12 @@ here and use it to log in.
                 {{ key.last_used_on }}
             </td>
         </tr>
-        {% empty %}
-        <tr><td colspan=3>{% trans "You have no authentication keys." %}</td></tr>
         {% endfor %}
     </tbody>
 </table>
+{% else %}
+<p class="empty">{% trans "You have no authentication keys." %}</p>
+{% endif %}
 </p>
 
 <p>
@@ -172,9 +178,9 @@ here and use it to log in.
 
 <section>
 
-<h1>{% trans "Your API key" %}</h1>
+<h1>{% trans "API key" %}</h1>
 
-<p>
+<p class="help-block">
 {% blocktrans %}
 This is your API key. For more details on how to use it, visit the
 <a href="/api/">API documentation</a>.

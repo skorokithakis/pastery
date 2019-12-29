@@ -3,26 +3,40 @@
 
 {% block content %}
 <div class="container">
-    <article class="login-container">
+    <section class="authentication-methods">
+        <h1>Choose a login method</h1>
+        <section class="authentication-type">
+            <button data-action="email"><em>@</em>Email</button>
+            <button id="webauthin-login" data-action="web-token"><img src="/static/images/token.svg"/>Token</button>
+        </section>
+        <section class="authentication-tips">
+            <div data-caption="none">
+                <p>Hover over a method for more information.</p>
+            </div>
+            <div data-caption="email">
+                <p>To register or log in, just enter your email address. You will receive an email with a link, which you can visit to log in.</p>
+                <p>There is no username or password to remember, just your email address.</p>
+                <p>The link will expire in a few hours, but you will stay logged in until you choose to log out. However, be careful not to share it, as it will allow anyone to log in to your account.</p>            
+            </div>
+            <div data-caption="web-token">
+                <p>If you have a hardware key registered on this site, you can log in with it here.</p>
+                <p>You can learn more about Web Authentication <a href="https://webauthn.guide/">here</a>.</p>
+            </div>        
+        </section>
+    </section>
+    <article class="login-container" data-section="email">
         <h1>{% trans "Register or log in" %}</h1>
         <form action="{% url "tokenauth:login" %}?next={{ request.GET.next }}" method="post" class="account-form">{% csrf_token %}
-            <p>To register or log in, just enter your email address below. You will receive an email with a link, which you can visit to log in.</p>
-            <p>There is no username or password to remember, just your email address.</p>
-            <p>The link will expire in a few hours, but you will stay logged in until you choose to log out. However, be careful not to share it, as it will allow anyone to log in to your account.</p>
             <div class="form-group">
                 <label class="sr-only control-label" for="id_email">Your email address</label>
                 <input name="email" class="form-control" placeholder="Your email address" title="" required="" id="id_email" type="email">
             </div>
 
-            <button type="submit" class="btn btn-primary">{% trans "Log in" %}</button>
+            <div class="form-group">
+                <a href="javascript:void(0);" data-action="back">&laquo; Back</a> 
+                <button type="submit" class="btn">{% trans "Log in" %}</button>
+            </div>
         </form>
-
-        <p style="margin-top: 20px">
-        If you have a hardware key registered on this site, you can log in with it here.
-        <br>
-        <br>
-            <button id="webauthin-login" class="btn btn-primary">{% trans "Log in with hardware key" %}</button>
-        </p>
     </article>
 </div>
 
