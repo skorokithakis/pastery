@@ -1,6 +1,7 @@
 *.pyc
 *.swp
 .venv
+.env
 .idea/*
 .coverage
 .hypothesis/

@@ -32,7 +32,9 @@ SECRET_KEY = os.getenv(
 DEBUG = os.environ.get("NODEBUG") is None
 
 ALLOWED_HOSTS = (
-    ["localhost", "web"] if os.environ.get("NODEBUG") is None else [".pastery.net"]
+    ["web", os.environ.get("HOSTNAME", "localhost")]
+    if os.environ.get("NODEBUG") is None
+    else [".pastery.net"]
 )
 
 # Application definition
@@ -52,6 +54,7 @@ INSTALLED_APPS = [
     "tokenauth",
     "bootstrap3",
     "captcha",
+    "webauthin",
     "main",
     "api",
     "django_nose",
@@ -78,6 +81,7 @@ SESSION_COOKIE_SECURE = not os.environ.get("NODEBUG") is None
 CSRF_COOKIE_SECURE = not os.environ.get("NODEBUG") is None
 
 AUTHENTICATION_BACKENDS = (
+    "webauthin.auth_backends.WebAuthinBackend",
     "tokenauth.auth_backends.EmailTokenBackend",
     "django.contrib.auth.backends.ModelBackend",
 )
@@ -103,6 +107,8 @@ ROOT_URLCONF = "pastery.urls"
 
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/login/"
+
+WEBAUTHIN_REGISTRATION_ERROR_URL = WEBAUTHIN_REGISTRATION_REDIRECT_URL = "/account/"
 
 IPWARE_META_PRECEDENCE_ORDER = (
     "HTTP_CF_CONNECTING_IP",

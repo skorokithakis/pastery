@@ -344,6 +344,7 @@ def account(request):
         "pref_form": pref_form,
         "languages": STYLES,
         "pastes": pastes,
+        "keys": request.user.authdata_set.order_by("-last_used_on"),
     }
 
 

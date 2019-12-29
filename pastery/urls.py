@@ -25,5 +25,6 @@ urlpatterns = [
     url(r"^narnia/", admin.site.urls),
     url(r"^api/", include(api_urls)),
     url(r"^auth/", include("tokenauth.urls", namespace="tokenauth")),
+    url(r"^webauthn/", include("webauthin.urls")),
     url(r"^", include(main_urls)),
 ]

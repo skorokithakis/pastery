@@ -132,6 +132,46 @@ working email address, otherwise you won't be able to log in again.
 
 <section>
 
+<h1>{% trans "Your authentication keys" %}</h1>
+
+<p>
+If you have hardware authentication keys that support FIDO2/WebAuthn (Yubikey 5, Titan, etc) you can register it
+here and use it to log in.
+</p>
+
+<p>
+<table class="pastes table table-condensed">
+    <thead>
+        <tr>
+            <th>{% trans "Created on" %}</th>
+            <th class="expires">{% trans "Last used on" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for key in keys %}
+        <tr>
+            <td>
+                {{ key.created_on }}
+            </td>
+            <td class="expires">
+                {{ key.last_used_on }}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan=3>{% trans "You have no authentication keys." %}</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+</p>
+
+<p>
+    <button id="webauthin-register" class="btn btn-primary">Register new key</button>
+</p>
+
+</section>
+
+<section>
+
 <h1>{% trans "Your API key" %}</h1>
 
 <p>
@@ -165,4 +205,6 @@ UserStyles['{{ nick }}'] = '{% static "css/"|add:nick|add:".css" %}';
 {% endfor %}
 DefaultUserStyle = '{{ settings.DEFAULT_STYLE }}';
 </script>
+
+{% include "webauthin_register.html" %}
 {% endblock %}

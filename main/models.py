@@ -328,6 +328,9 @@ class User(AbstractUser):
         help_text=_("Pick the color style you prefer for all pastes on the site."),
     )
 
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
     class Meta:
         db_table = "auth_user"
 
