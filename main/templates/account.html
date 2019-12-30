@@ -150,16 +150,30 @@ here and use it to log in.
         <tr>
             <th>{% trans "Created on" %}</th>
             <th class="expires">{% trans "Last used on" %}</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         {% for key in keys %}
         <tr>
             <td>
+                {{ key.name }}
+            </td>
+            <td>
                 {{ key.created_on }}
             </td>
             <td class="expires">
                 {{ key.last_used_on }}
+            </td>
+            <td class="expires">
+                <form
+                    method="POST"
+                    action="{% url "webauthin:delete-key" %}"
+                    onsubmit="return confirm('Are you sure you want to delete this key?');"
+                    >{% csrf_token %}
+                    <input type="hidden" name="key_id" value="{{ key.id }}" />
+                    <button type="submit" class="btn btn-default btn-sm">Delete</button>
+                </form>
             </td>
         </tr>
         {% endfor %}

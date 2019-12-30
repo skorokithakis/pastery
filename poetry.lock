@@ -1,12 +1,4 @@
 [[package]]
-category = "main"
-description = "Radically simple IT automation"
-name = "ansible"
-optional = false
-python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
-version = "2.9.0"
-
-[[package]]
 category = "dev"
 description = "Disable App Nap on OS X 10.9"
 marker = "sys_platform == \"darwin\""
@@ -79,14 +71,6 @@ cffi = ">=1.0.0"
 
 [[package]]
 category = "main"
-description = "Captain Webhook runs your scripts when it receives a webhook."
-name = "captainwebhook"
-optional = false
-python-versions = "*"
-version = "0.2.0"
-
-[[package]]
-category = "main"
 description = "Pure Python CBOR (de)serializer with extensive tag support"
 name = "cbor2"
 optional = false
@@ -113,8 +97,8 @@ description = "Cross-platform colored terminal text."
 marker = "sys_platform == \"win32\""
 name = "colorama"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "0.4.1"
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "0.4.3"
 
 [[package]]
 category = "main"
@@ -185,10 +169,11 @@ description = "This is a django application that tries to eliminate annoying thi
 name = "django-annoying"
 optional = false
 python-versions = "*"
-version = "0.10.5"
+version = "0.10.6"
 
 [package.dependencies]
 Django = ">=1.11"
+six = "*"
 
 [[package]]
 category = "main"
@@ -196,7 +181,7 @@ description = "Bootstrap support for Django projects"
 name = "django-bootstrap3"
 optional = false
 python-versions = "*"
-version = "11.1.0"
+version = "12.0.3"
 
 [[package]]
 category = "main"
@@ -284,8 +269,8 @@ category = "main"
 description = "Full featured redis cache backend for Django."
 name = "django-redis"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "4.10.0"
+python-versions = ">=3.5"
+version = "4.11.0"
 
 [package.dependencies]
 Django = ">=1.11"
@@ -297,7 +282,7 @@ description = "An implementation of Django's EmailBackend compatible with sendgr
 name = "django-sendgrid-v5"
 optional = false
 python-versions = "*"
-version = "0.8.0"
+version = "0.8.1"
 
 [package.dependencies]
 django = ">=1.8"
@@ -324,7 +309,7 @@ description = "An authentication backend that uses tokens sent over email to aut
 name = "django-tokenauth"
 optional = false
 python-versions = "*"
-version = "0.3.0"
+version = "0.4.0"
 
 [[package]]
 category = "main"
@@ -332,7 +317,7 @@ description = "Passwordless authentication using WebAuthn."
 name = "django-webauthin"
 optional = false
 python-versions = ">=3.6"
-version = "0.0.3"
+version = "0.0.4"
 
 [package.dependencies]
 py-webauthn-temporary-package = "*"
@@ -446,8 +431,8 @@ category = "dev"
 description = "IPython: Productive Interactive Computing"
 name = "ipython"
 optional = false
-python-versions = ">=3.5"
-version = "7.9.0"
+python-versions = ">=3.6"
+version = "7.11.0"
 
 [package.dependencies]
 appnope = "*"
@@ -457,13 +442,13 @@ decorator = "*"
 jedi = ">=0.10"
 pexpect = "*"
 pickleshare = "*"
-prompt-toolkit = ">=2.0.0,<2.1.0"
+prompt-toolkit = ">=2.0.0,<3.0.0 || >3.0.0,<3.0.1 || >3.0.1,<3.1.0"
 pygments = "*"
 setuptools = ">=18.5"
 traitlets = ">=4.2"
 
 [package.extras]
-all = ["testpath", "nbformat", "numpy", "notebook", "ipyparallel", "nbconvert", "ipywidgets", "pygments", "requests", "nose (>=0.10.1)", "qtconsole", "ipykernel", "Sphinx (>=1.3)"]
+all = ["notebook", "nose (>=0.10.1)", "ipyparallel", "qtconsole", "ipywidgets", "Sphinx (>=1.3)", "requests", "nbconvert", "testpath", "pygments", "nbformat", "ipykernel", "numpy (>=1.14)"]
 doc = ["Sphinx (>=1.3)"]
 kernel = ["ipykernel"]
 nbconvert = ["nbconvert"]
@@ -471,7 +456,7 @@ nbformat = ["nbformat"]
 notebook = ["notebook", "ipywidgets"]
 parallel = ["ipyparallel"]
 qtconsole = ["qtconsole"]
-test = ["nose (>=0.10.1)", "requests", "testpath", "pygments", "nbformat", "ipykernel", "numpy"]
+test = ["nose (>=0.10.1)", "requests", "testpath", "pygments", "nbformat", "ipykernel", "numpy (>=1.14)"]
 
 [[package]]
 category = "dev"
@@ -487,13 +472,13 @@ description = "An autocompletion tool for Python that can be used for text edito
 name = "jedi"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "0.15.1"
+version = "0.15.2"
 
 [package.dependencies]
-parso = ">=0.5.0"
+parso = ">=0.5.2"
 
 [package.extras]
-testing = ["colorama", "docopt", "pytest (>=3.1.0,<5.0.0)"]
+testing = ["colorama (0.4.1)", "docopt", "pytest (>=3.9.0,<5.0.0)"]
 
 [[package]]
 category = "main"
@@ -571,7 +556,7 @@ description = "A Python Parser"
 name = "parso"
 optional = false
 python-versions = "*"
-version = "0.5.1"
+version = "0.5.2"
 
 [package.extras]
 testing = ["docopt", "pytest (>=3.0.7)"]
@@ -609,11 +594,10 @@ category = "dev"
 description = "Library for building powerful interactive command lines in Python"
 name = "prompt-toolkit"
 optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
-version = "2.0.10"
+python-versions = ">=3.6"
+version = "3.0.2"
 
 [package.dependencies]
-six = ">=1.9.0"
 wcwidth = "*"
 
 [[package]]
@@ -887,19 +871,16 @@ description = "Radically simplified static file serving for WSGI applications"
 name = "whitenoise"
 optional = false
 python-versions = "*"
-version = "4.1.4"
+version = "5.0"
 
 [package.extras]
 brotli = ["brotli"]
 
 [metadata]
-content-hash = "5c26dc625a6ca0f59b22346c49b2b653b7b0ddf0a40f51ecd6763a51443e2cd0"
+content-hash = "356fe7d19dab111eac8be404cc485bde6ae2273f5b09f84441b89986fb3a9828"
 python-versions = ">=3.7"
 
 [metadata.files]
-ansible = [
-    {file = "ansible-2.9.0.tar.gz", hash = "sha256:9f9a9ace1d63cd8a4692ab6ee6ed04823743f1bd339a6ef188860c02cf7f46f1"},
-]
 appnope = [
     {file = "appnope-0.1.0-py2.py3-none-any.whl", hash = "sha256:5b26757dc6f79a3b7dc9fab95359328d5747fcb2409d331ea66d0272b90ab2a0"},
     {file = "appnope-0.1.0.tar.gz", hash = "sha256:8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71"},
@@ -954,9 +935,6 @@ brotlipy = [
     {file = "brotlipy-0.7.0-pp226-pp226u-macosx_10_10_x86_64.whl", hash = "sha256:786afc8c9bd67de8d31f46e408a3386331e126829114e4db034f91eacb05396d"},
     {file = "brotlipy-0.7.0.tar.gz", hash = "sha256:36def0b859beaf21910157b4c33eb3b06d8ce459c942102f16988cca6ea164df"},
 ]
-captainwebhook = [
-    {file = "captainwebhook-0.2.0.tar.gz", hash = "sha256:9f89939051638ea8028bf99f899e39f68001d4476da00b0bd8b6985642b45315"},
-]
 cbor2 = [
     {file = "cbor2-4.1.2-py2.py3-none-any.whl", hash = "sha256:6391fd3d2a4e976ecf892638a0a2a88d85e6764124bf9f128a945bfefefe77dc"},
     {file = "cbor2-4.1.2.tar.gz", hash = "sha256:17b615da69964f87e48c5adb34ba63db3068f65b9cd14a7b099503d9f8a0e9ae"},
@@ -997,8 +975,8 @@ cffi = [
     {file = "cffi-1.13.2.tar.gz", hash = "sha256:599a1e8ff057ac530c9ad1778293c665cb81a791421f46922d80a86473c13346"},
 ]
 colorama = [
-    {file = "colorama-0.4.1-py2.py3-none-any.whl", hash = "sha256:f8ac84de7840f5b9c4e3347b3c1eaa50f7e49c2b07596221daec5edaabbd7c48"},
-    {file = "colorama-0.4.1.tar.gz", hash = "sha256:05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d"},
+    {file = "colorama-0.4.3-py2.py3-none-any.whl", hash = "sha256:7d73d2a99753107a36ac6b455ee49046802e59d9d076ef8e47b61499fa29afff"},
+    {file = "colorama-0.4.3.tar.gz", hash = "sha256:e96da0d330793e2cb9485e9ddfd918d456036c7149416295932478192f4436a1"},
 ]
 coverage = [
     {file = "coverage-4.4.2-cp26-cp26m-macosx_10_10_x86_64.whl", hash = "sha256:d1ee76f560c3c3e8faada866a07a32485445e16ed2206ac8378bd90dadffb9f0"},
@@ -1077,11 +1055,12 @@ django = [
     {file = "Django-2.0.13.tar.gz", hash = "sha256:bde46d4dbc410678e89bc95ea5d312dd6eb4c37d0fa0e19c9415cad94addf22f"},
 ]
 django-annoying = [
-    {file = "django-annoying-0.10.5.tar.gz", hash = "sha256:3654d16f9e2f86a2f8688820bcf6d797c93db89197a117b1930d350e7a9509dd"},
-    {file = "django_annoying-0.10.5-py2.py3-none-any.whl", hash = "sha256:d9fe882258bf7278915e7835b4f93e12e7fd9b14c226eb06e210f9542aa5de5b"},
+    {file = "django-annoying-0.10.6.tar.gz", hash = "sha256:083b5e26f140f86178fcb47931f69b7ff75181ccd1e318d9c218ae9babc1805e"},
+    {file = "django_annoying-0.10.6-py2.py3-none-any.whl", hash = "sha256:e230f28fec0559b4fdb621ff202068a78170ada2ac1ec7a73ba822cc1f737791"},
 ]
 django-bootstrap3 = [
-    {file = "django-bootstrap3-11.1.0.tar.gz", hash = "sha256:c417b25328fb8e97cb89e1f07d35632602d702e6eaca863328e833939d0d1743"},
+    {file = "django-bootstrap3-12.0.3.tar.gz", hash = "sha256:760f8664a15f9e1e6e0495265cebd3d4c65b1026e93e476e8322f10e1375f0b8"},
+    {file = "django_bootstrap3-12.0.3-py3-none-any.whl", hash = "sha256:d161d23824fc2f43c18449285961b994fc3fe620d782b13240e382a7b233344a"},
 ]
 django-brake = [
     {file = "django-brake-1.6.0.tar.gz", hash = "sha256:1d8fdccdf9a73008367d93a135ab32c9cde49859f9ecd8466034e39e71b40a8f"},
@@ -1114,24 +1093,24 @@ django-recaptcha = [
     {file = "django_recaptcha-1.0.6-py2.py3-none-any.whl", hash = "sha256:99123497a9e4023800eae874fe4f586a7416f5d6206de3b4826ebf91b40aef64"},
 ]
 django-redis = [
-    {file = "django-redis-4.10.0.tar.gz", hash = "sha256:af0b393864e91228dd30d8c85b5c44d670b5524cb161b7f9e41acc98b6e5ace7"},
-    {file = "django_redis-4.10.0-py2.py3-none-any.whl", hash = "sha256:f46115577063d00a890867c6964ba096057f07cb756e78e0503b89cd18e4e083"},
+    {file = "django-redis-4.11.0.tar.gz", hash = "sha256:a5b1e3ffd3198735e6c529d9bdf38ca3fcb3155515249b98dc4d966b8ddf9d2b"},
+    {file = "django_redis-4.11.0-py3-none-any.whl", hash = "sha256:e1aad4cc5bd743d8d0b13d5cae0cef5410eaace33e83bff5fc3a139ad8db50b4"},
 ]
 django-sendgrid-v5 = [
-    {file = "django-sendgrid-v5-0.8.0.tar.gz", hash = "sha256:f74ccb676cdaee79962ab426bf3d689e243e97ffb7d152459f4d1e26e5d91147"},
-    {file = "django_sendgrid_v5-0.8.0-py2.py3-none-any.whl", hash = "sha256:e514084c340d17ce2c0f3822b00239d357766b90703cbbb88722f577949eeb7b"},
+    {file = "django-sendgrid-v5-0.8.1.tar.gz", hash = "sha256:31c2ab2a0c91a3443262d9a39986de0ef306c21f8af55ce67742d1ec02a344c6"},
+    {file = "django_sendgrid_v5-0.8.1-py2.py3-none-any.whl", hash = "sha256:71efc914ba4c7f80685633dd7940d47af6e009c7c24e63cf25d97e40865ac7d2"},
 ]
 django-stubs = [
     {file = "django-stubs-1.2.0.tar.gz", hash = "sha256:c0515576de547bb33057e24d1b0294d10a68e55150ee32fc964f1082192ab012"},
     {file = "django_stubs-1.2.0-py3-none-any.whl", hash = "sha256:ca565958a66c0772a11bf95e415d0bcd476eb59919a7ed1a417cc93315d68809"},
 ]
 django-tokenauth = [
-    {file = "django-tokenauth-0.3.0.tar.gz", hash = "sha256:86964e440af41392dd404c0c335a3175f5b451e723eeb9a598df11e769f61098"},
-    {file = "django_tokenauth-0.3.0-py2.py3-none-any.whl", hash = "sha256:45baf2e9cdf9584e5f46c704e22cc9192e401b4aa38ed63fd5bce0aee0e04a36"},
+    {file = "django-tokenauth-0.4.0.tar.gz", hash = "sha256:34fcff95068643c9721bfa74b673ed6980dc1d9d0e5a9c1bd6331e5908551e62"},
+    {file = "django_tokenauth-0.4.0-py2.py3-none-any.whl", hash = "sha256:f9f05c164d95aab3e840e4e8b90c3a9f7fdadfb00f678f1fa624c0d409155791"},
 ]
 django-webauthin = [
-    {file = "django-webauthin-0.0.3.tar.gz", hash = "sha256:1d38d0c96f569a6cb3ad2fa23a80e4e9f3fd3d5762c4214ba783c9b7a637e5be"},
-    {file = "django_webauthin-0.0.3-py2.py3-none-any.whl", hash = "sha256:e19b29a091e039514f8bf90cb9f4ae5cc6abbcc2bbce832db0a6e6469fbf33b0"},
+    {file = "django-webauthin-0.0.4.tar.gz", hash = "sha256:ad45a0eda1288cd6cf1b247ce3f51161d7a52c8c7a184c318a87f6698ff22123"},
+    {file = "django_webauthin-0.0.4-py2.py3-none-any.whl", hash = "sha256:574405ff3279a08b87ab06ce19a016bb9cafa46ab622c359db3c2afeee7c59df"},
 ]
 djangoql = [
     {file = "djangoql-0.13.1.tar.gz", hash = "sha256:366293d7d4e416f9f7d6e2b98775c2129222fbb4dc660f3e6c7b9e35a3cf3fce"},
@@ -1185,16 +1164,16 @@ hypothesis = [
     {file = "hypothesis-3.1.3.tar.gz", hash = "sha256:2e4837ad871fbbd0015fd530139c2e0fac4ffd8121f26f8a875138bd6e651dd4"},
 ]
 ipython = [
-    {file = "ipython-7.9.0-py3-none-any.whl", hash = "sha256:ed7ebe1cba899c1c3ccad6f7f1c2d2369464cc77dba8eebc65e2043e19cda995"},
-    {file = "ipython-7.9.0.tar.gz", hash = "sha256:dfd303b270b7b5232b3d08bd30ec6fd685d8a58cabd54055e3d69d8f029f7280"},
+    {file = "ipython-7.11.0-py3-none-any.whl", hash = "sha256:cc70e2111d1629e31ef9ff445529f8bb2b4fc4f93bfe140c33fe18cf36fde072"},
+    {file = "ipython-7.11.0.tar.gz", hash = "sha256:0b67031a659fd7046cbf8c4efc2a0d514ee050434dfede76f540cfa6f806f65e"},
 ]
 ipython-genutils = [
     {file = "ipython_genutils-0.2.0-py2.py3-none-any.whl", hash = "sha256:72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8"},
     {file = "ipython_genutils-0.2.0.tar.gz", hash = "sha256:eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8"},
 ]
 jedi = [
-    {file = "jedi-0.15.1-py2.py3-none-any.whl", hash = "sha256:786b6c3d80e2f06fd77162a07fed81b8baa22dde5d62896a790a331d6ac21a27"},
-    {file = "jedi-0.15.1.tar.gz", hash = "sha256:ba859c74fa3c966a22f2aeebe1b74ee27e2a462f56d3f5f7ca4a59af61bfe42e"},
+    {file = "jedi-0.15.2-py2.py3-none-any.whl", hash = "sha256:1349c1e8c107095a55386628bb3b2a79422f3a2cab8381e34ce19909e0cf5064"},
+    {file = "jedi-0.15.2.tar.gz", hash = "sha256:e909527104a903606dd63bea6e8e888833f0ef087057829b89a18364a856f807"},
 ]
 markdown = [
     {file = "Markdown-2.6.11-py2.py3-none-any.whl", hash = "sha256:9ba587db9daee7ec761cfc656272be6aabe2ed300fece21208e4aab2e457bc8f"},
@@ -1238,8 +1217,8 @@ nose = [
     {file = "nose-1.3.7.tar.gz", hash = "sha256:f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98"},
 ]
 parso = [
-    {file = "parso-0.5.1-py2.py3-none-any.whl", hash = "sha256:63854233e1fadb5da97f2744b6b24346d2750b85965e7e399bec1620232797dc"},
-    {file = "parso-0.5.1.tar.gz", hash = "sha256:666b0ee4a7a1220f65d367617f2cd3ffddff3e205f3f16a0284df30e774c2a9c"},
+    {file = "parso-0.5.2-py2.py3-none-any.whl", hash = "sha256:5c1f7791de6bd5dbbeac8db0ef5594b36799de198b3f7f7014643b0c5536b9d3"},
+    {file = "parso-0.5.2.tar.gz", hash = "sha256:55cf25df1a35fd88b878715874d2c4dc1ad3f0eebd1e0266a67e1f55efccfbe1"},
 ]
 pexpect = [
     {file = "pexpect-4.7.0-py2.py3-none-any.whl", hash = "sha256:2094eefdfcf37a1fdbfb9aa090862c1a4878e5c7e0e7e7088bdb511c558e5cd1"},
@@ -1254,9 +1233,8 @@ ply = [
     {file = "ply-3.11.tar.gz", hash = "sha256:00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3"},
 ]
 prompt-toolkit = [
-    {file = "prompt_toolkit-2.0.10-py2-none-any.whl", hash = "sha256:e7f8af9e3d70f514373bf41aa51bc33af12a6db3f71461ea47fea985defb2c31"},
-    {file = "prompt_toolkit-2.0.10-py3-none-any.whl", hash = "sha256:46642344ce457641f28fc9d1c9ca939b63dadf8df128b86f1b9860e59c73a5e4"},
-    {file = "prompt_toolkit-2.0.10.tar.gz", hash = "sha256:f15af68f66e664eaa559d4ac8a928111eebd5feda0c11738b5998045224829db"},
+    {file = "prompt_toolkit-3.0.2-py3-none-any.whl", hash = "sha256:0278d2f51b5ceba6ea8da39f76d15684e84c996b325475f6e5720edc584326a7"},
+    {file = "prompt_toolkit-3.0.2.tar.gz", hash = "sha256:63daee79aa8366c8f1c637f1a4876b890da5fc92a19ebd2f7080ebacb901e990"},
 ]
 psycopg2-binary = [
     {file = "psycopg2-binary-2.8.4.tar.gz", hash = "sha256:3a2522b1d9178575acee4adf8fd9f979f9c0449b00b4164bb63c3475ea6528ed"},
@@ -1418,6 +1396,6 @@ werkzeug = [
     {file = "Werkzeug-0.11.15.tar.gz", hash = "sha256:455d7798ac263266dbd38d4841f7534dd35ca9c3da4a8df303f8488f38f3bcc0"},
 ]
 whitenoise = [
-    {file = "whitenoise-4.1.4-py2.py3-none-any.whl", hash = "sha256:6dfea214b7c12efd689007abf9afa87a426586e9dbc051873ad2c8e535e2a1ac"},
-    {file = "whitenoise-4.1.4.tar.gz", hash = "sha256:22f79cf8f1f509639330f93886acaece8ec5ac5e9600c3b981d33c34e8a42dfd"},
+    {file = "whitenoise-5.0-py2.py3-none-any.whl", hash = "sha256:7c75090c09f58a261dfece4e12b2c46534ca9d70b3c4b5c2cfca89b59b446498"},
+    {file = "whitenoise-5.0.tar.gz", hash = "sha256:1ecfc1d9e16b71a4efc499e1f62a6a06e7728a475d39cb0657ce71e7529f0f08"},
 ]
