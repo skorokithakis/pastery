@@ -1,42 +1,31 @@
 {% extends "base.html" %}
-{% load bootstrap3 i18n %}
+{% load bootstrap3 i18n static %}
 
 {% block content %}
 <div class="container">
-    <section class="authentication-methods">
-        <h1>Choose a login method</h1>
-        <section class="authentication-type">
-            <button data-action="email"><em>@</em>Email</button>
-            <button id="webauthin-login" data-action="web-token"><img src="/static/images/token.svg"/>Token</button>
-        </section>
-        <section class="authentication-tips">
-            <div data-caption="none">
-                <p>Hover over a method for more information.</p>
-            </div>
-            <div data-caption="email">
-                <p>To register or log in, just enter your email address. You will receive an email with a link, which you can visit to log in.</p>
-                <p>There is no username or password to remember, just your email address.</p>
-                <p>The link will expire in a few hours, but you will stay logged in until you choose to log out. However, be careful not to share it, as it will allow anyone to log in to your account.</p>            
-            </div>
-            <div data-caption="web-token">
-                <p>If you have a hardware key registered on this site, you can log in with it here.</p>
-                <p>You can learn more about Web Authentication <a href="https://webauthn.guide/">here</a>.</p>
-            </div>        
-        </section>
-    </section>
-    <article class="login-container" data-section="email">
+    <article class="login-container">
         <h1>{% trans "Register or log in" %}</h1>
         <form action="{% url "tokenauth:login" %}?next={{ request.GET.next }}" method="post" class="account-form">{% csrf_token %}
             <div class="form-group">
                 <label class="sr-only control-label" for="id_email">Your email address</label>
                 <input name="email" class="form-control" placeholder="Your email address" title="" required="" id="id_email" type="email">
+                <button type="submit" class="btn">{% trans "Log in" %}</button>
             </div>
 
             <div class="form-group">
-                <a href="javascript:void(0);" data-action="back">&laquo; Back</a> 
-                <button type="submit" class="btn">{% trans "Log in" %}</button>
+                <button id="webauthin-login">
+                    <img src="{% static "images/token.svg" %}"/>
+                    login using a hardware token
+                </button> 
             </div>
         </form>
+        <div class="login-tip">
+            <p>To register or log in, just enter your email address above. You will receive an email with a link, which you can visit to log in.</p>
+            <p>There is no username or password to remember, just your email address.</p>
+            <p>The link will expire in a few hours, but you will stay logged in until you choose to log out. However, be careful not to share it, as it will allow anyone to log in to your account.</p>            
+            <p>Alternatively, if you have a hardware key registered on this site, you can log in with it here.</p>
+            <p>You can learn more about Web Authentication <a href="https://webauthn.guide/">here</a>.</p>
+        </div>        
     </article>
 </div>
 

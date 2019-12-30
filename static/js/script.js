@@ -695,48 +695,6 @@ var PasteryForm = (function() {
   }
 })();
 
-var AuthenticationTypeSelector = (function() {
-
-  var init = function() {
-
-    if(document.querySelector('.authentication-methods') == null)
-      return;
-
-    let authenticationTips = [...document.querySelectorAll('.authentication-tips > div')];
-
-    [...document.querySelectorAll('.authentication-type button')].forEach(element => {
-
-      element.addEventListener('mouseenter', function() {
-
-        authenticationTips.forEach(element => { element.style.display = 'none'; });
-
-        document.querySelector('.authentication-tips [data-caption="'+this.dataset['action']+'"]').style.display = 'block';
-      });
-
-      element.addEventListener('mouseleave', function() {
-
-        authenticationTips.forEach(element => { element.style.display = 'none'; });
-
-        document.querySelector('.authentication-tips [data-caption="none"]').style.display = 'flex';
-      });
-    });
-
-    document.querySelector('.authentication-methods button[data-action="email"]').addEventListener('click', () => {
-      document.querySelector('.authentication-methods').style.display = 'none';
-      document.querySelector('.login-container[data-section="email"]').style.display = 'block';
-    });
-
-    document.querySelector('.login-container a[data-action="back"]').addEventListener('click', () => {
-      document.querySelector('.authentication-methods').style.display = 'block';
-      document.querySelector('.login-container[data-section="email"]').style.display = 'none';      
-    })
-  }
-
-  return {
-    'initialize': init
-  }
-})();
-
 $(document).ready(function() {
 
     BurgerButton.initialize();
@@ -747,5 +705,4 @@ $(document).ready(function() {
     ConfirmAction.initialize();
     UserStyleSelector.initialize();
     ShareSelector.initialize();
-    AuthenticationTypeSelector.initialize();
 });

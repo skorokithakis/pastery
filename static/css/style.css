@@ -665,12 +665,13 @@ footer a:hover {
 }
 
 /* Login form */
+.login-container {
+    width: 60%;
+    margin: 0 auto;
+}
 .login-container h1 {
     margin-bottom: 20px;
     text-align: center;
-}
-.login-container p {
-    color: #666;
 }
 .login-container .form-group {
     margin: 20px auto;
@@ -678,10 +679,9 @@ footer a:hover {
     text-align: center;
 }
 .login-container .form-control {
-    font-size: 25px;
+    font-size: 20px;
     padding: 0 15px;
     height: auto;
-    margin: 0 auto;
     max-width: 390px;
     border-radius: 0;
 }
@@ -695,98 +695,57 @@ footer a:hover {
     min-width: 100px;
 }
 .login-container form {
-    padding: 20px;
-    background: rgba(204,27,27,.1);
+    padding: 10px 20px 20px;
 }
-.login-container form .form-group:last-child {
-    display: flex;
-    justify-content: space-evenly;
-}
-.login-container form a[data-action="back"] {
-    font-size: 15px;
-    color: #333;
-    padding: 6px 0;
-}
-
-/* Authentication Type */
-.authentication-methods h1 {
-    margin-bottom: 20px;
-    text-align: center;
-}
-.authentication-type {
+.login-container form .form-group {
     display: flex;
     justify-content: center;
-    margin: 0 auto;
 }
-.authentication-type button {
-    border: none;
-    padding: 30px;
+.login-container form #webauthin-login {
+    padding: 10px 15px;
     background: rgba(204,27,27,.1);
-    flex: 1;
-    font-weight: bold;
-    font-size: 20px;
-    color: #cc1b1b;
-    align-items: center;
+    color: #D41616;
+    font-size: 15px;
+    border: none;
     display: flex;
-    flex-direction: column;   
+    align-items: center;
+    justify-content: center;    
 }
-.authentication-type button:last-child {
-    margin-left: 1px;
+.login-container form #webauthin-login img {
+    height: 30px;
 }
-.authentication-type button em {
-    font-size: 40px;
-    margin-bottom: 10px;
-    font-style: normal;
-    height: 60px;
-    line-height: 60px;
-}
-.authentication-type button img {
-    height: 60px;
-    fill: #fff;
-    margin-bottom: 10px;    
-}
-.authentication-type button:hover {
-    background: #cc1b1b;
+.login-container form #webauthin-login:hover {
+    background: #D41616;
     color: #fff;
+    text-decoration: none;
 }
-.authentication-type button:hover img {
+.login-container form #webauthin-login:hover img {
     filter: brightness(100);
 }
-
-.authentication-tips div {
-    padding: 10px;
-    margin: 0 auto;
-    min-height: 100px;    
+.login-container .login-tip {
+    padding-top: 40px;
+    position: relative;
 }
-.authentication-tips [data-caption="none"] {
-    display: flex;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
+.login-container .login-tip:before {
+    content: '~';
+    position: absolute;
+    left: 50%;
+    transform: translate3d(-50%,0,0);
+    top: 0;
+    border-radius: 10px;
+    font-size: 40px;
+    color: #666;
+    line-height: 20px;
 }
-.authentication-tips [data-caption="none"] p {
-    margin: 0;
-    color: #999;
+.login-container .login-tip p {
+    color: #666;
 }
-.authentication-tips [data-caption="email"] {
-    display: none;
-}
-.authentication-tips [data-caption="web-token"] {
-    display: none;
-}
-.authentication-tips a {
-    color: #333;
+.login-container .login-tip a {
+    color: #666;
     text-decoration: underline;
 }
-.login-container[data-section="email"] {
-    display: none;
-    margin: 0 auto;
-    text-align: left;
-}
-.authentication-type,
-.authentication-tips div,
-.login-container[data-section="email"] {
-    width: 60%;
+.login-container .login-tip a:hover {
+    text-decoration: none;
 }
 
 @media (min-width: 768px) {
@@ -977,22 +936,28 @@ footer a:hover {
     .account #copy-code {
         display: block;
     }
+}
 
+@media (max-width: 480px) {
     .login-container {
         padding: 0 10px;
-    }
-    .login-container .form-group {
         width: 100%;
+    }
+    .login-container h1 {
+        margin-top: 0;
+        font-size: 30px;
+    }
+    .login-container form {
+        padding: 0;
+    }
+    .login-container form .form-group {
+        flex-direction: column;
     }
     .login-container .form-control {
-        display: inline-block;
-    }
-    .authentication-type,
-    .authentication-tips div,
-    .login-container[data-section="email"] {
-        width: 100%;
-    }    
+        max-width: 100%;
+    }  
 }
+
 /*
 414px matches the maximum width
 of a smartphone (excluding
@@ -1007,7 +972,7 @@ https://www.mydevice.io/
     }
     .pastetable pre {
         font-size: 11px;
-    }
+    }  
 }
 
 @media (max-width: 410px) {
