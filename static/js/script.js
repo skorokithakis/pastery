@@ -695,6 +695,53 @@ var PasteryForm = (function() {
   }
 })();
 
+var KeyRenamer = (function() {
+
+  initialize = function() {
+
+    if(document.querySelector('body.account') == null)
+      return;
+
+    let fields = [...document.querySelectorAll('body.account table em[data-renamefield]')];
+
+    if(fields.length == 0)
+      return;
+
+    let forms = [...document.querySelectorAll('body.account table form[data-renameform]')];
+
+    fields.forEach((element) => {
+
+      element.addEventListener('click', function() {
+
+        fields.forEach((element) => { element.style.display = 'inline'; });
+        forms.forEach((element) => { element.style.display = 'none'; });
+
+        let keyId = this.dataset['renamefield'];
+
+        this.style.display = 'none';
+
+        let form = document.querySelector('body.account table form[data-renameform="' + keyId +'"]');
+
+        form.style.display = 'block';        
+        form.querySelector('input[type="text"]').focus();
+      });
+    });
+
+    document.addEventListener('keyup', (event) => {
+
+      if(event.keyCode == 27) {
+
+        fields.forEach((element) => { element.style.display = 'inline'; });
+        forms.forEach((element) => { element.style.display = 'none'; });
+      }
+    });
+  }
+
+  return {
+    'initialize': initialize
+  }
+})();
+
 $(document).ready(function() {
 
     BurgerButton.initialize();
@@ -705,4 +752,5 @@ $(document).ready(function() {
     ConfirmAction.initialize();
     UserStyleSelector.initialize();
     ShareSelector.initialize();
+    KeyRenamer.initialize();
 });

@@ -148,15 +148,28 @@ here and use it to log in.
 <table class="pastes table table-condensed">
     <thead>
         <tr>
-            <th>{% trans "Created on" %}</th>
-            <th class="expires">{% trans "Last used on" %}</th>
+            <th>Name</th>
+            <td class="expires">{% trans "Created" %}</td>
+            <th class="expires">{% trans "Last used" %}</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         {% for key in keys %}
         <tr>
-            <td>
+            <td class="key-name">
+                <em data-renamefield="{{ key.id }}"{% if key.name %} title="Click to rename"{% else %} class="empty"{% endif %}>
+                    {% if not key.name %}Click to set a name{% else %}{{ key.name }}{% endif %}
+                </em>
+                <form
+                    data-renameform="{{ key.id }}"
+                    method="POST"
+                    action="{% url "webauthin:rename-key" %}">{% csrf_token %}
+                    <input autofocus placeholder="Set a name for this key" type="text" name="name" value="{{ key.name }}" />
+                    <input type="hidden" name="key_id" value="{{ key.id }}" />
+                    <button type="submit" title="Rename key" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+                </form>
+            <td class="expires">
                 {{ key.created_on }}
             </td>
             <td class="expires">
@@ -169,7 +182,7 @@ here and use it to log in.
                     onsubmit="return confirm('Are you sure you want to delete this key?');"
                     >{% csrf_token %}
                     <input type="hidden" name="key_id" value="{{ key.id }}" />
-                    <button type="submit" class="btn btn-default btn-sm">Delete</button>
+                    <button type="submit" title="Delete key" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                 </form>
             </td>
         </tr>

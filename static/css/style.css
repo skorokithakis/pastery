@@ -663,6 +663,32 @@ footer a:hover {
     display: inline-block;
     margin-left: 20px;
 }
+.account table td.key-name {
+    max-width: 270px;
+    width: 270px;
+}
+.account table em[data-renamefield] {
+    cursor: pointer;
+    font-style: normal;
+    border-bottom: 1px dotted #666;
+}
+.account table em[data-renamefield].empty {
+    color: #999;
+}
+.account table form[data-renameform] {
+    display: none;
+    position: relative;
+}
+.account table form[data-renameform] input[type="text"] {
+    width: 100%;
+    padding-right: 40px;
+    height: 32px;
+}
+.account table form[data-renameform] button[type="submit"] {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+}
 
 /* Login form */
 .login-container {
