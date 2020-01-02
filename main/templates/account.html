@@ -80,19 +80,19 @@
 <table class="pastes table table-condensed">
     <thead>
         <tr>
-            <th></th>
-            <th>{% trans "Created" %}</th>
-            <th class="expires">{% trans "Expires in" %}</th>
+            <th>Title</th>
+            <th class="small-collapse">{% trans "Created" %}</th>
+            <th class="expires small-collapse">{% trans "Expires in" %}</th>
         </tr>
     </thead>
     <tbody>
     {% for paste in pastes %}
     <tr>
         <td><a href="{{ paste.get_absolute_url }}">{{ paste }}</a></td>
-        <td>
+        <td class="small-collapse">
             {{ paste.created }}
         </td>
-        <td class="expires">
+        <td class="expires small-collapse">
             {% if paste.expiration %}
             {% blocktrans with paste.expiration|timeuntil as until %}
             {{ until }}
