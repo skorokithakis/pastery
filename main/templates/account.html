@@ -106,7 +106,7 @@
     </tbody>
 </table>
 {% else %}
-<p class="empty">{% trans "You have no pastes&hellip;yet!" %}</p>
+<p class="empty">{% trans "You haven't created any pastes&hellip;yet!" %}</p>
 {% endif %}
 
 </section>
@@ -149,8 +149,8 @@ here and use it to log in.
     <thead>
         <tr>
             <th>Name</th>
-            <td class="expires">{% trans "Created" %}</td>
-            <th class="expires">{% trans "Last used" %}</th>
+            <td class="expires small-collapse">{% trans "Created" %}</td>
+            <th class="expires small-collapse">{% trans "Last used" %}</th>
             <th></th>
         </tr>
     </thead>
@@ -158,7 +158,7 @@ here and use it to log in.
         {% for key in keys %}
         <tr>
             <td class="key-name">
-                <em data-renamefield="{{ key.id }}"{% if key.name %} title="Click to rename"{% else %} class="empty"{% endif %}>
+                <em data-renamefield="{{ key.id }}"{% if key.name %} title="Click to rename" data-toggle="tooltip"{% else %} class="empty"{% endif %}>
                     {% if not key.name %}Click to set a name{% else %}{{ key.name }}{% endif %}
                 </em>
                 <form
@@ -169,10 +169,10 @@ here and use it to log in.
                     <input type="hidden" name="key_id" value="{{ key.id }}" />
                     <button type="submit" title="Rename key" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
                 </form>
-            <td class="expires">
+            <td class="expires small-collapse">
                 {{ key.created_on }}
             </td>
-            <td class="expires">
+            <td class="expires small-collapse">
                 {{ key.last_used_on }}
             </td>
             <td class="expires">
@@ -182,7 +182,7 @@ here and use it to log in.
                     onsubmit="return confirm('Are you sure you want to delete this key?');"
                     >{% csrf_token %}
                     <input type="hidden" name="key_id" value="{{ key.id }}" />
-                    <button type="submit" title="Delete key" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                    <button type="submit" title="Delete key" class="btn btn-default btn-sm" data-toggle="tooltip"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                 </form>
             </td>
         </tr>
@@ -190,7 +190,7 @@ here and use it to log in.
     </tbody>
 </table>
 {% else %}
-<p class="empty">{% trans "You have no authentication keys." %}</p>
+<p class="empty">{% trans "You haven't set any authentication keys yet." %}</p>
 {% endif %}
 </p>
 
@@ -216,7 +216,7 @@ This is your API key. For more details on how to use it, visit the
         <input class="apikey" title="Copied!" value="{{ user.api_key }}" readonly />
     </div>
     <div class="btn-group action-copy">
-        <button data-trigger="hover" data-toggle="tooltip" title="" aria-label="Copy to clipboard" class="btn btn-default btn-sm" type="button" data-original-title="Copy to clipboard"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
+        <button data-trigger="hover" data-toggle="tooltip" title="Copy to clipboard" aria-label="Copy to clipboard" class="btn btn-default btn-sm" type="button" data-original-title="Copy to clipboard"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
         <form data-confirm="{% trans "Are you sure you want to reset your API key?" %}" action="{% url "main:reset-key" %}" method="post">
             {% csrf_token %}
             <button type="submit" data-toggle="tooltip" title="{% trans "Reset API Key" %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
