@@ -697,21 +697,27 @@ var PasteryForm = (function() {
 
 var KeyRenamer = (function() {
 
+  let fields;
+  let forms;
+
+  var activeInput  = null;
+  var activeButton = null;
+  var lastName = '';
+
   initialize = function() {
 
     if(document.querySelector('body.account') == null)
       return;
 
-    let fields = [...document.querySelectorAll('body.account table em[data-renamefield]')];
+    fields = [...document.querySelectorAll('body.account table em[data-renamefield]')];
+    forms = [...document.querySelectorAll('body.account table form[data-renameform]')];
 
     if(fields.length == 0)
       return;
 
-    let forms = [...document.querySelectorAll('body.account table form[data-renameform]')];
-
     fields.forEach((element) => {
 
-      element.addEventListener('click', function() {
+      element.addEventListener('click', function(event) {
 
         fields.forEach((element) => { element.style.display = 'inline'; });
         forms.forEach((element) => { element.style.display = 'none'; });
@@ -723,18 +729,48 @@ var KeyRenamer = (function() {
         let form = document.querySelector('body.account table form[data-renameform="' + keyId +'"]');
 
         form.style.display = 'block';        
-        form.querySelector('input[type="text"]').focus();
+
+        activeInput = form.querySelector('input[type="text"]');
+        activeInput.focus();
+
+        lastName = activeInput.value;
+
+        activeButton = form.querySelector('button');
+
+        event.stopPropagation();
       });
+    });
+
+    document.addEventListener('click', (event) => {
+
+      if(activeInput == null || activeButton == null)
+        return;
+
+      if(event.target == activeInput || event.target == activeButton)
+        return;
+
+      dismissActiveField();
     });
 
     document.addEventListener('keyup', (event) => {
 
       if(event.keyCode == 27) {
 
-        fields.forEach((element) => { element.style.display = 'inline'; });
-        forms.forEach((element) => { element.style.display = 'none'; });
+        dismissActiveField();
       }
     });
+  },
+
+  dismissActiveField = function() {
+
+      fields.forEach((element) => { element.style.display = 'inline'; });
+      forms.forEach((element) => { element.style.display = 'none'; });
+
+      activeInput.value = lastName;
+
+      activeInput = null;
+      activeButton = null;    
+      lastName = '';
   }
 
   return {
