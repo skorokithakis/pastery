@@ -220,6 +220,9 @@ elif os.environ.get("DATABASE_URL"):
 
     SENDGRID_API_KEY = os.getenv("EMAIL_HOST_PASSWORD", "pass")
     SENDGRID_SANDBOX_MODE_IN_DEBUG = DEBUG
+    SENDGRID_TRACK_EMAIL_OPENS = False
+    SENDGRID_TRACK_CLICKS_HTML = False
+    SENDGRID_TRACK_CLICKS_PLAIN = False
 else:
     DATABASES = {
         "default": {
