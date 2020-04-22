@@ -524,33 +524,6 @@ footer a:hover {
     background-color: rgba(255, 251, 236, .15);
     box-shadow: inset 0px 1px 0px rgba(0,0,0,0.25),inset 0px -1px 0px rgba(0,0,0,.25);
 }
-
-.pretty-paste[data-wrap="1"] .pastetable .linenos {
-    position: relative;
-}
-.pretty-paste[data-wrap="1"] .pastetable .linenodiv {
-    display: flex;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 35px;
-}
-.pretty-paste[data-wrap="1"] .pastetable .linenodiv pre {
-    flex-wrap: wrap;
-    display: flex;
-    flex-direction: column;
-}
-.pretty-paste[data-wrap="1"] .pastetable .linenodiv pre a {
-    flex-grow: 1;
-}
-.pretty-paste[data-wrap="1"] .pastetable .code pre span {
-    white-space: normal;
-    margin-left: 10px;
-}
-
-
 .pretty-paste {
     overflow: auto;
 }
