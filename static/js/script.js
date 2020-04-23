@@ -550,7 +550,11 @@ var CopyToClipboard = (function() {
         if(!preElement)
           return;
 
+        $(preElement).addClass('copying');
+
         code = preElement.innerText;
+
+        $(preElement).removeClass('copying');
       }
 
       var copied = self.copyTextToClipboard(code);
