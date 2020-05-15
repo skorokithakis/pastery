@@ -485,21 +485,50 @@ footer a:hover {
 .pastetable {
     width: 100%;
 }
+.pretty-paste .paste pre,
 .pastetable pre {
+    padding: 0;
     background-color: transparent;
     border: 0;
     margin-bottom: 0;
     color: inherit;
+    border-radius: 0;
+}
+.pretty-paste .paste > pre > span > span::selection {
+    background-color: rgb(104, 150, 211);
+    color: #fff;
+}
+.pretty-paste .paste > pre > span {
+    display: flex;
+    flex-direction: row;
+}
+.pretty-paste .paste pre > span > .lineno + span {
+    flex-grow: 1;
 }
 .pastetable .linenos {
     width: 1%;
 }
+.pretty-paste .lineno,
 .pastetable .linenos pre {
     background: rgba(255,255,255,.2);
     border-radius: 0;
     text-align: right;
 }
-.pastetable .linenos pre a {
+.pretty-paste .lineno {
+    background: rgba(0,0,0,.2);
+    display: inline-block;
+    padding: 0 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    cursor: pointer;
+    color: rgb(255,255,255,.5);
+    transition: color .2s ease-in;
+}
+.pastetable .linenos pre a  {
     color: inherit;
     opacity: .5;
     transition: opacity .2s ease-in;
@@ -509,7 +538,13 @@ footer a:hover {
 .pastetable .linenos pre a:active,
 .pastetable .linenos pre a.selected {
     opacity: 1;
-    text-decoration: none;
+    text-decoration: none;    
+}
+.pretty-paste .lineno:hover,
+.pretty-paste .lineno:focus,
+.pretty-paste .lineno:active,
+.pretty-paste .selected .lineno {
+    color: rgb(255,255,255, 1.0);
 }
 .pastetable .paste pre {
     padding-left: 0;
@@ -520,12 +555,23 @@ footer a:hover {
     padding-left: 10px;
     padding-right: 10px;
 }
+.pretty-paste .paste pre.copying .lineno {
+    display: none;
+}
 .pastetable .paste pre.copying > span {
     display: inline;
 }
+.pretty-paste .paste pre > span.selected > .lineno,
+.pretty-paste .paste pre > span.selected > .lineno + span,
 .pastetable .paste pre > span.selected {
-    background-color: rgba(255, 251, 236, .15);
+    background-color: rgb(52,93,145) !important;
     box-shadow: inset 0px 1px 0px rgba(0,0,0,0.25),inset 0px -1px 0px rgba(0,0,0,.25);
+    font-weight: bold;
+    text-decoration: none;
+    font-style: normal;
+}
+.pretty-paste .paste pre > span.selected * {
+    color: #fff !important;
 }
 .pretty-paste {
     overflow: auto;
@@ -545,7 +591,7 @@ footer a:hover {
     padding: 10px 15px 0;
     background: #E6E2D4;
     color: #333;
-    max-width: 950px;
+    max-width: 992px;
     margin: 0 auto;
 }
 .paste-full .pretty-paste.markdown-language {
@@ -585,6 +631,11 @@ footer a:hover {
     border-bottom: 1px solid #B4A87E;
     border-right: 1px solid #B4A87E;
     padding: 5px;
+}
+
+/* Wrapping */
+.pretty-paste[data-wrap="1"] .paste pre > span > .lineno + span {
+    white-space: break-spaces;
 }
 
 /* Account */
@@ -741,7 +792,8 @@ footer a:hover {
     border: none;
     display: flex;
     align-items: center;
-    justify-content: center;    
+    justify-content: center;
+    white-space: nowrap;
 }
 .login-container form #webauthin-login img {
     height: 30px;
@@ -781,16 +833,18 @@ footer a:hover {
 }
 
 @media (min-width: 768px) {
-
-    .page-paste:not(.paste-full) .pretty-paste.markdown-language {
-        width: 720px;
-    }
+    .container {
+        width: auto;
+   }
 }
 @media (min-width: 992px) {
 
     .page-paste:not(.paste-full) .pretty-paste.markdown-language {
-        width: 940px;
+        width: 950px;
     }
+    .container {
+        width: auto;
+   }
 }
 @media (min-width: 1200px) {
 
@@ -858,7 +912,7 @@ footer a:hover {
     .paste header {
         text-align: left;
         margin-bottom: 0;
-        padding: 0 10px;
+        padding: 0 15px;
     }
     .paste header h1 {
         text-align: left;

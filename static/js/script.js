@@ -202,11 +202,34 @@ var LineSelector = (function() {
 
   init = function() {
 
-    if($('.page-paste').length == 0)
+    let pasteElement =  document.querySelector('.pretty-paste .paste > pre');
+
+    if(pasteElement == null)
+      return;
+
+    $('.lineno').attr('aria-hidden', 'true');
+
+    [...document.querySelectorAll('.paste > pre > span')].forEach((element) => {
+
+      if(element.id.length == 0)
         return;
 
-    $('.linenos pre').attr('aria-hidden', 'true');
-    $.each($('.linenos pre a:not(:first-child)'), function() { this.setAttribute('tabindex', '-1'); });
+      let lineNumber = element.id.split(/-/)[1];
+      let lineNo = element.querySelector('.lineno');
+
+      // lineNo.setAttribute('unselectable', 'on');
+      // lineNo.addEventListener('selectstart', (event) => { console.log(event); return false; });
+      lineNo.addEventListener('click', () => { location.href = '#l-' + lineNumber; });
+    });
+
+    // Replace the double new lines when user manually copies the text of the paste
+    pasteElement.addEventListener('copy', (event) => {
+
+      let updatedText = (document.getSelection() + '').replace('\n\n', '\n');
+      event.clipboardData.setData('text', updatedText);
+      event.preventDefault();
+      return false;
+    });
 
     var self = this;
 
@@ -232,6 +255,12 @@ var LineSelector = (function() {
     }
 
     this.parseHash(true);
+  }
+
+  clearSelection = function()
+  {
+    if (window.getSelection) {window.getSelection().removeAllRanges();}  
+    else if (document.selection) {document.selection.empty();}
   }
 
   supportsHistory = function() {
@@ -295,7 +324,8 @@ var LineSelector = (function() {
     'initialize': init,
     'parseHash': parseHash,
     'lastSelectedLineNumber': lastSelectedLineNumber,
-    'supportsHistory': supportsHistory
+    'supportsHistory': supportsHistory,
+    'clearSelection': clearSelection
   }
 })();
 
@@ -502,6 +532,25 @@ var TabbedPastes = (function() {
       $('.clone+.pseudo-dropdown')[0].innerText = 'Not available';
     }
 
+    if(!notFound) {
+      $('.wrap').on('click', function() {
+
+        var wrapMode = paste.dataset['wrap'];
+        var enableWrap = (wrapMode == false);
+
+        if(enableWrap)
+        {
+          $(this.querySelector('span.glyphicon')).removeClass('glyphicon-text-height').addClass('glyphicon-text-width');
+          paste.setAttribute('data-wrap', "1");
+        }
+        else
+        {
+          $(this.querySelector('span.glyphicon')).removeClass('glyphicon-text-width').addClass('glyphicon-text-height');
+          paste.setAttribute('data-wrap', "0");
+        }
+      });
+    }
+
     $(this).attr('aria-hidden', 'false');
   }
 
@@ -545,14 +594,20 @@ var CopyToClipboard = (function() {
           code = paste.innerText;
       else {
 
-        var preElement = document.querySelector('.pretty-paste[aria-hidden="false"] .code pre');
+        let preElement = document.querySelector('.pretty-paste[aria-hidden="false"] .paste pre');
 
         if(!preElement)
           return;
 
         $(preElement).addClass('copying');
 
-        code = preElement.innerText;
+        [...document.querySelectorAll('.pretty-paste[aria-hidden="false"] .paste pre > span')].forEach((spanElement) => {
+
+          if(spanElement.id.length == 0)
+            return;
+
+          code += spanElement.innerText + '\n';
+        });
 
         $(preElement).removeClass('copying');
       }

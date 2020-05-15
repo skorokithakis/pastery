@@ -122,6 +122,14 @@ Multiple pastes
                     </div>
                 </div>
 
+                {% if paste.language != 'markdown' %}
+                <!-- Wrap -->
+                <div class="btn-group admin-parent dropdown-parent" role="group">
+                    <a type="button" data-toggle="tooltip" aria-label="{% trans "Wrap lines" %}" title="{% trans "Wrap lines" %}" class="btn btn-default btn-sm dropdown-toggle admin-button wrap" href="javascript:void(0);" type="button"><span class="glyphicon glyphicon-text-height" aria-hidden="true"></span></a>
+                    <div class="dropdown-menu pseudo-dropdown">{% trans "Wrap" %}</div>
+                </div>
+                {% endif %}
+
             </div>
 
             <h1 class="tabs">
@@ -140,6 +148,7 @@ Multiple pastes
 
     {% for paste in pastes %}
         <div    data-pasteid="{{ paste.id }}"
+                data-wrap="0"
                 data-language="{{ paste.get_language_display }}"
                 data-expires="{% if paste.expiration %}{% blocktrans with paste.expiration|timeuntil as until %}Expires in {{ until }}{% endblocktrans %}{% else %}{% trans "Never expires" %}{% endif %}"
                 {% if paste %}
