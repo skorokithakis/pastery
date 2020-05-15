@@ -427,6 +427,27 @@ class ActivePasteManager(models.Manager):
         return qs
 
 
+class PasteryFormatter(HtmlFormatter):
+    """A formatter that wraps the code contents on a separate <span>
+    HTML element so that it can be manipulated correctly via CSS for
+    line-wrapping."""
+
+    # Code adapted from:
+    # https://github.com/pygments/pygments/blob/master/pygments/formatters/html.py#L642
+
+    def _wrap_inlinelinenos(self, inner):
+        lines = list(inner)
+        st = self.linenostep
+        num = self.linenostart
+        mw = len(str(len(lines) + num - 1))
+        for t, line in lines:
+            yield 1, '<span class="lineno">%*s</span>' % (
+                mw,
+                (num % st and " " or num),
+            ) + "<span> " + line + "</span>"
+            num += 1
+
+
 class Paste(models.Model):
     id = models.CharField(
         max_length=100,
@@ -574,11 +595,12 @@ class Paste(models.Model):
         elif language == "textile":
             rendered = clean(textile.textile_restricted(self.body))
         else:
-            formatter = HtmlFormatter(
-                linenos="table",
+            formatter = PasteryFormatter(
+                linenos="inline",
                 linespans="line",
                 anchorlinenos=True,
                 lineanchors="l",
+                lineseparator="",
                 cssclass="paste",
             )
             rendered = highlight(
