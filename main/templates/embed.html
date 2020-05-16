@@ -14,7 +14,7 @@
         <article class="paste" id="paste-embed">
 
             {% for paste in pastes %}
-                <div data-tabcontent="{{ paste.id }}" aria-hidden="{% if forloop.counter0 > 0 %}true{% else %}false{% endif %}" {% if paste %}data-rawurl="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}"{% endif %} class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}">
+                <div data-wrap="0" data-tabcontent="{{ paste.id }}" aria-hidden="{% if forloop.counter0 > 0 %}true{% else %}false{% endif %}" {% if paste %}data-rawurl="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url "main:raw-paste" paste.id %}"{% endif %} class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}">
                 {% if paste %}
                 {{ paste.rendered_body|safe }}
                 {% else %}
@@ -34,6 +34,7 @@
                 {% trans "hosted by" %}
                 <a target="_blank" class="website" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url 'main:home' %}" title="{{ current_site.name }}">{{ current_site.name }}</a>
                 <span class="copy" data-copy>Copy</span>
+                <span class="wrap" data-wrap>Wrap</span>
                 <span class="raw" data-raw>Raw</span>
             </footer>
         </article>
@@ -119,6 +120,22 @@
                 }
             }
 
+            document.querySelector('span[data-wrap]').addEventListener('click', function() {
+
+                var paste = document.querySelector('.pretty-paste[aria-hidden="false"]');
+                var wrapMode = paste.dataset['wrap'];
+                var enableWrap = (wrapMode == false);
+
+                if(enableWrap)
+                {
+                  paste.setAttribute('data-wrap', "1");
+                }
+                else
+                {
+                  paste.setAttribute('data-wrap', "0");
+                }
+            });
+
             document.querySelector('span[data-raw]').addEventListener('click', function() {
 
                 var rawurl = document.querySelector('.pretty-paste[aria-hidden="false"]').dataset.rawurl;
@@ -136,9 +153,26 @@
                 var code = '';
 
                 if(hasMarkdown)
-                    code = paste.innerText;
-                else
-                    code = document.querySelector('.pretty-paste[aria-hidden="false"] .code pre').innerText;
+                  code = paste.innerText;
+                else {
+
+                    let preElement = document.querySelector('.pretty-paste[aria-hidden="false"] .paste pre');
+
+                    if(!preElement)
+                      return;
+
+                    preElement.className = 'copying';
+
+                    [...document.querySelectorAll('.pretty-paste[aria-hidden="false"] .paste pre > span')].forEach((spanElement) => {
+
+                      if(spanElement.id.length == 0)
+                        return;
+
+                      code += spanElement.innerText + '\n';
+                    });
+
+                    preElement.className = '';
+                }
 
                 var copyElement = this;
 
@@ -146,6 +180,20 @@
 
                 setTimeout(function() { copyElement.innerText = 'Copy'; }, 1000);
             });
+
+            let pasteElement =  document.querySelector('.pretty-paste .paste > pre');
+
+            if(pasteElement != null)
+            {
+                // Replace the double new lines when user manually copies the text of the paste
+                pasteElement.addEventListener('copy', (event) => {
+
+                  let updatedText = (document.getSelection() + '').replace('\n\n', '\n');
+                  event.clipboardData.setData('text', updatedText);
+                  event.preventDefault();
+                  return false;
+                });
+            }
 
             changedHeight();
 
