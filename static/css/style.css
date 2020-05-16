@@ -384,6 +384,7 @@ footer a:hover {
     border-top: none;
     border-bottom: none;
     min-width: 44px;
+    height: 33px;
 }
 .paste .button-container .dropdown-toggle:hover,
 .paste .button-container .open .dropdown-toggle:focus,
@@ -1024,6 +1025,16 @@ footer a:hover {
     }  
     .account table.pastes .small-collapse {
         display: none;
+    }
+}
+
+@media (min-width: 610px) {
+    .paste-full .paste .container:first-child {
+        position: sticky;
+        top: 0;
+        right: 0;
+        top: 0;
+        background-color: #fffbec;
     }
 }
 

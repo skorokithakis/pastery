@@ -6,7 +6,7 @@ var ShareSelector = (function() {
       return;
 
     $('[data-placement="tooltip"],[data-toggle="tooltip"]').tooltip({
-      'placement': 'top'
+      'placement': 'bottom'
     });
 
     // Select text when dropdown shows
