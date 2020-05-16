@@ -54,16 +54,44 @@ article {
     bottom: 0px;
     font-size: 11px;
 }
+.pretty-paste .paste pre,
 .pastetable pre {
+    padding: 0;
     background-color: transparent;
     border: 0;
     margin-bottom: 0;
     color: inherit;
+    border-radius: 0;
 }
+.pretty-paste .lineno,
 .pastetable .linenos pre {
     background: rgba(255,255,255,.2);
     border-radius: 0;
-    opacity: .5;
+    text-align: right;
+}
+.pretty-paste .lineno {
+    background: rgba(0,0,0,.2);
+    display: inline-block;
+    padding: 0 10px;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    color: rgb(255,255,255,.5);
+}
+
+.pretty-paste .paste > pre > span > span::selection {
+    background-color: rgb(104, 150, 211);
+    color: #fff;
+}
+.pretty-paste .paste > pre > span {
+    display: flex;
+    flex-direction: row;
+}
+.pretty-paste .paste pre > span > .lineno + span {
+    flex-grow: 1;
 }
 .pastetable .linenos pre a {
     color: inherit;
@@ -75,6 +103,33 @@ article {
     width: 1px;
     min-width: 100%;
 }
+.pastetable .paste pre {
+    padding-left: 0;
+    padding-right: 0;
+}
+.pastetable .paste pre > span {
+    display: block;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.pretty-paste .paste pre.copying .lineno {
+    display: none;
+}
+.pastetable .paste pre.copying > span {
+    display: inline;
+}
+.pretty-paste .paste pre > span.selected > .lineno,
+.pretty-paste .paste pre > span.selected > .lineno + span,
+.pastetable .paste pre > span.selected {
+    background-color: rgb(52,93,145) !important;
+    box-shadow: inset 0px 1px 0px rgba(0,0,0,0.25),inset 0px -1px 0px rgba(0,0,0,.25);
+    font-weight: bold;
+    text-decoration: none;
+    font-style: normal;
+}
+.pretty-paste .paste pre > span.selected * {
+    color: #fff !important;
+}
 .pretty-paste.markdown-language {
     padding: 10px 15px;
     background: #E6E2D4;
@@ -82,6 +137,11 @@ article {
     margin: 0 auto;
     line-height: 1.42857143;
     font-size: 14px;
+}
+
+/* Wrapping */
+.pretty-paste[data-wrap="1"] .paste pre > span > .lineno + span {
+    white-space: break-spaces;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -121,6 +181,7 @@ footer {
     font-size: 12px;
     position: relative;
 }
+footer .wrap,
 footer .copy,
 footer .raw,
 footer a {
@@ -152,9 +213,15 @@ footer a:hover {
 footer a.website {
     color: #CC1B1B;
 }
-footer .copy {
+footer .wrap {
     position: absolute;
     right: 45px;
+    padding: 7px;
+    top: 0;    
+}
+footer .copy {
+    position: absolute;
+    right: 90px;
     padding: 7px;
     top: 0;
 }
@@ -164,6 +231,7 @@ footer .raw {
     top: 0;
     padding: 7px;
 }
+footer .wrap:hover,
 footer .copy:hover,
 footer .raw:hover {
     background-color: #CC1B1B;

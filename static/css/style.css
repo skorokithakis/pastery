@@ -1029,7 +1029,7 @@ footer a:hover {
 }
 
 @media (min-width: 610px) {
-    .paste-full .paste .container:first-child {
+    .page-paste .paste .container:first-child {
         position: sticky;
         top: 0;
         right: 0;
