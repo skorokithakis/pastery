@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.contrib.sitemaps.views import sitemap
 
 from . import views
 
@@ -12,6 +13,12 @@ urlpatterns = [
     url(r"^(?P<paste_id>[^/]+)/delete/$", views.delete_paste, name="delete-paste"),
     url(r"^(?P<paste_id>[^/]+)/report/$", views.report_paste, name="report-paste"),
     url(r"^(?P<paste_id>[^/]+)/embed/$", views.embed_paste, name="embed-paste"),
+    url(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": {"static": views.StaticViewSitemap}},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
     url(r"^(?P<paste_id>[^/]+)/raw/$", views.raw_paste, name="raw-paste"),
     url(r"^(?P<paste_id>[^/]+)/dl/$", views.download_paste, name="download-paste"),
     url(r"^(?P<paste_id>[^/]+)/$", views.paste, name="paste"),

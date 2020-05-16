@@ -10,6 +10,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.contrib.sitemaps import Sitemap
 from django.contrib.sites.models import Site
 from django.http import Http404
 from django.http import HttpResponse
@@ -32,6 +33,17 @@ from utils import send_event  # noqa
 
 User = get_user_model()
 LANGUAGE_NAMES = LANGUAGE_DICT.keys()
+
+
+class StaticViewSitemap(Sitemap):
+    priority = 0.5
+    changefreq = "daily"
+
+    def items(self):
+        return ["api", "about", "plugins", "login"]
+
+    def location(self, item):
+        return f"/{item}/"
 
 
 def pasteform_factory(user):
