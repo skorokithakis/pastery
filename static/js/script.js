@@ -532,25 +532,6 @@ var TabbedPastes = (function() {
       $('.clone+.pseudo-dropdown')[0].innerText = 'Not available';
     }
 
-    if(!notFound) {
-      $('.wrap').on('click', function() {
-
-        var wrapMode = paste.dataset['wrap'];
-        var enableWrap = (wrapMode == false);
-
-        if(enableWrap)
-        {
-          $(this.querySelector('span.glyphicon')).removeClass('glyphicon-text-height').addClass('glyphicon-text-width');
-          paste.setAttribute('data-wrap', "1");
-        }
-        else
-        {
-          $(this.querySelector('span.glyphicon')).removeClass('glyphicon-text-width').addClass('glyphicon-text-height');
-          paste.setAttribute('data-wrap', "0");
-        }
-      });
-    }
-
     $(this).attr('aria-hidden', 'false');
   }
 
@@ -565,6 +546,25 @@ var TabbedPastes = (function() {
       'activePasteId': ''
   }
 
+})();
+
+var WrapLines = (function() {
+
+  init = function() {
+
+      $('.wrap').on('click', function() {
+
+        var paste= document.querySelector('.pretty-paste[aria-hidden="false"]');
+        var wrapMode = paste.dataset['wrap'];
+        var enableWrap = (wrapMode == false);
+
+        paste.setAttribute('data-wrap', (enableWrap ? "1" : "0"));
+      });
+  }
+
+  return {
+    'initialize': init
+  }
 })();
 
 var CopyToClipboard = (function() {
@@ -599,6 +599,8 @@ var CopyToClipboard = (function() {
         if(!preElement)
           return;
 
+        var codeLines = [];
+
         $(preElement).addClass('copying');
 
         [...document.querySelectorAll('.pretty-paste[aria-hidden="false"] .paste pre > span')].forEach((spanElement) => {
@@ -606,8 +608,10 @@ var CopyToClipboard = (function() {
           if(spanElement.id.length == 0)
             return;
 
-          code += spanElement.innerText + '\n';
+          codeLines.push(spanElement.innerText);
         });
+
+        code = codeLines.join('\n');
 
         $(preElement).removeClass('copying');
       }
@@ -848,4 +852,5 @@ $(document).ready(function() {
     UserStyleSelector.initialize();
     ShareSelector.initialize();
     KeyRenamer.initialize();
+    WrapLines.initialize();
 });

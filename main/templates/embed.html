@@ -24,18 +24,21 @@
             {% endfor %}
 
             <footer>
-                {% if pastes|length > 1 %}
-                {% for paste in pastes %}
-                <span class="tab{% if forloop.counter0 == 0 %} active{% endif %}" data-tab="{{ paste.id }}" href="javascript:void(0);">{% if paste %}{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}{% else %}Unknown{% endif %}</span>
-                {% endfor %}
-                {% else %}
-                <a target="_blank" href="{{ paste.get_full_url }}">{% if paste.title %}{{ paste }}{% else %}{% trans "Paste" %}{% endif %}</a>
-                {% endif %}
-                {% trans "hosted by" %}
-                <a target="_blank" class="website" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url 'main:home' %}" title="{{ current_site.name }}">{{ current_site.name }}</a>
-                <span class="copy" data-copy>Copy</span>
-                <span class="wrap" data-wrap>Wrap</span>
-                <span class="raw" data-raw>Raw</span>
+                <div class="caption">
+                    {% if pastes|length > 1 %}
+                    {% for paste in pastes %}<span class="tab{% if forloop.counter0 == 0 %} active{% endif %}" data-tab="{{ paste.id }}" href="javascript:void(0);">{% if paste %}{% if paste.title %}{{ paste }}{% else %}{{ paste.id }}{% endif %}{% else %}Unknown{% endif %}</span>{% endfor %}
+                    {% trans "Hosted by" %}
+                    {% else %}
+                    <a class="sole" target="_blank" href="{{ paste.get_full_url }}">{% if paste.title %}{{ paste }}{% else %}{% trans "Paste" %}{% endif %}</a>
+                    {% trans "hosted by" %}
+                    {% endif %}
+                    <a target="_blank" class="website" href="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url 'main:home' %}" title="{{ current_site.name }}">{{ current_site.name }}</a>
+                </div>
+                <div class="tools">
+                    <span class="copy" data-copy>Copy</span>
+                    <span class="wrap" data-wrap>Wrap</span>
+                    <span class="raw" data-raw>Raw</span>
+                </div>
             </footer>
         </article>
         <script>
@@ -161,6 +164,8 @@
                     if(!preElement)
                       return;
 
+                    var codeLines = [];
+
                     preElement.className = 'copying';
 
                     [...document.querySelectorAll('.pretty-paste[aria-hidden="false"] .paste pre > span')].forEach((spanElement) => {
@@ -168,10 +173,12 @@
                       if(spanElement.id.length == 0)
                         return;
 
-                      code += spanElement.innerText + '\n';
+                      codeLines.push(spanElement.innerText);
                     });
 
                     preElement.className = '';
+
+                    code = codeLines.join('\n');
                 }
 
                 var copyElement = this;
