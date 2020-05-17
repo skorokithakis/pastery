@@ -444,7 +444,7 @@ class PasteryFormatter(HtmlFormatter):
             yield 1, '<span class="lineno">%*s</span>' % (
                 mw,
                 (num % st and " " or num),
-            ) + "<span> " + line + "</span>"
+            ) + "<span>" + line + "</span>"
             num += 1
 
 

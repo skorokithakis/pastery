@@ -42,7 +42,6 @@ pre {
     overflow: auto;
 }
 article {
-    border: 1px solid #ddd;
     position: relative;
 }
 .meta-footer {
@@ -92,6 +91,7 @@ article {
 }
 .pretty-paste .paste pre > span > .lineno + span {
     flex-grow: 1;
+    padding-left: 10px;
 }
 .pastetable .linenos pre a {
     color: inherit;
@@ -176,10 +176,11 @@ h1, h2, h3, h4, h5, h6 {
 footer {
     background-color: #FFFBEC;
     color: #737373;
-    padding: 7px;
     overflow: hidden;
     font-size: 12px;
-    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 footer .wrap,
 footer .copy,
@@ -190,9 +191,18 @@ footer a {
     text-decoration: none;
     cursor: pointer;
 }
+footer .tools {
+    display: flex;
+}
+footer .caption .sole {
+    padding-left: 7px;
+}
+footer .tools span {
+    border-left: 1px solid rgba(0,0,0,.1);
+    padding: 7px;        
+}
 footer .tab {
     position: relative;
-    left: -7px;
     padding: 7px;
     color: #737373;
     font-weight: bold;
@@ -212,24 +222,6 @@ footer a:hover {
 }
 footer a.website {
     color: #CC1B1B;
-}
-footer .wrap {
-    position: absolute;
-    right: 45px;
-    padding: 7px;
-    top: 0;    
-}
-footer .copy {
-    position: absolute;
-    right: 90px;
-    padding: 7px;
-    top: 0;
-}
-footer .raw {
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding: 7px;
 }
 footer .wrap:hover,
 footer .copy:hover,
