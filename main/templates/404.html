@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-
 {% load staticfiles i18n %}
+
+{% block title %}{{ current_site.name }} - {% trans "Not found" %}{% endblock %}
 
 {% block content %}
 <div class="container">

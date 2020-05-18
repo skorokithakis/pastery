@@ -219,7 +219,19 @@ var LineSelector = (function() {
 
       // lineNo.setAttribute('unselectable', 'on');
       // lineNo.addEventListener('selectstart', (event) => { console.log(event); return false; });
-      lineNo.addEventListener('click', () => { location.href = '#l-' + lineNumber; });
+      lineNo.addEventListener('click', () => { 
+        var url  = '#l-' + lineNumber; 
+
+        if(TabbedPastes.hasTabs)
+            url += '-' + TabbedPastes.activePasteId;
+
+        location.href = url;
+
+        if(this.supportsHistory())
+          history.pushState(null, null, url);
+
+        this.parseHash(false);
+      });
     });
 
     // Replace the double new lines when user manually copies the text of the paste
@@ -236,23 +248,6 @@ var LineSelector = (function() {
     $(window).on('hashchange', function() {
       self.parseHash(false);
     });
-
-    if(this.supportsHistory()) {
-
-      $('a[href^="#l-"]').click(function(event) {
-
-        event.preventDefault();
-
-        var url = $(this).attr('href');
-
-        if(TabbedPastes.hasTabs)
-            url += '-' + TabbedPastes.activePasteId;
-
-        history.pushState(null, null, url);
-
-        self.parseHash(false);
-      });
-    }
 
     this.parseHash(true);
   }

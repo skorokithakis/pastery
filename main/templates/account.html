@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load bootstrap3 i18n static %}
 
+{% block title %}{{ current_site.name }} - {% trans "Account" %}{% endblock %}
+
 {% block pageclass %}account{% endblock %}
 
 {% block content %}
