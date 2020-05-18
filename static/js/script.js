@@ -199,6 +199,7 @@ var ConfirmAction = (function() {
 var LineSelector = (function() {
 
   lastSelectedLineNumber = '';
+  lastSelectedPasteId = '';
 
   init = function() {
 
@@ -222,9 +223,9 @@ var LineSelector = (function() {
       lineNo.addEventListener('click', () => { 
         var url  = '#l-' + lineNumber; 
 
-        if(TabbedPastes.hasTabs)
+        if(TabbedPastes.tabs.length > 1)
             url += '-' + TabbedPastes.activePasteId;
-
+          
         location.href = url;
 
         if(this.supportsHistory())
@@ -279,25 +280,30 @@ var LineSelector = (function() {
         return;
     }
 
-    if(this.lastSelectedLineNumber != '') {
+    if(this.lastSelectedLineNumber != ''
+      && this.lastSelectedPasteId != '') {
 
-      $('#line-' + this.lastSelectedLineNumber).removeClass('selected');
-      $('a[href=#l-' + this.lastSelectedLineNumber + ']').removeClass('selected');
+      $('#line-' + this.lastSelectedLineNumber + '-' + this.lastSelectedPasteId).removeClass('selected');
     }
 
-    var lineObjects= hash.split(/-/);
+    let lineObjects= hash.split(/-/);
+    let lineNumber = lineObjects[1];
+    let linePasteId = lineObjects[2];
 
     if(lineObjects.length > 2)
-        TabbedPastes.selectPasteWithId(lineObjects[2]);
+        TabbedPastes.selectPasteWithId(linePasteId);
+    else
+        linePasteId = TabbedPastes.activePasteId;
 
-    var lineNumber = lineObjects[1];
+    var lineElement = document.getElementById('line-' + lineNumber + '-' + linePasteId);
 
-    var lineElement = $('#line-' + lineNumber);
+    if(lineElement == undefined)
+      return;
 
     $(lineElement).addClass('selected');
-    $('a[href=#l-' + lineNumber + ']').addClass('selected');
 
     this.lastSelectedLineNumber = lineNumber;
+    this.lastSelectedPasteId = linePasteId;
 
     var scrollObject = $(lineElement).offset();
     var scrollHeight = scrollObject.top;
@@ -319,6 +325,7 @@ var LineSelector = (function() {
     'initialize': init,
     'parseHash': parseHash,
     'lastSelectedLineNumber': lastSelectedLineNumber,
+    'lastSelectedPasteId': lastSelectedPasteId,
     'supportsHistory': supportsHistory,
     'clearSelection': clearSelection
   }
@@ -340,8 +347,6 @@ var TabbedPastes = (function() {
 
     this.tabsParent = $('h1.tabs')[0];
     this.tabArrows = $('[data-arrow]');
-
-    this.hasTabs = true;
     this.pastes = $('[data-pasteid]');
     this.activePasteId = this.tabs[0].dataset.tab;
 
@@ -537,7 +542,6 @@ var TabbedPastes = (function() {
       'resized': resized,
       'tabs': [],
       'pastes': [],
-      'hasTabs': false,
       'activePasteId': ''
   }
 

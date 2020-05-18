@@ -430,10 +430,26 @@ class ActivePasteManager(models.Manager):
 class PasteryFormatter(HtmlFormatter):
     """A formatter that wraps the code contents on a separate <span>
     HTML element so that it can be manipulated correctly via CSS for
-    line-wrapping."""
+    line-wrapping. It also appends the linesuffix option at the end
+    of the id attribute of every line."""
 
     # Code adapted from:
     # https://github.com/pygments/pygments/blob/master/pygments/formatters/html.py#L642
+
+    def __init__(self, **options):
+        HtmlFormatter.__init__(self, **options)
+        self.linesuffix = options.get("linesuffix", "")
+
+    def _wrap_linespans(self, inner):
+        s = self.linespans
+        suf = self.linesuffix
+        i = self.linenostart - 1
+        for t, line in inner:
+            if t:
+                i += 1
+                yield 1, '<span id="%s-%d-%s">%s</span>' % (s, i, suf, line)
+            else:
+                yield 0, line
 
     def _wrap_inlinelinenos(self, inner):
         lines = list(inner)
@@ -598,6 +614,7 @@ class Paste(models.Model):
             formatter = PasteryFormatter(
                 linenos="inline",
                 linespans="line",
+                linesuffix=self.id,
                 anchorlinenos=True,
                 lineanchors="l",
                 lineseparator="",
