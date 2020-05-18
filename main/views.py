@@ -40,10 +40,10 @@ class StaticViewSitemap(Sitemap):
     changefreq = "daily"
 
     def items(self):
-        return ["api", "about", "plugins", "login"]
+        return ["/", "/api/", "/about/", "/plugins/", "/login/"]
 
     def location(self, item):
-        return f"/{item}/"
+        return item
 
 
 def pasteform_factory(user):
