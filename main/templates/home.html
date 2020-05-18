@@ -1,5 +1,17 @@
 {% extends "base.html" %}
-{% load bootstrap3 i18n tabindex %}
+{% load staticfiles bootstrap3 i18n tabindex %}
+
+{% block description %}<meta name="description" content="{% trans "Pastery is the sweetest pastebin in the world. Pastery is a secure website where you can store text online for a set period of time." %}" />
+{% endblock %}
+
+{% block ogtags %}<meta property="og:title" content="{{ current_site.name }} - {% trans "The sweetest pastebin in the world!" %}"/>
+    <meta property="og:description" content="{% trans "Pastery is the sweetest pastebin in the world. Pastery is a secure website where you can store text online for a set period of time." %}"/>
+    <meta property="og:url" content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}"/>
+    <meta property="og:image" content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% static "images/logo.png" %}"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="og:type" content="website"/>    
+    <meta property="og:site_name" content="{{ current_site.name }}"/>
+{% endblock %}
 
 {% block content %}
 <div class="container">
