@@ -143,6 +143,9 @@ article {
 .pretty-paste[data-wrap="1"] .paste pre > span > .lineno + span {
     white-space: break-spaces;
 }
+.markdown-language[data-wrap="1"] {
+    word-break: break-all;
+}
 
 h1, h2, h3, h4, h5, h6 {
     font-family: inherit;
