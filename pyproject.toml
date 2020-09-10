@@ -45,6 +45,7 @@ werkzeug = "==0.11.*,>=0.11.2"
 whitenoise = "*"
 django-dotenv = "^1.4.2"
 django-webauthin = "^0.0.4"
+django-qmethod = "^0.0.3"
 
 [tool.poetry.dev-dependencies]
 bpython = "*"

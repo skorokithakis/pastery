@@ -255,6 +255,14 @@ nose = ">=1.2.1"
 
 [[package]]
 category = "main"
+description = "Define methods on QuerySets without custom manager and QuerySet subclasses."
+name = "django-qmethod"
+optional = false
+python-versions = "*"
+version = "0.0.3"
+
+[[package]]
+category = "main"
 description = "Django recaptcha form field/widget app."
 name = "django-recaptcha"
 optional = false
@@ -877,7 +885,7 @@ version = "5.0"
 brotli = ["brotli"]
 
 [metadata]
-content-hash = "356fe7d19dab111eac8be404cc485bde6ae2273f5b09f84441b89986fb3a9828"
+content-hash = "b90490f1e4cbc461307e055f6b0d5d81a4a6b4369b96d483a336ad3b7d57da8a"
 python-versions = ">=3.7"
 
 [metadata.files]
@@ -1087,6 +1095,9 @@ django-ipware = [
 django-nose = [
     {file = "django-nose-1.4.6.tar.gz", hash = "sha256:58934a06a6932696e54c9e8af3fab49bf67ca9e9c840ad668cb7f51219808a07"},
     {file = "django_nose-1.4.6-py2.py3-none-any.whl", hash = "sha256:f515d903cfaeda52c7a9198e0c8ed51563e82802b62a4e5fbd056fd830095318"},
+]
+django-qmethod = [
+    {file = "django-qmethod-0.0.3.tar.gz", hash = "sha256:9f47e56f0762980e69bbd28a9e88dc8e67625d9178d5d369e9f24b0ec80e0b49"},
 ]
 django-recaptcha = [
     {file = "django-recaptcha-1.0.6.tar.gz", hash = "sha256:9cde155d8a5a7226f899f99fb267007d601a485755e69b703b816d7d7664e32b"},
