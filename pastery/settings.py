@@ -31,11 +31,7 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("NODEBUG") is None
 
-ALLOWED_HOSTS = (
-    ["web", os.environ.get("HOSTNAME", "localhost")]
-    if os.environ.get("NODEBUG") is None
-    else [".pastery.net"]
-)
+ALLOWED_HOSTS = ["*"] if os.environ.get("NODEBUG") is None else [".pastery.net"]
 
 # Application definition
 

@@ -228,8 +228,11 @@ category = "main"
 description = "Extensions for Django"
 name = "django-extensions"
 optional = false
-python-versions = ">=3.5"
-version = "3.0.8"
+python-versions = "*"
+version = "2.2.9"
+
+[package.dependencies]
+six = ">=1.2"
 
 [[package]]
 category = "main"
@@ -925,7 +928,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "8dbe918ba75202dfc3d99685fd2a4a4fce25176acee22a18d453dd3dc14603cf"
+content-hash = "7f84303c1cb3b9e0b5ce03eb555b119a5f56f0a22748ada643902c38dd5f4032"
 python-versions = ">=3.7"
 
 [metadata.files]
@@ -1130,8 +1133,8 @@ django-dotenv = [
     {file = "django_dotenv-1.4.2-py2.py3-none-any.whl", hash = "sha256:a9b1b40a70bd321acd231926acedb9bd2c5e873e33a1873b34a7276d196a765e"},
 ]
 django-extensions = [
-    {file = "django-extensions-3.0.8.tar.gz", hash = "sha256:a67747508ec39583892fbddf57e0b66b3f332a885ef5520698bc2e1cb351955a"},
-    {file = "django_extensions-3.0.8-py3-none-any.whl", hash = "sha256:c7c2ca48ccc2ecc4427c908cd3a6dc114fc7534092de51209b02f84ccafe648b"},
+    {file = "django-extensions-2.2.9.tar.gz", hash = "sha256:2f81b618ba4d1b0e58603e25012e5c74f88a4b706e0022a3b21f24f0322a6ce6"},
+    {file = "django_extensions-2.2.9-py2.py3-none-any.whl", hash = "sha256:b19182d101a441fe001c5753553a901e2ef3ff60e8fbbe38881eb4a61fdd17c4"},
 ]
 django-ipware = [
     {file = "django-ipware-2.1.0.tar.gz", hash = "sha256:a7c7a8fd019dbdc9c357e6e582f65034e897572fc79a7e467674efa8aef9d00b"},
