@@ -22,6 +22,7 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
         "title",
         "created",
         "expiration",
+        "user_address",
         "views",
         "max_views",
         "has_expired",
