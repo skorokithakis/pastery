@@ -29,7 +29,7 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
     ]
     list_filter = ("created", "expiration")
     ordering = ["-created"]
-    actions = ["purge_user"]
+    actions = ["purge_user", "purge_by_ip"]
 
     def purge_user(self, request, queryset):
         for paste in queryset:
@@ -49,6 +49,25 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
 
     purge_user.short_description = (
         "Delete selected pastes and their users"
+    )  # type: ignore
+
+    def purge_by_ip(self, request, queryset):
+        ips = set()
+        for paste in queryset:
+            ips.add(paste.user_address)
+
+        paste_counter = 0
+        for ip in ips:
+            for paste in Paste.objects.filter(user_address=ip):
+                paste.delete()
+                paste_counter += 1
+
+        self.message_user(
+            request, "Deleted %s pastes from %s IPs.." % (paste_counter, len(ips))
+        )
+
+    purge_by_ip.short_description = (
+        "Delete all pastes from the selected pastes' IPs"
     )  # type: ignore
 
 
