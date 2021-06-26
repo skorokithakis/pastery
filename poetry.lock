@@ -311,7 +311,7 @@ typing-extensions = "*"
 
 [[package]]
 name = "django-tokenauth"
-version = "0.5.0"
+version = "0.5.1"
 description = "An authentication backend that uses tokens sent over email to authenticate users."
 category = "main"
 optional = false
@@ -920,7 +920,7 @@ testing = ["jaraco.itertools", "func-timeout"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7"
-content-hash = "7f84303c1cb3b9e0b5ce03eb555b119a5f56f0a22748ada643902c38dd5f4032"
+content-hash = "6fb5a62699f0d8b0339afaf8e6f48382f580940d17d4f492ba01031b46f070d5"
 
 [metadata.files]
 appnope = [
@@ -1160,8 +1160,8 @@ django-stubs = [
     {file = "django_stubs-1.5.0-py3-none-any.whl", hash = "sha256:4a03df70e062f4133085efc461148d0934f36ccfd60a2b6d7bc35821f62008b6"},
 ]
 django-tokenauth = [
-    {file = "django-tokenauth-0.5.0.tar.gz", hash = "sha256:cc12b68adf1c4b7b24c7aa6ee3f7ce1dd080eb7e2287edb65a69b2e41fd07aaa"},
-    {file = "django_tokenauth-0.5.0-py2.py3-none-any.whl", hash = "sha256:a8aba6d8a18d1b0f727a5005ac2a6bf02e4d02149ca9f523ecfa648c3d149547"},
+    {file = "django-tokenauth-0.5.1.tar.gz", hash = "sha256:af5eeb769c39bd111663008ae753d59247f818d8fa696e810d2cc41742bb252b"},
+    {file = "django_tokenauth-0.5.1-py2.py3-none-any.whl", hash = "sha256:54e6cd1ab47390ab9248e3f032b4e2aaf1a39c85ed899d13d8b2af9b8eb12767"},
 ]
 django-webauthin = [
     {file = "django-webauthin-0.0.6.tar.gz", hash = "sha256:e3b28cd4f63d0cc39420a5c1495683f0aec5f3e2a1f24b891b692bff785fdfcc"},
