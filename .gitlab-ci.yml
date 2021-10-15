@@ -28,6 +28,37 @@ test:
     paths:
       - .cache/pip
 
+terraform:
+  image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+  stage: deploy
+  needs:
+    - test
+  script:
+    - |
+        if [ "${CI_COMMIT_REF_PROTECTED}" != "true" ]; then
+            export TF_VAR_cloudflare_token=$cf_readonly_token
+        fi
+    - cd ${TF_ROOT}
+    - gitlab-terraform init
+    - gitlab-terraform validate
+    - gitlab-terraform fmt
+    - gitlab-terraform plan
+    - gitlab-terraform plan-json
+    - if [ "${CI_COMMIT_REF_PROTECTED}" = "true" ]; then gitlab-terraform apply; fi
+  artifacts:
+    name: plan
+    paths:
+      - ${TF_ROOT}/plan.cache
+    reports:
+      terraform: ${TF_ROOT}/plan.json
+  variables:
+    TF_ROOT: ${CI_PROJECT_DIR}/misc/terraform/
+    TF_ADDRESS: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/production
+  cache:
+    key: terraform-production
+    paths:
+      - ${TF_ROOT}/.terraform
+
 deploy to production:
   image: ilyasemenov/gitlab-ci-git-push
   stage: deploy
