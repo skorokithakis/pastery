@@ -1,3 +1,0 @@
-#!/bin/bash
-cd {{ project_root }}/certs/
-simp_le --valid_min 1296000 -f fullchain.pem -f key.pem -d {{ domain }} -d {{ full_domain }} --default_root {{ project_root }}/certs/

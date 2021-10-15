@@ -1,6 +1,0 @@
----
-- hosts: app
-  sudo: yes
-  gather_facts: false
-  roles:
-    - role: ansible-pull

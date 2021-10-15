@@ -1,8 +1,0 @@
----
-- hosts: app
-  sudo: yes
-  gather_facts: false
-  roles:
-    - role: django
-      tags:
-        - django
