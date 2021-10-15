@@ -22,9 +22,9 @@ variable "zone_id" {
   default = "f1928f8f37c9e76fc7c99a7cc9455702"
 }
 
-variable ipv6_ip { default = "2a01:4f8:1c0c:6109::1" }
-variable ipv4_ip { default = "195.201.40.251" }
-variable domain { default = "pastery.net" }
+variable "ipv6_ip" { default = "2a01:4f8:1c0c:6109::1" }
+variable "ipv4_ip" { default = "195.201.40.251" }
+variable "domain" { default = "pastery.net" }
 
 resource "cloudflare_record" "v6_root" {
   zone_id = var.zone_id
@@ -126,14 +126,14 @@ resource "cloudflare_record" "brave_verification" {
 
 resource "cloudflare_filter" "filter_eastern_europe" {
   expression = "ip.geoip.country eq \"RU\" or ip.geoip.country eq \"UZ\" or ip.geoip.country eq \"UA\" or ip.geoip.country eq \"BY\""
-  paused = false
-  zone_id = var.zone_id
+  paused     = false
+  zone_id    = var.zone_id
 }
 
 resource "cloudflare_firewall_rule" "block_eastern_europe" {
-  action = "js_challenge"
+  action      = "js_challenge"
   description = "Block Eastern Europe"
-  filter_id = cloudflare_filter.filter_eastern_europe.id
-  paused = false
-  zone_id = var.zone_id
+  filter_id   = cloudflare_filter.filter_eastern_europe.id
+  paused      = false
+  zone_id     = var.zone_id
 }
