@@ -125,7 +125,7 @@ resource "cloudflare_record" "brave_verification" {
 
 
 resource "cloudflare_filter" "filter_eastern_europe" {
-  expression = "ip.geoip.country eq \"RU\" or ip.geoip.country eq \"UZ\" or ip.geoip.country eq \"UA\" or ip.geoip.country eq \"BY\""
+  expression = "(ip.geoip.country in {\"RU\" \"UZ\" \"BY\" \"UA\"})"
   paused     = false
   zone_id    = var.zone_id
 }
