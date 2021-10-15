@@ -220,12 +220,12 @@ var LineSelector = (function() {
 
       // lineNo.setAttribute('unselectable', 'on');
       // lineNo.addEventListener('selectstart', (event) => { console.log(event); return false; });
-      lineNo.addEventListener('click', () => { 
-        var url  = '#l-' + lineNumber; 
+      lineNo.addEventListener('click', () => {
+        var url  = '#l-' + lineNumber;
 
         if(TabbedPastes.tabs.length > 1)
             url += '-' + TabbedPastes.activePasteId;
-          
+
         location.href = url;
 
         if(this.supportsHistory())
@@ -255,7 +255,7 @@ var LineSelector = (function() {
 
   clearSelection = function()
   {
-    if (window.getSelection) {window.getSelection().removeAllRanges();}  
+    if (window.getSelection) {window.getSelection().removeAllRanges();}
     else if (document.selection) {document.selection.empty();}
   }
 
@@ -790,7 +790,7 @@ var KeyRenamer = (function() {
 
         let form = document.querySelector('body.account table form[data-renameform="' + keyId +'"]');
 
-        form.style.display = 'block';        
+        form.style.display = 'block';
 
         activeInput = form.querySelector('input[type="text"]');
         activeInput.focus();
@@ -831,7 +831,7 @@ var KeyRenamer = (function() {
       activeInput.value = lastName;
 
       activeInput = null;
-      activeButton = null;    
+      activeButton = null;
       lastName = '';
   }
 

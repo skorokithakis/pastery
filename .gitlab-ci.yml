@@ -12,6 +12,7 @@ test:
     key: pre-commit
     paths:
       - .cache/pre-commit
+      - .cache/pip
   before_script:
     - pip install virtualenv --pre poetry pre-commit
     - virtualenv venv
@@ -21,12 +22,9 @@ test:
     - python manage.py migrate
     - python manage.py collectstatic --noinput
   script:
-    - pre-commit run -a
+    - pre-commit run -a --hook-stage manual
     - python manage.py test
   stage: test
-  cache:
-    paths:
-      - .cache/pip
 
 terraform:
   image: registry.gitlab.com/gitlab-org/terraform-images/stable:latest

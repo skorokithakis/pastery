@@ -540,7 +540,7 @@ footer a:hover {
 .pastetable .linenos pre a:active,
 .pastetable .linenos pre a.selected {
     opacity: 1;
-    text-decoration: none;    
+    text-decoration: none;
 }
 .pretty-paste .lineno:hover,
 .pretty-paste .lineno:focus,
@@ -1026,7 +1026,7 @@ footer a:hover {
     }
     .account #copy-code {
         display: block;
-    }  
+    }
     .account table.pastes .small-collapse {
         display: none;
     }
@@ -1059,7 +1059,7 @@ footer a:hover {
     }
     .login-container .form-control {
         max-width: 100%;
-    }    
+    }
 }
 
 /*
@@ -1076,7 +1076,7 @@ https://www.mydevice.io/
     }
     .pastetable pre {
         font-size: 11px;
-    }  
+    }
 }
 
 @media (max-width: 410px) {

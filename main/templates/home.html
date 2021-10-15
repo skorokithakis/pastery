@@ -9,7 +9,7 @@
     <meta property="og:url" content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}"/>
     <meta property="og:image" content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% static "images/logo.png" %}"/>
     <meta property="og:locale" content="en_US"/>
-    <meta property="og:type" content="website"/>    
+    <meta property="og:type" content="website"/>
     <meta property="og:site_name" content="{{ current_site.name }}"/>
 {% endblock %}
 
