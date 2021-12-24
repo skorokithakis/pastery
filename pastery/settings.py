@@ -51,8 +51,8 @@ INSTALLED_APPS = [
     "tokenauth",
     "bootstrap3",
     "captcha",
-    "webauthin",
     "main",
+    "webauthin",
     "api",
     "django_nose",
 ]

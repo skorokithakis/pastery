@@ -1,5 +1,5 @@
 .pretty-paste .hll { background-color: #ffffcc }
-.pretty-paste  { background: #ffffff; }
+.pretty-paste { background: #ffffff; }
 .pretty-paste .c { color: #FF0000; font-style: italic } /* Comment */
 .pretty-paste .k { color: #0000FF } /* Keyword */
 .pretty-paste .ch { color: #FF0000; font-style: italic } /* Comment.Hashbang */
@@ -18,8 +18,10 @@
 .pretty-paste .nc { color: #007575 } /* Name.Class */
 .pretty-paste .nd { color: #CC00A3 } /* Name.Decorator */
 .pretty-paste .nf { color: #C34E00 } /* Name.Function */
+.pretty-paste .sa { color: #009C00 } /* Literal.String.Affix */
 .pretty-paste .sb { color: #009C00 } /* Literal.String.Backtick */
 .pretty-paste .sc { color: #009C00 } /* Literal.String.Char */
+.pretty-paste .dl { color: #009C00 } /* Literal.String.Delimiter */
 .pretty-paste .sd { color: #009C00 } /* Literal.String.Doc */
 .pretty-paste .s2 { color: #009C00 } /* Literal.String.Double */
 .pretty-paste .se { color: #009C00 } /* Literal.String.Escape */
@@ -29,3 +31,4 @@
 .pretty-paste .sr { color: #009C00 } /* Literal.String.Regex */
 .pretty-paste .s1 { color: #009C00 } /* Literal.String.Single */
 .pretty-paste .ss { color: #009C00 } /* Literal.String.Symbol */
+.pretty-paste .fm { color: #C34E00 } /* Name.Function.Magic */

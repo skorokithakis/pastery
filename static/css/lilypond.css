@@ -1,0 +1,56 @@
+.pretty-paste .hll { background-color: #ffffcc }
+.pretty-paste { background: #ffffff; }
+.pretty-paste .-ChordModifier { color: #976806 } /* ChordModifier */
+.pretty-paste .c { color: #A3AAB2; font-style: italic } /* Comment */
+.pretty-paste .k { font-weight: bold } /* Keyword */
+.pretty-paste .ch { color: #A3AAB2; font-style: italic } /* Comment.Hashbang */
+.pretty-paste .cm { color: #A3AAB2; font-style: italic } /* Comment.Multiline */
+.pretty-paste .cp { color: #A3AAB2; font-style: italic } /* Comment.Preproc */
+.pretty-paste .cpf { color: #A3AAB2; font-style: italic } /* Comment.PreprocFile */
+.pretty-paste .c1 { color: #A3AAB2; font-style: italic } /* Comment.Single */
+.pretty-paste .cs { color: #A3AAB2; font-style: italic } /* Comment.Special */
+.pretty-paste .kc { font-weight: bold } /* Keyword.Constant */
+.pretty-paste .kd { font-weight: bold } /* Keyword.Declaration */
+.pretty-paste .kn { font-weight: bold } /* Keyword.Namespace */
+.pretty-paste .kp { font-weight: bold } /* Keyword.Pseudo */
+.pretty-paste .kr { font-weight: bold } /* Keyword.Reserved */
+.pretty-paste .kt { font-weight: bold } /* Keyword.Type */
+.pretty-paste .m { color: #976806 } /* Literal.Number */
+.pretty-paste .s { color: #AB0909 } /* Literal.String */
+.pretty-paste .n-BackslashReference { color: #08547A } /* Name.BackslashReference */
+.pretty-paste .n-Lvalue { color: #08547A } /* Name.Lvalue */
+.pretty-paste .mb { color: #976806 } /* Literal.Number.Bin */
+.pretty-paste .mf { color: #976806 } /* Literal.Number.Float */
+.pretty-paste .mh { color: #976806 } /* Literal.Number.Hex */
+.pretty-paste .mi { color: #976806 } /* Literal.Number.Integer */
+.pretty-paste .mo { color: #976806 } /* Literal.Number.Oct */
+.pretty-paste .sa { color: #AB0909 } /* Literal.String.Affix */
+.pretty-paste .sb { color: #AB0909 } /* Literal.String.Backtick */
+.pretty-paste .sc { color: #AB0909 } /* Literal.String.Char */
+.pretty-paste .dl { color: #AB0909 } /* Literal.String.Delimiter */
+.pretty-paste .sd { color: #AB0909 } /* Literal.String.Doc */
+.pretty-paste .s2 { color: #AB0909 } /* Literal.String.Double */
+.pretty-paste .se { color: #C46C6C } /* Literal.String.Escape */
+.pretty-paste .sh { color: #AB0909 } /* Literal.String.Heredoc */
+.pretty-paste .si { color: #AB0909 } /* Literal.String.Interpol */
+.pretty-paste .sx { color: #AB0909 } /* Literal.String.Other */
+.pretty-paste .sr { color: #AB0909 } /* Literal.String.Regex */
+.pretty-paste .s1 { color: #AB0909 } /* Literal.String.Single */
+.pretty-paste .nb-Articulation { color: #68175A } /* Name.Builtin.Articulation */
+.pretty-paste .nb-Clef { color: #08547A; font-weight: bold } /* Name.Builtin.Clef */
+.pretty-paste .nb-Context { color: #038B8B; font-weight: bold } /* Name.Builtin.Context */
+.pretty-paste .nb-ContextProperty { color: #038B8B } /* Name.Builtin.ContextProperty */
+.pretty-paste .nb-Dynamic { color: #68175A } /* Name.Builtin.Dynamic */
+.pretty-paste .nb-Grob { color: #0C7441; font-weight: bold } /* Name.Builtin.Grob */
+.pretty-paste .nb-GrobProperty { color: #0C7441 } /* Name.Builtin.GrobProperty */
+.pretty-paste .nb-HeaderVariable { color: #6C5A05; font-weight: bold } /* Name.Builtin.HeaderVariable */
+.pretty-paste .nb-MarkupCommand { color: #831E71; font-weight: bold } /* Name.Builtin.MarkupCommand */
+.pretty-paste .nb-MusicCommand { color: #08547A; font-weight: bold } /* Name.Builtin.MusicCommand */
+.pretty-paste .nb-MusicFunction { color: #08547A; font-weight: bold } /* Name.Builtin.MusicFunction */
+.pretty-paste .nb-PaperVariable { color: #6C5A05; font-weight: bold } /* Name.Builtin.PaperVariable */
+.pretty-paste .nb-RepeatType { color: #08547A } /* Name.Builtin.RepeatType */
+.pretty-paste .nb-Scale { color: #08547A; font-weight: bold } /* Name.Builtin.Scale */
+.pretty-paste .nb-SchemeBuiltin { font-weight: bold } /* Name.Builtin.SchemeBuiltin */
+.pretty-paste .nb-SchemeFunction { color: #A83401; font-weight: bold } /* Name.Builtin.SchemeFunction */
+.pretty-paste .nb-Translator { color: #6200A4; font-weight: bold } /* Name.Builtin.Translator */
+.pretty-paste .il { color: #976806 } /* Literal.Number.Integer.Long */

@@ -1,5 +1,5 @@
 .pretty-paste .hll { background-color: #ffffcc }
-.pretty-paste  { background: #ffffff; }
+.pretty-paste { background: #ffffff; }
 .pretty-paste .c { color: #aaaaaa; font-style: italic } /* Comment */
 .pretty-paste .err { color: #FF0000; background-color: #FFAAAA } /* Error */
 .pretty-paste .k { color: #0000aa } /* Keyword */
@@ -44,8 +44,10 @@
 .pretty-paste .mh { color: #009999 } /* Literal.Number.Hex */
 .pretty-paste .mi { color: #009999 } /* Literal.Number.Integer */
 .pretty-paste .mo { color: #009999 } /* Literal.Number.Oct */
+.pretty-paste .sa { color: #aa5500 } /* Literal.String.Affix */
 .pretty-paste .sb { color: #aa5500 } /* Literal.String.Backtick */
 .pretty-paste .sc { color: #aa5500 } /* Literal.String.Char */
+.pretty-paste .dl { color: #aa5500 } /* Literal.String.Delimiter */
 .pretty-paste .sd { color: #aa5500 } /* Literal.String.Doc */
 .pretty-paste .s2 { color: #aa5500 } /* Literal.String.Double */
 .pretty-paste .se { color: #aa5500 } /* Literal.String.Escape */
@@ -56,7 +58,9 @@
 .pretty-paste .s1 { color: #aa5500 } /* Literal.String.Single */
 .pretty-paste .ss { color: #0000aa } /* Literal.String.Symbol */
 .pretty-paste .bp { color: #00aaaa } /* Name.Builtin.Pseudo */
+.pretty-paste .fm { color: #00aa00 } /* Name.Function.Magic */
 .pretty-paste .vc { color: #aa0000 } /* Name.Variable.Class */
 .pretty-paste .vg { color: #aa0000 } /* Name.Variable.Global */
 .pretty-paste .vi { color: #aa0000 } /* Name.Variable.Instance */
+.pretty-paste .vm { color: #aa0000 } /* Name.Variable.Magic */
 .pretty-paste .il { color: #009999 } /* Literal.Number.Integer.Long */

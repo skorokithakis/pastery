@@ -33,7 +33,6 @@ from pygments.lexers import get_filetype_from_buffer
 from pygments.lexers import get_lexer_by_name
 from pygments.util import ClassNotFound
 from pygments.util import guess_decode
-from pygments.util import text_type
 
 from utils import identify_user
 from utils import send_event
@@ -49,7 +48,7 @@ def guess_lexer(_text, **options):
     confidence guesses which were wrong.
     """
 
-    if not isinstance(_text, text_type):
+    if not isinstance(_text, str):
         inencoding = options.get("inencoding", options.get("encoding"))
         if inencoding:
             _text = _text.decode(inencoding or "utf8")
@@ -184,7 +183,7 @@ def get_languages() -> List:
     lexers = [
         [lexer[1][0], lexer[0]]
         for lexer in get_all_lexers()
-        if lexer[1][0] not in banned_lexers
+        if lexer[1] and lexer[1][0] not in banned_lexers
     ]
     lexers += [
         ["markdown", "Markdown"],
@@ -243,37 +242,54 @@ def get_aliases() -> Dict[str, str]:
 
 def get_styles() -> List:
     """Return all available highlighters and their names."""
+    # Generate with:
+    # pygmentize -L styles | grep "^\* " | sed "s/\* \(.*\):/\1/" | \
+    #   xargs -n 1 -I % bash -c "pygmentize -S % -f html -a '.pretty-paste' | \
+    #   tail -n +6 > static/css/%.css"
+
     highlighters = [
         ["default", "Plain"],
+        ["abap", "ABAP"],
         ["algol", "Algol"],
-        ["algol_nu", "Algol_Nu"],
+        ["algol_nu", "Algol Nu"],
         ["arduino", "Arduino"],
         ["autumn", "Autumn"],
         ["borland", "Borland"],
         ["bw", "Bw"],
         ["colorful", "Colorful"],
+        ["dracula", "Dracula"],
         ["emacs", "Emacs"],
         ["friendly", "Friendly"],
         ["fruity", "Fruity"],
+        ["gruvbox-dark", "Gruvbox Dark"],
+        ["gruvbox-light", "Gruvbox Light"],
         ["igor", "Igor"],
+        ["inkpot", "Inkpot"],
+        ["lilypond", "LilyPond"],
         ["lovelace", "Lovelace"],
         ["manni", "Manni"],
+        ["material", "Material"],
         ["monokai", "Monokai"],
         ["murphy", "Murphy"],
         ["native", "Native"],
-        ["paraiso-dark", "Paraiso-Dark"],
-        ["paraiso-light", "Paraiso-Light"],
+        ["one-dark", "One Dark"],
+        ["paraiso-dark", "Paraiso Dark"],
+        ["paraiso-light", "Paraiso Light"],
         ["pastie", "Pastie"],
         ["perldoc", "Perldoc"],
+        ["rainbow_dash", "Rainbow Dash"],
         ["rrt", "Rrt"],
         ["solarized", "Solarized"],
-        ["solarized_dark", "Solarized_Dark"],
-        ["solarized_dark256", "Solarized_Dark256"],
+        ["solarized_dark", "Solarized Dark"],
+        ["solarized_dark256", "Solarized Dark256"],
+        ["stata-dark", "Stata Dark"],
+        ["stata-light", "Stata Light"],
         ["tango", "Tango"],
         ["trac", "Trac"],
         ["vim", "Vim"],
         ["vs", "Vs"],
         ["xcode", "Xcode"],
+        ["zenburn", "Zenburn"],
     ]
     return highlighters
 

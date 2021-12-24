@@ -1,5 +1,5 @@
 .pretty-paste .hll { background-color: #ffffcc }
-.pretty-paste  { background: #ffffff; }
+.pretty-paste { background: #ffffff; }
 .pretty-paste .c { font-style: italic } /* Comment */
 .pretty-paste .err { border: 1px solid #FF0000 } /* Error */
 .pretty-paste .k { font-weight: bold } /* Keyword */
@@ -24,8 +24,10 @@
 .pretty-paste .nn { font-weight: bold } /* Name.Namespace */
 .pretty-paste .nt { font-weight: bold } /* Name.Tag */
 .pretty-paste .ow { font-weight: bold } /* Operator.Word */
+.pretty-paste .sa { font-style: italic } /* Literal.String.Affix */
 .pretty-paste .sb { font-style: italic } /* Literal.String.Backtick */
 .pretty-paste .sc { font-style: italic } /* Literal.String.Char */
+.pretty-paste .dl { font-style: italic } /* Literal.String.Delimiter */
 .pretty-paste .sd { font-style: italic } /* Literal.String.Doc */
 .pretty-paste .s2 { font-style: italic } /* Literal.String.Double */
 .pretty-paste .se { font-weight: bold; font-style: italic } /* Literal.String.Escape */

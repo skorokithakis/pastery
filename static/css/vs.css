@@ -1,5 +1,5 @@
 .pretty-paste .hll { background-color: #ffffcc }
-.pretty-paste  { background: #ffffff; }
+.pretty-paste { background: #ffffff; }
 .pretty-paste .c { color: #008000 } /* Comment */
 .pretty-paste .err { border: 1px solid #FF0000 } /* Error */
 .pretty-paste .k { color: #0000ff } /* Keyword */
@@ -23,8 +23,10 @@
 .pretty-paste .s { color: #a31515 } /* Literal.String */
 .pretty-paste .nc { color: #2b91af } /* Name.Class */
 .pretty-paste .ow { color: #0000ff } /* Operator.Word */
+.pretty-paste .sa { color: #a31515 } /* Literal.String.Affix */
 .pretty-paste .sb { color: #a31515 } /* Literal.String.Backtick */
 .pretty-paste .sc { color: #a31515 } /* Literal.String.Char */
+.pretty-paste .dl { color: #a31515 } /* Literal.String.Delimiter */
 .pretty-paste .sd { color: #a31515 } /* Literal.String.Doc */
 .pretty-paste .s2 { color: #a31515 } /* Literal.String.Double */
 .pretty-paste .se { color: #a31515 } /* Literal.String.Escape */
