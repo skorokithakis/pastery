@@ -59,21 +59,22 @@ class Command(BaseCommand):
         counter = 0
 
         ratio_threshold = options["link_ratio"]
+        relevant_pastes = Paste.objects.filter(user=None)
 
         if ratio_threshold:
-            for paste in Paste.objects.filter(user=None):
+            for paste in relevant_pastes:
                 if len(paste.body) < 50:
                     continue
 
                 ratio = calculate_link_ratio(paste.body)
-                if ratio > ratio_threshold:
+                if ratio >= ratio_threshold:
                     print("Deleting %s (%s)..." % (paste, ratio))
                     paste.delete()
                     counter += 1
 
         regex = options["regex"]
         if regex:
-            for paste in Paste.objects.filter(user=None, title__iregex=regex):
+            for paste in relevant_pastes.filter(title__iregex=regex):
                 print("Deleting %s..." % paste)
                 paste.delete()
                 counter += 1
@@ -85,21 +86,21 @@ class Command(BaseCommand):
             title_terms = terms["title"]
 
             for term in body_terms:
-                pastes = Paste.objects.filter(body__contains=term, user=None)
+                pastes = relevant_pastes.filter(body__contains=term)
                 for paste in pastes:
                     ban_ip(paste.user_address)
                 deleted = pastes.delete()
                 counter += deleted[0]
 
             for term in title_terms:
-                pastes = Paste.objects.filter(title__icontains=term, user=None)
+                pastes = relevant_pastes.filter(title__icontains=term)
                 for paste in pastes:
                     ban_ip(paste.user_address)
                 deleted = pastes.delete()
                 counter += deleted[0]
 
             # Make all userless, non-expiring pastes last a month.
-            Paste.objects.filter(user=None).filter(expiration=None).update(
+            relevant_pastes.filter(expiration=None).update(
                 expiration=datetime.datetime.now() + datetime.timedelta(days=30)
             )
 
