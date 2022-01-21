@@ -296,6 +296,14 @@ def report_paste(request, paste_id):
 
 @require_POST
 @login_required
+def delete_account(request):
+    request.user.delete()
+    messages.success(request, _("Your account has been deleted."))
+    return redirect("main:home")
+
+
+@require_POST
+@login_required
 def reset_key(request):
     request.user.reset_key()
     messages.success(request, _("Your API key has been reset."))

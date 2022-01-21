@@ -191,6 +191,26 @@ This is your API key. For more details on how to use it, visit the
 </div>
 
 </section>
+
+<section>
+
+<h1>{% trans "Delete your account" %}</h1>
+
+<p class="help-block">
+If you really want to, you can delete your account. I don't see why you might want to
+delete an account on such an amazing service, but you do you.
+</p>
+
+<p class="help-block">
+<strong>WARNING:</strong> This will delete all your pastes.
+</p>
+
+<form action="{% url "main:delete-account" %}" method="post" data-confirm="{% trans "Are you sure you want to delete your account and all your pastes?" %}" class="account-form">{% csrf_token %}
+    <button type="submit" class="btn btn-primary">{% trans "Delete account" %}</button>
+</form>
+
+</section>
+
 </article>
 </div>
 

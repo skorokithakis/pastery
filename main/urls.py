@@ -8,6 +8,7 @@ urlpatterns = [
     url(r"^$", views.home, name="home"),
     url(r"^account/$", views.account, name="account"),
     url(r"^account/reset-key/$", views.reset_key, name="reset-key"),
+    url(r"^account/delete-account/$", views.delete_account, name="delete-account"),
     url(r"^login/$", views.login, name="login"),
     url(r"^oembed/$", views.oembed, name="oembed"),
     url(r"^(?P<paste_id>[^/]+)/delete/$", views.delete_paste, name="delete-paste"),
