@@ -1,3 +1,4 @@
+# type: ignore
 """
 Nofollow Extension for Python-Markdown
 =====================================
@@ -22,7 +23,7 @@ from markdown.inlinepatterns import SHORT_REF_RE
 
 class NofollowMixin(object):
     def handleMatch(self, m):  # noqa
-        el = super(NofollowMixin, self).handleMatch(m)  # type: ignore
+        el = super(NofollowMixin, self).handleMatch(m)
         if el is not None:
             el.set("rel", "nofollow")
         return el

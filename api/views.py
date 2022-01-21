@@ -33,7 +33,7 @@ class PasteView(View):
         if isinstance(data, HttpResponse):
             return data
 
-        status_code = 200  # type: ignore
+        status_code = 200
 
         if data.get("result") == "error":
             status_code = 422
