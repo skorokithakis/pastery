@@ -13,8 +13,6 @@ import os
 import random
 import re
 from subprocess import check_output
-from typing import Dict
-from typing import Union
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -279,9 +277,7 @@ LOGGING = {
     },
 }
 
-RAVEN_CONFIG = {
-    "dsn": os.getenv("RAVEN_DSN", None)
-}  # type: Dict[str, Union[None, str]]
+RAVEN_CONFIG = {"dsn": os.getenv("RAVEN_DSN", None)}
 
 CACHING_TIME = 24 * 3600
 

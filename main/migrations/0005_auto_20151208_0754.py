@@ -9,7 +9,6 @@ import main.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("main", "0004_auto_20151206_0811")]
 
     operations = [
