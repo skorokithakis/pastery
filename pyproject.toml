@@ -6,7 +6,7 @@ version = "1.0.0"
 authors = []
 
 [tool.poetry.dependencies]
-python = ">=3.7,<4"
+python = ">=3.8,<4"
 bleach = "*"
 brotlipy = "*"
 coverage = "*"
