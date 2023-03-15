@@ -3,7 +3,7 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update
 RUN apt-get install -y swig libssl-dev dpkg-dev netcat
 
-RUN pip install -U --pre pip poetry
+RUN pip install -U --pre pip poetry==1.4.0
 ADD poetry.lock /code/
 ADD pyproject.toml /code/
 RUN poetry config virtualenvs.create false
