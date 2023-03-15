@@ -1,6 +1,6 @@
 repos:
   - repo: "https://github.com/pre-commit/pre-commit-hooks"
-    rev: v4.1.0
+    rev: v4.4.0
     hooks:
       - id: check-case-conflict
       - id: check-json
@@ -15,29 +15,29 @@ repos:
       - id: mixed-line-ending
       - id: trailing-whitespace
   - repo: "https://github.com/ambv/black"
-    rev: 21.12b0
+    rev: 23.1.0
     hooks:
       - id: black
   - repo: "https://github.com/asottile/reorder_python_imports"
-    rev: v2.6.0
+    rev: v3.9.0
     hooks:
       - id: reorder-python-imports
-  - repo: "https://gitlab.com/pycqa/flake8"
-    rev: 3.9.2
+  - repo: "https://github.com/pycqa/flake8"
+    rev: 6.0.0
     hooks:
       - id: flake8
         args:
           - "--config=setup.cfg"
         language_version: python3
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.931
+    rev: v1.1.1
     hooks:
     - id: mypy
       name: Run type checks
       args: ["--ignore-missing-imports"]
       additional_dependencies: ["types-markdown"]
   - repo: "https://github.com/gruntwork-io/pre-commit"
-    rev: v0.1.17
+    rev: v0.1.19
     hooks:
       - id: terraform-fmt
         stages:
