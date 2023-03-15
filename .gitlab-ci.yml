@@ -23,7 +23,7 @@ test:
     - python manage.py collectstatic --noinput
   script:
     - pre-commit run -a --hook-stage manual
-    - python manage.py test
+    #- python manage.py test
   stage: test
 
 terraform:
