@@ -5,7 +5,6 @@
 
 {% block ogtags %}{% if has_multiple %}<meta property="og:title" content="Multiple pastes"/>{% elif paste.title %}<meta property="og:title" content="{{ paste }}"/>{% else %}<meta property="og:title" content="{{ current_site.name }} - {% trans "The sweetest pastebin in the world!" %}"/>{% endif %}
     {% if has_multiple %}<meta property="og:url" content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% url 'main:paste' paste_id %}"/>{% else %}<meta property="og:url" content="{{ paste.get_full_url }}"/>{% endif %}
-    <meta property="og:image" content="{% if request.is_secure %}https{% else %}http{% endif %}://{{ current_site.domain }}{% static "images/logo.png" %}"/>
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="{{ current_site.name }}"/>
     <meta property="og:locale" content="en_US"/>
