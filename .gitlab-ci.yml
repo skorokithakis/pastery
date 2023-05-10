@@ -14,7 +14,7 @@ test:
       - .cache/pre-commit
       - .cache/pip
   before_script:
-    - pip install virtualenv --pre poetry pre-commit
+    - pip install virtualenv --pre poetry==1.4.2 pre-commit
     - virtualenv venv
     - source venv/bin/activate
     - poetry config virtualenvs.create false
