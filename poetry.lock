@@ -1078,36 +1078,6 @@ files = [
 ]
 
 [[package]]
-name = "mixpanel"
-version = "4.2.0"
-description = "Official Mixpanel library for Python"
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "mixpanel-4.2.0-py2.py3-none-any.whl", hash = "sha256:da67eaa9f4b6bbe9cc6dff1e9fc3c0bcd653b1b39545edddb22a27c3986400a2"},
-    {file = "mixpanel-4.2.0.tar.gz", hash = "sha256:c32af890e2505c2bf69d8c233721bcdbebf8b34855656bff686cf080d2aa8a70"},
-]
-
-[package.dependencies]
-six = "*"
-
-[[package]]
-name = "mixpanel-py-async"
-version = "0.3.0"
-description = "Python library for using Mixpanel asynchronously"
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "mixpanel-py-async-0.3.0.tar.gz", hash = "sha256:01607821d7d94e97214aaf398de8ed12cb96c5febea694f1a69a223bf15325f2"},
-    {file = "mixpanel_py_async-0.3.0-py3-none-any.whl", hash = "sha256:a356560a62637740183c2984dded3b286b885d39c7daa48606c01eb071494afd"},
-]
-
-[package.dependencies]
-mixpanel = "*"
-
-[[package]]
 name = "mypy"
 version = "1.2.0"
 description = "Optional static typing for Python"
@@ -1826,4 +1796,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<4"
-content-hash = "2e78bbf8f6b203f8a068c4ec31bd975beaae579cca7d9e030c0a13e2a5d1d491"
+content-hash = "0520a6624e407b72e31243bfd80d8ea84aaa293b98b63b13cb4bca65d0dc6a7b"
