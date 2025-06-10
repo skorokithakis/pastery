@@ -122,6 +122,7 @@ def home(request):
     if request.method == "POST":
         if not request.user.is_authenticated:
             messages.error(request, _("To create a new paste, you must log in first."))
+            return redirect("main:home")
 
         form = pasteform_factory(request.user)(request.POST)
         if form.is_valid():
