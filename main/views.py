@@ -120,6 +120,9 @@ def home(request):
         return redirect("main:home")
 
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            messages.error(request, _("To create a new paste, you must log in first."))
+
         form = pasteform_factory(request.user)(request.POST)
         if form.is_valid():
             clean = form.cleaned_data
@@ -127,6 +130,7 @@ def home(request):
             data["title"] = clean["title"]
             data["body"] = clean["body"]
             data["raw_language"] = clean["raw_language"]
+            data["user"] = request.user
             data["user_address"] = (
                 get_client_ip(request)[0] if get_client_ip(request)[0] else ""
             )
@@ -136,9 +140,6 @@ def home(request):
                 data["expiration"] = timezone.now() + datetime.timedelta(
                     minutes=int(clean["expires"])
                 )
-
-            if request.user.is_authenticated:
-                data["user"] = request.user
 
             paste = Paste.objects.create(**data)
 
@@ -159,9 +160,11 @@ def home(request):
         initial = {
             "title": request.GET.get("title", ""),
             "body": "",
-            "raw_language": request.GET["lang"]
-            if request.GET.get("lang") in LANGUAGE_NAMES
-            else "autodetect",
+            "raw_language": (
+                request.GET["lang"]
+                if request.GET.get("lang") in LANGUAGE_NAMES
+                else "autodetect"
+            ),
         }
 
         if "expires" in request.GET:
@@ -226,9 +229,9 @@ def paste(request, paste_id):
     if pastes[0] and pastes[0].language == "raw html":
         response = HttpResponse(pastes[0].body, content_type="text/html")
         # Add the CSP header to allow scripts but disable `allow-same-origin` for the sandbox.
-        response[
-            "Content-Security-Policy"
-        ] = "script-src 'unsafe-inline' https:; sandbox allow-scripts"
+        response["Content-Security-Policy"] = (
+            "script-src 'unsafe-inline' https:; sandbox allow-scripts"
+        )
         return response
 
     return render(
