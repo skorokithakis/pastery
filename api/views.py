@@ -4,7 +4,6 @@ from collections import namedtuple
 
 from brake.decorators import ratelimit
 from django.contrib.auth import get_user_model
-from django.db.models import Q
 from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -66,10 +65,12 @@ class PasteView(View):
             return {"result": "error", "error_msg": str(e)}
 
         if paste_id:
-            qs = Paste.active.filter(pk=paste_id).filter(
-                Q(user=data["api_key"])  # Show if requester is the owner
-                | Q(user__shadowbanned=False)  # OR show if owner is not shadowbanned
-            )
+            # Get the paste and filter based on view permissions
+            paste = Paste.active.filter(pk=paste_id).first()
+            if paste and paste.can_view_paste(data["api_key"]):
+                qs = [paste]
+            else:
+                qs = []
         else:
             qs = Paste.active.filter(user=data["api_key"]).order_by("-created")
 

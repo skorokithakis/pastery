@@ -513,6 +513,24 @@ class Paste(models.Model):
     def __str__(self) -> str:
         return self.title if self.title else self.id
 
+    def can_view_paste(self, requesting_user) -> bool:
+        """
+        Determine if a user can view this paste.
+
+        Shadowbanned user pastes can only be viewed by:
+        - The paste author themselves
+        - Superusers
+
+        All other pastes can be viewed by anyone.
+        """
+        if not self.user.shadowbanned:
+            return True
+
+        if not requesting_user or not requesting_user.is_authenticated:
+            return False
+
+        return requesting_user == self.user or requesting_user.is_superuser
+
     def as_dict(self, include_body: bool = False) -> Dict:
         """Represent the object as a dictionary."""
         r = {
@@ -520,9 +538,11 @@ class Paste(models.Model):
             "title": self.title,
             "url": self.get_full_url(),
             "language": self.language,
-            "duration": int((self.expiration - timezone.now()).total_seconds() / 60)
-            if self.expiration
-            else None,
+            "duration": (
+                int((self.expiration - timezone.now()).total_seconds() / 60)
+                if self.expiration
+                else None
+            ),
         }
 
         if include_body:
@@ -538,15 +558,9 @@ class Paste(models.Model):
         if not paste:
             raise Http404
 
-        # Check if the paste author is shadowbanned
-        if paste.user.shadowbanned:
-            # Only show the paste to the author themselves
-            if (
-                not requesting_user
-                or not requesting_user.is_authenticated
-                or requesting_user != paste.user
-            ):
-                raise Http404
+        # Check if the requesting user can view this paste
+        if not paste.can_view_paste(requesting_user):
+            raise Http404
 
         return paste
 

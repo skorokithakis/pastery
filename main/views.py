@@ -195,15 +195,10 @@ def embed_paste(request, paste_id):
     # Create a dictionary out of the pastes so we can order them.
     db_pastes = {paste.id: paste for paste in Paste.active.filter(pk__in=paste_ids)}
 
-    # Filter out shadowbanned user pastes (unless it's their own paste)
+    # Filter out pastes that the requesting user cannot view
     filtered_pastes = {}
     for paste in db_pastes.values():
-        if paste.user.shadowbanned:
-            # Only show shadowbanned user pastes to the author themselves
-            if request.user.is_authenticated and request.user == paste.user:
-                filtered_pastes[paste.id] = paste
-            # Otherwise skip this paste (acts like 404)
-        else:
+        if paste.can_view_paste(request.user):
             filtered_pastes[paste.id] = paste
 
     for paste in filtered_pastes.values():
@@ -228,15 +223,10 @@ def paste(request, paste_id):
     # Create a dictionary out of the pastes so we can order them.
     db_pastes = {paste.id: paste for paste in Paste.active.filter(pk__in=paste_ids)}
 
-    # Filter out shadowbanned user pastes (unless it's their own paste)
+    # Filter out pastes that the requesting user cannot view
     filtered_pastes = {}
     for paste in db_pastes.values():
-        if paste.user.shadowbanned:
-            # Only show shadowbanned user pastes to the author themselves
-            if request.user.is_authenticated and request.user == paste.user:
-                filtered_pastes[paste.id] = paste
-            # Otherwise skip this paste (acts like 404)
-        else:
+        if paste.can_view_paste(request.user):
             filtered_pastes[paste.id] = paste
 
     for paste in filtered_pastes.values():
