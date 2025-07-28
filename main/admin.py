@@ -47,27 +47,24 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
     ]
     list_filter = ("created", "expiration", ShadowbannedUserFilter)
     ordering = ["-created"]
-    actions = ["purge_user", "purge_user_and_pastes", "purge_by_ip"]
+    actions = ["shadowban_user", "shadowban_user_and_pastes", "purge_by_ip"]
 
-    def purge_user(self, request, queryset):
-        user_counter = 0
+    def shadowban_user(self, request, queryset):
+        users = {paste.user for paste in queryset}
 
-        for paste in queryset:
-            if paste.user:
-                # Shadowban the user instead of deleting
-                if not paste.user.shadowbanned:
-                    paste.user.shadowbanned = True
-                    paste.user.save()
-                    user_counter += 1
+        for user in users:
+            if not user.shadowbanned:
+                user.shadowbanned = True
+                user.save()
 
         self.message_user(
             request,
-            "%s users shadowbanned." % user_counter,
+            "%s users shadowbanned." % len(users),
         )
 
-    purge_user.short_description = "Shadowban users of selected pastes"  # type: ignore
+    shadowban_user.short_description = "Shadowban users of selected pastes"  # type: ignore
 
-    def purge_user_and_pastes(self, request, queryset):
+    def shadowban_user_and_pastes(self, request, queryset):
         user_counter = 0
         paste_counter = 0
 
@@ -95,7 +92,7 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
             % (user_counter, paste_counter),
         )
 
-    purge_user_and_pastes.short_description = (
+    shadowban_user_and_pastes.short_description = (
         "Shadowban users and delete all their pastes"  # type: ignore
     )
 
