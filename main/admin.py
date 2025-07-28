@@ -29,25 +29,57 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
     ]
     list_filter = ("created", "expiration")
     ordering = ["-created"]
-    actions = ["purge_user", "purge_by_ip"]
+    actions = ["purge_user", "purge_user_and_pastes", "purge_by_ip"]
 
     def purge_user(self, request, queryset):
-        for paste in queryset:
-            user_counter = 0
-            paste_counter = 0
-            if paste.user:
-                paste_counter += paste.user.paste_set.count()
-                paste.user.delete()
-                user_counter += 1
-            else:
-                paste.delete()
-                paste_counter += 1
-            self.message_user(
-                request,
-                "%s users and %s pastes deleted." % (user_counter, paste_counter),
-            )
+        user_counter = 0
 
-    purge_user.short_description = "Delete selected pastes and their users"  # type: ignore
+        for paste in queryset:
+            if paste.user:
+                # Shadowban the user instead of deleting
+                if not paste.user.shadowbanned:
+                    paste.user.shadowbanned = True
+                    paste.user.save()
+                    user_counter += 1
+
+        self.message_user(
+            request,
+            "%s users shadowbanned." % user_counter,
+        )
+
+    purge_user.short_description = "Shadowban users of selected pastes"  # type: ignore
+
+    def purge_user_and_pastes(self, request, queryset):
+        user_counter = 0
+        paste_counter = 0
+
+        # Collect unique users from selected pastes
+        users = set()
+
+        for paste in queryset:
+            users.add(paste.user)
+
+        # Process each unique user once
+        for user in users:
+            # Shadowban the user if not already shadowbanned
+            if not user.shadowbanned:
+                user.shadowbanned = True
+                user.save()
+                user_counter += 1
+
+            # Delete all their pastes
+            paste_counter += user.paste_set.count()
+            user.paste_set.all().delete()
+
+        self.message_user(
+            request,
+            "%s users shadowbanned and %s pastes deleted."
+            % (user_counter, paste_counter),
+        )
+
+    purge_user_and_pastes.short_description = (
+        "Shadowban users and delete all their pastes"  # type: ignore
+    )
 
     def purge_by_ip(self, request, queryset):
         ips = set()
@@ -84,6 +116,7 @@ class MyUserAdmin(DjangoQLSearchMixin, UserAdmin):
             },
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
-        (_("Various"), {"fields": ("_style_name", "api_key")}),
+        (_("Various"), {"fields": ("_style_name", "api_key", "shadowbanned")}),
     )
-    list_display = ("username", "email", "is_staff")
+    list_display = ("username", "email", "is_staff", "shadowbanned")
+    list_filter = ("is_staff", "is_superuser", "is_active", "shadowbanned")

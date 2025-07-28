@@ -342,6 +342,12 @@ class User(AbstractUser):
         blank=True,
         help_text=_("Pick the color style you prefer for all pastes on the site."),
     )
+    shadowbanned = models.BooleanField(
+        default=False,
+        help_text=_(
+            "Shadowbanned users can use the site but their pastes won't be saved."
+        ),
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -525,14 +531,24 @@ class Paste(models.Model):
         return r
 
     @classmethod
-    def get_by_id_or_404(cls, paste_id) -> "Paste":
+    def get_by_id_or_404(cls, paste_id, requesting_user=None) -> "Paste":
         """Retrieve a paste by its ID, or None if it doesn't exist."""
         paste = cls.active.filter(pk=paste_id.lower()).first()
 
         if not paste:
             raise Http404
-        else:
-            return paste
+
+        # Check if the paste author is shadowbanned
+        if paste.user.shadowbanned:
+            # Only show the paste to the author themselves
+            if (
+                not requesting_user
+                or not requesting_user.is_authenticated
+                or requesting_user != paste.user
+            ):
+                raise Http404
+
+        return paste
 
     def get_full_url(self) -> str:
         return "https://%s%s" % (

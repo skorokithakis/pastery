@@ -194,10 +194,22 @@ def embed_paste(request, paste_id):
 
     # Create a dictionary out of the pastes so we can order them.
     db_pastes = {paste.id: paste for paste in Paste.active.filter(pk__in=paste_ids)}
+
+    # Filter out shadowbanned user pastes (unless it's their own paste)
+    filtered_pastes = {}
     for paste in db_pastes.values():
+        if paste.user.shadowbanned:
+            # Only show shadowbanned user pastes to the author themselves
+            if request.user.is_authenticated and request.user == paste.user:
+                filtered_pastes[paste.id] = paste
+            # Otherwise skip this paste (acts like 404)
+        else:
+            filtered_pastes[paste.id] = paste
+
+    for paste in filtered_pastes.values():
         paste.increment_views()
 
-    pastes = [db_pastes.get(pasteid) for pasteid in paste_ids]
+    pastes = [filtered_pastes.get(pasteid) for pasteid in paste_ids]
 
     # If there's only one paste id and it wasn't found, raise a 404.
     if pastes == [None]:
@@ -215,10 +227,22 @@ def paste(request, paste_id):
 
     # Create a dictionary out of the pastes so we can order them.
     db_pastes = {paste.id: paste for paste in Paste.active.filter(pk__in=paste_ids)}
+
+    # Filter out shadowbanned user pastes (unless it's their own paste)
+    filtered_pastes = {}
     for paste in db_pastes.values():
+        if paste.user.shadowbanned:
+            # Only show shadowbanned user pastes to the author themselves
+            if request.user.is_authenticated and request.user == paste.user:
+                filtered_pastes[paste.id] = paste
+            # Otherwise skip this paste (acts like 404)
+        else:
+            filtered_pastes[paste.id] = paste
+
+    for paste in filtered_pastes.values():
         paste.increment_views()
 
-    pastes = [db_pastes.get(pasteid) for pasteid in paste_ids]
+    pastes = [filtered_pastes.get(pasteid) for pasteid in paste_ids]
 
     # If there's only one paste id and it wasn't found, raise a 404.
     if pastes == [None]:
@@ -252,7 +276,7 @@ def paste(request, paste_id):
 
 
 def download_paste(request, paste_id):
-    paste = Paste.get_by_id_or_404(paste_id)
+    paste = Paste.get_by_id_or_404(paste_id, request.user)
     response = HttpResponse(paste.body, content_type="text/plain")
     response["Content-Disposition"] = "attachment; filename=" + paste.filename
     paste.increment_views()
@@ -261,7 +285,7 @@ def download_paste(request, paste_id):
 
 def raw_paste(request, paste_id):
     print(request.META)
-    paste = Paste.get_by_id_or_404(paste_id)
+    paste = Paste.get_by_id_or_404(paste_id, request.user)
     response = HttpResponse(paste.body, content_type="text/plain; charset=utf-8")
     if paste.title:
         filename = get_valid_filename(paste.title)[:40]
@@ -274,7 +298,7 @@ def raw_paste(request, paste_id):
 @ratelimit(method=["POST"], rate="50/d")
 @ratelimit(method=["POST"], rate="2/m")
 def report_paste(request, paste_id):
-    paste = Paste.get_by_id_or_404(paste_id)
+    paste = Paste.get_by_id_or_404(paste_id, request.user)
 
     if getattr(request, "limited", False):
         messages.error(
@@ -319,7 +343,7 @@ def reset_key(request):
 
 @require_POST
 def delete_paste(request, paste_id):
-    paste = Paste.get_by_id_or_404(paste_id)
+    paste = Paste.get_by_id_or_404(paste_id, request.user)
     if request.user != paste.user:
         messages.error(request, _("That's not your paste, you naughty girl."))
     else:
@@ -394,7 +418,7 @@ def oembed(request):
         paste_id = paste_re.group(1)
     else:
         paste_id = ""
-    paste = Paste.get_by_id_or_404(paste_id)
+    paste = Paste.get_by_id_or_404(paste_id, request.user)
 
     site = Site.objects.get_current()
 
