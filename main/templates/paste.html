@@ -132,6 +132,12 @@
                 aria-hidden="{% if not forloop.first %}true{% else %}false{% endif %}"
                 class="pretty-paste{% if paste.language == 'markdown' or paste.language == 'textile' %} markdown-language{% endif %}{% if not paste %} not-found{% endif %}">
         {% if paste %}
+        {% if paste.user.shadowbanned and request.user.is_superuser %}
+        <div class="alert alert-warning shadowban-banner" role="alert" style="margin: 20px 0; border-left: 4px solid #f0ad4e;">
+            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+            <strong>{% trans "Warning:" %}</strong> {% trans "This paste is from a shadowbanned user" %}
+        </div>
+        {% endif %}
         {{ paste.rendered_body|safe }}
         {% else %}
         {% include "404_body.html" %}
