@@ -1,4 +1,3 @@
-import datetime
 import hashlib
 import json
 from typing import Dict
@@ -400,16 +399,6 @@ class PasteManager(models.Manager):
         else:
             raise IntegrityError("Could not find a paste ID after %s tries." % tries)
 
-        if not paste.user:
-            # Anonymous users only get month-long pastes.
-            max_expiration = timezone.now() + datetime.timedelta(minutes=30 * 24 * 60)
-            paste.expiration = (
-                max_expiration
-                if paste.expiration is None
-                else min(paste.expiration, max_expiration)
-            )
-            paste.save()
-
         if kwargs.get("user"):
             user_id = kwargs["user"].username
         else:
@@ -473,10 +462,17 @@ class PasteryFormatter(HtmlFormatter):
         num = self.linenostart
         mw = len(str(len(lines) + num - 1))
         for t, line in lines:
-            yield 1, '<span class="lineno">%*s</span>' % (
-                mw,
-                (num % st and " " or num),
-            ) + "<span>" + line + "</span>"
+            yield (
+                1,
+                '<span class="lineno">%*s</span>'
+                % (
+                    mw,
+                    (num % st and " " or num),
+                )
+                + "<span>"
+                + line
+                + "</span>",
+            )
             num += 1
 
 
@@ -488,9 +484,7 @@ class Paste(models.Model):
         default=generate_paste_uuid,
         editable=False,
     )
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE
-    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(
         max_length=500, blank=True, help_text=_("The title of the paste.")
     )

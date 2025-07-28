@@ -6,6 +6,7 @@ Nofollow Extension for Python-Markdown
 Modify the behavior of Links in Python-Markdown by adding rel="nofollow"
 to all generated links.
 """
+
 from __future__ import absolute_import
 from __future__ import unicode_literals
 

@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/1.9/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
+
 import os
 import random
 import re
@@ -72,8 +73,8 @@ MIDDLEWARE = [
 
 AUTH_USER_MODEL = "main.User"
 
-SESSION_COOKIE_SECURE = not os.environ.get("NODEBUG") is None
-CSRF_COOKIE_SECURE = not os.environ.get("NODEBUG") is None
+SESSION_COOKIE_SECURE = os.environ.get("NODEBUG") is not None
+CSRF_COOKIE_SECURE = os.environ.get("NODEBUG") is not None
 
 AUTHENTICATION_BACKENDS = (
     "webauthin.auth_backends.WebAuthinBackend",

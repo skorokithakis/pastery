@@ -47,9 +47,7 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
                 "%s users and %s pastes deleted." % (user_counter, paste_counter),
             )
 
-    purge_user.short_description = (
-        "Delete selected pastes and their users"
-    )  # type: ignore
+    purge_user.short_description = "Delete selected pastes and their users"  # type: ignore
 
     def purge_by_ip(self, request, queryset):
         ips = set()
@@ -66,9 +64,7 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
             request, "Deleted %s pastes from %s IPs.." % (paste_counter, len(ips))
         )
 
-    purge_by_ip.short_description = (
-        "Delete all pastes from the selected pastes' IPs"
-    )  # type: ignore
+    purge_by_ip.short_description = "Delete all pastes from the selected pastes' IPs"  # type: ignore
 
 
 @admin.register(User)

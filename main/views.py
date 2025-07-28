@@ -49,6 +49,7 @@ class StaticViewSitemap(Sitemap):
 def pasteform_factory(user):
     class PasteForm(forms.ModelForm):
         "The form for a new paste."
+
         EXPIRATION = [
             [10, _("ten minutes")],
             [60, _("an hour")],
@@ -88,11 +89,13 @@ def pasteform_factory(user):
 
 class EmailForm(forms.Form):
     "The email form for the login page."
+
     email = forms.EmailField(label="Your email address")
 
 
 class EmailChangeForm(forms.Form):
     "The email changing form for the account page."
+
     email = forms.EmailField(label="Your email address")
     confirmation = forms.EmailField(label="Enter your email address again")
 

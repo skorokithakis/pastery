@@ -102,7 +102,7 @@ class PasteView(View):
                         lambda x: 0 < x <= 50 * 365 * 24 * 60,
                         error='"duration" should be a positive integer number of minutes before the paste is deleted.',
                     ),
-                    Optional("api_key", default=None): Use(
+                    "api_key": Use(
                         lambda x: User.objects.get(api_key=x[0]),
                         error='"api_key" must be a valid API key.',
                     ),

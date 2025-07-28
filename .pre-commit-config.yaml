@@ -1,55 +1,19 @@
 repos:
-  - repo: "https://github.com/pre-commit/pre-commit-hooks"
-    rev: v4.4.0
-    hooks:
-      - id: check-case-conflict
-      - id: check-json
-      - id: check-merge-conflict
-      - id: check-symlinks
-      - id: check-toml
-      - id: check-xml
-      - id: check-yaml
-      - id: debug-statements
-      - id: end-of-file-fixer
-      - id: fix-byte-order-marker
-      - id: mixed-line-ending
-      - id: trailing-whitespace
-  - repo: "https://github.com/ambv/black"
-    rev: 23.1.0
-    hooks:
-      - id: black
-  - repo: "https://github.com/asottile/reorder_python_imports"
-    rev: v3.9.0
-    hooks:
-      - id: reorder-python-imports
-  - repo: "https://github.com/pycqa/flake8"
-    rev: 6.0.0
-    hooks:
-      - id: flake8
-        args:
-          - "--config=setup.cfg"
-        language_version: python3
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.1.1
-    hooks:
-    - id: mypy
-      name: Run type checks
-      args: ["--ignore-missing-imports"]
-      additional_dependencies: ["types-markdown"]
-  - repo: "https://github.com/gruntwork-io/pre-commit"
-    rev: v0.1.19
-    hooks:
-      - id: terraform-fmt
-        stages:
-          - commit
-  - repo: local
-    hooks:
-      - id: migrations-check
-        language: system
-        name: Check for uncreated migrations.
-        entry: bash -c "./manage.py makemigrations --check --dry-run"
-        types:
-          - python
-        pass_filenames: false
-        stages:
-          - commit
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.12.2
+  hooks:
+    - id: ruff-check
+      args: ["--fix"]
+    - id: ruff-format
+- repo: https://github.com/pre-commit/mirrors-mypy
+  rev: v1.16.1
+  hooks:
+  - id: mypy
+    name: Run MyPy typing checks.
+    args: ["--ignore-missing-imports", "--install-types", "--non-interactive"]
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v5.0.0
+  hooks:
+    - id: trailing-whitespace
+      files: '\.html?$'
