@@ -8,6 +8,24 @@ from .models import Setting
 from .models import User
 
 
+class ShadowbannedUserFilter(admin.SimpleListFilter):
+    title = _("user shadowban status")
+    parameter_name = "user_shadowbanned"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("yes", _("From shadowbanned users")),
+            ("no", _("From non-shadowbanned users")),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == "yes":
+            return queryset.filter(user__shadowbanned=True)
+        if self.value() == "no":
+            return queryset.filter(user__shadowbanned=False)
+        return queryset
+
+
 @admin.register(Setting)
 class SettingAdmin(admin.ModelAdmin):
     list_display = ["key"]
@@ -27,7 +45,7 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
         "max_views",
         "has_expired",
     ]
-    list_filter = ("created", "expiration")
+    list_filter = ("created", "expiration", ShadowbannedUserFilter)
     ordering = ["-created"]
     actions = ["purge_user", "purge_user_and_pastes", "purge_by_ip"]
 
