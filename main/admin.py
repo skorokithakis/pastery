@@ -51,15 +51,17 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
 
     def shadowban_user(self, request, queryset):
         users = {paste.user for paste in queryset}
+        total_pastes = 0
 
         for user in users:
+            total_pastes += user.paste_set.count()
             if not user.shadowbanned:
                 user.shadowbanned = True
                 user.save()
 
         self.message_user(
             request,
-            "%s users shadowbanned." % len(users),
+            "%s users shadowbanned (%s total pastes)." % (len(users), total_pastes),
         )
 
     shadowban_user.short_description = "Shadowban users of selected pastes"  # type: ignore
@@ -76,6 +78,10 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
 
         # Process each unique user once
         for user in users:
+            # Count pastes before deletion
+            user_paste_count = user.paste_set.count()
+            paste_counter += user_paste_count
+
             # Shadowban the user if not already shadowbanned
             if not user.shadowbanned:
                 user.shadowbanned = True
@@ -83,7 +89,6 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
                 user_counter += 1
 
             # Delete all their pastes
-            paste_counter += user.paste_set.count()
             user.paste_set.all().delete()
 
         self.message_user(
