@@ -44,8 +44,9 @@ class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
         "views",
         "max_views",
         "has_expired",
+        "spam_processed",
     ]
-    list_filter = ("created", "expiration", ShadowbannedUserFilter)
+    list_filter = ("created", "expiration", "spam_processed", ShadowbannedUserFilter)
     ordering = ["-created"]
     actions = ["shadowban_user", "shadowban_user_and_pastes", "purge_by_ip"]
 

@@ -59,49 +59,56 @@ class Command(BaseCommand):
         counter = 0
 
         ratio_threshold = options["link_ratio"]
-        relevant_pastes = Paste.objects.filter(user=None)
-
-        if ratio_threshold:
-            for paste in relevant_pastes:
-                if len(paste.body) < 50:
-                    continue
-
-                ratio = calculate_link_ratio(paste.body)
-                if ratio >= ratio_threshold:
-                    print("Deleting %s (%s)..." % (paste, ratio))
-                    paste.delete()
-                    counter += 1
-
         regex = options["regex"]
-        if regex:
-            for paste in relevant_pastes.filter(title__iregex=regex):
-                print("Deleting %s..." % paste)
+
+        # Get spam terms if configured
+        spam_terms = None
+        if term_setting:
+            spam_terms = json.loads(term_setting.value)
+
+        for paste in Paste.objects.filter(spam_processed=False):
+            is_spam = False
+
+            # Check regex if provided
+            if regex and re.search(regex, paste.title, re.IGNORECASE):
+                print("Deleting %s (matches regex)..." % paste)
+                is_spam = True
+
+            # Check link ratio if provided and paste is long enough
+            if not is_spam and ratio_threshold and len(paste.body) >= 50:
+                ratio = calculate_link_ratio(paste.body)
+                print(f"{paste.id} {ratio}")
+                if ratio >= ratio_threshold:
+                    print("Deleting %s (link ratio: %s)..." % (paste, ratio))
+                    is_spam = True
+
+            # Check spam terms if configured
+            if not is_spam and spam_terms:
+                # Check body terms
+                for term in spam_terms.get("body", []):
+                    if term in paste.body:
+                        print("Deleting %s (contains spam term in body)..." % paste)
+                        is_spam = True
+                        ban_ip(paste.user_address)
+                        break
+
+                # Check title terms if not already marked as spam
+                if not is_spam:
+                    for term in spam_terms.get("title", []):
+                        if term.lower() in paste.title.lower():
+                            print(
+                                "Deleting %s (contains spam term in title)..." % paste
+                            )
+                            is_spam = True
+                            ban_ip(paste.user_address)
+                            break
+
+            # Delete if spam, otherwise mark as processed
+            if is_spam:
                 paste.delete()
                 counter += 1
-
-        if term_setting:
-            print("No terms found.")
-            terms = json.loads(term_setting.value)
-            body_terms = terms["body"]
-            title_terms = terms["title"]
-
-            for term in body_terms:
-                pastes = relevant_pastes.filter(body__contains=term)
-                for paste in pastes:
-                    ban_ip(paste.user_address)
-                deleted = pastes.delete()
-                counter += deleted[0]
-
-            for term in title_terms:
-                pastes = relevant_pastes.filter(title__icontains=term)
-                for paste in pastes:
-                    ban_ip(paste.user_address)
-                deleted = pastes.delete()
-                counter += deleted[0]
-
-            # Make all userless, non-expiring pastes last a month.
-            relevant_pastes.filter(expiration=None).update(
-                expiration=datetime.datetime.now() + datetime.timedelta(days=30)
-            )
+            else:
+                paste.spam_processed = True
+                paste.save()
 
         print("Deleted %s pastes in total." % counter)

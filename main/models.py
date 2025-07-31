@@ -506,6 +506,11 @@ class Paste(models.Model):
     user_address = models.CharField(max_length=1000, blank=True)
     views = models.IntegerField(default=0, blank=False)
     max_views = models.IntegerField(default=0, blank=False)
+    spam_processed = models.BooleanField(
+        default=False,
+        db_index=True,
+        help_text=_("Whether this paste has been processed for spam detection."),
+    )
 
     objects = PasteManager()
     active = ActivePasteManager()
