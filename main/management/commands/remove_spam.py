@@ -77,7 +77,6 @@ class Command(BaseCommand):
             # Check link ratio if provided and paste is long enough
             if not is_spam and ratio_threshold and len(paste.body) >= 50:
                 ratio = calculate_link_ratio(paste.body)
-                print(f"{paste.id} {ratio}")
                 if ratio >= ratio_threshold:
                     print("Deleting %s (link ratio: %s)..." % (paste, ratio))
                     is_spam = True
