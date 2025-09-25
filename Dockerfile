@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.9-slim
 ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1
 
 RUN apt update && apt install -y build-essential
@@ -10,7 +10,7 @@ WORKDIR /code
 ADD pyproject.toml poetry.lock /code/
 ADD pyproject.toml /code/
 RUN poetry config virtualenvs.create false
-RUN poetry install --no-dev --no-interaction --no-root
+RUN poetry install --only main --no-interaction --no-root
 
 ADD misc/dokku/CHECKS /app/
 ADD misc/dokku/* /code/
