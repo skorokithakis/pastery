@@ -212,13 +212,11 @@ elif os.environ.get("DATABASE_URL"):
     SESSION_CACHE_ALIAS = "default"
     SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
 
-    EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-
-    SENDGRID_API_KEY = os.getenv("EMAIL_HOST_PASSWORD", "pass")
-    SENDGRID_SANDBOX_MODE_IN_DEBUG = DEBUG
-    SENDGRID_TRACK_EMAIL_OPENS = False
-    SENDGRID_TRACK_CLICKS_HTML = False
-    SENDGRID_TRACK_CLICKS_PLAIN = False
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_HOST, EMAIL_PORT = re.match(  # type: ignore
+        r"^email://(?P<username>.*)\:(?P<password>.*?)\@(?P<host>.*?)\:(?P<port>\d+)\/?$",
+        os.getenv("EMAIL_URL", ""),
+    ).groups()
 else:
     DATABASES = {
         "default": {
