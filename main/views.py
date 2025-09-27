@@ -217,6 +217,9 @@ def embed_paste(request, paste_id):
     return response
 
 
+@ratelimit(method=["POST"], rate="500/d", block=True)
+@ratelimit(method=["POST"], rate="100/h", block=True)
+@ratelimit(method=["POST"], rate="20/m", block=True)
 def paste(request, paste_id):
     paste_ids = paste_id.strip("+").split("+")[: settings.MAX_COMBINED_PASTES]
 
@@ -265,6 +268,9 @@ def paste(request, paste_id):
     )
 
 
+@ratelimit(method=["POST"], rate="500/d", block=True)
+@ratelimit(method=["POST"], rate="100/h", block=True)
+@ratelimit(method=["POST"], rate="20/m", block=True)
 def download_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id, request.user)
     response = HttpResponse(paste.body, content_type="text/plain")
@@ -273,8 +279,10 @@ def download_paste(request, paste_id):
     return response
 
 
+@ratelimit(method=["POST"], rate="500/d", block=True)
+@ratelimit(method=["POST"], rate="100/h", block=True)
+@ratelimit(method=["POST"], rate="20/m", block=True)
 def raw_paste(request, paste_id):
-    print(request.META)
     paste = Paste.get_by_id_or_404(paste_id, request.user)
     response = HttpResponse(paste.body, content_type="text/plain; charset=utf-8")
     if paste.title:
