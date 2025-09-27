@@ -4,15 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('main', '0029_paste_spam_processed'),
+        ("main", "0029_paste_spam_processed"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='paste',
-            name='spam_processed',
-            field=models.BooleanField(db_index=True, default=False, help_text='Whether this paste has been processed for spam detection.'),
+            model_name="paste",
+            name="spam_processed",
+            field=models.BooleanField(
+                db_index=True,
+                default=False,
+                help_text="Whether this paste has been processed for spam detection.",
+            ),
         ),
     ]

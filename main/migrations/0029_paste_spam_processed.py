@@ -4,15 +4,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('main', '0028_add_shadowbanned_field'),
+        ("main", "0028_add_shadowbanned_field"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='paste',
-            name='spam_processed',
-            field=models.BooleanField(default=False, help_text='Whether this paste has been processed for spam detection.'),
+            model_name="paste",
+            name="spam_processed",
+            field=models.BooleanField(
+                default=False,
+                help_text="Whether this paste has been processed for spam detection.",
+            ),
         ),
     ]
