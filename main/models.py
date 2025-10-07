@@ -634,7 +634,7 @@ class Paste(models.Model):
             except pygments.util.ClassNotFound:
                 language = "text"
         else:
-            language = self.raw_language
+            language = ALIAS_DICT.get(self.raw_language, self.raw_language)
 
         cache.set(key, language, settings.CACHING_TIME)
         return language
