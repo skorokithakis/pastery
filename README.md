@@ -1,7 +1,7 @@
 Pastery
 =======
 
-[![build status](https://gitlab.com/skorokithakis/pastery/badges/master/build.svg)](https://gitlab.com/skorokithakis/pastery/commits/master)
+[![CI](https://github.com/skorokithakis/pastery/actions/workflows/ci.yml/badge.svg)](https://github.com/skorokithakis/pastery/actions/workflows/ci.yml)
 
 Pastery is the best pastebin in the world.
 
@@ -12,12 +12,10 @@ Installation
 To install:
 
 ~~~
-$ virtualenv env
-$ source env/bin/activate
-$ pip install -Ur requirements.txt
-$ ./manage.py migrate
-$ ./manage.py createsuperuser
-$ ./manage.py runserver_plus
+$ poetry install --no-root
+$ poetry run ./manage.py migrate
+$ poetry run ./manage.py createsuperuser
+$ poetry run ./manage.py runserver_plus
 ~~~
 
 And just visit http://localhost:8000/, you're done.
