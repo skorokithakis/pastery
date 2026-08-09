@@ -26,6 +26,7 @@ from django.views.decorators.http import require_POST
 from ipware import get_client_ip
 from raven.contrib.django.raven_compat.models import client
 
+from .models import LANGUAGES
 from .models import LANGUAGE_DICT
 from .models import Paste
 from .models import STYLES
@@ -67,6 +68,7 @@ def pasteform_factory(user):
             label=_("Expires in"),
             required=False,
         )
+        raw_language = forms.ChoiceField(choices=LANGUAGES, label=_("Language"))
         work = forms.CharField(required=False)
         other_pastes = forms.CharField(required=False)
         if settings.ENABLE_CAPTCHA:

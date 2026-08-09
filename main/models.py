@@ -497,10 +497,17 @@ class Paste(models.Model):
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     expiration = models.DateTimeField(blank=True, null=True)
+    # Deliberately no choices=LANGUAGES here. LANGUAGES comes from Pygments'
+    # get_all_lexers(), which also returns lexers that other installed packages
+    # register through the "pygments.lexers" entry point (IPython registers
+    # three). The list therefore differs between a dev environment and a
+    # production one, so putting it on the model made the migration state depend
+    # on what happened to be installed, and every Pygments upgrade wrote another
+    # 500-line migration that emitted no SQL. The choices live on the forms
+    # instead, in main/views.py and main/admin.py.
     raw_language = models.CharField(
         verbose_name=_("Language"),
         max_length=100,
-        choices=LANGUAGES,
         default="autodetect",
     )
     user_address = models.CharField(max_length=1000, blank=True)

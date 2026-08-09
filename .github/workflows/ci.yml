@@ -36,6 +36,9 @@ jobs:
       - run: pip install poetry==1.4.0
       - run: poetry config virtualenvs.create false
       - run: poetry install --no-root
+      # Fail CI when model changes are missing their migrations. Needs no
+      # database and no collected static files.
+      - run: ./manage.py makemigrations --check --dry-run
       # Needed before the tests: settings use whitenoise's manifest storage,
       # so templates cannot render without a collected static manifest.
       - run: ./manage.py collectstatic --noinput

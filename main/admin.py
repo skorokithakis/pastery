@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django import forms
 from django.utils.translation import ugettext_lazy as _
 from djangoql.admin import DjangoQLSearchMixin
 
+from .models import LANGUAGES
 from .models import Paste
 from .models import Setting
 from .models import User
@@ -32,8 +34,17 @@ class SettingAdmin(admin.ModelAdmin):
     search_fields = ["key"]
 
 
+class PasteAdminForm(forms.ModelForm):
+    raw_language = forms.ChoiceField(choices=LANGUAGES, label=_("Language"))
+
+    class Meta:
+        model = Paste
+        fields = "__all__"
+
+
 @admin.register(Paste)
 class PasteAdmin(DjangoQLSearchMixin, admin.ModelAdmin):
+    form = PasteAdminForm
     list_display = [
         "id",
         "user",
