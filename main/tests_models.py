@@ -105,8 +105,35 @@ class PasteRenderingTests(TestCase):
             '&lt;script&gt;alert("xss")&lt;/script&gt;\n'
             "\n"
             '<p>Click <a rel="nofollow">here</a> or '
-            '<a href="https://ok.example/">there</a>.</p>\n'
+            '<a href="https://ok.example/" rel="nofollow">there</a>.</p>\n'
             "&lt;iframe&gt;<b>kept</b>&lt;/iframe&gt;",
+        )
+
+    def test_golden_raw_html_link_gets_nofollow(self):
+        """A link written as raw HTML must not bypass the nofollow choke point."""
+        paste = Paste.objects.create(
+            id="goldraw",
+            body='<a href="https://example.com/">raw link</a>',
+            raw_language="markdown",
+            user=self.user,
+        )
+        self.assertEqual(
+            paste.rendered_body,
+            '<p><a href="https://example.com/" rel="nofollow">raw link</a></p>',
+        )
+
+    def test_golden_existing_rel_is_preserved(self):
+        """An existing rel value survives, with nofollow added alongside."""
+        paste = Paste.objects.create(
+            id="goldrel",
+            body='<a href="https://example.com/" rel="noopener">raw link</a>',
+            raw_language="markdown",
+            user=self.user,
+        )
+        self.assertEqual(
+            paste.rendered_body,
+            '<p><a href="https://example.com/" '
+            'rel="noopener nofollow">raw link</a></p>',
         )
 
     def test_golden_textile_output(self):

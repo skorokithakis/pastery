@@ -3,7 +3,8 @@ import json
 from typing import Dict
 from typing import List
 
-import bleach
+from bleach.sanitizer import Cleaner
+from html5lib.filters.base import Filter
 import markdown
 import pygments
 import shortuuid
@@ -35,7 +36,6 @@ from pygments.util import guess_decode
 
 from utils import identify_user
 from utils import send_event
-from utils.md_nofollow import NofollowExtension
 
 
 def guess_lexer(_text, **options):
@@ -77,8 +77,31 @@ def guess_lexer(_text, **options):
     return best_lexer[1](**options)
 
 
+class NofollowFilter(Filter):
+    """
+    Add rel="nofollow" to every rendered link.
+
+    This lives in the clean() choke point rather than in a markdown
+    extension because clean() is the one place both the markdown and the
+    textile paths pass through, so raw HTML links cannot bypass it.
+    """
+
+    def __iter__(self):
+        for token in self.source:
+            if token["type"] == "StartTag" and token["name"] == "a":
+                # The dict can be empty: the sanitizer strips the href of a
+                # javascript: link, and the bare <a> still needs nofollow.
+                data = token.get("data")
+                if data is not None:
+                    rel = data.get((None, "rel"), "").split()
+                    if "nofollow" not in rel:
+                        rel.append("nofollow")
+                        data[(None, "rel")] = " ".join(rel)
+            yield token
+
+
 def clean(text: str) -> str:
-    """Convenience method to bleach.clean()."""
+    """Sanitize HTML and add rel="nofollow" to every link it contains."""
     allowed_tags = [
         "a",
         "abbr",
@@ -162,9 +185,12 @@ def clean(text: str) -> str:
     }
     allowed_styles = ["font-weight", "text-align", "text-transform"]
 
-    return bleach.clean(
-        text, tags=allowed_tags, attributes=allowed_attributes, styles=allowed_styles
-    )
+    return Cleaner(
+        tags=allowed_tags,
+        attributes=allowed_attributes,
+        styles=allowed_styles,
+        filters=[NofollowFilter],
+    ).clean(text)
 
 
 def get_languages() -> List:
@@ -656,9 +682,7 @@ class Paste(models.Model):
         language = self.language
         if language == "markdown":
             rendered = clean(
-                markdown.markdown(
-                    self.body, ["markdown.extensions.extra", NofollowExtension()]
-                )
+                markdown.markdown(self.body, ["markdown.extensions.extra"])
             )
         elif language == "textile":
             rendered = clean(textile.textile_restricted(self.body))
