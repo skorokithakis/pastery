@@ -1,7 +1,7 @@
 ---
 id: S1-ixple
 status: open
-deps: [S1-jlmlp, rep-dbelk]
+deps: [S1-jlmlp, rep-dbelk, rep-yihyw]
 links: []
 created: 2026-08-09T17:55:42Z
 type: chore
