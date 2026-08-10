@@ -1,6 +1,6 @@
 ---
 id: S1-sfqqx
-status: open
+status: closed
 deps: []
 links: []
 created: 2026-08-09T17:55:14Z
