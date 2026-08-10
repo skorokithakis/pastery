@@ -39,3 +39,13 @@ The golden output tests are the point of this ticket. markdown 2.6 to 3.x, bleac
 
 Coverage of main/models.py is around 70 percent or better. main/admin.py is exercised at least at changelist level. All tests pass.
 
+
+## Notes
+
+**2026-08-09T18:47:12Z**
+
+ready for implementation
+
+**2026-08-10T07:18:05Z**
+
+Coverage note, so the numbers do not confuse you. .coveragerc is now the only coverage config, and its omit list already excluded 'admin.py' and '*/urls.py' before this plan started. So main/admin.py will report no coverage however many tests you add. That is expected; this ticket asks for admin.py to be exercised at changelist level, not for a coverage number on it. Do not change the omit list to chase one. The 'around 70 percent' target applies to main/models.py only.

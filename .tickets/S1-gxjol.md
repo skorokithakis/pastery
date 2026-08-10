@@ -36,3 +36,7 @@ Suite green on PostgreSQL 18. collectstatic works. makemigrations --check is cle
 **2026-08-09T18:40:51Z**
 
 Ordering change: uv replaces Poetry before this ticket runs. Ignore the 'use Poetry 1.4.0' caveat in the description; there is no poetry.lock by then. Use uv for all lock operations.
+
+**2026-08-09T18:47:12Z**
+
+ready for implementation

@@ -28,3 +28,9 @@ While you are here: django-stubs is pinned at 1.15 and will be wrong for Django 
 
 CI, the Dockerfile, pyproject.toml and setup.cfg all name Python 3.13. docker build succeeds. Suite green.
 
+
+## Notes
+
+**2026-08-09T18:47:12Z**
+
+ready for implementation

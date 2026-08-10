@@ -30,3 +30,9 @@ Non-goals: do not change any rate value. Do not add rate limiting to views that 
 
 The 429 tests from the safety-net ticket still pass. A test proves that two decorators with different rates on the same view keep separate counters.
 
+
+## Notes
+
+**2026-08-09T18:47:12Z**
+
+ready for implementation

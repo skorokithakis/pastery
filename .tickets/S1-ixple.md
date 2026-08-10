@@ -33,3 +33,13 @@ Caveat: use Poetry 1.4.0 for lock operations.
 
 Suite green. collectstatic still works, with brotli compression intact. A grep for each removed package name finds nothing outside the lock history.
 
+
+## Notes
+
+**2026-08-09T18:47:12Z**
+
+ready for implementation
+
+**2026-08-10T07:18:18Z**
+
+Lock operations: use 'poetry lock --no-update', not plain 'poetry lock'. Found while doing S1-sfqqx, and it is pre-existing, not caused by that ticket. Plain 'poetry lock' re-resolves with no locked preferences, then picks a yanked docutils 0.21.post1 for the '==0.*' constraint, fails to load it, drops into compatibility mode and grinds for ever on a sendgrid/cryptography conflict against the pinned werkzeug==0.11.*. Note that this ticket deletes both docutils and werkzeug, so it may cure itself, but start with --no-update anyway: it also keeps the lock diff minimal, which is what we want for a deletion ticket. This rule dies at S1-mkxad with Poetry.

@@ -26,3 +26,13 @@ Non-goals: no dependency changes, no Django version change.
 
 No occurrence of ugettext, conf.urls.url, load staticfiles or postgresql_psycopg2 remains outside migrations. Suite green.
 
+
+## Notes
+
+**2026-08-09T18:47:12Z**
+
+ready for implementation
+
+**2026-08-10T07:18:03Z**
+
+Extra occurrence of the old ENGINE alias to rename here. S1-sfqqx added a heredoc in .github/workflows/ci.yml that writes pastery/local_settings.py for the CI Postgres service, and it uses 'django.db.backends.postgresql_psycopg2'. So this ticket has three places to change, not two: both blocks in pastery/settings.py plus that heredoc. Harmless today, but it must be gone before the 3.2 rung.

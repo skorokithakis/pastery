@@ -42,3 +42,7 @@ Second, every later ticket currently carries a 'use Poetry 1.4.0' caveat. Doing 
 It sits after the deletion ticket on purpose: that removes fourteen packages, including brotlipy, which has no modern wheels, so uv gets the easiest version of the old dependency set to resolve.
 
 Two corrections to the description above. It no longer says 'the Python bump is the next ticket'; the Python bump stays at the end, after Django 5.2. And if uv cannot resolve the locked set, stop and report. Do NOT upgrade packages to make the resolution succeed: that would smuggle a dependency upgrade into a tooling ticket and we would not know which change caused what.
+
+**2026-08-09T18:47:12Z**
+
+ready for implementation

@@ -49,3 +49,7 @@ This AlterField only changes choices, which is form and admin validation only, s
 **2026-08-09T18:40:36Z**
 
 The dirty-baseline part of my earlier note is done, by commit d17dbd7. Migration 0031 is committed, choices= is off Paste.raw_language, and the tests job already runs makemigrations --check --dry-run before collectstatic. Do not redo any of it. Your baseline is origin/master at c0aef60, which is ahead of this workspace; pull before you start.
+
+**2026-08-09T18:47:12Z**
+
+ready for implementation
