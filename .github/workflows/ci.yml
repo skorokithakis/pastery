@@ -47,6 +47,13 @@ jobs:
           python-version: "3.9"
       - run: pip install poetry==1.4.0
       - run: poetry config virtualenvs.create false
+      # Temporary prop for the pinned 2020-era dependency set: with
+      # virtualenvs.create false, Poetry installs into the system Python and
+      # downgrades its setuptools to the locked 67.6.0 partway through, so
+      # any sdist built after that point races a half-swapped setuptools.
+      # Pre-installing the locked version removes the swap. Deleted when the
+      # project moves to uv.
+      - run: pip install setuptools==67.6.0
       - run: poetry install --no-root
       # Point Django at the PostgreSQL 18 service container. local_settings.py
       # is gitignored and is imported at the end of settings.py. Do not set
