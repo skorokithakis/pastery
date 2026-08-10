@@ -15,7 +15,7 @@ To install:
 $ poetry install --no-root
 $ poetry run ./manage.py migrate
 $ poetry run ./manage.py createsuperuser
-$ poetry run ./manage.py runserver_plus
+$ poetry run ./manage.py runserver
 ~~~
 
 And just visit http://localhost:8000/, you're done.

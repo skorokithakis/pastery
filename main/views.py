@@ -4,7 +4,6 @@ import re
 from annoying.decorators import ajax_request
 from annoying.decorators import render_to
 from brake.decorators import ratelimit
-from captcha.fields import ReCaptchaField
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -30,7 +29,6 @@ from .models import LANGUAGES
 from .models import LANGUAGE_DICT
 from .models import Paste
 from .models import STYLES
-from utils import send_event  # noqa
 
 User = get_user_model()
 LANGUAGE_NAMES = LANGUAGE_DICT.keys()
@@ -71,8 +69,6 @@ def pasteform_factory(user):
         raw_language = forms.ChoiceField(choices=LANGUAGES, label=_("Language"))
         work = forms.CharField(required=False)
         other_pastes = forms.CharField(required=False)
-        if settings.ENABLE_CAPTCHA:
-            captcha = ReCaptchaField()
 
         def clean(self):
             cleaned_data = super().clean()
@@ -321,7 +317,6 @@ def report_paste(request, paste_id):
     client.captureMessage(
         "A paste was reported by %s: %s" % (reporter, paste.get_full_url())
     )
-    send_event(reporter, "report_paste", {"id": paste.id, "url": paste.get_full_url()})
     messages.success(
         request,
         _("Thank you for your report. We will investigate as soon as possible."),
@@ -351,11 +346,6 @@ def delete_paste(request, paste_id):
     if request.user != paste.user:
         messages.error(request, _("That's not your paste, you naughty girl."))
     else:
-        send_event(
-            request.user.username,
-            "delete_paste",
-            {"id": paste.id, "url": paste.get_full_url()},
-        )
         paste.delete()
         messages.success(request, _("Your paste has been deleted."))
     return redirect("main:home")

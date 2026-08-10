@@ -44,12 +44,9 @@ INSTALLED_APPS = [
     "django.contrib.sitemaps",
     "django.contrib.sites",
     "raven.contrib.django.raven_compat",
-    "django_extensions",
-    "debug_toolbar",
     "djangoql",
     "tokenauth",
     "bootstrap3",
-    "captcha",
     "main",
     "webauthin",
     "api",
@@ -57,7 +54,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "pastery.stats_middleware.StatsMiddleware",
-    "django_cloudflare_push.middleware.push_middleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -67,7 +63,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 AUTH_USER_MODEL = "main.User"
@@ -124,17 +119,6 @@ TEMPLATES = [
         },
     }
 ]
-
-DEBUG_TOOLBAR_PATCH_SETTINGS = True
-
-DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": lambda request: False
-    and (
-        (not request.is_ajax())  # type: ignore
-        and request.user.is_authenticated
-        and request.user.is_superuser
-    )
-}
 
 WSGI_APPLICATION = "pastery.wsgi.application"
 
@@ -229,8 +213,6 @@ AUTH_PASSWORD_VALIDATORS = [
 RATELIMIT_STATUS_CODE = 429
 RATELIMIT_CACHE_BACKEND = "pastery.brake_backend.MyBrake"
 
-MIXPANEL_TOKEN = os.getenv("MIXPANEL_TOKEN")
-
 try:
     COMMIT_HASH = check_output(["git", "rev-parse", "--short", "HEAD"])
 except:  # noqa
@@ -266,16 +248,6 @@ LOGGING = {
 RAVEN_CONFIG = {"dsn": os.getenv("RAVEN_DSN", None)}
 
 CACHING_TIME = 24 * 3600
-
-RECAPTCHA_PUBLIC_KEY = "6LfkpBITAAAAACCMrowwJj4dcUmcjKrZs7CfTqiu"
-RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY", "override me")
-RECAPTCHA_USE_SSL = True
-NOCAPTCHA = True  # Use the new-style NoCAPTCHA.
-
-CLOUDFLARE_EMAIL = os.getenv("CLOUDFLARE_EMAIL", "example@example.com")
-CLOUDFLARE_API_KEY = os.getenv("CLOUDFLARE_API_KEY", "example")
-
-ENABLE_CAPTCHA = False
 
 MAX_COMBINED_PASTES = 7
 

@@ -9,7 +9,7 @@ User = get_user_model()
 
 class ShadowbanTests(TestCase):
     def setUp(self):
-        # Create users without using factories to avoid Hypothesis issues
+        # Create users directly.
         self.normal_user = User.objects.create_user(
             username="normal_user",
             email="normal@example.com",

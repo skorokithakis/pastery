@@ -1,4 +1,3 @@
-import hashlib
 import json
 from typing import Dict
 from typing import List
@@ -33,9 +32,6 @@ from pygments.lexers import get_filetype_from_buffer
 from pygments.lexers import get_lexer_by_name
 from pygments.util import ClassNotFound
 from pygments.util import guess_decode
-
-from utils import identify_user
-from utils import send_event
 
 
 def guess_lexer(_text, **options):
@@ -431,23 +427,6 @@ class PasteManager(models.Manager):
         else:
             raise IntegrityError("Could not find a paste ID after %s tries." % tries)
 
-        if kwargs.get("user"):
-            user_id = kwargs["user"].username
-        else:
-            user_id = hashlib.sha256(
-                kwargs.get("user_address", "").encode("utf8")
-            ).hexdigest()[:16]
-
-        send_event(
-            user_id,
-            "new_paste",
-            {
-                "raw_language": kwargs["raw_language"],
-                "id": paste.id,
-                "url": paste.get_full_url(),
-            },
-        )
-
         return paste
 
 
@@ -701,14 +680,6 @@ class Paste(models.Model):
             )
         cache.set(key, rendered, settings.CACHING_TIME)
         return rendered
-
-
-@receiver(post_save, sender=User)
-def identify(sender, instance, created, **kwargs):
-    """
-    Identify a user to Mixpanel.
-    """
-    identify_user(instance)
 
 
 @receiver(post_save, sender=Paste)

@@ -1,8 +1,5 @@
-# The original SmokeTests that used Hypothesis have been moved to tests_smoke.py
-# to avoid Python 3.8 compatibility issues with Hypothesis.
+# The original SmokeTests have been moved to tests_smoke.py.
 # The shadowban tests have been moved to test_shadowban_web.py for better organization.
-
-# This file is kept for potential future tests that don't require Hypothesis.
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase

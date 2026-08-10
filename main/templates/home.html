@@ -40,13 +40,6 @@
                     {{ form.raw_language|tabindex:5 }}
                 </div>
             </div>
-            {% if form.captcha %}
-            <div class="fieldWrapper">
-                {{ form.captcha.errors }}
-                <label for="{{ form.captcha.id_for_label }}">{{ form.captcha.label }}</label>
-                {{ form.captcha|tabindex:4 }}
-            </div>
-            {% endif %}
 
             {% buttons %}
             {{ form.work.as_hidden }}
