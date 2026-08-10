@@ -1,6 +1,6 @@
 ---
 id: S1-ixple
-status: open
+status: closed
 deps: [S1-jlmlp, rep-dbelk, rep-yihyw]
 links: []
 created: 2026-08-09T17:55:42Z
@@ -49,3 +49,24 @@ Lock operations: use 'poetry lock --no-update', not plain 'poetry lock'. Found w
 Add html5lib to the removal list. It is declared in pyproject.toml as a direct dependency and, since be765fc, nothing in the repo imports it. It was briefly the target of an import in main/models.py; that now goes through bleach.html5lib_shim instead.
 
 Caution: bleach vendors its own copy at bleach._vendor.html5lib and the sanitizer depends on it. Remove the top-level html5lib distribution only. Do not act on a blanket grep for the string 'html5lib', and do not touch the import in main/models.py.
+
+**2026-08-10T19:36:59Z**
+
+Pre-implementation findings, all in scope:
+
+1. send_event has a third call site the ticket does not mention: main/models.py line 441, in PasteManager.create. Delete it with the others.
+2. utils/ holds only __init__.py, which holds only send_event and identify_user. rep-dbelk already deleted md_nofollow.py. So the whole utils package goes, not just the two functions.
+3. MIXPANEL_TOKEN in settings.py is dead once mixpanel goes. Delete it.
+4. README.md also tells the reader to run runserver_plus. Change it with docker-compose.yml.
+5. Stale 'Hypothesis' comments in main/tests.py and api/test_shadowban.py, plus '.hypothesis/' in .gitignore. Clean them, or the grep acceptance criterion fails.
+6. CLOUDFLARE_EMAIL and CLOUDFLARE_API_KEY: remove_spam.py DOES read both, in ban_ip. So keep them, per the ticket rule. Note that ban_ip is dead code, its first statement is 'return True', but that is a separate question and not this ticket's.
+
+Environment caveat: the poetry on PATH is 2.4.1. CI pins 1.4.0. Poetry 2.x writes lock-version 2.1, which 1.4.0 cannot read, so locking with the default poetry would break CI. Lock with 1.4.0 specifically.
+
+**2026-08-10T19:47:33Z**
+
+Done. Two review passes found nothing in the change itself. Both only flagged a stale ARCHITECTURE.md, which was an untracked scratch artifact from my repo scan, never in git; deleted.
+
+CLOUDFLARE_EMAIL and CLOUDFLARE_API_KEY kept, as required: ban_ip in remove_spam.py reads both. Worth knowing that ban_ip cannot run, its first statement is 'return True', so the settings are live only in the linter's eyes. Not this ticket's problem.
+
+Verified: 66 tests pass, collectstatic emits 372 .br files with brotli 1.2.0, makemigrations --check clean, pre-commit clean, lock-version still 2.0, no surviving package moved version.
