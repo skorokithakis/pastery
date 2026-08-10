@@ -1,7 +1,7 @@
 ---
 id: S1-ixple
 status: open
-deps: [S1-jlmlp]
+deps: [S1-jlmlp, rep-dbelk]
 links: []
 created: 2026-08-09T17:55:42Z
 type: chore
@@ -43,3 +43,9 @@ ready for implementation
 **2026-08-10T07:18:18Z**
 
 Lock operations: use 'poetry lock --no-update', not plain 'poetry lock'. Found while doing S1-sfqqx, and it is pre-existing, not caused by that ticket. Plain 'poetry lock' re-resolves with no locked preferences, then picks a yanked docutils 0.21.post1 for the '==0.*' constraint, fails to load it, drops into compatibility mode and grinds for ever on a sendgrid/cryptography conflict against the pinned werkzeug==0.11.*. Note that this ticket deletes both docutils and werkzeug, so it may cure itself, but start with --no-update anyway: it also keeps the lock diff minimal, which is what we want for a deletion ticket. This rule dies at S1-mkxad with Poetry.
+
+**2026-08-10T18:59:43Z**
+
+Add html5lib to the removal list. It is declared in pyproject.toml as a direct dependency and, since be765fc, nothing in the repo imports it. It was briefly the target of an import in main/models.py; that now goes through bleach.html5lib_shim instead.
+
+Caution: bleach vendors its own copy at bleach._vendor.html5lib and the sanitizer depends on it. Remove the top-level html5lib distribution only. Do not act on a blanket grep for the string 'html5lib', and do not touch the import in main/models.py.
