@@ -50,6 +50,18 @@ class SmokeTests(TestCase):
         response = self.client.get("/nourlthere/")
         self.assertEqual(response.status_code, 404)
 
+    def test_raw_html_paste_is_noindexed(self):
+        paste = Paste.objects.create(
+            id="rawhtml1",
+            title="Raw HTML paste",
+            body='<a href="https://spam.example/">click</a>',
+            raw_language="raw html",
+            user=self.user1,
+        )
+        response = self.client.get(reverse("main:paste", args=[paste.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["X-Robots-Tag"], "noindex, nofollow")
+
     def test_anonymous(self):
         response = self.client.get(reverse("main:home"))
         form = response.context["form"]

@@ -255,6 +255,10 @@ def paste(request, paste_id):
         response["Content-Security-Policy"] = (
             "script-src 'unsafe-inline' https:; sandbox allow-scripts"
         )
+        # The body is deliberately served unsanitised, so a crawler
+        # directive is the only lever: keep raw HTML pastes out of search
+        # indexes and stop them passing link equity on.
+        response["X-Robots-Tag"] = "noindex, nofollow"
         return response
 
     return render(
