@@ -1,9 +1,6 @@
-import datetime
 import json
 import re
 
-import requests
-from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from main.models import Paste
@@ -19,25 +16,6 @@ def calculate_link_ratio(text):
     total_urls = regex.findall(text)
     url_length = len("".join(total_urls))
     return url_length / len(re.findall(r"\S", text))
-
-
-def ban_ip(ip):
-    return True
-    print("Banning %s..." % ip)
-    url = "https://api.cloudflare.com/client/v4/zones/f1928f8f37c9e76fc7c99a7cc9455702/firewall/access_rules/rules"
-    r = requests.post(
-        url,
-        headers={
-            "X-Auth-Email": settings.CLOUDFLARE_EMAIL,
-            "X-Auth-Key": settings.CLOUDFLARE_API_KEY,
-        },
-        json={
-            "mode": "challenge",
-            "configuration": {"target": "ip", "value": ip},
-            "notes": "Banned bot: %s" % datetime.date.today().strftime("%Y-%m-%d"),
-        },
-    )
-    return r
 
 
 class Command(BaseCommand):
@@ -88,7 +66,6 @@ class Command(BaseCommand):
                     if term in paste.body:
                         print("Deleting %s (contains spam term in body)..." % paste)
                         is_spam = True
-                        ban_ip(paste.user_address)
                         break
 
                 # Check title terms if not already marked as spam
@@ -99,7 +76,6 @@ class Command(BaseCommand):
                                 "Deleting %s (contains spam term in title)..." % paste
                             )
                             is_spam = True
-                            ban_ip(paste.user_address)
                             break
 
             # Delete if spam, otherwise mark as processed
