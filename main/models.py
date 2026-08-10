@@ -3,8 +3,8 @@ import json
 from typing import Dict
 from typing import List
 
+from bleach.html5lib_shim import Filter
 from bleach.sanitizer import Cleaner
-from html5lib.filters.base import Filter
 import markdown
 import pygments
 import shortuuid
