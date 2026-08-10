@@ -550,21 +550,6 @@ files = [
 ]
 
 [[package]]
-name = "django-nose"
-version = "1.4.7"
-description = "Makes your Django tests simple and snappy"
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "django-nose-1.4.7.tar.gz", hash = "sha256:a4885cd002d65fd2de96e2bb2563ef477c3fbe207009360c015fca5c3b5561b7"},
-    {file = "django_nose-1.4.7-py2.py3-none-any.whl", hash = "sha256:304adc447ee35b889b733d7106004f98aa401d8387ddcada5d4f2239d86790a9"},
-]
-
-[package.dependencies]
-nose = ">=1.2.1"
-
-[[package]]
 name = "django-qmethod"
 version = "0.0.3"
 description = "Define methods on QuerySets without custom manager and QuerySet subclasses."
@@ -1608,4 +1593,4 @@ brotli = ["Brotli"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<4"
-content-hash = "2e78bbf8f6b203f8a068c4ec31bd975beaae579cca7d9e030c0a13e2a5d1d491"
+content-hash = "46054b245846ac543d882fb5b1ebadfb39cfb05b95de2d6ef359f882277d7643"

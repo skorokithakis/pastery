@@ -28,6 +28,18 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -36,13 +48,31 @@ jobs:
       - run: pip install poetry==1.4.0
       - run: poetry config virtualenvs.create false
       - run: poetry install --no-root
+      # Point Django at the PostgreSQL 18 service container. local_settings.py
+      # is gitignored and is imported at the end of settings.py. Do not set
+      # DATABASE_URL instead: that branch also switches sessions to Redis and
+      # parses EMAIL_URL, which would raise.
+      - run: |
+          cat > pastery/local_settings.py <<'EOF'
+          DATABASES = {
+              "default": {
+                  "ENGINE": "django.db.backends.postgresql_psycopg2",
+                  "NAME": "postgres",
+                  "USER": "postgres",
+                  "PASSWORD": "password",
+                  "HOST": "localhost",
+                  "PORT": 5432,
+              }
+          }
+          EOF
       # Fail CI when model changes are missing their migrations. Needs no
       # database and no collected static files.
       - run: ./manage.py makemigrations --check --dry-run
       # Needed before the tests: settings use whitenoise's manifest storage,
       # so templates cannot render without a collected static manifest.
       - run: ./manage.py collectstatic --noinput
-      - run: ./manage.py test
+      - run: coverage run ./manage.py test
+      - run: coverage report
 
   deploy:
     runs-on: ubuntu-latest

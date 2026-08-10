@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     "main",
     "webauthin",
     "api",
-    "django_nose",
 ]
 
 MIDDLEWARE = [
@@ -85,19 +84,6 @@ AUTHENTICATION_BACKENDS = (
 DEFAULT_STYLE = random.choice(
     ["monokai", "solarized", "solarized_dark", "paraiso-dark", "native"]
 )
-
-TEST_RUNNER = "django_nose.NoseTestSuiteRunner"
-
-NOSE_ARGS = ["--nocapture", "--nologcapture", "--stop"]
-NOSE_ARGS += [
-    "--cover-package=pastery",
-    "--cover-package=main",
-    "--cover-package=api",
-    "--cover-erase",
-    "--cover-html",
-    "--cover-html-dir=htmlcov",
-]
-NOSE_ARGS += ["--with-coverage"]
 
 ROOT_URLCONF = "pastery.urls"
 

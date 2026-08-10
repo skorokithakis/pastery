@@ -1,4 +1,8 @@
 [run]
+source =
+  pastery
+  main
+  api
 omit =
   */management/*
   */migrations/*
