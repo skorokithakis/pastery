@@ -46,14 +46,11 @@ jobs:
         with:
           python-version: "3.9"
       - run: pip install poetry==1.4.0
-      - run: poetry config virtualenvs.create false
-      # Temporary prop for the pinned 2020-era dependency set: with
-      # virtualenvs.create false, Poetry installs into the system Python and
-      # downgrades its setuptools to the locked 67.6.0 partway through, so
-      # any sdist built after that point races a half-swapped setuptools.
-      # Pre-installing the locked version removes the swap. Deleted when the
-      # project moves to uv.
-      - run: pip install setuptools==67.6.0
+      # Let Poetry create a real virtualenv. Poetry must not own the runner's
+      # system Python: its ephemeral build environment would see the ambient
+      # site-packages, where the locked setuptools 67.6.0 collides with the
+      # setuptools the build environment resolves for itself, and sdist
+      # builds break. A real virtualenv isolates the two.
       - run: poetry install --no-root
       # Point Django at the PostgreSQL 18 service container. local_settings.py
       # is gitignored and is imported at the end of settings.py. Do not set
@@ -74,12 +71,12 @@ jobs:
           EOF
       # Fail CI when model changes are missing their migrations. Needs no
       # database and no collected static files.
-      - run: ./manage.py makemigrations --check --dry-run
+      - run: poetry run ./manage.py makemigrations --check --dry-run
       # Needed before the tests: settings use whitenoise's manifest storage,
       # so templates cannot render without a collected static manifest.
-      - run: ./manage.py collectstatic --noinput
-      - run: coverage run ./manage.py test
-      - run: coverage report
+      - run: poetry run ./manage.py collectstatic --noinput
+      - run: poetry run coverage run ./manage.py test
+      - run: poetry run coverage report
 
   deploy:
     runs-on: ubuntu-latest
