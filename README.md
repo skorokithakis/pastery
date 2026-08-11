@@ -12,10 +12,10 @@ Installation
 To install:
 
 ~~~
-$ poetry install --no-root
-$ poetry run ./manage.py migrate
-$ poetry run ./manage.py createsuperuser
-$ poetry run ./manage.py runserver
+$ uv sync
+$ uv run ./manage.py migrate
+$ uv run ./manage.py createsuperuser
+$ uv run ./manage.py runserver
 ~~~
 
 And just visit http://localhost:8000/, you're done.

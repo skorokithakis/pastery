@@ -45,13 +45,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.9"
-      - run: pip install poetry==1.4.0
-      # Let Poetry create a real virtualenv. Poetry must not own the runner's
-      # system Python: its ephemeral build environment would see the ambient
-      # site-packages, where the locked setuptools 67.6.0 collides with the
-      # setuptools the build environment resolves for itself, and sdist
-      # builds break. A real virtualenv isolates the two.
-      - run: poetry install --no-root
+      - run: pip install uv==0.11.6
+      # --locked: uv.lock deliberately holds older versions than a fresh
+      # resolution would pick, so a silent re-lock must be an error.
+      - run: uv sync --locked --no-install-project
       # Point Django at the PostgreSQL 18 service container. local_settings.py
       # is gitignored and is imported at the end of settings.py. Do not set
       # DATABASE_URL instead: that branch also switches sessions to Redis and
@@ -71,16 +68,66 @@ jobs:
           EOF
       # Fail CI when model changes are missing their migrations. Needs no
       # database and no collected static files.
-      - run: poetry run ./manage.py makemigrations --check --dry-run
+      - run: uv run ./manage.py makemigrations --check --dry-run
       # Needed before the tests: settings use whitenoise's manifest storage,
       # so templates cannot render without a collected static manifest.
-      - run: poetry run ./manage.py collectstatic --noinput
-      - run: poetry run coverage run ./manage.py test
-      - run: poetry run coverage report
+      - run: uv run ./manage.py collectstatic --noinput
+      - run: uv run coverage run ./manage.py test
+      - run: uv run coverage report
+
+  # Nothing else verifies the image: no CI job builds it, so the Dockerfile is
+  # first exercised by Dokku at deploy time, which would only surface a broken
+  # image in production. Build it here, boot it with the Procfile's real
+  # command, and prove uwsgi answers HTTP, so a bad image blocks the deploy.
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 🐳 Build the image
+        run: docker build -t pastery .
+
+      # misc/dokku/Procfile hardcodes this path, and UV_PROJECT_ENVIRONMENT
+      # must keep delivering it. Assert it anyway, so a future change to that
+      # mechanism fails here instead of at container boot.
+      - name: 🔍 Assert the Procfile's uwsgi binary is in the image
+        run: docker run --rm pastery test -x /usr/local/bin/uwsgi
+
+      # Boot with the Procfile's real command and prove it serves HTTP. The
+      # app has no Postgres or Redis here, so a 500 or an error page is a PASS:
+      # the point is that pastery.wsgi:application imports cleanly and uwsgi
+      # answers the socket. --need-app makes uwsgi refuse to start when the
+      # app fails to load, instead of serving "no app loaded" 500s that would
+      # pass this step vacuously. If it never answers, dump the container logs
+      # and fail loudly so the reason (e.g. an ImportError) is visible.
+      - name: 🚀 Boot uwsgi and check it answers HTTP
+        run: |
+          docker run -d --name pastery --publish 5000:5000 pastery \
+            /usr/local/bin/uwsgi --need-app --chdir=/code/ --ini=/code/uwsgi.ini
+          for i in $(seq 1 30); do
+            if curl -s -m 5 -o /dev/null http://localhost:5000/; then
+              # Any status, including a 500 from the missing Postgres/Redis,
+              # is a pass — but only if the container is still running. An
+              # exited container is uwsgi dying, not the app serving.
+              if [ "$(docker inspect -f '{{.State.Running}}' pastery)" = "true" ]; then
+                echo "uwsgi is serving HTTP on :5000 (any status is a pass; there is no DB here)"
+                exit 0
+              fi
+              echo "uwsgi answered but the container exited" >&2
+              docker logs pastery >&2 || true
+              exit 1
+            fi
+            sleep 1
+          done
+          # No HTTP response within 30s: the WSGI app never loaded or uwsgi
+          # never came up. Make the reason visible.
+          echo "uwsgi never answered on :5000" >&2
+          docker logs pastery >&2 || true
+          exit 1
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [pre-commit, tests]
+    needs: [pre-commit, tests, docker]
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
 
     steps:

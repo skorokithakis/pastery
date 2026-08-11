@@ -1,38 +1,39 @@
-[tool]
-[tool.poetry]
+[project]
 name = "pastery"
 description = "The sweetest pastebin in the world."
 version = "1.0.0"
-authors = []
+requires-python = ">=3.8,<4"
+dependencies = [
+    "bleach",
+    "coverage",
+    "django>=2.0,<2.1",
+    "django-annoying",
+    "django-bootstrap3",
+    "django-brake",
+    "django-ipware~=2.1.0",
+    "django-redis",
+    "django-tokenauth==0.5.1",
+    "django-webauthin>=0.0.4,<0.1.0",
+    "djangoql",
+    "markdown>=2.6.5,<2.7",
+    "psycopg2-binary>=2.7.1",
+    "pygments>=2.4.2",
+    "pytz",
+    "raven",
+    "requests>=2.11.1,<2.12",
+    "schema>=0.4.0,<0.5",
+    "shortuuid>=0.4.2,<0.5",
+    "textile>=2.2.2,<2.3",
+    "uwsgi>=2.0.11,<2.1",
+    "whitenoise[brotli]",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.8,<4"
-bleach = "*"
-coverage = "*"
-django = "==2.0.*,>=2.0.0"
-django-annoying = "*"
-django-bootstrap3 = "*"
-django-brake = "*"
-django-ipware = "~=2.1.0"
-django-redis = "*"
-django-tokenauth = "0.5.1"
-djangoql = "*"
-markdown = "==2.6.*,>=2.6.5"
-psycopg2-binary = ">=2.7.1"
-pygments = ">=2.4.2"
-pytz = "*"
-raven = "*"
-requests = "==2.11.*,>=2.11.1"
-schema = "==0.4.*,>=0.4.0"
-shortuuid = "==0.4.*,>=0.4.2"
-textile = "==2.2.*,>=2.2.2"
-uwsgi = "==2.0.*,>=2.0.11"
-whitenoise = {version = "*", extras = ["brotli"]}
-django-webauthin = "~0.0.4"
+[dependency-groups]
+dev = [
+    "bpython",
+    "flake8",
+    "ipython",
+    "django-stubs",
+    "mypy",
+]
 
-[tool.poetry.dev-dependencies]
-bpython = "*"
-flake8 = "*"
-ipython = "*"
-django-stubs = "*"
-mypy = "*"
