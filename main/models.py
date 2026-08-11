@@ -189,6 +189,33 @@ def clean(text: str) -> str:
     ).clean(text)
 
 
+# The first aliases of the lexers pinned to the top of the language dropdown,
+# above the separator. Each entry must resolve to a real value in LANGUAGES
+# (see test_top_languages_resolve_to_languages).
+TOP_LANGUAGES = [
+    "bash",
+    "c",
+    "csharp",
+    "cpp",
+    "css",
+    "html",
+    "java",
+    "javascript",
+    "json",
+    "markdown",
+    "markdown-source",
+    "lua",
+    "text",
+    "objective-c",
+    "perl",
+    "php",
+    "python",
+    "raw html",
+    "ruby",
+    "swift",
+]
+
+
 def get_languages() -> List:
     """
     Return the list of all supported languages.
@@ -217,33 +244,10 @@ def get_languages() -> List:
     ]
     sorted_lexers = sorted(lexers, key=lambda x: x[0].lower())
 
-    top = [
-        "bash",
-        "c",
-        "csharp",
-        "cpp",
-        "css",
-        "html",
-        "java",
-        "js",
-        "json",
-        "markdown",
-        "markdown-source",
-        "lua",
-        "text",
-        "objective-c",
-        "perl",
-        "php",
-        "python",
-        "raw html",
-        "ruby",
-        "swift",
-    ]
-
     top_languages = [["autodetect", _("Autodetect")]]
     bottom_languages = [["autodetect1", "--------"]]
     for language in sorted_lexers:
-        if language[0] in top:
+        if language[0] in TOP_LANGUAGES:
             top_languages.append(language)
         else:
             bottom_languages.append(language)

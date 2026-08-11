@@ -8,6 +8,7 @@ from unittest import mock
 from .models import ALIAS_DICT
 from .models import LANGUAGES
 from .models import Paste
+from .models import TOP_LANGUAGES
 from .models import get_aliases
 
 User = get_user_model()
@@ -71,6 +72,18 @@ class LanguageListTests(TestCase):
         labels = [language[1] for language in LANGUAGES]
         self.assertEqual(len(values), len(set(values)))
         self.assertEqual(len(labels), len(set(labels)))
+
+    def test_top_languages_resolve_to_languages(self):
+        """Every entry in TOP_LANGUAGES must appear as a value in LANGUAGES.
+
+        The top-languages list is matched against each lexer's first alias, so
+        an entry that is only a secondary alias (eg "js" for JavaScript) never
+        matches anything and silently drops the language out of the pinned
+        group at the top of the dropdown.
+        """
+        values = [language[0] for language in LANGUAGES]
+        for language in TOP_LANGUAGES:
+            self.assertIn(language, values)
 
     def test_markdown_and_markdown_source_are_the_only_markdown_entries(self):
         """The dropdown shows exactly one "Markdown" and one "Markdown (source)"."""
