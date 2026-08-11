@@ -3,8 +3,12 @@
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from unittest import mock
 
+from .models import ALIAS_DICT
+from .models import LANGUAGES
 from .models import Paste
+from .models import get_aliases
 
 User = get_user_model()
 
@@ -52,3 +56,59 @@ class LanguageAliasTests(TestCase):
         # get_language_display should work without raising KeyError.
         display_name = paste_ahk.get_language_display()
         self.assertIsNotNone(display_name)
+
+
+class LanguageListTests(TestCase):
+    """Tests for the language dropdown list and alias dictionary."""
+
+    def test_languages_have_no_duplicate_values_or_labels(self):
+        """LANGUAGES must not contain duplicate values or duplicate labels.
+
+        This is the check that stops a future Pygments release (which may
+        reorder lexer aliases) from resurrecting a duplicate Markdown entry.
+        """
+        values = [language[0] for language in LANGUAGES]
+        labels = [language[1] for language in LANGUAGES]
+        self.assertEqual(len(values), len(set(values)))
+        self.assertEqual(len(labels), len(set(labels)))
+
+    def test_markdown_and_markdown_source_are_the_only_markdown_entries(self):
+        """The dropdown shows exactly one "Markdown" and one "Markdown (source)"."""
+        markdown_entries = [
+            language for language in LANGUAGES if language[0].startswith("markdown")
+        ]
+        self.assertEqual(
+            markdown_entries,
+            [["markdown", "Markdown"], ["markdown-source", "Markdown (source)"]],
+        )
+
+    def test_markdown_and_markdown_source_are_adjacent(self):
+        """The two markdown entries sit next to each other in the dropdown."""
+        values = [language[0] for language in LANGUAGES]
+        self.assertEqual(values.index("markdown") + 1, values.index("markdown-source"))
+
+    def test_markdown_source_passes_through_alias_normalization(self):
+        """markdown-source must survive ALIAS_DICT unchanged, and md must still mean markdown."""
+        self.assertEqual(ALIAS_DICT["markdown-source"], "markdown-source")
+        self.assertEqual(ALIAS_DICT["markdown"], "markdown")
+        self.assertEqual(ALIAS_DICT["md"], "markdown")
+        self.assertEqual(ALIAS_DICT["textile"], "textile")
+
+    def test_markdown_aliases_survive_reversed_pygments_order(self):
+        """The intended mapping holds even if Pygments reorders aliases.
+
+        Pygments 2.8.1 reported the Markdown lexer as ("md", "markdown");
+        current versions report ("markdown", "md"). get_aliases() applies its
+        hand-written entries last, so the loop's aliases[0] can never override
+        them, and "md" must still normalize to "markdown".
+        """
+        fake_lexers = [
+            ("Markdown", ("md", "markdown"), ("md",), ("text/x-markdown",)),
+            ("Textile", ("textile",), ("textile",), ("text/x-textile",)),
+        ]
+        with mock.patch("main.models.get_all_lexers", return_value=fake_lexers):
+            alias_dict = get_aliases()
+        self.assertEqual(alias_dict["markdown"], "markdown")
+        self.assertEqual(alias_dict["md"], "markdown")
+        self.assertEqual(alias_dict["markdown-source"], "markdown-source")
+        self.assertEqual(alias_dict["textile"], "textile")

@@ -46,6 +46,24 @@ class PasteRenderingTests(TestCase):
         rendered = paste.rendered_body
         self.assertIn("<strong>bold</strong>", rendered)
 
+    def test_rendered_body_markdown_source_highlights_source(self):
+        """markdown-source renders as highlighted source, not as prose."""
+        paste = Paste.objects.create(
+            id="rendermdsrc",
+            body="# Hello\n\nSome **bold** text.",
+            raw_language="markdown-source",
+            user=self.user,
+        )
+        self.assertEqual(paste.language, "markdown-source")
+        rendered = paste.rendered_body
+        # No prose rendering...
+        self.assertNotIn("<h1>Hello</h1>", rendered)
+        self.assertNotIn("<strong>bold</strong>", rendered)
+        # ...but it is highlighted as Markdown source.
+        self.assertIn('<div class="paste">', rendered)
+        self.assertIn("Hello", rendered)
+        self.assertEqual(paste.get_language_display(), "Markdown (source)")
+
     def test_golden_pygments_output(self):
         """Byte-exact Pygments rendering.
 
@@ -223,6 +241,15 @@ class PasteFilenameTests(TestCase):
             user=self.user,
         )
         self.assertEqual(paste.filename, "filemd.md")
+
+    def test_filename_for_markdown_source(self):
+        paste = Paste.objects.create(
+            id="filemdsrc",
+            body="# Hello",
+            raw_language="markdown-source",
+            user=self.user,
+        )
+        self.assertEqual(paste.filename, "filemdsrc.md")
 
     def test_filename_for_textile(self):
         paste = Paste.objects.create(

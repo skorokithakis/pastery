@@ -199,15 +199,19 @@ def get_languages() -> List:
     returning a list with it, after reordering the most frequent aliases to the
     top.
     """
-    banned_lexers = ["md"]
-    # Create a tuple of (first_alias, friendly_name) for each lexer.
+    banned_lexers = ["markdown"]
+    # Create a tuple of (first_alias, friendly_name) for each lexer. The ban
+    # matches the lexer name rather than its first alias, because Pygments
+    # reorders aliases between releases (the Markdown lexer used to be
+    # ("md", "markdown") and is now ("markdown", "md")).
     lexers = [
         [lexer[1][0], lexer[0]]
         for lexer in get_all_lexers()
-        if lexer[1] and lexer[1][0] not in banned_lexers
+        if lexer[1] and lexer[0].lower() not in banned_lexers
     ]
     lexers += [
         ["markdown", "Markdown"],
+        ["markdown-source", "Markdown (source)"],
         ["textile", "Textile"],
         ["raw html", "Raw HTML"],
     ]
@@ -224,6 +228,7 @@ def get_languages() -> List:
         "js",
         "json",
         "markdown",
+        "markdown-source",
         "lua",
         "text",
         "objective-c",
@@ -254,10 +259,22 @@ def get_aliases() -> Dict[str, str]:
     the lexer's first alias. This way, any language that comes in can be mapped
     to the alias that Pygments supports for that language.
     """
-    alias_dict = {"markdown": "markdown", "textile": "textile"}
+    alias_dict = {}
     for name, aliases, filetypes, mimetypes in get_all_lexers():
         for alias in aliases:
             alias_dict[alias] = aliases[0]
+    # Hand-written entries go last so they are authoritative: Pygments
+    # reorders lexer aliases between releases (the Markdown lexer used to
+    # report ("md", "markdown") and now reports ("markdown", "md")), and the
+    # loop above maps each alias to aliases[0], which would otherwise win.
+    alias_dict.update(
+        {
+            "markdown": "markdown",
+            "md": "markdown",
+            "markdown-source": "markdown-source",
+            "textile": "textile",
+        }
+    )
     return alias_dict
 
 
@@ -318,6 +335,10 @@ def get_styles() -> List:
 LANGUAGES = get_languages()
 LANGUAGE_DICT = dict(LANGUAGES)
 ALIAS_DICT = get_aliases()
+
+# Sentinel values that are not Pygments aliases, mapped to the real lexer
+# they should be highlighted with.
+LEXER_OVERRIDES = {"markdown-source": "markdown"}
 
 # Rename the default style to avoid confusion.
 STYLES = get_styles()
@@ -621,7 +642,9 @@ class Paste(models.Model):
             elif self.language == "textile":
                 glob = "*.txl"
             else:
-                lexer = get_lexer_by_name(self.language)
+                lexer = get_lexer_by_name(
+                    LEXER_OVERRIDES.get(self.language, self.language)
+                )
                 if lexer.filenames and "*" in lexer.filenames[0]:
                     glob = lexer.filenames[0]
                 else:
@@ -676,7 +699,11 @@ class Paste(models.Model):
                 cssclass="paste",
             )
             rendered = highlight(
-                self.body, pygments.lexers.get_lexer_by_name(language), formatter
+                self.body,
+                pygments.lexers.get_lexer_by_name(
+                    LEXER_OVERRIDES.get(language, language)
+                ),
+                formatter,
             )
         cache.set(key, rendered, settings.CACHING_TIME)
         return rendered
