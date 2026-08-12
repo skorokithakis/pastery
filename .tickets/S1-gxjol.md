@@ -1,6 +1,6 @@
 ---
 id: S1-gxjol
-status: open
+status: closed
 deps: [S1-ocrfa]
 links: []
 created: 2026-08-09T17:56:43Z
@@ -49,3 +49,13 @@ Two concrete 4.x blockers found by inspection while reviewing S1-cnpew, so they 
 - djangoql (pyproject.toml, in INSTALLED_APPS): its admin.py imports django.conf.urls.url. Same problem.
 
 Both must be bumped to releases that survive 4.0's removals, or replaced. Note the existing comment in pastery/urls.py: tokenauth 0.5.1 also probes for the old ratelimit module names and silently degrades to a no-op decorator, which is why the login rate-limit shim exists there. If tokenauth gets bumped here, check whether that shim can go, and say so rather than removing it silently.
+
+**2026-08-12T20:27:14Z**
+
+Done. Django 3.2.25 -> 4.2.30 (final 4.2 release). Forced moves: django-tokenauth 0.5.1 -> 0.5.5 and djangoql 0.14.0 -> 0.19.1, both of which could not be imported on 4.2. pytz removed, nothing needed it once Django stopped depending on it; tzdata entered win32-only. django-annoying and django-bootstrap3, the expected casualties, survived unchanged.
+
+The rate-limit shim STAYS: 0.5.5 is tokenauth's last release and still probes the old ratelimit module names. Bigger find: tokenauth 0.5.4 silently dropped the trailing slash from its login URL, which would have made the old shim pattern miss and silently removed the login rate limit; the pattern now matches both spellings and the suite proved the 4th POST sends no email from either.
+
+Other forced changes: bootstrap.min.css lost its dangling sourceMappingURL comment (Django 4.0's HashedFilesMixin rewrites map references, and the .map never existed, so collectstatic died with MissingFileError). RateLimitTests now freeze django-ratelimit's clock; pre-existing epoch-window flake at ~2/10 runs, fixed at the root, assertions untouched.
+
+No migrations, CSRF verified live with enforce_csrf_checks (trusted origin 302, foreign origin 403), 92 tests green on PG 18.4 and SQLite, coverage 94%, no W042, client-IP tests green.
