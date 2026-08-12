@@ -359,20 +359,19 @@ wheels = [
 ]
 
 [[package]]
-name = "django-brake"
-version = "1.6.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django" },
-    { name = "nose" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/e2/43/7cc249e0e22104b582502347499abfc796f062aba4b9ba944c4e46c39bc9/django-brake-1.6.0.tar.gz", hash = "sha256:1d8fdccdf9a73008367d93a135ab32c9cde49859f9ecd8466034e39e71b40a8f", size = 11116, upload-time = "2019-07-11T04:54:35.257Z" }
-
-[[package]]
 name = "django-ipware"
 version = "2.1.0"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/21/b3/1683aa978adfcbcdb647909cd6943c31fb3d510a971e683561ff90e26551/django-ipware-2.1.0.tar.gz", hash = "sha256:a7c7a8fd019dbdc9c357e6e582f65034e897572fc79a7e467674efa8aef9d00b", size = 10901, upload-time = "2018-04-19T01:51:53.123Z" }
+
+[[package]]
+name = "django-ratelimit"
+version = "4.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/6f/8f/94038fe739b095aca3e4708ecc8a4e77f1fcfd87bed5d6baff43d4c80bc4/django-ratelimit-4.1.0.tar.gz", hash = "sha256:555943b283045b917ad59f196829530d63be2a39adb72788d985b90c81ba808b", size = 11551, upload-time = "2023-07-24T20:34:32.374Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fb/78/2c59b30cd8bc8068d02349acb6aeed5c4e05eb01cdf2107ccd76f2e81487/django_ratelimit-4.1.0-py2.py3-none-any.whl", hash = "sha256:d047a31cf94d83ef1465d7543ca66c6fc16695559b5f8d814d1b51df15110b92", size = 11608, upload-time = "2023-07-24T20:34:31.362Z" },
+]
 
 [[package]]
 name = "django-redis"
@@ -596,15 +595,6 @@ wheels = [
 ]
 
 [[package]]
-name = "nose"
-version = "1.3.7"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/58/a5/0dc93c3ec33f4e281849523a5a913fa1eea9a3068acfa754d44d88107a44/nose-1.3.7.tar.gz", hash = "sha256:f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98", size = 280488, upload-time = "2015-06-02T09:12:32.961Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/15/d8/dd071918c040f50fa1cf80da16423af51ff8ce4a0f2399b7bf8de45ac3d9/nose-1.3.7-py3-none-any.whl", hash = "sha256:9ff7c6cc443f8c51994b34a667bbcf45afd6d945be7477b52e97516fd17c53ac", size = 154731, upload-time = "2015-06-02T09:12:40.57Z" },
-]
-
-[[package]]
 name = "packaging"
 version = "20.4"
 source = { registry = "https://pypi.org/simple" }
@@ -636,8 +626,8 @@ dependencies = [
     { name = "django" },
     { name = "django-annoying" },
     { name = "django-bootstrap3" },
-    { name = "django-brake" },
     { name = "django-ipware" },
+    { name = "django-ratelimit" },
     { name = "django-redis" },
     { name = "django-tokenauth" },
     { name = "django-webauthin" },
@@ -671,8 +661,8 @@ requires-dist = [
     { name = "django", specifier = ">=2.0,<2.1" },
     { name = "django-annoying" },
     { name = "django-bootstrap3" },
-    { name = "django-brake" },
     { name = "django-ipware", specifier = "~=2.1.0" },
+    { name = "django-ratelimit", specifier = "~=4.1.0" },
     { name = "django-redis" },
     { name = "django-tokenauth", specifier = "==0.5.1" },
     { name = "django-webauthin", specifier = ">=0.0.4,<0.1.0" },

@@ -3,7 +3,6 @@ import re
 
 from annoying.decorators import ajax_request
 from annoying.decorators import render_to
-from brake.decorators import ratelimit
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -24,6 +23,10 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_POST
 from ipware import get_client_ip
 from raven.contrib.django.raven_compat.models import client
+from django_ratelimit.decorators import ratelimit
+
+from pastery.ratelimit import limited_response
+from pastery.ratelimit import rate_limit_key
 
 from .models import LANGUAGES
 from .models import LANGUAGE_DICT
@@ -111,14 +114,29 @@ class UserForm(forms.ModelForm):
         fields = ["_style_name"]
 
 
-@ratelimit(method=["POST"], rate="200/d")
-@ratelimit(method=["POST"], rate="100/h")
-@ratelimit(method=["POST"], rate="20/m")
+@ratelimit(
+    group="home_daily", key=rate_limit_key, method=["POST"], rate="200/d", block=False
+)
+@ratelimit(
+    group="home_hourly",
+    key=rate_limit_key,
+    method=["POST"],
+    rate="100/h",
+    block=False,
+)
+@ratelimit(
+    group="home_minutely",
+    key=rate_limit_key,
+    method=["POST"],
+    rate="20/m",
+    block=False,
+)
 @render_to("home.html")
 def home(request):
-    if getattr(request, "limited", False):
+    limited = limited_response(request, redirect("main:home"))
+    if limited:
         messages.error(request, _("You're pasting too much, please slow down."))
-        return redirect("main:home")
+        return limited
 
     if request.method == "POST":
         if not request.user.is_authenticated:
@@ -215,10 +233,14 @@ def embed_paste(request, paste_id):
     return response
 
 
-@ratelimit(rate="500/d", block=True)
-@ratelimit(rate="100/h", block=True)
-@ratelimit(rate="20/m", block=True)
+@ratelimit(group="paste_daily", key=rate_limit_key, rate="500/d", block=False)
+@ratelimit(group="paste_hourly", key=rate_limit_key, rate="100/h", block=False)
+@ratelimit(group="paste_minutely", key=rate_limit_key, rate="20/m", block=False)
 def paste(request, paste_id):
+    limited = limited_response(request)
+    if limited:
+        return limited
+
     paste_ids = paste_id.strip("+").split("+")[: settings.MAX_COMBINED_PASTES]
 
     # Create a dictionary out of the pastes so we can order them.
@@ -270,10 +292,29 @@ def paste(request, paste_id):
     )
 
 
-@ratelimit(rate="500/d", block=True)
-@ratelimit(rate="100/h", block=True)
-@ratelimit(rate="20/m", block=True)
+@ratelimit(
+    group="download_paste_daily",
+    key=rate_limit_key,
+    rate="500/d",
+    block=False,
+)
+@ratelimit(
+    group="download_paste_hourly",
+    key=rate_limit_key,
+    rate="100/h",
+    block=False,
+)
+@ratelimit(
+    group="download_paste_minutely",
+    key=rate_limit_key,
+    rate="20/m",
+    block=False,
+)
 def download_paste(request, paste_id):
+    limited = limited_response(request)
+    if limited:
+        return limited
+
     paste = Paste.get_by_id_or_404(paste_id, request.user)
     response = HttpResponse(paste.body, content_type="text/plain")
     response["Content-Disposition"] = "attachment; filename=" + paste.filename
@@ -281,10 +322,14 @@ def download_paste(request, paste_id):
     return response
 
 
-@ratelimit(rate="500/d", block=True)
-@ratelimit(rate="100/h", block=True)
-@ratelimit(rate="20/m", block=True)
+@ratelimit(group="raw_paste_daily", key=rate_limit_key, rate="500/d", block=False)
+@ratelimit(group="raw_paste_hourly", key=rate_limit_key, rate="100/h", block=False)
+@ratelimit(group="raw_paste_minutely", key=rate_limit_key, rate="20/m", block=False)
 def raw_paste(request, paste_id):
+    limited = limited_response(request)
+    if limited:
+        return limited
+
     paste = Paste.get_by_id_or_404(paste_id, request.user)
     response = HttpResponse(paste.body, content_type="text/plain; charset=utf-8")
     if paste.title:
@@ -295,19 +340,32 @@ def raw_paste(request, paste_id):
 
 
 @require_POST
-@ratelimit(method=["POST"], rate="50/d")
-@ratelimit(method=["POST"], rate="2/m")
+@ratelimit(
+    group="report_paste_daily",
+    key=rate_limit_key,
+    method=["POST"],
+    rate="50/d",
+    block=False,
+)
+@ratelimit(
+    group="report_paste_minutely",
+    key=rate_limit_key,
+    method=["POST"],
+    rate="2/m",
+    block=False,
+)
 def report_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id, request.user)
 
-    if getattr(request, "limited", False):
+    limited = limited_response(request, redirect(paste))
+    if limited:
         messages.error(
             request,
             _(
                 "You're reporting too many pastes. If there's something widespread going on, please contact us directly."
             ),
         )
-        return redirect(paste)
+        return limited
 
     reporter = (
         request.user.username

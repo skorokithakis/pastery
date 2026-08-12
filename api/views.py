@@ -2,7 +2,7 @@ import datetime
 import json
 from collections import namedtuple
 
-from brake.decorators import ratelimit
+from django_ratelimit.decorators import ratelimit
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.utils import timezone
@@ -18,14 +18,40 @@ from schema import Use
 
 from main.models import ALIAS_DICT
 from main.models import Paste
+from pastery.ratelimit import limited_response
+from pastery.ratelimit import rate_limit_key
 
 User = get_user_model()
 
 
 class PasteView(View):
-    @method_decorator(ratelimit(rate="1000/d", method=["POST"]))
-    @method_decorator(ratelimit(rate="500/h", method=["POST"]))
-    @method_decorator(ratelimit(rate="20/m", method=["POST"]))
+    @method_decorator(
+        ratelimit(
+            group="api_paste_daily",
+            key=rate_limit_key,
+            method=["POST"],
+            rate="1000/d",
+            block=False,
+        )
+    )
+    @method_decorator(
+        ratelimit(
+            group="api_paste_hourly",
+            key=rate_limit_key,
+            method=["POST"],
+            rate="500/h",
+            block=False,
+        )
+    )
+    @method_decorator(
+        ratelimit(
+            group="api_paste_minutely",
+            key=rate_limit_key,
+            method=["POST"],
+            rate="20/m",
+            block=False,
+        )
+    )
     @method_decorator(csrf_exempt)
     def dispatch(self, *args, **kwargs):
         data = super().dispatch(*args, **kwargs)
@@ -79,12 +105,16 @@ class PasteView(View):
         }
 
     def post(self, request, paste_id=None):
-        if getattr(request, "limited", False):
-            return {
+        limited = limited_response(
+            request,
+            {
                 "result": "error",
                 "error_msg": "You're pasting too much, please slow down.",
                 "status_code": 429,
-            }
+            },
+        )
+        if limited:
+            return limited
 
         schema = Schema(
             And(
