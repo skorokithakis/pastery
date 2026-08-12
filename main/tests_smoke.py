@@ -290,3 +290,30 @@ class SmokeTests(TestCase):
 
         response = self.client.get(reverse("main:paste", args=[paste_id]))
         self.assertEqual(response.status_code, 200)
+
+
+class WebauthinSmokeTests(TestCase):
+    """django-webauthin 0.0.8 replaced the whole challenge flow
+    (py_webauthn 0.4 -> 2.x) and nothing else in the suite touches its
+    endpoints, so pin down the two halves of the login flow that work
+    without a real credential: the rendered login page and the
+    login-begin challenge hand-off. The verify endpoints need a signing
+    authenticator and stay out of scope."""
+
+    def test_login_page_renders_webauthin_login_markup(self):
+        # main/templates/login.html includes webauthin_login.html, whose
+        # script fetches the login-begin endpoint and binds the
+        # #webauthin-login button.
+        response = self.client.get(reverse("main:login"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="webauthin-login"')
+        self.assertContains(response, reverse("webauthin:login-begin"))
+
+    def test_login_begin_returns_challenge_and_stores_it_in_session(self):
+        response = self.client.post(reverse("webauthin:login-begin"))
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertIn("challenge", payload)
+        # login_verify pops the challenge out of the session, so it must
+        # have been stored by login_begin.
+        self.assertEqual(self.client.session["challenge"], payload["challenge"])

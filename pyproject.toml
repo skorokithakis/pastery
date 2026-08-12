@@ -2,39 +2,59 @@
 name = "pastery"
 description = "The sweetest pastebin in the world."
 version = "1.0.0"
-requires-python = ">=3.9,<4"
+requires-python = ">=3.13,<4"
 dependencies = [
-    # 6.2 is the newest bleach that runs on Python 3.9. 6.4 fixes
-    # GHSA-8rfp-98v4-mmr6, a low-severity URI sanitisation bypass that needs
-    # Python 3.10, so raise this floor to >=6.4 when Python moves.
-    "bleach>=6.2,<7",
+    # 6.4 fixes GHSA-8rfp-98v4-mmr6, a low-severity URI sanitisation bypass,
+    # and needs Python 3.10, so it doubles as the 3.13 floor.
+    "bleach>=6.4,<7",
     "coverage>=7,<8",
-    "django>=4.2,<4.3",
+    "django>=5.2,<5.3",
     "django-annoying",
     "django-bootstrap3",
     "django-ratelimit~=4.1.0",
-    "django-redis",
+    # 4.11.0 imports django.utils.encoding.smart_text, removed in Django 4.0,
+    # and 6.0.0 is the first release that declares both Django 5.2 and
+    # Python 3.13 support.
+    "django-redis>=6,<8",
     "django-tokenauth==0.5.5",
-    "django-webauthin>=0.0.4,<0.1.0",
+    # 0.0.6's migration 0003 imports django.utils.timezone.utc, removed in
+    # Django 5.0, so it cannot even migrate on 5.x. 0.0.8 is the first
+    # release that both migrates and passes the challenge to the backend.
+    "django-webauthin>=0.0.8,<0.1.0",
     "djangoql>=0.19.1",
     "markdown>=3.9,<4",
-    "psycopg2-binary>=2.7.1",
+    # 2.9.10 is the first psycopg2-binary with Python 3.13 wheels; older
+    # releases only exist as sdists, which need libpq headers we do not ship.
+    "psycopg2-binary>=2.9.10,<3",
     "pygments>=2.20,<3",
     "requests>=2.32,<3",
     "schema>=0.7,<1",
     "sentry-sdk[django]>=2.67.1",
     "shortuuid>=1,<2",
     "textile>=4,<5",
-    "uwsgi>=2.0.11,<2.1",
-    "whitenoise[brotli]",
+    # 2.0.27 is the first release that compiles against Python 3.13 (the
+    # python plugin still used _PyImport_AcquireLock, removed in 3.13).
+    "uwsgi>=2.0.27,<2.1",
+    # 5.0 predates the STORAGES dictionary; 6.9.0 is the first release that
+    # declares Django 5.2 support.
+    "whitenoise[brotli]>=6.9,<7",
 ]
 
 [dependency-groups]
 dev = [
     "bpython",
-    "flake8",
+    # 3.8.3's plugin manager calls importlib_metadata.entry_points().get(),
+    # an API removed in importlib-metadata 4.3, so it crashes on Python 3.13
+    # before loading a single plugin; 5.0.0 is the first release that uses
+    # the new entry_points() API.
+    "flake8>=5.0.0",
     "ipython",
-    "django-stubs",
-    "mypy",
+    # bpython leaves greenlet unpinned, and the locked 0.4.16 cannot build on
+    # Python 3.13; 3.1.0 is the first release with cp313 wheels.
+    "greenlet>=3.1.0",
+    # 1.1.1 locks typing-extensions 4.5.0, whose TypeVar subclass crashes on
+    # Python 3.13 before mypy can analyze anything; 1.16 matches the version
+    # the pre-commit mypy hook uses (v1.16.1).
+    "mypy>=1.16",
 ]
 
