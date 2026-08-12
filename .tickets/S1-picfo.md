@@ -1,6 +1,6 @@
 ---
 id: S1-picfo
-status: open
+status: closed
 deps: [S1-tlgrm]
 links: []
 created: 2026-08-09T17:57:05Z
@@ -58,3 +58,11 @@ Add coverage to the marker-split list in the note above. rep-mcpwp raised the co
 **2026-08-12T17:45:30Z**
 
 Stopgap from the 2026-08-12 note is now in place: the pre-commit and tests jobs in ci.yml pin runs-on to ubuntu-24.04, because they are the only jobs that ask setup-python for 3.9. Remember to flip them back to ubuntu-latest on this rung, the comment above the jobs block says so too.
+
+**2026-08-12T20:35:46Z**
+
+Being executed together with S1-tlgrm as one combined rung, per Stavros's decision of 2026-08-12; see the note there. The dependency arrow stays for bookkeeping but both close together. Everything in this ticket's notes (bleach floor, marker-split report, golden rendering re-run, ubuntu-24.04 pin removal) is in scope for the combined rung.
+
+**2026-08-12T21:28:45Z**
+
+Done, shipped together with S1-tlgrm as one commit. Python 3.13 in all six places (Dockerfile, .python-version, both ci.yml pins, requires-python, setup.cfg mypy). Stale 3.9 comments deleted; ubuntu-24.04 pins removed after verifying 3.13 has ubuntu-26.04 builds in the actions manifest. bleach floor raised to >=6.4,<7 and its comment deleted. Marker splits selected their new branch: bleach 6.4.0, markdown 3.10.3, requests 2.34.2, coverage 7.15.4, asgiref 3.12.1, regex 2026.7.19, urllib3 2.7.0; golden rendering tests re-run deliberately, output byte-identical. Forced by 3.13: psycopg2-binary >=2.9.10 (first cp313 wheels), uwsgi >=2.0.27 (2.0.21 uses _PyImport_AcquireLock, removed in 3.13; 2.0.31 built from sdist and served HTTP under 3.13 locally, CI docker job is the final gate), greenlet dev floor, mypy>=1.16 and flake8>=5 in the dev group. django-stubs deleted rather than bumped: dev-only, the pre-commit mypy hook never used it, and 1.15 was wrong for 5.2.

@@ -1,6 +1,6 @@
 ---
 id: S1-tlgrm
-status: open
+status: closed
 deps: [S1-gxjol]
 links: []
 created: 2026-08-09T17:56:51Z
@@ -48,3 +48,11 @@ Warnings pointing at this rung: USE_L10N (RemovedInDjango50Warning, delete per t
 Filter gotcha: RemovedInDjango51Warning is a PendingDeprecationWarning in 4.2, so PYTHONWARNINGS=always::DeprecationWarning does not show the STATICFILES_STORAGE warning. Use plain PYTHONWARNINGS=always for the warning report on this rung.
 
 Also carried forward: tokenauth 0.5.5 is the LAST release and still probes the pre-4.x ratelimit module names, so the login rate-limit shim in pastery/urls.py stays alive on this rung too; its comment is current. django-annoying 0.10.6, django-bootstrap3 12.1.0, django-redis 4.11.0 and whitenoise 5.0 survived 4.2 unchanged, but 5.2 may be the rung that finally forces some of them; whitenoise 5.0 predates the STORAGES dictionary, so expect the STORAGES change to force a whitenoise floor raise.
+
+**2026-08-12T20:35:46Z**
+
+Plan change, approved by Stavros 2026-08-12: this rung cannot ship on Python 3.9 because every Django 5.2 release declares requires-python >=3.10, and Django 4.2 caps at 3.12, so the ticket order was impossible as written. Decision: do this ticket and S1-picfo together as ONE commit and one deploy (option A), fallback to an intermediate Python 3.12 rung only if the combined deploy breaks. See gnosis entry referencing trdjcz.
+
+**2026-08-12T21:28:45Z**
+
+Done, shipped together with S1-picfo as one commit. Django 4.2.30 -> 5.2.17, USE_L10N deleted, STORAGES dict in (whitenoise CompressedManifestStaticFilesStorage staticfiles + FileSystemStorage default), whitenoise 5.0 -> 6.12.0 (floor >=6.9, first declaring 5.2), django-webauthin 0.0.6 -> 0.0.8 (0.0.6's migration 0003 imports timezone.utc, removed in 5.0; 0.0.8 also fixes challenge handling; webauthn 2.8.0, cryptography 50, pyopenssl 26 came along), django-redis 4.11.0 -> 7.0.0 (4.11.0 imports smart_text and was already dead on 4.2, see the gnosis entry about the rejected 4.2 deploy). tokenauth shim survives on 5.2, rate-limit tests green. No migrations, no W042, no PG-18-layer misbehavior, so no Django 6.0 contingency needed. 94 tests (two new webauthin smoke tests) green on PG 18.4 and SQLite, coverage 94%, golden rendering byte-identical.
