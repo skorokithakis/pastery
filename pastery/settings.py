@@ -73,6 +73,13 @@ MIDDLEWARE = [
 
 AUTH_USER_MODEL = "main.User"
 
+# Explicitly AutoField, never BigAutoField: every model here already
+# migrated with an AutoField id, so a BigAutoField default would generate
+# AlterField migrations rewriting the primary key column of every table on
+# the live PostgreSQL database, for no benefit. Setting it explicitly also
+# silences models.W042 (Django warns when the setting is left implicit).
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 SESSION_COOKIE_SECURE = os.environ.get("NODEBUG") is not None
 CSRF_COOKIE_SECURE = os.environ.get("NODEBUG") is not None
 
