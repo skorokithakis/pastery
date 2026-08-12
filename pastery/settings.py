@@ -36,6 +36,11 @@ ALLOWED_HOSTS = ["*"] if os.environ.get("NODEBUG") is None else [".pastery.net"]
 
 # Application definition
 
+# django_ratelimit is deliberately not installed here. Its AppConfig registers
+# a system check that raises an Error, not a warning, when the default cache is
+# LocMemCache, which is what CI and bare local development get. Installing the
+# app would abort every management command in those environments. The
+# decorators work without it.
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
