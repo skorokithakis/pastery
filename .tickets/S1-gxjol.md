@@ -40,3 +40,12 @@ Ordering change: uv replaces Poetry before this ticket runs. Ignore the 'use Poe
 **2026-08-09T18:47:12Z**
 
 ready for implementation
+
+**2026-08-12T16:08:15Z**
+
+Two concrete 4.x blockers found by inspection while reviewing S1-cnpew, so they do not have to be rediscovered as a mystery import error on this rung. Both are in dependencies, not in our code; our own code is clean after S1-cnpew.
+
+- django-tokenauth 0.5.1 (pyproject.toml, included in pastery/urls.py): its urls.py imports django.conf.urls.url and its views.py imports ugettext_lazy. Both were removed in Django 4.0, so the package cannot be imported on 4.2 at all.
+- djangoql (pyproject.toml, in INSTALLED_APPS): its admin.py imports django.conf.urls.url. Same problem.
+
+Both must be bumped to releases that survive 4.0's removals, or replaced. Note the existing comment in pastery/urls.py: tokenauth 0.5.1 also probes for the old ratelimit module names and silently degrades to a no-op decorator, which is why the login rate-limit shim exists there. If tokenauth gets bumped here, check whether that shim can go, and say so rather than removing it silently.
