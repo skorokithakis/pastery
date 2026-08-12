@@ -23,8 +23,8 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_POST
 from django_ratelimit.decorators import ratelimit
-from ipware import get_client_ip
 
+from pastery.ratelimit import get_client_ip
 from pastery.ratelimit import is_limited
 from pastery.ratelimit import rate_limit_key
 
@@ -150,9 +150,7 @@ def home(request):
             data["body"] = clean["body"]
             data["raw_language"] = clean["raw_language"]
             data["user"] = request.user
-            data["user_address"] = (
-                get_client_ip(request)[0] if get_client_ip(request)[0] else ""
-            )
+            data["user_address"] = get_client_ip(request)
             data["views"] = -1
 
             if clean["expires"]:
@@ -365,7 +363,7 @@ def report_paste(request, paste_id):
     reporter = (
         request.user.username
         if request.user.is_authenticated
-        else get_client_ip(request)[0]
+        else get_client_ip(request)
     )
     sentry_sdk.capture_message(
         "A paste was reported by %s: %s" % (reporter, paste.get_full_url())

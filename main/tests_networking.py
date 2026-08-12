@@ -8,7 +8,9 @@ from django.core.cache import cache
 from django.test import RequestFactory
 from django.test import TestCase
 from django.urls import reverse
-from ipware import get_client_ip
+
+from pastery.ratelimit import get_client_ip
+from pastery.ratelimit import rate_limit_key
 
 from .models import Paste
 
@@ -16,21 +18,90 @@ User = get_user_model()
 
 
 class ClientIPTests(TestCase):
-    """The configured IPWARE_META_PRECEDENCE_ORDER is honoured."""
+    """The client IP is resolved from the Cloudflare trust chain.
 
-    def test_cf_connecting_ip_wins_over_remote_addr(self):
+    CF-Connecting-IP is only trusted when the peer (the right-most
+    X-Forwarded-For entry, or REMOTE_ADDR when the header is absent) is a
+    real Cloudflare address from the ranges committed in pastery/ratelimit.py.
+    """
+
+    def test_cf_connecting_ip_is_honoured_when_the_peer_is_cloudflare(self):
+        # 173.245.48.1 is inside the committed 173.245.48.0/20 range.
         request = RequestFactory().get("/")
-        request.META["REMOTE_ADDR"] = "1.2.3.4"
+        request.META["REMOTE_ADDR"] = "10.0.0.5"
+        request.META["HTTP_X_FORWARDED_FOR"] = "173.245.48.1"
+        request.META["HTTP_CF_CONNECTING_IP"] = "5.6.7.8"
+        self.assertEqual(get_client_ip(request), "5.6.7.8")
+
+    def test_forged_cf_connecting_ip_is_ignored_when_the_peer_is_not_cloudflare(self):
+        # A direct-to-origin attacker cannot make the resolver trust their
+        # header: the peer is the trust anchor, and 9.9.9.9 is not a
+        # Cloudflare address, so the forged header is ignored entirely.
+        request = RequestFactory().get("/")
+        request.META["REMOTE_ADDR"] = "10.0.0.5"
         request.META["HTTP_X_FORWARDED_FOR"] = "9.9.9.9"
         request.META["HTTP_CF_CONNECTING_IP"] = "5.6.7.8"
-        ip, _ = get_client_ip(request)
-        self.assertEqual(ip, "5.6.7.8")
+        self.assertEqual(get_client_ip(request), "9.9.9.9")
 
-    def test_remote_addr_is_the_fallback(self):
+    def test_remote_addr_is_the_fallback_when_xff_is_absent(self):
+        # The runserver and test-client case: no X-Forwarded-For at all.
         request = RequestFactory().get("/")
         request.META["REMOTE_ADDR"] = "1.2.3.4"
-        ip, _ = get_client_ip(request)
-        self.assertEqual(ip, "1.2.3.4")
+        self.assertEqual(get_client_ip(request), "1.2.3.4")
+
+    def test_cloudflare_peer_without_connecting_ip_falls_back_to_the_peer(self):
+        # 2606:4700::1 is inside the committed 2606:4700::/32 range.
+        request = RequestFactory().get("/")
+        request.META["HTTP_X_FORWARDED_FOR"] = "2606:4700::1"
+        self.assertEqual(get_client_ip(request), "2606:4700::1")
+
+    def test_ipv4_mapped_ipv6_peer_is_normalised_before_the_range_check(self):
+        # ::ffff:173.245.48.1 is the IPv4-mapped form of a Cloudflare
+        # address; it must match the ranges as plain IPv4, not as an IPv6
+        # address that is in no range.
+        request = RequestFactory().get("/")
+        request.META["HTTP_X_FORWARDED_FOR"] = "::ffff:173.245.48.1"
+        request.META["HTTP_CF_CONNECTING_IP"] = "5.6.7.8"
+        self.assertEqual(get_client_ip(request), "5.6.7.8")
+
+    def test_malformed_headers_do_not_raise(self):
+        request = RequestFactory().get("/")
+        request.META["REMOTE_ADDR"] = ""
+        request.META["HTTP_X_FORWARDED_FOR"] = "not-an-ip, also-junk"
+        request.META["HTTP_CF_CONNECTING_IP"] = "junk"
+        self.assertEqual(get_client_ip(request), "")
+
+
+class RateLimitKeyTests(TestCase):
+    """rate_limit_key buckets IPv4 clients by address and IPv6 by /64."""
+
+    def _key_for_client(self, client_ip):
+        # The peer is a real Cloudflare address (104.16.0.0/13), so the
+        # CF-Connecting-IP header is trusted.
+        request = RequestFactory().get("/")
+        request.META["HTTP_X_FORWARDED_FOR"] = "104.16.0.1"
+        request.META["HTTP_CF_CONNECTING_IP"] = client_ip
+        return rate_limit_key("test", request)
+
+    def test_ipv4_clients_are_bucketed_by_their_full_address(self):
+        self.assertEqual(self._key_for_client("203.0.113.7"), "203.0.113.7")
+
+    def test_ipv6_clients_in_one_64_share_a_bucket(self):
+        self.assertEqual(
+            self._key_for_client("2001:db8:1:2::1"),
+            self._key_for_client("2001:db8:1:2::ffff"),
+        )
+        self.assertEqual(self._key_for_client("2001:db8:1:2::1"), "2001:db8:1:2::/64")
+
+    def test_ipv6_clients_in_different_64s_do_not_share_a_bucket(self):
+        self.assertNotEqual(
+            self._key_for_client("2001:db8:1:2::1"),
+            self._key_for_client("2001:db8:1:3::1"),
+        )
+
+    def test_ipv4_mapped_ipv6_client_gets_a_plain_ipv4_bucket(self):
+        # ::ffff:203.0.113.7 must not be collapsed into a nonsense /64.
+        self.assertEqual(self._key_for_client("::ffff:203.0.113.7"), "203.0.113.7")
 
 
 class RateLimitTests(TestCase):
@@ -71,23 +142,59 @@ class RateLimitTests(TestCase):
         self.assertEqual(response.status_code, 429)
 
     def test_cf_connecting_ip_gets_its_own_bucket(self):
-        # The key is rate_limit_key, which resolves the client IP through
-        # Cloudflare's HTTP_CF_CONNECTING_IP header. Every request here
-        # shares the test client's default REMOTE_ADDR, so if the key fell
-        # back to REMOTE_ADDR (or to django-ratelimit's built-in 'ip' key)
-        # the request from 2.2.2.2 would also be limited. As in
-        # test_limited_view_returns_429, the counter starts at 1 and trips
-        # when it is exceeded, so the 21st request is the first one over
-        # 20/m.
+        # The key is rate_limit_key, which trusts CF-Connecting-IP only
+        # when the peer is a Cloudflare address. The X-Forwarded-For here
+        # carries 173.245.48.1, inside the committed 173.245.48.0/20 range,
+        # so the header is honoured. Every request shares the test client's
+        # default REMOTE_ADDR, so if the key fell back to REMOTE_ADDR (or
+        # to django-ratelimit's built-in 'ip' key) the request from 2.2.2.2
+        # would also be limited. As in test_limited_view_returns_429, the
+        # counter starts at 1 and trips when it is exceeded, so the 21st
+        # request is the first one over 20/m.
         url = reverse("main:paste", args=[self.paste.id])
+        xff = {"HTTP_X_FORWARDED_FOR": "173.245.48.1"}
         for _ in range(20):
-            response = self.client.get(url, HTTP_CF_CONNECTING_IP="1.1.1.1")
+            response = self.client.get(url, HTTP_CF_CONNECTING_IP="1.1.1.1", **xff)
             self.assertEqual(response.status_code, 200)
 
-        response = self.client.get(url, HTTP_CF_CONNECTING_IP="1.1.1.1")
+        response = self.client.get(url, HTTP_CF_CONNECTING_IP="1.1.1.1", **xff)
         self.assertEqual(response.status_code, 429)
 
+        response = self.client.get(url, HTTP_CF_CONNECTING_IP="2.2.2.2", **xff)
+        self.assertEqual(response.status_code, 200)
+
+    def test_forged_cf_connecting_ip_cannot_choose_its_own_bucket(self):
+        # A request that did not come through Cloudflare must not be able
+        # to pick its rate limit bucket: the test client sends no
+        # X-Forwarded-For, so the peer is its REMOTE_ADDR, and the
+        # CF-Connecting-IP header is ignored. Rotating the header therefore
+        # changes nothing, and the 21st request trips the 20/m limit even
+        # with a fresh forged value. This is the rep-woxjr criterion.
+        url = reverse("main:paste", args=[self.paste.id])
+        for i in range(20):
+            response = self.client.get(url, HTTP_CF_CONNECTING_IP="1.1.1.%d" % i)
+            self.assertEqual(response.status_code, 200)
+
         response = self.client.get(url, HTTP_CF_CONNECTING_IP="2.2.2.2")
+        self.assertEqual(response.status_code, 429)
+
+    def test_ipv6_clients_in_one_64_share_a_rate_limit_bucket(self):
+        # The peer is a real Cloudflare IPv6 address (2606:4700::/32), so
+        # CF-Connecting-IP is trusted, and rate_limit_key collapses the
+        # client to its /64: rotating addresses within the /64 cannot
+        # defeat the 20/m limit, while a different /64 gets a fresh bucket.
+        url = reverse("main:paste", args=[self.paste.id])
+        xff = {"HTTP_X_FORWARDED_FOR": "2606:4700::1"}
+        for _ in range(20):
+            response = self.client.get(
+                url, HTTP_CF_CONNECTING_IP="2001:db8:1:2::1", **xff
+            )
+            self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(url, HTTP_CF_CONNECTING_IP="2001:db8:1:2::2", **xff)
+        self.assertEqual(response.status_code, 429)
+
+        response = self.client.get(url, HTTP_CF_CONNECTING_IP="2001:db8:1:3::1", **xff)
         self.assertEqual(response.status_code, 200)
 
     def test_tokenauth_login_keeps_its_rate_limit(self):

@@ -9,7 +9,6 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
-from ipware import get_client_ip
 from schema import And
 from schema import Optional
 from schema import Schema
@@ -18,6 +17,7 @@ from schema import Use
 
 from main.models import ALIAS_DICT
 from main.models import Paste
+from pastery.ratelimit import get_client_ip
 from pastery.ratelimit import is_limited
 from pastery.ratelimit import rate_limit_key
 
@@ -176,7 +176,7 @@ class PasteView(View):
             user=data.api_key,
             max_views=data.max_views,
             expiration=timezone.now() + datetime.timedelta(minutes=data.duration),
-            user_address=get_client_ip(request)[0] or "",
+            user_address=get_client_ip(request),
         )
 
         return paste.as_dict()
