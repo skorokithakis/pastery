@@ -11,7 +11,7 @@ ADD pyproject.toml uv.lock /code/
 # Install into the system Python so /usr/local/bin/uwsgi (misc/dokku/Procfile)
 # keeps working.
 ENV UV_PROJECT_ENVIRONMENT=/usr/local
-# requires-python is ">=3.8,<4" and there is no .python-version in the image,
+# requires-python is ">=3.9,<4" and there is no .python-version in the image,
 # so uv would pick the newest interpreter it can download (3.13/3.14), on
 # which Django 2.0 cannot run. Force uv to use the image's own Python 3.9
 # instead of a downloaded managed interpreter.

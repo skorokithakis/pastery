@@ -69,9 +69,9 @@ class PasteRenderingTests(TestCase):
 
         This expected string is a deliberate baseline for the vendored
         PasteryFormatter (a copy of old Pygments HtmlFormatter internals).
-        A Pygments upgrade is expected to change it; when it does, the diff
-        must be reviewed by a human rather than blindly re-baselined. That
-        re-baselining decision is the signal this ticket exists to produce.
+        It was re-baselined when Pygments moved from 2.10 to 2.20; the only
+        change was that the whitespace between tokens is now emitted as a
+        <span class="w"> element instead of a literal space.
         """
         paste = Paste.objects.create(
             id="pygold",
@@ -84,7 +84,7 @@ class PasteRenderingTests(TestCase):
             '<div class="paste"><pre><span></span>'
             '<span id="line-1-pygold"><a id="l-1" name="l-1"></a>'
             '<span class="lineno">1</span><span>'
-            '<span class="k">def</span> <span class="nf">foo</span>'
+            '<span class="k">def</span><span class="w"> </span><span class="nf">foo</span>'
             '<span class="p">():</span></span></span>'
             '<span id="line-2-pygold"><a id="l-2" name="l-2"></a>'
             '<span class="lineno">2</span><span>    '
@@ -93,7 +93,7 @@ class PasteRenderingTests(TestCase):
         )
 
     def test_golden_markdown_output(self):
-        """Byte-exact markdown rendering, pinned before markdown 2.6 moves to 3.x.
+        """Byte-exact markdown rendering, unchanged by the 2.6 to 3.9 move.
 
         The sample mixes benign markup with hostile input so the golden output
         also pins the sanitisation: the <script> and <iframe> tags are
@@ -155,11 +155,13 @@ class PasteRenderingTests(TestCase):
         )
 
     def test_golden_textile_output(self):
-        """Byte-exact textile rendering, pinned before textile 2.2 moves to 4.x.
+        """Byte-exact textile rendering, re-baselined for the 2.2 to 4.0 move.
 
-        The hostile subset: textile 2.2.2 replaces the javascript: href with
-        a bare "#" and escapes the <script> tag, converting its inner double
-        quotes to curly quotes.
+        The hostile subset: textile 4.0.4 no longer parses
+        "here":javascript:alert(1) as a link at all (2.2.2 turned it into a
+        bare "#" href), so the phrase stays literal text with its quotes
+        curled; the <script> tag is still escaped, with its inner double
+        quotes converted to curly quotes.
         """
         paste = Paste.objects.create(
             id="goldtx",
@@ -175,7 +177,7 @@ class PasteRenderingTests(TestCase):
             "\t<p>Some <strong>bold</strong> text with "
             '<a href="https://example.com/" rel="nofollow">a link</a>.</p>\n'
             "\n"
-            '\t<p>Click <a href="#" rel="nofollow">here</a> and '
+            "\t<p>Click &#8220;here&#8221;:javascript:alert(1) and "
             "&lt;script&gt;alert(&#8220;xss&#8221;)&lt;/script&gt;.</p>",
         )
 

@@ -2,28 +2,30 @@
 name = "pastery"
 description = "The sweetest pastebin in the world."
 version = "1.0.0"
-requires-python = ">=3.8,<4"
+requires-python = ">=3.9,<4"
 dependencies = [
-    "bleach",
+    # 6.2 is the newest bleach that runs on Python 3.9. 6.4 fixes
+    # GHSA-8rfp-98v4-mmr6, a low-severity URI sanitisation bypass that needs
+    # Python 3.10, so raise this floor to >=6.4 when Python moves.
+    "bleach>=6.2,<7",
     "coverage",
     "django>=2.0,<2.1",
     "django-annoying",
     "django-bootstrap3",
-    "django-ipware~=2.1.0",
     "django-ratelimit~=4.1.0",
     "django-redis",
     "django-tokenauth==0.5.1",
     "django-webauthin>=0.0.4,<0.1.0",
     "djangoql",
-    "markdown>=2.6.5,<2.7",
+    "markdown>=3.9,<4",
     "psycopg2-binary>=2.7.1",
-    "pygments>=2.4.2",
+    "pygments>=2.20,<3",
     "pytz",
-    "requests>=2.11.1,<2.12",
-    "schema>=0.4.0,<0.5",
+    "requests>=2.32,<3",
+    "schema>=0.7,<1",
     "sentry-sdk[django]>=2.67.1",
-    "shortuuid>=0.4.2,<0.5",
-    "textile>=2.2.2,<2.3",
+    "shortuuid>=1,<2",
+    "textile>=4,<5",
     "uwsgi>=2.0.11,<2.1",
     "whitenoise[brotli]",
 ]

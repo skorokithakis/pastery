@@ -179,12 +179,10 @@ def clean(text: str) -> str:
         "acronym": ["title"],
         "img": ["src", "title", "alt", "width", "height"],
     }
-    allowed_styles = ["font-weight", "text-align", "text-transform"]
 
     return Cleaner(
         tags=allowed_tags,
         attributes=allowed_attributes,
-        styles=allowed_styles,
         filters=[NofollowFilter],
     ).clean(text)
 
@@ -688,7 +686,7 @@ class Paste(models.Model):
         language = self.language
         if language == "markdown":
             rendered = clean(
-                markdown.markdown(self.body, ["markdown.extensions.extra"])
+                markdown.markdown(self.body, extensions=["markdown.extensions.extra"])
             )
         elif language == "textile":
             rendered = clean(textile.textile_restricted(self.body))
