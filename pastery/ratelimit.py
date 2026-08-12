@@ -9,6 +9,15 @@ from django.http import HttpRequest
 # Cloudflare's published edge ranges, fetched 2026-08-12 from
 # https://www.cloudflare.com/ips-v4 and https://www.cloudflare.com/ips-v6.
 # Both families are needed: the AAAA records are proxied too.
+#
+# To update them: misc/check_cloudflare_ips.py compares these tuples against
+# both published lists and prints the exact lines to add and remove. It runs
+# weekly from .github/workflows/cloudflare-ips.yml, so drift arrives as a
+# failed job rather than as visitors sharing an edge IP's rate limit bucket.
+# Fetching the lists at runtime instead was considered and rejected: this is
+# the allow-list that decides whose CF-Connecting-IP we believe, and it should
+# stay a reviewed change in git rather than a value that arrives over the
+# network.
 CLOUDFLARE_IPV4_RANGES = (
     ipaddress.ip_network("173.245.48.0/20"),
     ipaddress.ip_network("103.21.244.0/22"),
