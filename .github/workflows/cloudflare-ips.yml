@@ -20,13 +20,12 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.9"
+      - uses: actions/checkout@v7
       # The script uses only the standard library, so there is nothing to
-      # install; it reads the committed ranges out of ratelimit.py as text
-      # (see the comment in the script for why it must not import the
-      # module). It exits non-zero on drift or on a failed fetch, which
-      # fails this job and makes the weekly run visible.
-      - run: python misc/check_cloudflare_ips.py
+      # install, and no interpreter is pinned either: python3 is guaranteed on
+      # the runner and matches the script's own shebang. The script reads the
+      # committed ranges out of ratelimit.py as text (see the comment in the
+      # script for why it must not import the module). It exits non-zero on
+      # drift or on a failed fetch, which fails this job and makes the weekly
+      # run visible.
+      - run: python3 misc/check_cloudflare_ips.py

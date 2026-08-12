@@ -18,13 +18,21 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.9"
-      - uses: pre-commit/action@v3.0.1
+      # pre-commit/action@v3.0.1 is unmaintained and hardcodes
+      # actions/cache@v4 (node 20) inside itself, so run the three steps it
+      # performs directly instead. The 3.9 pin caps pip's resolution at
+      # pre-commit 4.3.0, because 4.4 and newer need Python 3.10, so CI
+      # deliberately runs an older pre-commit than a developer's machine will.
+      - run: pip install pre-commit
+      - uses: actions/cache@v6
         with:
-          extra_args: '--all-files --hook-stage=manual'
+          path: ~/.cache/pre-commit
+          key: pre-commit-3|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
+      - run: pre-commit run --show-diff-on-failure --color=always --all-files --hook-stage=manual
 
   tests:
     runs-on: ubuntu-latest
@@ -41,8 +49,8 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.9"
       - run: pip install uv==0.11.6
@@ -82,7 +90,7 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: 🐳 Build the image
         run: docker build -t pastery .
@@ -132,12 +140,12 @@ jobs:
 
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: 🔐 Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
+        uses: webfactory/ssh-agent@v0.10.0
         with:
           ssh-private-key: ${{ secrets.DOKKU_SSH_KEY }}
 
