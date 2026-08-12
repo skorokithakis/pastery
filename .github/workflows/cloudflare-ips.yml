@@ -1,0 +1,32 @@
+# Why this is its own workflow and not a job in ci.yml: every job in ci.yml
+# feeds the deploy job through "needs", so anything that runs there can block
+# a deploy, and ci.yml runs on every pull request. This check must reach
+# cloudflare.com, and a check that depends on an external site must never be
+# able to block a deploy or turn an unrelated pull request red. It therefore
+# runs only on a weekly schedule and on demand via workflow_dispatch.
+name: cloudflare-ips
+
+on:
+  schedule:
+    # Weekly, Monday 03:00 UTC. Cloudflare changes these ranges rarely, so
+    # anything more frequent just raises the odds of a transient failure.
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      # The script uses only the standard library, so there is nothing to
+      # install; it reads the committed ranges out of ratelimit.py as text
+      # (see the comment in the script for why it must not import the
+      # module). It exits non-zero on drift or on a failed fetch, which
+      # fails this job and makes the weekly run visible.
+      - run: python misc/check_cloudflare_ips.py
