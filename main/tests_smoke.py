@@ -1,8 +1,10 @@
+import contextlib
 from datetime import timedelta
 
 import sentry_sdk
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -14,11 +16,33 @@ from .models import Paste
 User = get_user_model()
 
 
-class NoopTransport(Transport):
-    """Swallows every envelope, keeping the smoke test off the network."""
+class RecordingTransport(Transport):
+    """Records every envelope it receives instead of sending it, keeping
+    the smoke test off the network."""
+
+    def __init__(self):
+        super().__init__()
+        self.envelopes = []
 
     def capture_envelope(self, envelope):
-        pass
+        self.envelopes.append(envelope)
+
+
+@contextlib.contextmanager
+def sentry_with_recording_transport():
+    """Temporarily initialise Sentry with a fake DSN and the recording
+    transport, restoring whatever client was active before."""
+    previous_client = sentry_sdk.get_client()
+    transport = RecordingTransport()
+    try:
+        # A fake DSN with a no-op transport: DjangoIntegration.setup_once()
+        # runs at init time and must not fail on Django 2.0, but no event
+        # can ever reach the network.
+        sentry_sdk.init(dsn="https://public@fake.example.com/1", transport=transport)
+        yield transport
+    finally:
+        sentry_sdk.get_client().close()
+        sentry_sdk.get_global_scope().set_client(previous_client)
 
 
 class SentrySmokeTests(TestCase):
@@ -27,14 +51,7 @@ class SentrySmokeTests(TestCase):
         # all, so nothing else in the suite exercises the Django integration.
         self.assertFalse(sentry_sdk.is_initialized())
 
-        previous_client = sentry_sdk.get_client()
-        try:
-            # A fake DSN with a no-op transport: DjangoIntegration.setup_once()
-            # runs at init time and must not fail on Django 2.0, but no event
-            # can ever reach the network.
-            sentry_sdk.init(
-                dsn="https://public@fake.example.com/1", transport=NoopTransport
-            )
+        with sentry_with_recording_transport() as transport:
             self.assertIsInstance(
                 sentry_sdk.get_client().get_integration(DjangoIntegration),
                 DjangoIntegration,
@@ -48,9 +65,9 @@ class SentrySmokeTests(TestCase):
             self.assertEqual(response.status_code, 200)
             sentry_sdk.capture_message("smoke test message")
             sentry_sdk.flush(timeout=1)
-        finally:
-            sentry_sdk.get_client().close()
-            sentry_sdk.get_global_scope().set_client(previous_client)
+            # The capture must actually reach the transport: without this
+            # assertion the test would pass even if capturing were broken.
+            self.assertEqual(len(transport.envelopes), 1)
 
         self.assertFalse(sentry_sdk.is_initialized())
 
@@ -208,6 +225,27 @@ class SmokeTests(TestCase):
 
         response = self.client.get(reverse("tokenauth:logout"), follow=True)
         self.assertRedirects(response, reverse("main:home"))
+
+    def test_report_paste_reports_to_sentry(self):
+        # The successful report path is the one place in the codebase that
+        # reports to Sentry, so it must run and actually reach a transport.
+        # report_paste is limited at 2/m on the shared default cache and
+        # other tests in this class have already reported from the test
+        # client's IP, so clear the counters first to keep this POST
+        # un-limited (and leave no leftovers for later tests).
+        cache.clear()
+        self.client.force_login(self.user1, backend=settings.AUTHENTICATION_BACKENDS[0])
+        url = reverse("main:report-paste", args=[self.paste1.id])
+
+        with sentry_with_recording_transport() as transport:
+            response = self.client.post(url, follow=True)
+            self.assertRedirects(response, reverse("main:home"))
+            self.assertEqual(
+                str(list(response.context["messages"])[0]),
+                "Thank you for your report. We will investigate as soon as possible.",
+            )
+            sentry_sdk.flush(timeout=1)
+            self.assertEqual(len(transport.envelopes), 1)
 
     def test_submitting(self):
         self.client.force_login(self.user1, backend=settings.AUTHENTICATION_BACKENDS[0])

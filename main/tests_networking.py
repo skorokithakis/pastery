@@ -146,12 +146,14 @@ class RateLimitTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response["Location"], "/rl123/")
 
-    def test_decorators_with_different_rates_keep_separate_counters(self):
-        # PasteView is limited at 20/m, 500/h and 1000/d on POST. Each
-        # decorator has its own explicit group, so each POST increments
-        # three separate counters and only the 20/m limit trips on the
-        # 21st request. If the decorators shared a bucket, each POST would
-        # increment it three times and the limit would trip on the 7th.
+    def test_stacked_decorators_each_count_the_request_once(self):
+        # PasteView is limited at 20/m, 500/h and 1000/d on POST. The rate
+        # is part of django-ratelimit's cache key, so this test cannot tell
+        # the decorators' groups apart. What it does prove is that each
+        # stacked decorator counts a request exactly once: after 20 POSTs
+        # the 20/m counter is at 20, so the 21st request is the first one
+        # over the limit. If every POST were counted three times in one
+        # bucket, the limit would trip on the 7th request instead.
         url = reverse("api:paste") + "?api_key=" + self.user.api_key
         for _ in range(20):
             response = self.client.post(
