@@ -15,8 +15,13 @@ permissions:
   contents: read
 
 jobs:
+  # The pre-commit and tests jobs pin ubuntu-24.04, not ubuntu-latest: they
+  # need Python 3.9 from setup-python, and the actions/python-versions
+  # manifest has no 3.9 build for Ubuntu 26.04. When ubuntu-latest flips to
+  # 26.04, those jobs would go red with no commit from us. Drop the pins when
+  # the Python version moves past 3.9.
   pre-commit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -35,7 +40,7 @@ jobs:
       - run: pre-commit run --show-diff-on-failure --color=always --all-files --hook-stage=manual
 
   tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     services:
       postgres:
         image: postgres:18
