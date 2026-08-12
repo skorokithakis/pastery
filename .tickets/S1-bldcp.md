@@ -1,6 +1,6 @@
 ---
 id: S1-bldcp
-status: open
+status: closed
 deps: [S1-mkxad]
 links: []
 created: 2026-08-09T17:56:00Z
@@ -36,3 +36,7 @@ The 429 tests from the safety-net ticket still pass. A test proves that two deco
 **2026-08-09T18:47:12Z**
 
 ready for implementation
+
+**2026-08-11T22:31:32Z**
+
+-

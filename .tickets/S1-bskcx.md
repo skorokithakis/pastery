@@ -1,6 +1,6 @@
 ---
 id: S1-bskcx
-status: open
+status: closed
 deps: [S1-mkxad]
 links: []
 created: 2026-08-09T17:55:49Z
@@ -31,3 +31,7 @@ Suite green with no DSN set. No reference to raven remains.
 **2026-08-09T18:47:12Z**
 
 ready for implementation
+
+**2026-08-11T22:31:42Z**
+
+-
