@@ -21,11 +21,11 @@ from django.utils.text import get_valid_filename
 from django.utils.translation import ugettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_POST
+from django_ratelimit.decorators import ratelimit
 from ipware import get_client_ip
 from raven.contrib.django.raven_compat.models import client
-from django_ratelimit.decorators import ratelimit
 
-from pastery.ratelimit import limited_response
+from pastery.ratelimit import is_limited
 from pastery.ratelimit import rate_limit_key
 
 from .models import LANGUAGES
@@ -133,10 +133,9 @@ class UserForm(forms.ModelForm):
 )
 @render_to("home.html")
 def home(request):
-    limited = limited_response(request, redirect("main:home"))
-    if limited:
+    if is_limited(request):
         messages.error(request, _("You're pasting too much, please slow down."))
-        return limited
+        return redirect("main:home")
 
     if request.method == "POST":
         if not request.user.is_authenticated:
@@ -237,9 +236,8 @@ def embed_paste(request, paste_id):
 @ratelimit(group="paste_hourly", key=rate_limit_key, rate="100/h", block=False)
 @ratelimit(group="paste_minutely", key=rate_limit_key, rate="20/m", block=False)
 def paste(request, paste_id):
-    limited = limited_response(request)
-    if limited:
-        return limited
+    if is_limited(request):
+        return HttpResponse(status=429)
 
     paste_ids = paste_id.strip("+").split("+")[: settings.MAX_COMBINED_PASTES]
 
@@ -311,9 +309,8 @@ def paste(request, paste_id):
     block=False,
 )
 def download_paste(request, paste_id):
-    limited = limited_response(request)
-    if limited:
-        return limited
+    if is_limited(request):
+        return HttpResponse(status=429)
 
     paste = Paste.get_by_id_or_404(paste_id, request.user)
     response = HttpResponse(paste.body, content_type="text/plain")
@@ -326,9 +323,8 @@ def download_paste(request, paste_id):
 @ratelimit(group="raw_paste_hourly", key=rate_limit_key, rate="100/h", block=False)
 @ratelimit(group="raw_paste_minutely", key=rate_limit_key, rate="20/m", block=False)
 def raw_paste(request, paste_id):
-    limited = limited_response(request)
-    if limited:
-        return limited
+    if is_limited(request):
+        return HttpResponse(status=429)
 
     paste = Paste.get_by_id_or_404(paste_id, request.user)
     response = HttpResponse(paste.body, content_type="text/plain; charset=utf-8")
@@ -357,15 +353,14 @@ def raw_paste(request, paste_id):
 def report_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id, request.user)
 
-    limited = limited_response(request, redirect(paste))
-    if limited:
+    if is_limited(request):
         messages.error(
             request,
             _(
                 "You're reporting too many pastes. If there's something widespread going on, please contact us directly."
             ),
         )
-        return limited
+        return redirect(paste)
 
     reporter = (
         request.user.username

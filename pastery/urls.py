@@ -18,13 +18,32 @@ Including another URLconf
 from django.conf.urls import include
 from django.conf.urls import url
 from django.contrib import admin
+from django_ratelimit.decorators import ratelimit
+from tokenauth import settings as tokenauth_settings
+from tokenauth import views as tokenauth_views
 
 from api import urls as api_urls  # noqa
 from main import urls as main_urls  # noqa
+from pastery.ratelimit import rate_limit_key
 
 urlpatterns = [
     url(r"^narnia/", admin.site.urls),
     url(r"^api/", include(api_urls)),
+    # tokenauth 0.5.1 probes for `ratelimit.decorators` (django-ratelimit
+    # 3.x) and then `brake.decorators`, and falls back to a no-op decorator
+    # when both fail, so it silently loses its per-IP limit with
+    # django-ratelimit 4.x (which renamed its module to `django_ratelimit`).
+    # Apply the limit it intended to use here; this shim can be deleted once
+    # tokenauth is upgraded to a version that imports `django_ratelimit`.
+    url(
+        r"^auth/login/$",
+        ratelimit(
+            group="tokenauth_login",
+            key=rate_limit_key,
+            rate=tokenauth_settings.RATELIMIT_RATE,
+            block=False,
+        )(tokenauth_views.email_post),
+    ),
     url(r"^auth/", include("tokenauth.urls", namespace="tokenauth")),
     url(r"^webauthn/", include("webauthin.urls")),
     url(r"^", include(main_urls)),

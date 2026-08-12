@@ -18,7 +18,7 @@ from schema import Use
 
 from main.models import ALIAS_DICT
 from main.models import Paste
-from pastery.ratelimit import limited_response
+from pastery.ratelimit import is_limited
 from pastery.ratelimit import rate_limit_key
 
 User = get_user_model()
@@ -105,16 +105,12 @@ class PasteView(View):
         }
 
     def post(self, request, paste_id=None):
-        limited = limited_response(
-            request,
-            {
+        if is_limited(request):
+            return {
                 "result": "error",
                 "error_msg": "You're pasting too much, please slow down.",
                 "status_code": 429,
-            },
-        )
-        if limited:
-            return limited
+            }
 
         schema = Schema(
             And(

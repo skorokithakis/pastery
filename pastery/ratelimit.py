@@ -1,10 +1,8 @@
 """Shared helpers for the django-ratelimit based rate limiting."""
 
-from typing import Any
 from typing import Optional
 
 from django.http import HttpRequest
-from django.http import HttpResponse
 from ipware import get_client_ip
 
 
@@ -24,13 +22,6 @@ def rate_limit_key(group: Optional[str], request: HttpRequest) -> Optional[str]:
     return ip
 
 
-def limited_response(request: HttpRequest, response: Any = None) -> Any:
-    """Return the response to send if the request was rate limited.
-
-    Returns a plain 429 response unless ``response`` is given (e.g. a
-    redirect with an error message, or an API error dict). Returns None if
-    the request was not limited.
-    """
-    if getattr(request, "limited", False):
-        return response if response is not None else HttpResponse(status=429)
-    return None
+def is_limited(request: HttpRequest) -> bool:
+    """Return True if the request was rate limited by the decorators."""
+    return getattr(request, "limited", False)

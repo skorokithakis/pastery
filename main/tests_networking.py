@@ -3,6 +3,7 @@
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core import mail
 from django.core.cache import cache
 from django.test import RequestFactory
 from django.test import TestCase
@@ -68,6 +69,46 @@ class RateLimitTests(TestCase):
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, 429)
+
+    def test_cf_connecting_ip_gets_its_own_bucket(self):
+        # The key is rate_limit_key, which resolves the client IP through
+        # Cloudflare's HTTP_CF_CONNECTING_IP header. Every request here
+        # shares the test client's default REMOTE_ADDR, so if the key fell
+        # back to REMOTE_ADDR (or to django-ratelimit's built-in 'ip' key)
+        # the request from 2.2.2.2 would also be limited. As in
+        # test_limited_view_returns_429, the counter starts at 1 and trips
+        # when it is exceeded, so the 21st request is the first one over
+        # 20/m.
+        url = reverse("main:paste", args=[self.paste.id])
+        for _ in range(20):
+            response = self.client.get(url, HTTP_CF_CONNECTING_IP="1.1.1.1")
+            self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(url, HTTP_CF_CONNECTING_IP="1.1.1.1")
+        self.assertEqual(response.status_code, 429)
+
+        response = self.client.get(url, HTTP_CF_CONNECTING_IP="2.2.2.2")
+        self.assertEqual(response.status_code, 200)
+
+    def test_tokenauth_login_keeps_its_rate_limit(self):
+        # tokenauth 0.5.1 probes for `ratelimit.decorators` (django-ratelimit
+        # 3.x) and then `brake.decorators`, and falls back to a no-op
+        # decorator when both fail, so pastery.urls applies the 3/h limit
+        # itself. A different email on each POST is the attack that would
+        # otherwise go unlimited: the 4th POST is the first one over 3/h
+        # and must not send a fourth login email. It is not blocked:
+        # email_post sees request.limited itself and redirects to the login
+        # URL with a warning instead.
+        url = reverse("tokenauth:login")
+        for i in range(3):
+            response = self.client.post(url, {"email": "login%d@example.com" % i})
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response["Location"], settings.LOGIN_URL)
+
+        response = self.client.post(url, {"email": "login3@example.com"})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response["Location"], settings.LOGIN_URL)
+        self.assertEqual(len(mail.outbox), 3)
 
     def test_limited_view_redirects_to_paste(self):
         # report_paste is limited at 2/m with block=False: the limited
