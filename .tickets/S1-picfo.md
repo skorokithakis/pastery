@@ -34,3 +34,11 @@ CI, the Dockerfile, pyproject.toml and setup.cfg all name Python 3.13. docker bu
 **2026-08-09T18:47:12Z**
 
 ready for implementation
+
+**2026-08-12T13:19:38Z**
+
+Two things S1-nweul left for this rung.
+
+1. Raise the bleach floor in pyproject.toml to >=6.4,<7 once Python is 3.13, and delete the comment above it. 6.4 fixes GHSA-8rfp-98v4-mmr6 and needs Python 3.10, so 3.9 was stuck on 6.2.
+
+2. uv.lock currently holds marker-split versions: bleach 6.2/6.4, markdown 3.9/3.10.3, requests 2.32.5/2.34.2, split on python_full_version 3.10. Moving to 3.13 silently selects the newer branch of each. Report which versions actually change, and re-run the golden rendering tests deliberately rather than assuming the Python bump cannot touch rendering.

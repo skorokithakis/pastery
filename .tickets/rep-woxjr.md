@@ -1,7 +1,7 @@
 ---
 id: rep-woxjr
-status: open
-deps: []
+status: closed
+deps: [rep-dfzrh]
 links: []
 created: 2026-08-12T12:16:20Z
 type: chore
@@ -26,3 +26,15 @@ Non-goals: no change to any rate value, and no change to which views are limited
 
 A request that arrives from a non-Cloudflare address with a forged CF-Connecting-IP header cannot pick its own rate limit bucket, and a test proves it.
 
+
+## Notes
+
+**2026-08-12T13:52:53Z**
+
+Planned. Lever chosen: verify the trust chain in the application, not at the firewall. A firewall allow-list was rejected because this host runs other things and the rule would affect all of them.
+
+Confirmed on the live host: 'dokku nginx:report pastery' gives x-forwarded-for value $remote_addr. So nginx overwrites X-Forwarded-For with its own peer address and the container sees exactly one value, which a client cannot forge. That value, not REMOTE_ADDR, is the trust anchor. REMOTE_ADDR inside the container is the Docker gateway; the claim in pastery/ratelimit.py's docstring that it is a Cloudflare address is wrong.
+
+Also in scope, decided at the same time: bucket IPv6 clients by /64 rather than /128, because a visitor with a /64 can otherwise rotate addresses to defeat any IP-based limit.
+
+ready for implementation
