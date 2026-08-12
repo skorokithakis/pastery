@@ -684,17 +684,17 @@ wheels = [
 
 [[package]]
 name = "django"
-version = "3.2.25"
+version = "4.2.30"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asgiref", version = "3.11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "asgiref", version = "3.12.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "pytz" },
     { name = "sqlparse" },
+    { name = "tzdata", marker = "sys_platform == 'win32'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ec/68/0e744f07b57bfdf99abbb6b3eb14fcba188867021c05f4a104e04f6d56b8/Django-3.2.25.tar.gz", hash = "sha256:7ca38a78654aee72378594d63e51636c04b8e28574f5505dff630895b5472777", size = 9836336, upload-time = "2024-03-04T08:57:02.257Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/11/b5/f1a53dc68da6429d6e0345bb848161e2381a2e9f02700148911e8582c2b3/django-4.2.30.tar.gz", hash = "sha256:4ebc7a434e3819db6cf4b399fb5b3f536310a30e8486f08b66886840be84b37c", size = 10468707, upload-time = "2026-04-07T14:05:45.57Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/30/8e/cc23c762c5dcd1d367d73cf006a326e0df2bd0e785cba18b658b39904c1e/Django-3.2.25-py3-none-any.whl", hash = "sha256:a52ea7fcf280b16f7b739cec38fa6d3f8953a5456986944c3ca97e79882b4e38", size = 7890550, upload-time = "2024-03-04T08:56:47.529Z" },
+    { url = "https://files.pythonhosted.org/packages/39/b7/a7c96f239cf91313a6589233fed55111c7063b26683b226802732c455dbc/django-4.2.30-py3-none-any.whl", hash = "sha256:4d07aaf1c62f9984842b67c2874ebbf7056a17be253860299b93ae1881faad65", size = 7997231, upload-time = "2026-04-07T14:05:38.241Z" },
 ]
 
 [[package]]
@@ -774,11 +774,11 @@ wheels = [
 
 [[package]]
 name = "django-tokenauth"
-version = "0.5.1"
+version = "0.5.5"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/73/ff/3210a1b694f94c26197ab8f392d8487c321e996ebba17076374326ceb318/django-tokenauth-0.5.1.tar.gz", hash = "sha256:af5eeb769c39bd111663008ae753d59247f818d8fa696e810d2cc41742bb252b", size = 14237, upload-time = "2021-06-26T13:07:27.649Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c0/d1/da636b17c9ef380072820630c6c033efa4df1cacd0ff99f9c6c9d8c31a96/django_tokenauth-0.5.5.tar.gz", hash = "sha256:5f053c3e4d350f66063ec714b79a6e64af6550f5183d76c8521d7d05cea0bd5c", size = 13496, upload-time = "2025-08-02T19:12:25.614Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/17/c1/7090a1921a9993ecec5dc5ccae0d18b757be286f4ed38e46cc5e7c240912/django_tokenauth-0.5.1-py2.py3-none-any.whl", hash = "sha256:54e6cd1ab47390ab9248e3f032b4e2aaf1a39c85ed899d13d8b2af9b8eb12767", size = 12083, upload-time = "2021-06-26T13:07:29.886Z" },
+    { url = "https://files.pythonhosted.org/packages/20/b5/12b4a47238b6720c7d7ca4da761884f2136f34719d3d91cef17d8752efaf/django_tokenauth-0.5.5-py2.py3-none-any.whl", hash = "sha256:533faaacd9a3244215843f80b69d93d30edcdfeff1a778653b02a06161ea8fca", size = 12155, upload-time = "2025-08-02T19:12:24.584Z" },
 ]
 
 [[package]]
@@ -795,12 +795,15 @@ wheels = [
 
 [[package]]
 name = "djangoql"
-version = "0.14.0"
+version = "0.19.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ply" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/32/4c/6612fa14622ad3616bf4275a13f4ba69a637d08355e53c2d59a85b4cf72e/djangoql-0.14.0.tar.gz", hash = "sha256:1b1f80940bb15982e06208b97d7b3d08e1d5f8fb62aa07e5e33599c7ce4c0334", size = 218845, upload-time = "2020-06-26T05:53:03.08Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/9b/95/c4747b92a55e48abcfde05cc1309fe7223998f8fe3bb2e435bb16256738f/djangoql-0.19.1.tar.gz", hash = "sha256:bce09d52857857b22744f93241f16d5c62a1b118a7834e1c8afa14bebb964eee", size = 233831, upload-time = "2026-01-27T03:47:38.743Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/59/86/4455346b3c3cd7e5abe74a9c6abc97ceda2d597e73dd9eb77bd3bd558086/djangoql-0.19.1-py2.py3-none-any.whl", hash = "sha256:70cf53218b15557ed02baaace1387de1caffb6809cdfb3c633e4fd4e53a36111", size = 218813, upload-time = "2026-01-27T03:47:36.522Z" },
+]
 
 [[package]]
 name = "flake8"
@@ -1042,7 +1045,6 @@ dependencies = [
     { name = "markdown", version = "3.10.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "psycopg2-binary" },
     { name = "pygments" },
-    { name = "pytz" },
     { name = "requests", version = "2.32.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "requests", version = "2.34.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "schema" },
@@ -1066,18 +1068,17 @@ dev = [
 requires-dist = [
     { name = "bleach", specifier = ">=6.2,<7" },
     { name = "coverage", specifier = ">=7,<8" },
-    { name = "django", specifier = ">=3.2,<3.3" },
+    { name = "django", specifier = ">=4.2,<4.3" },
     { name = "django-annoying" },
     { name = "django-bootstrap3" },
     { name = "django-ratelimit", specifier = "~=4.1.0" },
     { name = "django-redis" },
-    { name = "django-tokenauth", specifier = "==0.5.1" },
+    { name = "django-tokenauth", specifier = "==0.5.5" },
     { name = "django-webauthin", specifier = ">=0.0.4,<0.1.0" },
-    { name = "djangoql" },
+    { name = "djangoql", specifier = ">=0.19.1" },
     { name = "markdown", specifier = ">=3.9,<4" },
     { name = "psycopg2-binary", specifier = ">=2.7.1" },
     { name = "pygments", specifier = ">=2.20,<3" },
-    { name = "pytz" },
     { name = "requests", specifier = ">=2.32,<3" },
     { name = "schema", specifier = ">=0.7,<1" },
     { name = "sentry-sdk", extras = ["django"], specifier = ">=2.67.1" },
@@ -1207,15 +1208,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/0d/1d/6cc4bd4e79f78be6640fab268555a11af48474fac9df187c3361a1d1d2f0/pyOpenSSL-19.1.0.tar.gz", hash = "sha256:9a24494b2602aaf402be5c9e30a0b82d4a5c67528fe8fb475e3f3bc00dd69507", size = 160510, upload-time = "2019-11-18T04:59:40.529Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9e/de/f8342b68fa9e981d348039954657bdf681b2ab93de27443be51865ffa310/pyOpenSSL-19.1.0-py2.py3-none-any.whl", hash = "sha256:621880965a720b8ece2f1b2f54ea2071966ab00e2970ad2ce11d596102063504", size = 53749, upload-time = "2019-11-18T04:59:37.93Z" },
-]
-
-[[package]]
-name = "pytz"
-version = "2020.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/f4/f6/94fee50f4d54f58637d4b9987a1b862aeb6cd969e73623e02c5c00755577/pytz-2020.1.tar.gz", hash = "sha256:c35965d010ce31b23eeb663ed3cc8c906275d6be1a34393a1d73a41febf4a048", size = 311771, upload-time = "2020-04-28T08:28:24.561Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/4f/a4/879454d49688e2fad93e59d7d4efda580b783c745fd2ec2a3adf87b0808d/pytz-2020.1-py2.py3-none-any.whl", hash = "sha256:a494d53b6d39c3c6e44c3bec237336e14305e4f29bbf800b599253057fbb79ed", size = 510223, upload-time = "2020-04-28T08:28:21.201Z" },
 ]
 
 [[package]]
@@ -1661,6 +1653,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/d3/20/06270dac7316220643c32ae61694e451c98f8caf4c8eab3aa80a2bedf0df/typing_extensions-4.5.0.tar.gz", hash = "sha256:5cb5f4a79139d699607b3ef622a1dedafa84e115ab0024e0d9c044a9479ca7cb", size = 52399, upload-time = "2023-02-15T00:17:55.502Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/31/25/5abcd82372d3d4a3932e1fa8c3dbf9efac10cc7c0d16e78467460571b404/typing_extensions-4.5.0-py3-none-any.whl", hash = "sha256:fb33085c39dd998ac16d1431ebc293a8b3eedd00fd4a32de0ff79002c19511b4", size = 27736, upload-time = "2023-02-15T00:17:53.726Z" },
+]
+
+[[package]]
+name = "tzdata"
+version = "2026.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/92/ff/5a28bdfd8c3ebec42564ac7d0e54ca3db65044a9314a97f9564fa7a1e926/tzdata-2026.3.tar.gz", hash = "sha256:4a1518b8993086a7982523e071643f3c0e5f213e75b21318e78bcabfff9d1415", size = 198674, upload-time = "2026-07-10T08:50:37.887Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e5/6d/b53b99a9f2766d095985947a5782f1702cabb129a34f7a802d7197af832f/tzdata-2026.3-py2.py3-none-any.whl", hash = "sha256:dc096730c87af6cab1b171c9d532be840741ff5d459015e7f6947bd7d7e54931", size = 348168, upload-time = "2026-07-10T08:50:36.46Z" },
 ]
 
 [[package]]

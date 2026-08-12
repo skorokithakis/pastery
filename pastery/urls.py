@@ -29,16 +29,17 @@ from pastery.ratelimit import rate_limit_key
 urlpatterns = [
     re_path(r"^narnia/", admin.site.urls),
     re_path(r"^api/", include(api_urls)),
-    # tokenauth 0.5.1 probes for `ratelimit.decorators` (django-ratelimit
-    # 3.x) and then `brake.decorators`, and falls back to a no-op decorator
-    # when both fail, so it silently loses its per-IP limit with
-    # django-ratelimit 4.x (which renamed its module to `django_ratelimit`).
-    # Apply the limit it intended to use here; this shim can be deleted once
-    # tokenauth is upgraded to a version that imports `django_ratelimit`.
-    # The shim runs before tokenauth's own `require_http_methods`, so it
-    # must count POSTs only.
+    # tokenauth probes for `ratelimit.decorators` (django-ratelimit 3.x) and
+    # then `brake.decorators`, and falls back to a no-op decorator when both
+    # fail, so it silently loses its per-IP limit with django-ratelimit 4.x
+    # (which renamed its module to `django_ratelimit`). This is still true on
+    # tokenauth 0.5.5, the last release, so the shim stays: apply the limit
+    # it intended to use here. The shim runs before tokenauth's own
+    # `require_http_methods`, so it must count POSTs only. tokenauth 0.5.4
+    # also dropped the trailing slash from the login URL (and 0.5.1's
+    # `^login/$`), so the shim matches both spellings.
     re_path(
-        r"^auth/login/$",
+        r"^auth/login/?$",
         ratelimit(
             group="tokenauth_login",
             key=rate_limit_key,

@@ -1,6 +1,8 @@
 # Cross-cutting tests: the client IP that the rate limiter and the spam
 # blocker key on, and the rate limiting itself.
 
+from unittest import mock
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
@@ -110,10 +112,21 @@ class RateLimitTests(TestCase):
     The cache is cleared in setUp/tearDown so the counters never leak into
     other test classes (and vice versa): the rate limiting counts by IP on
     the shared default cache.
+
+    django-ratelimit's counter window ends at a fixed epoch-aligned boundary
+    (django_ratelimit.core._get_window), so a test whose requests straddle
+    the boundary silently gets a fresh counter and the request that should
+    trip the limit sails through. Its clock is frozen here so the window
+    cannot roll over mid-test; the assertions are unchanged.
     """
 
     def setUp(self):
         cache.clear()
+        self._time_patcher = mock.patch(
+            "django_ratelimit.core.time.time", return_value=1600000000
+        )
+        self._time_patcher.start()
+        self.addCleanup(self._time_patcher.stop)
         self.user = User.objects.create_user(
             username="ratelimit_user",
             email="ratelimit@example.com",
