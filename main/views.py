@@ -1,6 +1,7 @@
 import datetime
 import re
 
+import sentry_sdk
 from annoying.decorators import ajax_request
 from annoying.decorators import render_to
 from django import forms
@@ -23,7 +24,6 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_POST
 from django_ratelimit.decorators import ratelimit
 from ipware import get_client_ip
-from raven.contrib.django.raven_compat.models import client
 
 from pastery.ratelimit import is_limited
 from pastery.ratelimit import rate_limit_key
@@ -367,7 +367,7 @@ def report_paste(request, paste_id):
         if request.user.is_authenticated
         else get_client_ip(request)[0]
     )
-    client.captureMessage(
+    sentry_sdk.capture_message(
         "A paste was reported by %s: %s" % (reporter, paste.get_full_url())
     )
     messages.success(

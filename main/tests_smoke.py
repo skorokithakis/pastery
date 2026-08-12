@@ -1,14 +1,52 @@
 from datetime import timedelta
 
+import sentry_sdk
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.test import SimpleTestCase
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.transport import Transport
 
 from .models import Paste
 
 User = get_user_model()
+
+
+class NoopTransport(Transport):
+    """Swallows every envelope, keeping the smoke test off the network."""
+
+    def capture_envelope(self, envelope):
+        pass
+
+
+class SentrySmokeTests(SimpleTestCase):
+    def test_django_integration_binds_without_network(self):
+        # With no SENTRY_DSN set, settings.py must not initialize Sentry at
+        # all, so nothing else in the suite exercises the Django integration.
+        self.assertFalse(sentry_sdk.is_initialized())
+
+        previous_client = sentry_sdk.get_client()
+        try:
+            # A fake DSN with a no-op transport: DjangoIntegration.setup_once()
+            # runs at init time and must not fail on Django 2.0, but no event
+            # can ever reach the network.
+            sentry_sdk.init(
+                dsn="https://public@fake.example.com/1", transport=NoopTransport
+            )
+            self.assertIsInstance(
+                sentry_sdk.get_client().get_integration(DjangoIntegration),
+                DjangoIntegration,
+            )
+            sentry_sdk.capture_message("smoke test message")
+            sentry_sdk.flush(timeout=1)
+        finally:
+            sentry_sdk.get_client().close()
+            sentry_sdk.get_global_scope().set_client(previous_client)
+
+        self.assertFalse(sentry_sdk.is_initialized())
 
 
 class SmokeTests(TestCase):
