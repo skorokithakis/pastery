@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load staticfiles bootstrap3 i18n %}
+{% load static bootstrap3 i18n %}
 
 {% block title %}{% if has_multiple %}{% trans "Multiple pastes" %}{% elif paste.title %}{{ paste }} - {{ current_site.name }}{% else %}{{ current_site.name }} - {% trans "The sweetest pastebin in the world!" %}{% endif %}{% endblock %}
 

@@ -76,6 +76,25 @@ AUTH_USER_MODEL = "main.User"
 SESSION_COOKIE_SECURE = os.environ.get("NODEBUG") is not None
 CSRF_COOKIE_SECURE = os.environ.get("NODEBUG") is not None
 
+# Dokku's nginx terminates TLS and proxies plain HTTP to the container, so
+# request.is_secure() is False for every request, and Django 4.0's Origin
+# check would reject every POST on the live site. Trust the X-Forwarded-Proto
+# header nginx sets, and list the https origins the Origin check accepts.
+#
+# SECURE_PROXY_SSL_HEADER is also what makes request.is_secure() True in
+# production, which switches on Django's HTTPS Referer check (the
+# request.is_secure() branch in CsrfViewMiddleware). That is intended:
+# browser posts pass because Django adds request.get_host() to the trusted
+# hosts, and the API view is csrf_exempt.
+#
+# CSRF_TRUSTED_ORIGINS deliberately uses the Django 4.0 scheme-qualified
+# format. Django 2.0-3.2 compare it with is_same_domain(), which never
+# matches a string starting with "https://", so the setting is inert until
+# 4.0. Do not "fix" it to bare hostnames on the 2.x/3.x rungs; that would
+# break the 4.0 Origin check it exists to satisfy.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+CSRF_TRUSTED_ORIGINS = ["https://pastery.net", "https://www.pastery.net"]
+
 AUTHENTICATION_BACKENDS = (
     "webauthin.auth_backends.WebAuthinBackend",
     "tokenauth.auth_backends.EmailTokenBackend",
@@ -122,7 +141,7 @@ SITE_ID = 1
 if os.environ.get("IN_DOCKER"):
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+            "ENGINE": "django.db.backends.postgresql",
             "NAME": "postgres",  # Or path to database file if using sqlite3.
             "USER": "postgres",  # Not used with sqlite3.
             "PASSWORD": "password",  # Not used with sqlite3.
@@ -153,7 +172,7 @@ elif os.environ.get("DATABASE_URL"):
 
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "ENGINE": "django.db.backends.postgresql",
             "NAME": NAME,
             "USER": USER,
             "PASSWORD": PASSWORD,

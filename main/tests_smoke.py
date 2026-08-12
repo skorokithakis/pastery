@@ -111,6 +111,12 @@ class SmokeTests(TestCase):
         response = self.client.get("/nourlthere/")
         self.assertEqual(response.status_code, 404)
 
+    def test_sitemap_xml(self):
+        # The only pattern in main/urls.py registered with an unanchored
+        # plain string; pin it so a Django upgrade can't silently break it.
+        response = self.client.get("/sitemap.xml")
+        self.assertEqual(response.status_code, 200)
+
     def test_raw_html_paste_is_noindexed(self):
         paste = Paste.objects.create(
             id="rawhtml1",

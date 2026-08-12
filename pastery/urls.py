@@ -15,8 +15,8 @@ Including another URLconf
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 
-from django.conf.urls import include
-from django.conf.urls import url
+from django.urls import include
+from django.urls import re_path
 from django.contrib import admin
 from django_ratelimit.decorators import ratelimit
 from tokenauth import settings as tokenauth_settings
@@ -27,8 +27,8 @@ from main import urls as main_urls  # noqa
 from pastery.ratelimit import rate_limit_key
 
 urlpatterns = [
-    url(r"^narnia/", admin.site.urls),
-    url(r"^api/", include(api_urls)),
+    re_path(r"^narnia/", admin.site.urls),
+    re_path(r"^api/", include(api_urls)),
     # tokenauth 0.5.1 probes for `ratelimit.decorators` (django-ratelimit
     # 3.x) and then `brake.decorators`, and falls back to a no-op decorator
     # when both fail, so it silently loses its per-IP limit with
@@ -37,7 +37,7 @@ urlpatterns = [
     # tokenauth is upgraded to a version that imports `django_ratelimit`.
     # The shim runs before tokenauth's own `require_http_methods`, so it
     # must count POSTs only.
-    url(
+    re_path(
         r"^auth/login/$",
         ratelimit(
             group="tokenauth_login",
@@ -47,7 +47,7 @@ urlpatterns = [
             block=False,
         )(tokenauth_views.email_post),
     ),
-    url(r"^auth/", include("tokenauth.urls", namespace="tokenauth")),
-    url(r"^webauthn/", include("webauthin.urls")),
-    url(r"^", include(main_urls)),
+    re_path(r"^auth/", include("tokenauth.urls", namespace="tokenauth")),
+    re_path(r"^webauthn/", include("webauthin.urls")),
+    re_path(r"^", include(main_urls)),
 ]

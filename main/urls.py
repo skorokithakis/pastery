@@ -1,26 +1,26 @@
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib.sitemaps.views import sitemap
 
 from . import views
 
 app_name = "main"
 urlpatterns = [
-    url(r"^$", views.home, name="home"),
-    url(r"^account/$", views.account, name="account"),
-    url(r"^account/reset-key/$", views.reset_key, name="reset-key"),
-    url(r"^account/delete-account/$", views.delete_account, name="delete-account"),
-    url(r"^login/$", views.login, name="login"),
-    url(r"^oembed/$", views.oembed, name="oembed"),
-    url(r"^(?P<paste_id>[^/]+)/delete/$", views.delete_paste, name="delete-paste"),
-    url(r"^(?P<paste_id>[^/]+)/report/$", views.report_paste, name="report-paste"),
-    url(r"^(?P<paste_id>[^/]+)/embed/$", views.embed_paste, name="embed-paste"),
-    url(
+    re_path(r"^$", views.home, name="home"),
+    re_path(r"^account/$", views.account, name="account"),
+    re_path(r"^account/reset-key/$", views.reset_key, name="reset-key"),
+    re_path(r"^account/delete-account/$", views.delete_account, name="delete-account"),
+    re_path(r"^login/$", views.login, name="login"),
+    re_path(r"^oembed/$", views.oembed, name="oembed"),
+    re_path(r"^(?P<paste_id>[^/]+)/delete/$", views.delete_paste, name="delete-paste"),
+    re_path(r"^(?P<paste_id>[^/]+)/report/$", views.report_paste, name="report-paste"),
+    re_path(r"^(?P<paste_id>[^/]+)/embed/$", views.embed_paste, name="embed-paste"),
+    re_path(
         "sitemap.xml",
         sitemap,
         {"sitemaps": {"static": views.StaticViewSitemap}},
         name="django.contrib.sitemaps.views.sitemap",
     ),
-    url(r"^(?P<paste_id>[^/]+)/raw/$", views.raw_paste, name="raw-paste"),
-    url(r"^(?P<paste_id>[^/]+)/dl/$", views.download_paste, name="download-paste"),
-    url(r"^(?P<paste_id>[^/]+)/$", views.paste, name="paste"),
+    re_path(r"^(?P<paste_id>[^/]+)/raw/$", views.raw_paste, name="raw-paste"),
+    re_path(r"^(?P<paste_id>[^/]+)/dl/$", views.download_paste, name="download-paste"),
+    re_path(r"^(?P<paste_id>[^/]+)/$", views.paste, name="paste"),
 ]

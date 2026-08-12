@@ -23,7 +23,7 @@ from django.dispatch import receiver
 from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import _iter_lexerclasses
