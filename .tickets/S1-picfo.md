@@ -50,3 +50,11 @@ Deadline pressure on this rung, found while researching rep-mybaj on 2026-08-12.
 Python 3.9 has no Ubuntu 26.04 build. The actions/python-versions manifest stops at 24.04 for the whole 3.9 series. ubuntu-latest is 24.04 today, but 26.04 is already published as a preview runner image. When ubuntu-latest flips to it, setup-python can no longer supply 3.9 and CI goes red with no commit from us.
 
 This ticket is the only thing that frees us from the pin, so the ladder below it is on a clock we do not control. If ubuntu-latest flips before the ladder finishes, the stopgap is to pin runs-on to ubuntu-24.04 in ci.yml rather than to rush a Django rung.
+
+**2026-08-12T17:42:21Z**
+
+Add coverage to the marker-split list in the note above. rep-mcpwp raised the coverage floor to >=7,<8 and the lock now holds coverage 7.10.7 for python_full_version < 3.10 and 7.15.4 for >= 3.10, because 7.10 is the last line that runs on 3.9. Moving to 3.13 silently selects 7.15.4. Coverage 7.15.4's 'coverage report' was exercised on 3.13 and works, but statement attribution does shift slightly between 7.x minor versions, so expect the percentage to move a little on this rung and do not read that as a regression.
+
+**2026-08-12T17:45:30Z**
+
+Stopgap from the 2026-08-12 note is now in place: the pre-commit and tests jobs in ci.yml pin runs-on to ubuntu-24.04, because they are the only jobs that ask setup-python for 3.9. Remember to flip them back to ubuntu-latest on this rung, the comment above the jobs block says so too.

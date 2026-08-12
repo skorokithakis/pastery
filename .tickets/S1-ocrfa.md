@@ -1,7 +1,7 @@
 ---
 id: S1-ocrfa
 status: open
-deps: [S1-gfyky]
+deps: [S1-gfyky, rep-mcpwp]
 links: []
 created: 2026-08-09T17:56:35Z
 type: chore
@@ -38,3 +38,7 @@ Ordering change: uv replaces Poetry before this ticket runs. Ignore the 'use Poe
 **2026-08-09T18:47:12Z**
 
 ready for implementation
+
+**2026-08-12T17:42:21Z**
+
+Before you bump third-party packages here, read gnosis gtxgkc. The stale adjacent pins (django-bootstrap3 12.1.0, django-redis 4.11.0, whitenoise 5.0, djangoql 0.14.0, pytz 2020.1) do not move on their own, because plain 'uv lock' is preference-preserving. They move only if you raise their floor or run 'uv lock --upgrade'. Raise floors deliberately, package by package, rather than reaching for --upgrade; a fresh resolution moves about 30 packages at once and makes any failure unattributable. coverage is already dealt with by rep-mcpwp.
