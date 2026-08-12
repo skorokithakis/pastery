@@ -3,7 +3,6 @@ from datetime import timedelta
 import sentry_sdk
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.test import SimpleTestCase
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -22,7 +21,7 @@ class NoopTransport(Transport):
         pass
 
 
-class SentrySmokeTests(SimpleTestCase):
+class SentrySmokeTests(TestCase):
     def test_django_integration_binds_without_network(self):
         # With no SENTRY_DSN set, settings.py must not initialize Sentry at
         # all, so nothing else in the suite exercises the Django integration.
@@ -40,6 +39,13 @@ class SentrySmokeTests(SimpleTestCase):
                 sentry_sdk.get_client().get_integration(DjangoIntegration),
                 DjangoIntegration,
             )
+            # setup_once() also monkey-patches Django's request handling, so
+            # serve a real request through the test client: it runs through
+            # the patched BaseHandler.load_middleware()/get_response() and
+            # template rendering. The home page queries django.contrib.sites,
+            # which is why this class uses TestCase instead of SimpleTestCase.
+            response = self.client.get(reverse("main:home"))
+            self.assertEqual(response.status_code, 200)
             sentry_sdk.capture_message("smoke test message")
             sentry_sdk.flush(timeout=1)
         finally:
