@@ -110,6 +110,24 @@ class RateLimitTests(TestCase):
         self.assertEqual(response["Location"], settings.LOGIN_URL)
         self.assertEqual(len(mail.outbox), 3)
 
+    def test_tokenauth_login_get_requests_do_not_consume_quota(self):
+        # The pastery.urls shim wraps the already-decorated email_post, so
+        # it runs before tokenauth's own require_http_methods: GETs are
+        # rejected with 405 and must not count towards the 3/h limit. If
+        # they did, the first POST below would be the 4th request in the
+        # window and would not send a login email.
+        url = reverse("tokenauth:login")
+        for _ in range(3):
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, 405)
+
+        for i in range(3):
+            response = self.client.post(url, {"email": "getlogin%d@example.com" % i})
+            self.assertEqual(response.status_code, 302)
+            self.assertEqual(response["Location"], settings.LOGIN_URL)
+
+        self.assertEqual(len(mail.outbox), 3)
+
     def test_limited_view_redirects_to_paste(self):
         # report_paste is limited at 2/m with block=False: the limited
         # request still runs, but the shared helper sees request.limited

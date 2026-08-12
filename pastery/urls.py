@@ -35,11 +35,14 @@ urlpatterns = [
     # django-ratelimit 4.x (which renamed its module to `django_ratelimit`).
     # Apply the limit it intended to use here; this shim can be deleted once
     # tokenauth is upgraded to a version that imports `django_ratelimit`.
+    # The shim runs before tokenauth's own `require_http_methods`, so it
+    # must count POSTs only.
     url(
         r"^auth/login/$",
         ratelimit(
             group="tokenauth_login",
             key=rate_limit_key,
+            method=["POST"],
             rate=tokenauth_settings.RATELIMIT_RATE,
             block=False,
         )(tokenauth_views.email_post),
