@@ -8,7 +8,7 @@ from main.models import Setting
 
 
 def calculate_link_ratio(text):
-    if len(text) == 0:
+    if len(re.findall(r"\S", text)) == 0:
         return 0
 
     regex = re.compile(r"https?://\S+", re.IGNORECASE)
@@ -31,6 +31,13 @@ class Command(BaseCommand):
             type=float,
             help="Delete all links with a link ratio higher than RATIO",
         )
+        parser.add_argument(
+            "--min-length",
+            type=int,
+            default=500,
+            help="Only check pastes at least MIN-LENGTH characters long for "
+            "the link ratio, so a single pasted URL can never be deleted",
+        )
 
     def handle(self, *args, **options):
         term_setting = Setting.objects.filter(key="SPAM_TERMS").first()
@@ -38,13 +45,17 @@ class Command(BaseCommand):
 
         ratio_threshold = options["link_ratio"]
         regex = options["regex"]
+        min_length = options["min_length"]
 
         # Get spam terms if configured
         spam_terms = None
         if term_setting:
             spam_terms = json.loads(term_setting.value)
 
-        for paste in Paste.objects.filter(spam_processed=False):
+        # iterator() reads the table through a server-side cursor, so the
+        # first run over the whole Paste table doesn't load every body into
+        # memory at once.
+        for paste in Paste.objects.filter(spam_processed=False).iterator():
             is_spam = False
 
             # Check regex if provided
@@ -53,7 +64,11 @@ class Command(BaseCommand):
                 is_spam = True
 
             # Check link ratio if provided and paste is long enough
-            if not is_spam and ratio_threshold and len(paste.body) >= 50:
+            if (
+                not is_spam
+                and ratio_threshold is not None
+                and len(paste.body) >= min_length
+            ):
                 ratio = calculate_link_ratio(paste.body)
                 if ratio >= ratio_threshold:
                     print("Deleting %s (link ratio: %s)..." % (paste, ratio))
@@ -84,6 +99,6 @@ class Command(BaseCommand):
                 counter += 1
             else:
                 paste.spam_processed = True
-                paste.save()
+                paste.save(update_fields=["spam_processed"])
 
         print("Deleted %s pastes in total." % counter)

@@ -1,4 +1,11 @@
 {
+  "cron": [
+    {
+      "command": "python /code/manage.py remove_spam --link-ratio 0.98 --min-length 500",
+      "schedule": "@daily",
+      "concurrency_policy": "forbid"
+    }
+  ],
   "scripts": {
     "dokku": {
       "predeploy": "python /code/manage.py migrate --noinput"
