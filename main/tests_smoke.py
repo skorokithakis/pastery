@@ -129,6 +129,32 @@ class SmokeTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["X-Robots-Tag"], "noindex, nofollow")
 
+    def test_paste_views_are_noindexed(self):
+        # Every view that serves paste content must tell crawlers to leave
+        # it out of their indexes; a meta tag is impossible on the two
+        # text/plain views, which is why this is a header.
+        for url_name in (
+            "main:paste",
+            "main:raw-paste",
+            "main:download-paste",
+            "main:embed-paste",
+        ):
+            response = self.client.get(reverse(url_name, args=[self.paste1.id]))
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response["X-Robots-Tag"], "noindex, nofollow")
+
+    def test_clone_home_is_noindexed_but_home_is_not(self):
+        # ?clone=<id> loads a paste's body into the home form, so that
+        # response must carry the crawler directive; the plain home page
+        # must stay indexable.
+        response = self.client.get(reverse("main:home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn("X-Robots-Tag", response)
+
+        response = self.client.get(reverse("main:home") + "?clone=" + self.paste1.id)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["X-Robots-Tag"], "noindex, nofollow")
+
     def test_anonymous(self):
         response = self.client.get(reverse("main:home"))
         form = response.context["form"]

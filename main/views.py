@@ -131,11 +131,14 @@ class UserForm(forms.ModelForm):
     rate="20/m",
     block=False,
 )
-@render_to("home.html")
 def home(request):
     if is_limited(request):
         messages.error(request, _("You're pasting too much, please slow down."))
         return redirect("main:home")
+
+    # Set when a ?clone=<id> parameter resolved to a paste whose body was
+    # loaded into the form, so the rendered response can be noindexed.
+    clone_paste = None
 
     if request.method == "POST":
         if not request.user.is_authenticated:
@@ -189,16 +192,22 @@ def home(request):
 
         clone = request.GET.get("clone")
         if clone:
-            paste = Paste.active.filter(pk=clone).first()
-            if paste:
+            clone_paste = Paste.active.filter(pk=clone).first()
+            if clone_paste:
                 initial = {
-                    "title": paste.title,
-                    "body": paste.body,
-                    "raw_language": paste.language,
+                    "title": clone_paste.title,
+                    "body": clone_paste.body,
+                    "raw_language": clone_paste.language,
                 }
 
         form = pasteform_factory(request.user)(initial=initial)
-    return {"form": form}
+
+    response = render(request, "home.html", {"form": form})
+    if clone_paste:
+        # The clone parameter loaded a paste's body into the form, so this
+        # response carries paste content: keep it out of search indexes.
+        response["X-Robots-Tag"] = "noindex, nofollow"
+    return response
 
 
 @xframe_options_exempt
@@ -227,6 +236,8 @@ def embed_paste(request, paste_id):
 
     data = {"pastes": pastes, "paste_id": paste_id, "host": request.GET.get("host", "")}
     response = render(request, "embed.html", data, status=status)
+    # Keep paste content out of search indexes.
+    response["X-Robots-Tag"] = "noindex, nofollow"
     return response
 
 
@@ -269,23 +280,25 @@ def paste(request, paste_id):
         response["Content-Security-Policy"] = (
             "script-src 'unsafe-inline' https:; sandbox allow-scripts"
         )
-        # The body is deliberately served unsanitised, so a crawler
-        # directive is the only lever: keep raw HTML pastes out of search
-        # indexes and stop them passing link equity on.
-        response["X-Robots-Tag"] = "noindex, nofollow"
-        return response
+    else:
+        response = render(
+            request,
+            "paste.html",
+            {
+                "pastes": pastes,
+                "paste": pastes[0],
+                "paste_id": paste_id,
+                "has_multiple": has_multiple,
+                "show_full": show_full,
+            },
+        )
 
-    return render(
-        request,
-        "paste.html",
-        {
-            "pastes": pastes,
-            "paste": pastes[0],
-            "paste_id": paste_id,
-            "has_multiple": has_multiple,
-            "show_full": show_full,
-        },
-    )
+    # Keep paste content out of search indexes. The raw HTML branch
+    # deliberately serves its body unsanitised, so a crawler directive is
+    # the only lever that stops it passing link equity on; everywhere else
+    # it removes the SEO value of link-spam pastes.
+    response["X-Robots-Tag"] = "noindex, nofollow"
+    return response
 
 
 @ratelimit(
@@ -313,6 +326,9 @@ def download_paste(request, paste_id):
     paste = Paste.get_by_id_or_404(paste_id, request.user)
     response = HttpResponse(paste.body, content_type="text/plain")
     response["Content-Disposition"] = "attachment; filename=" + paste.filename
+    # A text/plain response cannot carry a meta tag, so the directive has
+    # to be a header.
+    response["X-Robots-Tag"] = "noindex, nofollow"
     paste.increment_views()
     return response
 
@@ -329,6 +345,9 @@ def raw_paste(request, paste_id):
     if paste.title:
         filename = get_valid_filename(paste.title)[:40]
         response["Content-Disposition"] = f'inline; filename="{filename}"'
+    # A text/plain response cannot carry a meta tag, so the directive has
+    # to be a header.
+    response["X-Robots-Tag"] = "noindex, nofollow"
     paste.increment_views()
     return response
 
