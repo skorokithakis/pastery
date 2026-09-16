@@ -296,8 +296,12 @@ def paste(request, paste_id):
     # Keep paste content out of search indexes. The raw HTML branch
     # deliberately serves its body unsanitised, so a crawler directive is
     # the only lever that stops it passing link equity on; everywhere else
-    # it removes the SEO value of link-spam pastes.
-    response["X-Robots-Tag"] = "noindex, nofollow"
+    # it removes the SEO value of link-spam pastes. A few IDs are site pages
+    # rather than pastes and are submitted in the sitemap, so they are
+    # exempt; a combined id never equals a single allowlisted id, so
+    # combining a site page with a real paste stays noindexed.
+    if paste_id not in settings.INDEXABLE_PASTE_IDS:
+        response["X-Robots-Tag"] = "noindex, nofollow"
     return response
 
 

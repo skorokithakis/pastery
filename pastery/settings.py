@@ -266,6 +266,11 @@ CACHING_TIME = 24 * 3600
 
 MAX_COMBINED_PASTES = 7
 
+# These paste IDs are really site pages: they fall through main/urls.py to the
+# paste view and StaticViewSitemap submits them to Google, so the paste view
+# must not noindex them. Any other ID is paste content and gets the header.
+INDEXABLE_PASTE_IDS = {"api", "about", "plugins"}
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 

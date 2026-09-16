@@ -12,6 +12,7 @@ from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.transport import Transport
 
 from .models import Paste
+from .views import StaticViewSitemap
 
 User = get_user_model()
 
@@ -104,6 +105,18 @@ class SmokeTests(TestCase):
             id="embed404", body="hi", raw_language="text", user=self.user1
         )
 
+        # /api/, /about/ and /plugins/ are site pages that fall through
+        # main/urls.py to the paste view, so they must exist as pastes for
+        # the sitemap test to reach them instead of a 404.
+        for paste_id in ("api", "about", "plugins"):
+            Paste.objects.create(
+                id=paste_id,
+                title=f"{paste_id} page",
+                body=f"{paste_id} page content",
+                raw_language="text",
+                user=self.user1,
+            )
+
     def test_urls(self):
         response = self.client.get(reverse("main:home"))
         self.assertEqual(response.status_code, 200)
@@ -116,6 +129,16 @@ class SmokeTests(TestCase):
         # plain string; pin it so a Django upgrade can't silently break it.
         response = self.client.get("/sitemap.xml")
         self.assertEqual(response.status_code, 200)
+
+    def test_sitemap_items_are_indexable(self):
+        # Anything we submit to Google via StaticViewSitemap must be
+        # indexable, so walk its items and prove the paste view left no
+        # crawler directive. /api/, /about/ and /plugins/ are pastes, and
+        # the paste view noindexes every paste by default.
+        for url in StaticViewSitemap().items():
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, 200, url)
+            self.assertNotIn("X-Robots-Tag", response, url)
 
     def test_raw_html_paste_is_noindexed(self):
         paste = Paste.objects.create(
