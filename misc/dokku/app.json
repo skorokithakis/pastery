@@ -1,7 +1,7 @@
 {
   "cron": [
     {
-      "command": "python /code/manage.py remove_spam --link-ratio 0.98 --min-length 500",
+      "command": "python /code/manage.py remove_spam --link-ratio 0.98 --min-length 500 > /dev/null",
       "schedule": "@daily",
       "concurrency_policy": "forbid"
     }
